@@ -28,3 +28,15 @@ git diff --cached --check
 # From /tmp/orc-web-pr3-selection after committing the prepared changes:
 git push origin codex/selection-continuity
 # Exit 128: Could not resolve host: github.com. No PR was created.
+
+# Successful retry after Codex restart, from experiments/automatic-source-mapping:
+set -o pipefail
+bun continuity/proof.ts 2>&1 | tee runs/pr3-retry-console.log
+retry_exit=${PIPESTATUS[0]}
+printf '%s\n' "$retry_exit" > runs/pr3-retry-exit.txt
+# Exit 0: 14 continuity workflows pass on installed Google Chrome.
+bun run proof 2>&1 | tee runs/pr3-retry-mapping-console.log
+mapping_retry_exit=${PIPESTATUS[0]}
+printf '%s\n' "$mapping_retry_exit" > runs/pr3-retry-mapping-exit.txt
+# Exit 0: 30 inherited mapping checks pass.
+# Evidence copied from continuity-final-2026-09-29T21-59-45-435Z and 2026-09-29T21-59-57-895Z.

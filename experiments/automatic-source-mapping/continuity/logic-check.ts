@@ -7,7 +7,7 @@ import { analyze, resolve, editRetainingSelection, type Selection } from "../res
 import { checkBoundaries } from "../boundaries";
 import { variants, fixture } from "./support";
 
-// AST-only diagnostics supplement the blocked Chrome rerun; they are not browser evidence.
+// AST-only diagnostics supplement the Chrome checks; they are not browser evidence.
 const records: unknown[] = [];
 for (const variant of variants) {
   const input = await fixture(variant.name);

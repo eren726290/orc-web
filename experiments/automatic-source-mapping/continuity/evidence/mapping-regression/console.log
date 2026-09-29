@@ -1,0 +1,65 @@
+$ bun proof.ts
+RUN /tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/runs/2026-09-29T21-59-57-895Z
+PASS boundaries: positive literal prop control
+PASS boundaries: nested block shadows prop
+PASS boundaries: nested callable shadows prop
+PASS boundaries: spread usage can override literal prop
+PASS boundaries: identical usages are structurally ambiguous
+PASS boundaries: local array shadows module array
+PASS boundaries: React keys collide after string coercion
+PASS boundaries: mutated collection is not a static record owner
+COMMIT basic 1: discovered literal
+COMMIT basic 2: discovered classes
+PASS basic: 1: literal text and static Tailwind owners discovered; source and rendering edited
+COMMIT basic 3: discovered prop
+COMMIT basic 4: discovered classes
+PASS basic: 2: particular usage prop and shared component style discovered with correct scopes
+COMMIT basic 5: Undo
+PASS basic: Undo restores exact source, rebuilt mappings, and rendered typography
+COMMIT basic 6: discovered classes
+COMMIT basic 7: discovered prop
+COMMIT basic 8: discovered classes
+PASS basic: 3: aliased module and imported-name resolution edit the correct usage and implementation files
+COMMIT basic 9: discovered collection
+COMMIT basic 10: Reorder source array
+COMMIT basic 11: discovered collection
+PASS basic: 4: React key discovers stable record identity; reorder never retargets by array position
+COMMIT basic 12: discovered classes
+PASS basic: 5: calculated and external-shaped text reject atomically; safely mapped style stays usable
+COMMIT basic 13: Format all modules and insert unrelated code
+COMMIT basic 14: discovered prop
+PASS basic: 6a: formatting and unrelated insertion rebuild mappings without retargeting selections
+COMMIT basic 15: Ambiguous structural duplication
+COMMIT basic 16: Undo
+PASS basic: 6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping
+PASS basic: Only this explicitly unsupported and rejected without fixture-specific cloning
+PASS basic: Invalid source and crashing candidate preserve source, design, saved state, and history
+PASS basic: Save/reopen regenerates working mappings from uninstrumented saved source
+COMMIT variation 1: discovered literal
+COMMIT variation 2: discovered classes
+PASS variation: 1: literal text and static Tailwind owners discovered; source and rendering edited
+COMMIT variation 3: discovered prop
+COMMIT variation 4: discovered classes
+PASS variation: 2: particular usage prop and shared component style discovered with correct scopes
+COMMIT variation 5: Undo
+PASS variation: Undo restores exact source, rebuilt mappings, and rendered typography
+COMMIT variation 6: discovered classes
+COMMIT variation 7: discovered prop
+COMMIT variation 8: discovered classes
+PASS variation: 3: aliased module and imported-name resolution edit the correct usage and implementation files
+COMMIT variation 9: discovered collection
+COMMIT variation 10: Reorder source array
+COMMIT variation 11: discovered collection
+PASS variation: 4: React key discovers stable record identity; reorder never retargets by array position
+COMMIT variation 12: discovered classes
+PASS variation: 5: calculated and external-shaped text reject atomically; safely mapped style stays usable
+COMMIT variation 13: Format all modules and insert unrelated code
+COMMIT variation 14: discovered prop
+PASS variation: 6a: formatting and unrelated insertion rebuild mappings without retargeting selections
+COMMIT variation 15: Ambiguous structural duplication
+COMMIT variation 16: Undo
+PASS variation: 6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping
+PASS variation: Only this explicitly unsupported and rejected without fixture-specific cloning
+PASS variation: Invalid source and crashing candidate preserve source, design, saved state, and history
+PASS variation: Save/reopen regenerates working mappings from uninstrumented saved source
+RESULT 30 passed, 0 failed. Evidence: /tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/runs/2026-09-29T21-59-57-895Z
