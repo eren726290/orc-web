@@ -5,6 +5,7 @@
 Baseline Chrome verification is complete.
 The proposed continuity addition passes AST checks, but its Chrome verification is blocked by the session's changed sandbox permissions.
 PR 3 has not been published because GitHub network access is also blocked.
+The attempted branch push exited 128 with `Could not resolve host: github.com`.
 This report does not claim a corrected browser pass.
 
 The work depends on unmerged PR 2 commit `2663a28aff8325e67e15a399ca321a365e1d9e18`.
@@ -122,6 +123,7 @@ Exact recorded commands and exit codes are in [commands.sh](evidence/commands.sh
 - [AST results and before/after ownership records](evidence/logic/report.json), [output](evidence/logic/console.log), and [exit code](evidence/logic/exit-code.txt).
 - [Final Chrome setup failure](evidence/final-setup-failure/setup-failure.json), [complete output](evidence/final-setup-failure/console.log), and [exit code](evidence/final-setup-failure/exit-code.txt).
 - [Mapping regression launch failure](evidence/final-setup-failure/mapping-console.log) and [exit code](evidence/final-setup-failure/mapping-exit-code.txt).
+- [Branch publication failure](evidence/final-setup-failure/publish.log) and [exit code](evidence/final-setup-failure/publish-exit-code.txt).
 
 Both post-correction browser commands exit 1 before running assertions.
 Chrome reports `setsockopt: Operation not permitted` and terminates with SIGTRAP under the changed sandbox.

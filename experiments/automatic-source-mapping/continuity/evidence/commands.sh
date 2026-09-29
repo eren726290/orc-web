@@ -24,3 +24,7 @@ printf '%s\n' "$regression_exit" > runs/pr3-regression-exit.txt
 /home/eren/D/orc-web/node_modules/.bin/oxfmt --check resolver.ts continuity/*.ts
 /home/eren/D/orc-web/node_modules/.bin/oxlint resolver.ts continuity/*.ts
 git diff --cached --check
+
+# From /tmp/orc-web-pr3-selection after committing the prepared changes:
+git push origin codex/selection-continuity
+# Exit 128: Could not resolve host: github.com. No PR was created.
