@@ -18,5 +18,5 @@ Scope: Prove automatic ownership discovery for a documented TSX subset in instal
   EVIDENCE: both Only this rejection results; README.md documents the copying limitation.
 - [x] G8: Runnable source, lockfile, environment, commands, ownership records, diagnostics, and inspected screenshots are available in Git without generated bundles or dependencies.
   EVIDENCE: package-lock.json, evidence/fedora-chrome/, and REPORT.md visual inspection.
-- [ ] G9: The documented checks and diff review pass; the branch excludes PR 1 and the PR is open without merging.
-  EVIDENCE: REPORT.md Diff review; branch based on origin/master; PR opening pending.
+- [x] G9: The documented checks and diff review pass; the branch excludes PR 1 and the PR is open without merging.
+  EVIDENCE: REPORT.md Diff review; branch based on origin/master; https://github.com/eren726290/orc-web/pull/2 targets master and remains unmerged.
