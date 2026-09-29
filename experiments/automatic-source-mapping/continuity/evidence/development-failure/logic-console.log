@@ -1,0 +1,24 @@
+PASS AST basic literal successive value edits
+88 |       const uncertain = resolve(
+89 |         analyze(collision.sources, input.aliases),
+90 |         collision.selection,
+91 |         "text",
+92 |       );
+93 |       assert.equal(uncertain.kind, "unsupported");
+                  ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ 'prop'
+- 'unsupported'
+
+ generatedMessage: true,
+     actual: "prop",
+   expected: "unsupported",
+   operator: "strictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at /tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/continuity/logic-check.ts:93:14
+
+Bun v1.4.2 (Linux x64)

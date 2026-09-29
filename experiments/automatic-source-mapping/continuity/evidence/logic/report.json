@@ -1,0 +1,745 @@
+{
+  "kind": "AST-only, not Chrome validation",
+  "records": [
+    {
+      "variant": "basic",
+      "kind": "literal",
+      "command": {
+        "field": "text",
+        "value": "Successive \"source\" 🌱"
+      },
+      "before": {
+        "selection": {
+          "node": "e83b42d80d96a0d98cc68811",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "literal",
+          "file": "src/App.tsx",
+          "host": "e83b42d80d96a0d98cc68811",
+          "scope": "This element"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "d664ac16bbff571500f76369",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "literal",
+          "file": "src/App.tsx",
+          "host": "d664ac16bbff571500f76369",
+          "scope": "This element"
+        }
+      }
+    },
+    {
+      "variant": "basic",
+      "kind": "literal",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "text-4xl",
+          "to": "text-5xl"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "d664ac16bbff571500f76369",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "d664ac16bbff571500f76369",
+          "scope": "This element"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "c01fcd3984f11bcc0295e905",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "c01fcd3984f11bcc0295e905",
+          "scope": "This element"
+        }
+      }
+    },
+    {
+      "variant": "basic",
+      "kind": "literal",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "font-bold",
+          "to": "font-medium"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "c01fcd3984f11bcc0295e905",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "c01fcd3984f11bcc0295e905",
+          "scope": "This element"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "b7805ca8720a1fede454de1e",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "b7805ca8720a1fede454de1e",
+          "scope": "This element"
+        }
+      }
+    },
+    {
+      "variant": "basic",
+      "kind": "prop",
+      "command": {
+        "field": "text",
+        "value": "Successive \"source\" 🌱"
+      },
+      "before": {
+        "selection": {
+          "node": "c976d43b26fc11a9d0c2e542",
+          "usages": [
+            "2df00014d1fe71479cdf2342"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "prop",
+          "file": "src/App.tsx",
+          "site": "2df00014d1fe71479cdf2342",
+          "property": "title",
+          "scope": "This instance"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "c976d43b26fc11a9d0c2e542",
+          "usages": [
+            "b49a6f7379fb5b9ac9ee8114"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "prop",
+          "file": "src/App.tsx",
+          "site": "b49a6f7379fb5b9ac9ee8114",
+          "property": "title",
+          "scope": "This instance"
+        }
+      }
+    },
+    {
+      "variant": "basic",
+      "kind": "prop",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "text-4xl",
+          "to": "text-5xl"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "c976d43b26fc11a9d0c2e542",
+          "usages": [
+            "b49a6f7379fb5b9ac9ee8114"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "c976d43b26fc11a9d0c2e542",
+          "scope": "Every Hero instance"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "abb5a59730a25d2c21f74cbe",
+          "usages": [
+            "b49a6f7379fb5b9ac9ee8114"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "abb5a59730a25d2c21f74cbe",
+          "scope": "Every Hero instance"
+        }
+      }
+    },
+    {
+      "variant": "basic",
+      "kind": "prop",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "font-bold",
+          "to": "font-medium"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "abb5a59730a25d2c21f74cbe",
+          "usages": [
+            "b49a6f7379fb5b9ac9ee8114"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "abb5a59730a25d2c21f74cbe",
+          "scope": "Every Hero instance"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "4aa44afc94152d1ec1bb6189",
+          "usages": [
+            "b49a6f7379fb5b9ac9ee8114"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "4aa44afc94152d1ec1bb6189",
+          "scope": "Every Hero instance"
+        }
+      }
+    },
+    {
+      "variant": "basic",
+      "kind": "command-created ambiguity",
+      "owner": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: component usage is missing or structurally ambiguous"
+      }
+    },
+    {
+      "variant": "basic",
+      "kind": "collection",
+      "command": {
+        "field": "text",
+        "value": "Successive \"source\" 🌱"
+      },
+      "before": {
+        "selection": {
+          "node": "6baa7b93be2f5f2812f47161",
+          "usages": [],
+          "record": "chair"
+        },
+        "owner": {
+          "kind": "collection",
+          "file": "src/App.tsx",
+          "list": "cards",
+          "key": "sku",
+          "record": "chair",
+          "property": "label",
+          "scope": "This item"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "6baa7b93be2f5f2812f47161",
+          "usages": [],
+          "record": "chair"
+        },
+        "owner": {
+          "kind": "collection",
+          "file": "src/App.tsx",
+          "list": "cards",
+          "key": "sku",
+          "record": "chair",
+          "property": "label",
+          "scope": "This item"
+        }
+      }
+    },
+    {
+      "variant": "basic",
+      "kind": "collection",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "text-xl",
+          "to": "text-5xl"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "6baa7b93be2f5f2812f47161",
+          "usages": [],
+          "record": "chair"
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "6baa7b93be2f5f2812f47161",
+          "scope": "Every cards item"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "f99175cbaa9c3fa10bfb4b71",
+          "usages": [],
+          "record": "chair"
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "f99175cbaa9c3fa10bfb4b71",
+          "scope": "Every cards item"
+        }
+      }
+    },
+    {
+      "variant": "basic",
+      "kind": "collection",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "font-bold",
+          "to": "font-medium"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "f99175cbaa9c3fa10bfb4b71",
+          "usages": [],
+          "record": "chair"
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "f99175cbaa9c3fa10bfb4b71",
+          "scope": "Every cards item"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "6da903aac9c13b3de6847833",
+          "usages": [],
+          "record": "chair"
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/App.tsx",
+          "host": "6da903aac9c13b3de6847833",
+          "scope": "Every cards item"
+        }
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "literal",
+      "command": {
+        "field": "text",
+        "value": "Successive \"source\" 🌱"
+      },
+      "before": {
+        "selection": {
+          "node": "7f63a88a69aea835f5d85d1f",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "literal",
+          "file": "src/Landing.tsx",
+          "host": "7f63a88a69aea835f5d85d1f",
+          "scope": "This element"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "60a833720fcced5b9f6bcd49",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "literal",
+          "file": "src/Landing.tsx",
+          "host": "60a833720fcced5b9f6bcd49",
+          "scope": "This element"
+        }
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "literal",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "text-4xl",
+          "to": "text-5xl"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "60a833720fcced5b9f6bcd49",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "60a833720fcced5b9f6bcd49",
+          "scope": "This element"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "23aaaaa78d18fc763495173a",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "23aaaaa78d18fc763495173a",
+          "scope": "This element"
+        }
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "literal",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "font-bold",
+          "to": "font-medium"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "23aaaaa78d18fc763495173a",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "23aaaaa78d18fc763495173a",
+          "scope": "This element"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "6566de847622e6e6c991797b",
+          "usages": [],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "6566de847622e6e6c991797b",
+          "scope": "This element"
+        }
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "prop",
+      "command": {
+        "field": "text",
+        "value": "Successive \"source\" 🌱"
+      },
+      "before": {
+        "selection": {
+          "node": "ec8b46497e56cb3846b6f8ec",
+          "usages": [
+            "15c0329a390fd030050aaba6"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "prop",
+          "file": "src/Landing.tsx",
+          "site": "15c0329a390fd030050aaba6",
+          "property": "caption",
+          "scope": "This instance"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "ec8b46497e56cb3846b6f8ec",
+          "usages": [
+            "9f6173fb449335f75522e44c"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "prop",
+          "file": "src/Landing.tsx",
+          "site": "9f6173fb449335f75522e44c",
+          "property": "caption",
+          "scope": "This instance"
+        }
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "prop",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "text-4xl",
+          "to": "text-5xl"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "ec8b46497e56cb3846b6f8ec",
+          "usages": [
+            "9f6173fb449335f75522e44c"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "ec8b46497e56cb3846b6f8ec",
+          "scope": "Every Notice instance"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "3aa36783582299d046ea26ba",
+          "usages": [
+            "9f6173fb449335f75522e44c"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "3aa36783582299d046ea26ba",
+          "scope": "Every Notice instance"
+        }
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "prop",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "font-bold",
+          "to": "font-medium"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "3aa36783582299d046ea26ba",
+          "usages": [
+            "9f6173fb449335f75522e44c"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "3aa36783582299d046ea26ba",
+          "scope": "Every Notice instance"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "58b005910e9a62352e08895f",
+          "usages": [
+            "9f6173fb449335f75522e44c"
+          ],
+          "record": null
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "58b005910e9a62352e08895f",
+          "scope": "Every Notice instance"
+        }
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "command-created ambiguity",
+      "owner": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: component usage is missing or structurally ambiguous"
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "collection",
+      "command": {
+        "field": "text",
+        "value": "Successive \"source\" 🌱"
+      },
+      "before": {
+        "selection": {
+          "node": "c170739e4a025ea7a6d8ad04",
+          "usages": [],
+          "record": 42
+        },
+        "owner": {
+          "kind": "collection",
+          "file": "src/Landing.tsx",
+          "list": "inventory",
+          "key": "code",
+          "record": 42,
+          "property": "name",
+          "scope": "This item"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "c170739e4a025ea7a6d8ad04",
+          "usages": [],
+          "record": 42
+        },
+        "owner": {
+          "kind": "collection",
+          "file": "src/Landing.tsx",
+          "list": "inventory",
+          "key": "code",
+          "record": 42,
+          "property": "name",
+          "scope": "This item"
+        }
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "collection",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "text-xl",
+          "to": "text-5xl"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "c170739e4a025ea7a6d8ad04",
+          "usages": [],
+          "record": 42
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "c170739e4a025ea7a6d8ad04",
+          "scope": "Every inventory item"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "0a73ffca378534b364e7f686",
+          "usages": [],
+          "record": 42
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "0a73ffca378534b364e7f686",
+          "scope": "Every inventory item"
+        }
+      }
+    },
+    {
+      "variant": "variation",
+      "kind": "collection",
+      "command": {
+        "field": "classes",
+        "value": {
+          "from": "font-bold",
+          "to": "font-medium"
+        }
+      },
+      "before": {
+        "selection": {
+          "node": "0a73ffca378534b364e7f686",
+          "usages": [],
+          "record": 42
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "0a73ffca378534b364e7f686",
+          "scope": "Every inventory item"
+        }
+      },
+      "after": {
+        "selection": {
+          "node": "f4ca45dd9e7a39305545f686",
+          "usages": [],
+          "record": 42
+        },
+        "owner": {
+          "kind": "classes",
+          "file": "src/Landing.tsx",
+          "host": "f4ca45dd9e7a39305545f686",
+          "scope": "Every inventory item"
+        }
+      }
+    }
+  ],
+  "boundaries": [
+    {
+      "name": "positive literal prop control",
+      "result": "PASS"
+    },
+    {
+      "name": "nested block shadows prop",
+      "result": "PASS"
+    },
+    {
+      "name": "nested callable shadows prop",
+      "result": "PASS"
+    },
+    {
+      "name": "spread usage can override literal prop",
+      "result": "PASS"
+    },
+    {
+      "name": "identical usages are structurally ambiguous",
+      "result": "PASS"
+    },
+    {
+      "name": "local array shadows module array",
+      "result": "PASS"
+    },
+    {
+      "name": "React keys collide after string coercion",
+      "result": "PASS"
+    },
+    {
+      "name": "mutated collection is not a static record owner",
+      "result": "PASS"
+    }
+  ]
+}

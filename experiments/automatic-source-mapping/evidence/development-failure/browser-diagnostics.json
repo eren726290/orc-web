@@ -1,0 +1,188 @@
+[
+  {
+    "build": 1,
+    "phase": "accepted",
+    "messages": [
+      "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ]
+  },
+  {
+    "build": 2,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 3,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 4,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 5,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 6,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 7,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 8,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 9,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 10,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 11,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 12,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 13,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 14,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 15,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 16,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 17,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 18,
+    "phase": "rejected",
+    "messages": [
+      "SyntaxError\n    at <parse> (:0)\n    at constructor (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:369:23)\n    at raise (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:6622:19)\n    at unexpected (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:6642:16)\n    at parseIdentifierName (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:12237:12)\n    at parseIdentifier (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:12215:23)\n    at parseVarId (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13436:21)\n    at parseVarId (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:9775:11)\n    at parseVar (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13417:12)\n    at parseVarStatement (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13264:10)\n    at parseVarStatement (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:9431:31)\n    at async scenario (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/proof.ts:286:11)"
+    ]
+  },
+  {
+    "build": 19,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 20,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 21,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 22,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 23,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 24,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 25,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 26,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 27,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 28,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 29,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 30,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 31,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 32,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 33,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 34,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 35,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 36,
+    "phase": "rejected",
+    "messages": [
+      "SyntaxError\n    at <parse> (:0)\n    at constructor (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:369:23)\n    at raise (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:6622:19)\n    at unexpected (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:6642:16)\n    at parseIdentifierName (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:12237:12)\n    at parseIdentifier (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:12215:23)\n    at parseVarId (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13436:21)\n    at parseVarId (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:9775:11)\n    at parseVar (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13417:12)\n    at parseVarStatement (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13264:10)\n    at parseVarStatement (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:9431:31)\n    at async scenario (/home/eren/D/orc-web-pr2/experiments/automatic-source-mapping/proof.ts:286:11)"
+    ]
+  }
+]
