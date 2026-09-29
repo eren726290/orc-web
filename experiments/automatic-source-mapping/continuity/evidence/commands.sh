@@ -40,3 +40,15 @@ mapping_retry_exit=${PIPESTATUS[0]}
 printf '%s\n' "$mapping_retry_exit" > runs/pr3-retry-mapping-exit.txt
 # Exit 0: 30 inherited mapping checks pass.
 # Evidence copied from continuity-final-2026-09-29T21-59-45-435Z and 2026-09-29T21-59-57-895Z.
+
+# Final review checks, each exit 0:
+/home/eren/D/orc-web/node_modules/.bin/oxfmt --check resolver.ts continuity/*.ts
+/home/eren/D/orc-web/node_modules/.bin/oxlint resolver.ts continuity/*.ts
+bun continuity/logic-check.ts
+git diff --cached --check
+
+# Successful publication from /tmp/orc-web-pr3-selection, each exit 0:
+git push origin codex/selection-continuity
+gh pr create --repo eren726290/orc-web --base master --head codex/selection-continuity --title 'Verify selection continuity in Fedora Google Chrome' --body-file /tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/continuity/PR.md
+# Created https://github.com/eren726290/orc-web/pull/3.
+# Read-only gh verification confirmed PR 1/2 remained open at their original heads.

@@ -15,5 +15,5 @@ Dependency: PR 2 commit 2663a28aff8325e67e15a399ca321a365e1d9e18.
   EVIDENCE: rejected-candidate operations plus evidence/mapping-regression/report.json; thirty existing checks pass, exit 0.
 - [x] G6: Exact commands, versions, exit codes, source and selection/owner records, and full diagnostics are committed separately from inherited evidence.
   EVIDENCE: REPORT.md and evidence/ preserve distinct baseline, AST, historical setup failures, and final Chrome outcomes.
-- [ ] G7: PR 3 is open against master with its inherited dependency and new commits identified; PR 1 and PR 2 remain unchanged and unmerged.
-  EVIDENCE: PR.md prepared; successful Chrome evidence complete; publication pending.
+- [x] G7: PR 3 is open against master with its inherited dependency and new commits identified; PR 1 and PR 2 remain unchanged and unmerged.
+  EVIDENCE: https://github.com/eren726290/orc-web/pull/3; GitHub confirms all three PRs open and the original PR 1/2 heads unchanged.

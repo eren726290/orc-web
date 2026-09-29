@@ -7,6 +7,7 @@ The continuity addition passes all fourteen workflows in installed Google Chrome
 The unchanged mapping proof passes all thirty checks, exit 0, including twenty-two browser checks and eight AST boundary controls.
 Earlier Chrome and GitHub setup failures were resolved after Codex restarted with host access.
 Their diagnostics remain preserved separately from the successful final output.
+[PR 3](https://github.com/eren726290/orc-web/pull/3) is open against `master`.
 
 The work depends on unmerged PR 2 commit `2663a28aff8325e67e15a399ca321a365e1d9e18`.
 The new branch is `codex/selection-continuity`, targeting the existing default branch `master`.
