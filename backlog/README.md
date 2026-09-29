@@ -5,9 +5,9 @@ Backlog entries are not product requirements until they are accepted and recorde
 
 ## Open topics
 
-- Review the [stack proposal](stack-proposal.md) and choose the implementation tools.
-- Decide whether Bun owns the local server, package commands, and development dependency management, or whether to use another runtime.
-- Define how ORC-web's MCP server connects to the local runtime, including protocol SDK and transports.
+- Validate the recommended React, Vite, and browser-check foundation with the real ORC-web implementation before treating it as final.
+- Run the [Fedora source-editing verification task](../doc_v1/architecture/react-source-editing-validation.md) in supported Google Chrome, then decide whether Babel plus Recast remains the source-editing choice.
+- Define ORC-web's MCP server, SDK, transports, and tool dependencies last, after project, import, source-binding, and export implementation requirements are known.
 - Adapt the original ORC's 39-tool inventory to ORC-web's loose workspace objects and frame operations.
 - Define any desktop conversion path for the accepted ORC-web `.orc` folder format.
 - Define component manifests, support for npx based import workflows, and behavior for packages that need unsupported runtime features.

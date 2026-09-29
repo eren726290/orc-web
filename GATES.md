@@ -153,3 +153,19 @@ Scope: Record the accepted Chrome-only V1 support policy and the font workflow t
 - [x] B3: The index, text editing, workspace bundle, and export documents link to the new browser and font contracts.
   CHECK: node -e 'const fs=require("node:fs");const files={"doc_v1/README.md":["browser-support.md","font-management.md"],"doc_v1/interface/text-editing.md":["font-management.md","browser-support.md"],"doc_v1/architecture/orc-workspace-bundle.md":["font-management.md"],"doc_v1/import-export/export.md":["font-management.md"]};for(const [f,targets]of Object.entries(files)){const s=fs.readFileSync(f,"utf8");for(const t of targets)if(!s.includes(t)){console.error(`${f} missing ${t}`);process.exit(1)}}console.log("Font and browser links are documented")'
   EXPECT: Font and browser links are documented.
+
+## Gates: implementation stack and source-editing evidence
+
+Scope: Record the accepted Bun decision, recommended browser application foundation, and the bounded source-editing proof without representing it as a complete ORC-web implementation.
+
+- [x] S1: The stack record distinguishes accepted, recommended, candidate, and deliberately deferred dependencies.
+  CHECK: node -e 'const s=require("node:fs").readFileSync("backlog/stack-proposal.md","utf8");for(const x of ["Accepted.","Recommended foundation.","current source-editing candidates","intentionally settled last"])if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}console.log("Stack statuses are explicit")'
+  EXPECT: Stack statuses are explicit.
+
+- [x] S2: The source-editing proof documents every passed behavior and explicit limits.
+  CHECK: node -e 'const s=require("node:fs").readFileSync("doc_v1/architecture/react-source-editing-validation.md","utf8");for(const x of ["Passed checks","Candidate runtime crash","Save and reopen","Automatic editable-layer discovery","Fedora Google Chrome"])if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}console.log("Proof results and limits are explicit")'
+  EXPECT: Proof results and limits are explicit.
+
+- [x] S3: A Fedora Chrome handoff task is self-contained and the source-binding and product indexes link to it.
+  CHECK: node -e 'const fs=require("node:fs");const files=["doc_v1/README.md","doc_v1/architecture/react-source-bindings.md","doc_v1/architecture/react-source-editing-validation.md"];const s=files.map(f=>fs.readFileSync(f,"utf8")).join("\\n");for(const x of ["React source-editing validation","Fedora verification task","Google Chrome"])if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}console.log("Proof handoff is linked")'
+  EXPECT: Proof handoff is linked.

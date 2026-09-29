@@ -3,7 +3,7 @@
 ## Status
 
 Accepted V1 editing contract with proposed storage field names.
-The final parser, AST library, and validation schema are implementation decisions.
+`@babel/parser` and Recast are the current source-editing candidates, supported by an isolated proof but awaiting Fedora Chrome validation and real resolver implementation.
 
 ## Purpose
 
@@ -139,4 +139,5 @@ If an agent works again later, its fresh read supplies the applied human changes
 [Code window](../interface/code-window.md) defines unapplied code and source Apply.
 [Motion](../interface/motion.md) defines source-authored animation.
 [Tailwind components](../import-export/tailwind-components.md) defines supported Tailwind source handling.
+[React source-editing validation](react-source-editing-validation.md) records the proof, its limits, and the Fedora handoff task.
 [Command contracts](../mcp/command-contracts.md) defines IDs, revisions, atomicity, and Undo.

@@ -43,6 +43,7 @@ When this specification does not decide a topic, record it in [`../backlog/`](..
 | Tailwind components | [Tailwind components](import-export/tailwind-components.md) | Supported source import, browser compilation, visual class edits, and faithful React export. |
 | Exports | [Export](import-export/export.md) | React with CSS or Tailwind, HTML, images, and PDF. |
 | Source mapping | [React source bindings](architecture/react-source-bindings.md) | Stable editor IDs that resolve visual component layers to authored React source. |
+| Source validation | [React source-editing validation](architecture/react-source-editing-validation.md) | Bounded source-editing proof, known limits, and Fedora verification task. |
 | Agents | [MCP server](mcp/mcp-server.md) | Local MCP endpoint, transport, and server behavior. |
 | Agent tools | [Tool catalog](mcp/tool-catalog.md) | The 39 public V1 MCP tools. |
 | Tool rules | [Command contracts](mcp/command-contracts.md) | Shared inputs, results, and command rules. |
