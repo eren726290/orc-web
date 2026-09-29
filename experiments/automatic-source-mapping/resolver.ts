@@ -514,6 +514,52 @@ export function edit(
   return result;
 }
 
+// Carry only the exact AST nodes owned by this value-edit command into its next build.
+// ponytail: no reconciliation for arbitrary source rewrites; invalidate them without command lineage.
+export function editRetainingSelection(
+  analysis: Analysis,
+  selection: Selection,
+  field: "text" | "classes",
+  value: string | { from: string; to: string },
+): { sources: Sources; selection: Selection } {
+  const host = unique(analysis.hosts, selection.node);
+  const sites = selection.usages.map((id) => unique(analysis.usages, id));
+  if (!host || sites.some((site) => !site)) throw new Error("Selection invalidated before editing");
+  const sources = edit(analysis, resolve(analysis, selection, field), value);
+  const targets = new Set([host.node, ...sites.flatMap((site) => (site ? [site.node] : []))]);
+  const ids = new Map<n.JSXElement, string>();
+  for (const [file, module] of analysis.modules) {
+    recast.types.visit(module.ast, {
+      visitJSXElement(p) {
+        if (targets.has(p.node)) {
+          // Normalize builders through the same parser used by the candidate rebuild.
+          const statement = parse("const fragment = (" + recast.print(p.node).code + ");").program
+            .body[0];
+          n.VariableDeclaration.assert(statement);
+          const variable = statement.declarations[0];
+          n.VariableDeclarator.assert(variable);
+          n.JSXElement.assert(variable.init);
+          const fn = parentFunction(p);
+          const component =
+            fn?.id && module.functions.get(fn.id.name)?.node === fn
+              ? file + "::" + fn.id.name
+              : null;
+          ids.set(p.node, identity(file, component, variable.init));
+        }
+        this.traverse(p);
+      },
+    });
+  }
+  const node = ids.get(host.node);
+  if (!node) throw new Error("Edited node lineage unavailable");
+  const usages = sites.map((site) => {
+    const id = site && ids.get(site.node);
+    if (!id) throw new Error("Edited usage lineage unavailable");
+    return id;
+  });
+  return { sources, selection: { node, usages, record: selection.record } };
+}
+
 export function instrument(analysis: Analysis, runtimePath: string): Sources {
   const generated = analyze(analysis.sources, analysis.aliases);
   const hostNodes = new Map<n.JSXElement, Host>(),
