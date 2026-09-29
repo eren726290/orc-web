@@ -1,0 +1,56 @@
+[
+  {
+    "text": "Selected once 🌱",
+    "size": "36px",
+    "weight": "700",
+    "classes": "text-4xl font-bold"
+  },
+  {
+    "text": "First instance",
+    "size": "36px",
+    "weight": "700",
+    "classes": "text-4xl font-bold hover:underline md:tracking-wide"
+  },
+  {
+    "text": "Second instance",
+    "size": "36px",
+    "weight": "700",
+    "classes": "text-4xl font-bold hover:underline md:tracking-wide"
+  },
+  {
+    "text": "Across the file boundary",
+    "size": "36px",
+    "weight": "700",
+    "classes": "text-4xl font-bold"
+  },
+  {
+    "text": "Another cross-file instance",
+    "size": "36px",
+    "weight": "700",
+    "classes": "text-4xl font-bold"
+  },
+  {
+    "text": "Desk lamp",
+    "size": "20px",
+    "weight": "700",
+    "classes": "text-xl font-bold"
+  },
+  {
+    "text": "Reading chair",
+    "size": "20px",
+    "weight": "700",
+    "classes": "text-xl font-bold"
+  },
+  {
+    "text": "Price: 21",
+    "size": "20px",
+    "weight": "700",
+    "classes": "text-xl"
+  },
+  {
+    "text": "From external-shaped input",
+    "size": "20px",
+    "weight": "700",
+    "classes": "text-xl"
+  }
+]
