@@ -34,12 +34,17 @@ If the package version, registry content, or local files changed, ORC-web asks f
 
 Every imported live component needs a component record and an accepted editable-component contract.
 The contract declares source-backed layers and the values that Properties can change, including their types, defaults, choices, asset rules, token compatibility, optional slots, and collection items.
-Without a suitable declared contract, the importer may report a static import candidate or reject the candidate as unsupported for editable component import.
+The contract can come from explicit declarations or reliable recognition of supported source shapes.
+An author does not need to supply a manifest for source the importer can already map reliably.
+When no editable contract can be derived, inspection explains the available source-only or static path, or the blocking runtime requirement.
 
 The importer may recognize V1 Base UI imports and Base UI-flavored shadcn component shapes as an accepted contract.
 V1 does not recognize Radix import paths as editable component contracts.
 An imported component's arbitrary runtime DOM is never automatically editable as a Layers tree.
 The accepted contract is the reliable visual editing boundary.
+Recognition follows supported local wrappers, including imports such as `@/components/ui/button`, to identify their required Base UI composition and styles.
+It evaluates the selected component's dependency path rather than rejecting it because an unrelated package is installed elsewhere.
+An unsupported internal expression receives Edit source for that value; other recognized properties and layers stay editable.
 See [Editable React components](../interface/react-components.md), [React source bindings](../architecture/react-source-bindings.md), and [Tailwind components](tailwind-components.md).
 
 ## Source and dependency storage
@@ -56,3 +61,5 @@ The importer therefore checks whether a candidate needs a runtime feature ORC-we
 
 The full support policy for lifecycle scripts, native addons, environment variables, network requirements, and other package capabilities remains open.
 The initial implementation should support a small clear subset before claiming broad npm compatibility.
+
+[React source-editing validation](../architecture/react-source-editing-validation.md) records the real Base UI/shadcn composition tested on Fedora and the package-internal and copying patterns that remain unverified.

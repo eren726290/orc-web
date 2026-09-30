@@ -38,7 +38,22 @@ Project fonts and the bundled default font remain available even if installed-fo
 
 The complete font workflow is defined in [Font management](../interface/font-management.md).
 
-## Verification
+## Automated browser checks
+
+Use Playwright with installed Google Chrome and `channel: "chrome"` for supported-browser checks.
+Headless mode is the normal repeatable automation path for source edits, computed styles, interactions, and regression assertions.
+Chrome runs the browser without displaying its window.
+Modern Chrome shares its implementation between headless and visible modes, as documented in [Chrome Headless](https://developer.chrome.com/docs/automation-and-testing/headless).
+
+Playwright's default bundled Chromium headless shell differs from installed Chrome's headless mode.
+The original Debian experiment used that shell; Fedora PRs used installed Google Chrome headlessly.
+See [Playwright browser channels](https://playwright.dev/docs/browsers#google-chrome--microsoft-edge) and the [source-editing evidence](react-source-editing-validation.md).
+Record the browser channel, headless or visible mode, exact browser version, operating system, and checked behavior with each result.
+
+Headless fixture results establish the tested browser behavior, not the usability of the complete editor.
+They do not certify Windows when the run happened only on Fedora.
+
+## Release and visible-browser verification
 
 Before a V1 release, verify this complete workflow on current stable Chrome for both Fedora and Windows:
 
@@ -49,3 +64,6 @@ Before a V1 release, verify this complete workflow on current stable Chrome for 
 5. Pan, zoom, select, edit, Preview, and export a frame.
 
 Record the Chrome version and operating-system version with the result.
+Also use visible Chrome on each supported platform to review actual dragging, typing, focus, nested scrolling, shortcuts, clipboard permissions, fonts, and visual placement alongside the editor panels.
+Use automated assertions for repeatable correctness and visible review for the human workflow and platform integration.
+Rerun passing experiment suites when relevant code, dependencies, or unresolved behavior changes; headless operation alone is not a reason to repeat all completed work.

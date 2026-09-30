@@ -85,6 +85,9 @@ The component manifest or recognized definition chooses the appropriate control 
 V1 control types include text, number, toggle, choice, color, asset, token-compatible values, and supported layout values.
 Number controls should support direct typing and drag adjustment where useful.
 Properties explains when an authored expression, external data source, or unsupported component shape requires a source edit instead of guessing.
+That explanation applies to the unsupported value or operation, not automatically to every control on the selected component.
+A heading may require Edit source for computed text while still exposing its supported font size and spacing.
+Supported commands retain the logical selected layer through successive edits; an uncertain identity after source replacement clears selection with an explanation.
 See [Editable React components](react-components.md), [Motion](motion.md), and [React source bindings](../architecture/react-source-bindings.md).
 
 ## Empty and several-selection states

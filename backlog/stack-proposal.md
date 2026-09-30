@@ -10,12 +10,15 @@ Implementation and platform verification happen on the Fedora and Windows PC.
 | --- | --- | --- |
 | Local runtime and development package manager | Bun | Accepted. |
 | Editor interface | React + TypeScript | Recommended foundation. |
+| Required V1 type checking | TypeScript 6 CLI | Accepted; exact patch pin is recorded when implementation begins. |
+| Future compiler migration | Separate pinned TypeScript 7 compatibility checkpoint | Accepted; reports compatibility without blocking the TS6 baseline. |
 | Frontend development and build | Vite with the React integration | Recommended foundation. |
 | Interface primitives | Base UI and selected Base UI-flavored shadcn/ui components | Accepted. |
 | Editor and supported-component styling | Tailwind CSS | Accepted. |
 | Icon library | Lucide | Recommended single icon library. |
 | Linting and formatting | Oxlint and Oxfmt | Recommended. |
 | Code window | CodeMirror 6 | Recommended. |
+| Source parsing and structured edits | `@babel/parser`, Recast, and directly imported `ast-types` helpers | Validated direction for the supported Fedora source-editing subset. |
 | Browser workflow checks | Bun test runner and Playwright driving supported Google Chrome | Recommended. |
 
 Bun runs the local ORC-web server and manages development packages.
@@ -23,19 +26,41 @@ An imported command or executable that explicitly requires Node must use Node fo
 React and Vite are the lean recommended browser application foundation.
 ORC-web does not need Next.js, Electron, Electron Builder, or an additional application framework.
 
-## Source-editing candidate
+## Source-editing direction and evidence
 
 The source-binding contract is accepted in [React source bindings](../doc_v1/architecture/react-source-bindings.md).
-The current source-editing candidates are `@babel/parser` for JavaScript, TypeScript, JSX, and TSX parsing and Recast for structured source edits while retaining unchanged source where possible.
+Use `@babel/parser` for JavaScript, TypeScript, JSX, and TSX parsing and Recast for structured source edits while retaining unchanged source where possible.
+Declare `ast-types` directly when implementation imports its node checks and builders instead of relying on an undeclared transitive dependency.
 
-An isolated proof passed all twelve defined checks on Debian ARM64 using Bun 1.3.14 and Playwright Chromium 153.0.8010.12.
-It covered per-instance text, shared Tailwind typography, Only this, Undo, local collection data, rejected candidate crashes, and save or reopen.
-The proof used explicitly authored source bindings.
-It did not prove automatic recognition of arbitrary React applications, cross-file resolution, computed expressions, Fedora Chrome, or Windows Chrome.
-The exact result and Fedora verification task are in [React source-editing validation](../doc_v1/architecture/react-source-editing-validation.md).
+The original twelve-check mobile proof used explicit bindings and passed again in installed Fedora Chrome.
+Later PC experiments established automatic ownership for supported JSX, literal props, local imports and aliases, and keyed sample records.
+They verified command-owned selection continuity, a real Base UI-flavored shadcn dialog, bounded cross-file Only this, temporary Show content, and two initially identical authored usages.
+PR5 combined the experiments into one exact installation and reran the existing and affected suites.
+[React source-editing validation](../doc_v1/architecture/react-source-editing-validation.md) records reviewed commits, outcomes, reproduction commands, and remaining limits.
 
-The proof supports the candidates.
-It does not select those packages for production until the Fedora Chrome check passes and implementation validates the real binding resolver.
+Continue with these tools for the actual editor's supported source-editing path.
+This does not certify arbitrary React recognition, arbitrary source-rewrite reconciliation, complete module copying, the whole application, or Windows.
+Unsupported values use Edit source while supported controls and sibling layers remain available.
+The complete editor workflow must validate these contracts through its real command engine and `.orc` storage.
+
+## TypeScript and reproducible dependencies
+
+TypeScript 6 is the required V1 type-checking CLI.
+The separate TS7 checkpoint uses the same source, dependency tree, and shared configuration without replacing the TS6 installation.
+Its failures are recorded but do not block a TS6-based release.
+The [TypeScript tooling policy](../doc_v1/architecture/typescript-tooling.md) defines planned commands, checkpoint timing, and migration conditions.
+Babel and Recast own source parsing and mutation; Bun builds component candidates.
+Keep the source-editing engine independent of TypeScript compiler APIs.
+PR5 used TS7 for its historical experiment check and temporarily compared TS6; those results do not determine the V1 baseline.
+The PC comparison found the same seven missing Tailwind declaration imports with TS6 and TS7, so a compiler downgrade did not fix that failure.
+PR5's reproducible Bun patch repairs only the two declaration files in `@tailwindcss/node@4.3.3`, with no runtime changes or disabled library checking.
+Full checking passed for the configured integration project after that patch.
+Reevaluate the patch when changing that pinned dependency; it is not an upstream fix or a permanent requirement for every future Tailwind release.
+
+The validation record lists the exact tested versions, including React 19.3.0, Babel parser 7.29.9, Recast 0.24.0, Tailwind 4.3.3, TS7 7.0.2, Oxlint 1.86.0, and Oxfmt 0.71.0.
+These are experiment pins, not a floating latest-version recommendation.
+Production dependencies need one project manifest and lockfile, local resolution, and one React installation for editor and supported component rendering.
+Do not rely on another experiment folder's compiler or dependency tree.
 
 ## Packages to add only when their work begins
 
@@ -45,10 +70,15 @@ It does not select those packages for production until the Fedora Chrome check p
 | `typebox` | Document and command schemas | Evaluate when canonical schemas are implemented. |
 | `dompurify` | HTML and SVG import boundary | Evaluate against the actual import path. |
 | `clsx` and `tailwind-merge` | Class composition for selected components | Add only if the selected components use them. |
+| `class-variance-authority`, `cn`, and `tw-animate-css` | Helpers and styles used by the tested shadcn source | Include only when selected generated source actually requires them; do not also add unused alternative helpers. |
 | `motion` | Source-authored live component animation | Add when Motion component support is implemented. |
 
 Do not inherit Zustand, Mutative, Vitest, Electron, Electron Builder, Electron-specific build setup, a second TypeScript compiler, or packages from the original ORC merely because the desktop application used them.
+The agreed TS7 compatibility checkpoint is an explicit development task and can use an isolated compiler installation.
 Fallow is already installed as a CLI for codebase analysis and does not need to become a project dependency for documentation work.
+shadcn supplies selected Base UI-flavored source when acquiring components; it is not a browser runtime requirement.
+The tested global CLI is acquisition provenance, and the combined proof reruns committed component source without requiring that global installation.
+Choose and record the CLI version when generating new source rather than installing it merely to rerun existing components.
 
 ## Deliberately deferred
 

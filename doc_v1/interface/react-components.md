@@ -78,12 +78,20 @@ For shared values, Properties says “Every [component name] instance.”
 For instance values, it says “This instance only.”
 The editor never hides this distinction.
 
+Eligibility belongs to each value, not to the entire component.
+If a heading's text comes from unsupported logic, Properties shows Edit source for that text while retaining any supported typography controls.
+Other supported Layers remain selectable and editable.
+
 When a supported shared value is changed in Properties, ORC asks one clear question: **Only this** or **All copies**.
 Only this creates an independent component record for the selected instance and applies the requested change.
 All copies changes the shared component source for every instance.
 The choice, any independent copy, and the value change form one Undo step.
 
 The person never needs to find a separate independent-copy action before changing a value.
+
+Only this copies the local definitions needed to make the selected value independent.
+It does not duplicate the whole project, package primitives, or shared theme.
+If that boundary cannot be copied safely, the editor explains why Only this is unavailable and keeps supported All copies or source editing available.
 
 The source-binding contract that makes these edits durable is defined in [React source bindings](../architecture/react-source-bindings.md).
 
@@ -127,7 +135,9 @@ The agent does not need a separate feedback loop to learn visual edits.
 
 V1 supports components with declared or reliably recognized editable shapes.
 It does not promise visual editing for every React, JSX, dynamic data, or runtime DOM pattern.
-Code source editing remains available when a safe visual binding does not exist.
+Code source editing remains available when a safe visual binding does not exist for a particular value.
+The Fedora experiments validate supported ownership discovery and editing in real component compositions; the complete Properties and Layers interface is still an implementation task.
+See [React source-editing validation](../architecture/react-source-editing-validation.md) for established behavior and limits.
 
 [Component import](../import-export/component-import.md) defines inspection and import.
 [Code window](code-window.md) defines unapplied code and Apply.

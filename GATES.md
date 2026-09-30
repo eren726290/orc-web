@@ -156,16 +156,34 @@ Scope: Record the accepted Chrome-only V1 support policy and the font workflow t
 
 ## Gates: implementation stack and source-editing evidence
 
-Scope: Record the accepted Bun decision, recommended browser application foundation, and the bounded source-editing proof without representing it as a complete ORC-web implementation.
+Scope: Record the accepted Bun decision, recommended application foundation, reviewed PR1–5 evidence, and supported implementation direction without representing experiments as the completed editor.
 
 - [x] S1: The stack record distinguishes accepted, recommended, candidate, and deliberately deferred dependencies.
-  CHECK: node -e 'const s=require("node:fs").readFileSync("backlog/stack-proposal.md","utf8");for(const x of ["Accepted.","Recommended foundation.","current source-editing candidates","intentionally settled last"])if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}console.log("Stack statuses are explicit")'
+  CHECK: node -e 'const s=require("node:fs").readFileSync("backlog/stack-proposal.md","utf8");for(const x of ["Accepted.","Recommended foundation.","Validated direction", "type-checking CLI", "intentionally settled last"])if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}console.log("Stack statuses are explicit")'
   EXPECT: Stack statuses are explicit.
+  EVIDENCE: Stack statuses are explicit.
 
-- [x] S2: The source-editing proof documents every passed behavior and explicit limits.
-  CHECK: node -e 'const s=require("node:fs").readFileSync("doc_v1/architecture/react-source-editing-validation.md","utf8");for(const x of ["Passed checks","Candidate runtime crash","Save and reopen","Automatic editable-layer discovery","Fedora Google Chrome"])if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}console.log("Proof results and limits are explicit")'
+- [x] S2: The reviewed PR1–5 results, corrected failures, type-checking scope, and remaining limits are recorded against immutable commits.
+  CHECK: node -e 'const s=require("node:fs").readFileSync("doc_v1/architecture/react-source-editing-validation.md","utf8");for(const x of ["Evidence by PR","Initially", "Actual failures corrected", "TypeScript and dependency checking", "Remaining limits", "7e8f3b5e314c9f42e6a2d455ef0e1db7dc44c6fc"])if(!s.toLowerCase().includes(x.toLowerCase())){console.error(`missing ${x}`);process.exit(1)}console.log("Proof results and limits are explicit")'
   EXPECT: Proof results and limits are explicit.
+  EVIDENCE: Proof results and limits are explicit.
 
-- [x] S3: A Fedora Chrome handoff task is self-contained and the source-binding and product indexes link to it.
-  CHECK: node -e 'const fs=require("node:fs");const files=["doc_v1/README.md","doc_v1/architecture/react-source-bindings.md","doc_v1/architecture/react-source-editing-validation.md"];const s=files.map(f=>fs.readFileSync(f,"utf8")).join("\\n");for(const x of ["React source-editing validation","Fedora verification task","Google Chrome"])if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}console.log("Proof handoff is linked")'
-  EXPECT: Proof handoff is linked.
+- [x] S3: Source-binding and index links point to completed Fedora evidence instead of a pending handoff.
+  CHECK: node -e 'const fs=require("node:fs");for(const f of ["doc_v1/README.md","doc_v1/architecture/react-source-bindings.md","backlog/README.md","backlog/stack-proposal.md"]){const s=fs.readFileSync(f,"utf8");if(!s.includes("react-source-editing-validation.md")||/awaiting Fedora|Fedora verification task|Fedora handoff task/.test(s)){console.error(`missing link or stale status in ${f}`);process.exit(1)}}console.log("Reviewed Fedora evidence is linked")'
+  EXPECT: Reviewed Fedora evidence is linked.
+  EVIDENCE: Reviewed Fedora evidence is linked.
+
+- [x] S4: Per-value fallback, command identity limits, and Only this copying boundaries connect the source contract to the human interface.
+  CHECK: node -e 'const fs=require("node:fs");const s=fs.readFileSync("doc_v1/architecture/react-source-bindings.md","utf8");for(const x of ["Identity through edits","snapshot digest","per value or operation","Only this is unavailable","Authoring editable foundations","get_context"]){if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}}for(const f of ["doc_v1/interface/react-components.md","doc_v1/interface/layers-and-properties.md","doc_v1/interface/code-window.md","doc_v1/import-export/component-import.md"])if(!fs.readFileSync(f,"utf8").includes("Edit source")){console.error(`missing fallback in ${f}`);process.exit(1)}console.log("Source ownership and UI boundaries are connected")'
+  EXPECT: Source ownership and UI boundaries are connected.
+  EVIDENCE: Source ownership and UI boundaries are connected.
+
+- [x] S5: Browser evidence distinguishes bundled Chromium from installed headless Chrome and retains visible Fedora/Windows verification.
+  CHECK: node -e 'const fs=require("node:fs");const s=fs.readFileSync("doc_v1/architecture/browser-support.md","utf8");for(const x of ["channel: \"chrome\"","Headless mode","headless shell","visible Chrome","Fedora and Windows"]){if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}}console.log("Browser evidence and release checks are distinguished")'
+  EXPECT: Browser evidence and release checks are distinguished.
+  EVIDENCE: Browser evidence and release checks are distinguished.
+
+- [x] S6: TS6 is the accepted V1 checker, TS7 is a separate compatibility checkpoint, and PR5's original compiler results remain historical evidence.
+  CHECK: node -e 'const fs=require("node:fs");const p="doc_v1/architecture/typescript-tooling.md",s=fs.readFileSync(p,"utf8");for(const x of ["Accepted V1 development policy","check:types","check:ts7","same project source","separate pinned compiler installation","Migration conditions","Choosing TS6 for V1 does not remove"]){if(!s.includes(x)){console.error(`missing ${x}`);process.exit(1)}}for(const f of ["doc_v1/README.md","doc_v1/architecture/system-architecture.md","doc_v1/architecture/react-source-editing-validation.md","backlog/stack-proposal.md","backlog/README.md"]){if(!fs.readFileSync(f,"utf8").includes("typescript-tooling.md")){console.error(`missing policy link in ${f}`);process.exit(1)}}if(fs.readFileSync("backlog/stack-proposal.md","utf8").includes("| Type checking | TypeScript 7 CLI |")){console.error("stale TS7 baseline");process.exit(1)}console.log("TS6 baseline, TS7 checkpoint, and historical evidence are connected")'
+  EXPECT: TS6 baseline, TS7 checkpoint, and historical evidence are connected.
+  EVIDENCE: TS6 baseline, TS7 checkpoint, and historical evidence are connected.

@@ -32,6 +32,9 @@ The agent never receives an unfinished private draft as though it were applied s
 Code Apply keeps stable identities where the editor can prove the selected structure still maps to the existing design.
 New elements receive new IDs.
 An ambiguous replacement must explain the identity change before it applies.
+The resolver validates old bindings against the new applied source before another visual edit can use them.
+The Fedora proof of selection through supported commands does not establish identity reconciliation after arbitrary Code Apply.
+This remains a production implementation requirement.
 
 ## Shared component source
 
@@ -46,6 +49,9 @@ The Apply flow validates declared properties and slots so an update cannot silen
 Selecting a source-backed component layer identifies the source binding that its visual controls use.
 A visual edit changes that owned source value through the same command engine as Code Apply.
 Code remains the path for valid source changes that do not have a safe visual binding.
+An unsupported computed value can remain source-editable without disabling supported controls on sibling layers.
+Properties offers **Edit source** for that value and opens the relevant applied source in Code.
+Apply still validates existing required instance properties and slots; partial visual support does not permit silently discarding their values.
 See [Editable React components](react-components.md), [Motion](motion.md), and [React source bindings](../architecture/react-source-bindings.md).
 
 ## Unapplied code

@@ -24,6 +24,7 @@ When this specification does not decide a topic, record it in [`../backlog/`](..
 | Area | Document | What it owns |
 | --- | --- | --- |
 | Architecture | [System architecture](architecture/system-architecture.md) | Local processes, authority, and data flow. |
+| TypeScript tooling | [TypeScript tooling and migration](architecture/typescript-tooling.md) | Required TS6 checking, a separate TS7 compatibility checkpoint, and migration conditions. |
 | Browser support | [Browser support](architecture/browser-support.md) | Chrome support policy, local-server boundaries, clipboard, shortcuts, and verification. |
 | Document data | [Canonical document model](architecture/canonical-document-model.md) | The saved design structure and invariants. |
 | Projects and saving | [Workspace bundle](architecture/orc-workspace-bundle.md) | Untitled projects, `.orc` folders, autosave, and recovery. |
@@ -43,9 +44,9 @@ When this specification does not decide a topic, record it in [`../backlog/`](..
 | Tailwind components | [Tailwind components](import-export/tailwind-components.md) | Supported source import, browser compilation, visual class edits, and faithful React export. |
 | Exports | [Export](import-export/export.md) | React with CSS or Tailwind, HTML, images, and PDF. |
 | Source mapping | [React source bindings](architecture/react-source-bindings.md) | Stable editor IDs that resolve visual component layers to authored React source. |
-| Source validation | [React source-editing validation](architecture/react-source-editing-validation.md) | Bounded source-editing proof, known limits, and Fedora verification task. |
+| Source validation | [React source-editing validation](architecture/react-source-editing-validation.md) | Reviewed PR1–5 results, Fedora Chrome evidence, measured corrections, and remaining implementation limits. |
 | Agents | [MCP server](mcp/mcp-server.md) | Local MCP endpoint, transport, and server behavior. |
-| Agent tools | [Tool catalog](mcp/tool-catalog.md) | The 39 public V1 MCP tools. |
+| Agent tools | [Tool catalog](mcp/tool-catalog.md) | Current 39-tool inventory, to be revisited with the complete MCP stack last. |
 | Tool rules | [Command contracts](mcp/command-contracts.md) | Shared inputs, results, and command rules. |
 
 ## Status vocabulary
@@ -53,3 +54,12 @@ When this specification does not decide a topic, record it in [`../backlog/`](..
 Accepted means the behavior is agreed for V1.
 Proposed means the document gives a direction that still needs agreement or implementation validation.
 Open means the decision belongs in the backlog.
+
+## Implementation evidence
+
+The [source-editing validation record](architecture/react-source-editing-validation.md) confirms bounded ownership discovery, selection continuity, real Base UI composition, and local copying in Fedora Chrome.
+These are implementation experiments, not a completed editor or Windows certification.
+The product still includes ordinary HTML/CSS and SVG editing alongside source-backed React, Tailwind, and Motion.
+The [stack record](../backlog/stack-proposal.md) identifies the package direction and remaining decisions.
+The [TypeScript tooling policy](architecture/typescript-tooling.md) selects TS6 for V1 while retaining PR5's TS7 results as evidence for a future migration.
+MCP server, transports, SDK, and the complete tool inventory are reviewed last; existing MCP documents do not finalize those implementation choices.

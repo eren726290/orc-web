@@ -6,7 +6,14 @@ Backlog entries are not product requirements until they are accepted and recorde
 ## Open topics
 
 - Validate the recommended React, Vite, and browser-check foundation with the real ORC-web implementation before treating it as final.
-- Run the [Fedora source-editing verification task](../doc_v1/architecture/react-source-editing-validation.md) in supported Google Chrome, then decide whether Babel plus Recast remains the source-editing choice.
+- Implement the real editor workflow using the Babel/Recast direction established by [PR1–5 source-editing validation](../doc_v1/architecture/react-source-editing-validation.md); completed Fedora fixture checks are not pending handoff work.
+- Define production binding identity and reconciliation after Code Apply, including harmless formatting and source movement, while preserving command-owned selection and refusing uncertain targets.
+- Implement Properties/Layers, supported Only this boundaries, and hidden-content controls with the existing source-ownership contract rather than expanding recognition to every React pattern first.
+- Verify same-page imported styles, frame-local portals, and editing around live components in the actual workspace; the isolated dialog proof does not settle those boundaries.
+- Integrate component source and binding storage with the portable `.orc` bundle; experiment selection/reveal JSON is not canonical design state.
+- Verify the finished editor in visible Chrome on Fedora and Windows, including focus, clipboard, fonts, and workspace gestures.
+- Reevaluate PR5's declaration-only Tailwind patch when selecting or changing the application's pinned compiler dependency.
+- Implement the accepted [TS6 baseline and TS7 checkpoint](../doc_v1/architecture/typescript-tooling.md), record exact compiler pins, and track any blockers before promoting TS7.
 - Define ORC-web's MCP server, SDK, transports, and tool dependencies last, after project, import, source-binding, and export implementation requirements are known.
 - Adapt the original ORC's 39-tool inventory to ORC-web's loose workspace objects and frame operations.
 - Define any desktop conversion path for the accepted ORC-web `.orc` folder format.
