@@ -1,0 +1,104 @@
+[
+  {
+    "build": 1,
+    "phase": "accepted",
+    "messages": [
+      "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ]
+  },
+  {
+    "build": 2,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 3,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 4,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 5,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 6,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 7,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 8,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 9,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 10,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 11,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 12,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 13,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 14,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 15,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 16,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 17,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 18,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 19,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 20,
+    "phase": "accepted",
+    "messages": []
+  }
+]

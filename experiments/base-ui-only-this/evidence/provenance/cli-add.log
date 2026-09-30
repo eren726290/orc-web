@@ -1,0 +1,9 @@
+- Checking registry.
+✔ Checking registry.
+- Installing dependencies.
+- Installing dependencies.
+✔ Installing dependencies.
+- Updating files.
+✔ Created 2 files:
+  - src/components/ui/button.tsx
+  - src/components/ui/dialog.tsx

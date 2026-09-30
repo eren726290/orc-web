@@ -1,0 +1,245 @@
+{
+  "environment": {
+    "os": "NAME=\"Fedora Linux\"\nVERSION=\"44 (KDE Plasma Desktop Edition)\"\nRELEASE_TYPE=stable\nID=fedora\nVERSION_ID=44\nVERSION_CODENAME=\"\"\nPRETTY_NAME=\"Fedora Linux 44 (KDE Plasma Desktop Edition)\"\nANSI_COLOR=\"0;38;2;60;110;180\"\nLOGO=fedora-logo-icon\nCPE_NAME=\"cpe:/o:fedoraproject:fedora:44\"\nDEFAULT_HOSTNAME=\"fedora\"\nHOME_URL=\"https://fedoraproject.org/\"\nDOCUMENTATION_URL=\"https://docs.fedoraproject.org/en-US/fedora/f44/\"\nSUPPORT_URL=\"https://ask.fedoraproject.org/\"\nBUG_REPORT_URL=\"https://bugzilla.redhat.com/\"\nREDHAT_BUGZILLA_PRODUCT=\"Fedora\"\nREDHAT_BUGZILLA_PRODUCT_VERSION=44\nREDHAT_SUPPORT_PRODUCT=\"Fedora\"\nREDHAT_SUPPORT_PRODUCT_VERSION=44\nSUPPORT_END=2027-05-19\nVARIANT=\"KDE Plasma Desktop Edition\"\nVARIANT_ID=kde\n",
+    "architecture": "x64",
+    "session": "wayland",
+    "desktop": "KDE",
+    "bun": "1.4.2",
+    "chrome": "154.0.8037.57",
+    "node": "v22.23.2",
+    "npm": "10.9.8",
+    "dependencies": {
+      "@babel/parser": "7.29.9",
+      "ast-types": "0.16.3",
+      "recast": "0.24.0",
+      "react": "19.3.0",
+      "react-dom": "19.3.0",
+      "tailwindcss": "4.3.3",
+      "playwright": "1.63.0"
+    }
+  },
+  "commands": [
+    "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install --ignore-scripts --no-audit --no-fund",
+    "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci --ignore-scripts --no-audit --no-fund",
+    "bun run proof"
+  ],
+  "results": [
+    {
+      "variant": "boundaries",
+      "name": "positive literal prop control",
+      "result": "PASS"
+    },
+    {
+      "variant": "boundaries",
+      "name": "nested block shadows prop",
+      "result": "PASS"
+    },
+    {
+      "variant": "boundaries",
+      "name": "nested callable shadows prop",
+      "result": "PASS"
+    },
+    {
+      "variant": "boundaries",
+      "name": "spread usage can override literal prop",
+      "result": "PASS"
+    },
+    {
+      "variant": "boundaries",
+      "name": "identical usages are structurally ambiguous",
+      "result": "PASS"
+    },
+    {
+      "variant": "boundaries",
+      "name": "local array shadows module array",
+      "result": "PASS"
+    },
+    {
+      "variant": "boundaries",
+      "name": "React keys collide after string coercion",
+      "result": "PASS"
+    },
+    {
+      "variant": "boundaries",
+      "name": "mutated collection is not a static record owner",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "1: literal text and static Tailwind owners discovered; source and rendering edited",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "2: particular usage prop and shared component style discovered with correct scopes",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "Undo restores exact source, rebuilt mappings, and rendered typography",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "3: aliased module and imported-name resolution edit the correct usage and implementation files",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "4: React key discovers stable record identity; reorder never retargets by array position",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "5: calculated and external-shaped text reject atomically; safely mapped style stays usable",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "6a: formatting and unrelated insertion rebuild mappings without retargeting selections",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "Only this explicitly unsupported and rejected without fixture-specific cloning",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "Invalid source and crashing candidate preserve source, design, saved state, and history",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "name": "Save/reopen regenerates working mappings from uninstrumented saved source",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "1: literal text and static Tailwind owners discovered; source and rendering edited",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "2: particular usage prop and shared component style discovered with correct scopes",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "Undo restores exact source, rebuilt mappings, and rendered typography",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "3: aliased module and imported-name resolution edit the correct usage and implementation files",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "4: React key discovers stable record identity; reorder never retargets by array position",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "5: calculated and external-shaped text reject atomically; safely mapped style stays usable",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "6a: formatting and unrelated insertion rebuild mappings without retargeting selections",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "Only this explicitly unsupported and rejected without fixture-specific cloning",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "Invalid source and crashing candidate preserve source, design, saved state, and history",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "name": "Save/reopen regenerates working mappings from uninstrumented saved source",
+      "result": "PASS"
+    }
+  ],
+  "expectedRejections": [
+    {
+      "variant": "basic",
+      "label": "Price: 21",
+      "diagnostic": "Error: Edit source: Calculated text or external-data-shaped input has no supported source owner\nError: Edit source: Calculated text or external-data-shaped input has no supported source owner\n    at edit (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/resolver.ts:473:47)\n    at change (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:180:17)\n    at rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:356:13)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "variant": "basic",
+      "label": "From external-shaped input",
+      "diagnostic": "Error: Edit source: Calculated text or external-data-shaped input has no supported source owner\nError: Edit source: Calculated text or external-data-shaped input has no supported source owner\n    at edit (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/resolver.ts:473:47)\n    at change (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:180:17)\n    at rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:356:13)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "variant": "basic",
+      "label": "ambiguous old selection",
+      "diagnostic": "Error: Edit source: Selection invalidated: source element is missing or structurally ambiguous\nError: Edit source: Selection invalidated: source element is missing or structurally ambiguous\n    at edit (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/resolver.ts:473:47)\n    at change (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:180:17)\n    at rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:427:11)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "variant": "basic",
+      "label": "Only this unsupported",
+      "diagnostic": "Error: Edit source: Only this is outside the safe module-copy subset of this experiment\nError: Edit source: Only this is outside the safe module-copy subset of this experiment\n    at change (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:177:17)\n    at rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:443:11)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "variant": "basic",
+      "label": "invalid TSX",
+      "diagnostic": "SyntaxError: Unexpected token (55:6)\nSyntaxError: Unexpected token (55:6)\n    at <parse> (:0)\n    at constructor (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:369:23)\n    at raise (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:6622:19)\n    at unexpected (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:6642:16)\n    at parseIdentifierName (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:12237:12)\n    at parseIdentifier (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:12215:23)\n    at parseVarId (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13436:21)\n    at parseVarId (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:9775:11)\n    at parseVar (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13417:12)\n    at parseVarStatement (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13264:10)\n    at parseVarStatement (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:9431:31)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:449:11)"
+    },
+    {
+      "variant": "basic",
+      "label": "crashing candidate",
+      "diagnostic": "AssertionError: Error: candidate crash\nError: candidate crash\n    at Hero (http://127.0.0.1:37249/app-19.js:12547:9)\n    at renderWithHooks (http://127.0.0.1:37249/app-19.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:37249/app-19.js:4852:15)\n    at beginWork (http://127.0.0.1:37249/app-19.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:37249/app-19.js:7996:14)\n    at workLoopSync (http://127.0.0.1:37249/app-19.js:7893:5)\n    at renderRootSync (http://127.0.0.1:37249/app-19.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:37249/app-19.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:37249/app-19.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:37249/app-19.js:175:44)\n\n1 !== 0\n\nAssertionError [ERR_ASSERTION]: Error: candidate crash\nError: candidate crash\n    at Hero (http://127.0.0.1:37249/app-19.js:12547:9)\n    at renderWithHooks (http://127.0.0.1:37249/app-19.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:37249/app-19.js:4852:15)\n    at beginWork (http://127.0.0.1:37249/app-19.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:37249/app-19.js:7996:14)\n    at workLoopSync (http://127.0.0.1:37249/app-19.js:7893:5)\n    at renderRootSync (http://127.0.0.1:37249/app-19.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:37249/app-19.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:37249/app-19.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:37249/app-19.js:175:44)\n\n1 !== 0\n\n    at prepare (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/browser.ts:112:14)\n    at async apply (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:152:36)\n    at async rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:473:11)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "variant": "variation",
+      "label": "Price: 21",
+      "diagnostic": "Error: Edit source: Calculated text or external-data-shaped input has no supported source owner\nError: Edit source: Calculated text or external-data-shaped input has no supported source owner\n    at edit (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/resolver.ts:473:47)\n    at change (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:180:17)\n    at rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:356:13)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "variant": "variation",
+      "label": "From external-shaped input",
+      "diagnostic": "Error: Edit source: Calculated text or external-data-shaped input has no supported source owner\nError: Edit source: Calculated text or external-data-shaped input has no supported source owner\n    at edit (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/resolver.ts:473:47)\n    at change (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:180:17)\n    at rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:356:13)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "variant": "variation",
+      "label": "ambiguous old selection",
+      "diagnostic": "Error: Edit source: Selection invalidated: source element is missing or structurally ambiguous\nError: Edit source: Selection invalidated: source element is missing or structurally ambiguous\n    at edit (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/resolver.ts:473:47)\n    at change (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:180:17)\n    at rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:427:11)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "variant": "variation",
+      "label": "Only this unsupported",
+      "diagnostic": "Error: Edit source: Only this is outside the safe module-copy subset of this experiment\nError: Edit source: Only this is outside the safe module-copy subset of this experiment\n    at change (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:177:17)\n    at rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:443:11)\n    at processTicksAndRejections (native:7:39)"
+    },
+    {
+      "variant": "variation",
+      "label": "invalid TSX",
+      "diagnostic": "SyntaxError: Unexpected token (55:6)\nSyntaxError: Unexpected token (55:6)\n    at <parse> (:0)\n    at constructor (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:369:23)\n    at raise (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:6622:19)\n    at unexpected (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:6642:16)\n    at parseIdentifierName (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:12237:12)\n    at parseIdentifier (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:12215:23)\n    at parseVarId (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13436:21)\n    at parseVarId (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:9775:11)\n    at parseVar (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13417:12)\n    at parseVarStatement (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:13264:10)\n    at parseVarStatement (/home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/node_modules/@babel/parser/lib/index.js:9431:31)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:449:11)"
+    },
+    {
+      "variant": "variation",
+      "label": "crashing candidate",
+      "diagnostic": "AssertionError: Error: candidate crash\nError: candidate crash\n    at Notice (http://127.0.0.1:37249/app-39.js:12533:9)\n    at renderWithHooks (http://127.0.0.1:37249/app-39.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:37249/app-39.js:4852:15)\n    at beginWork (http://127.0.0.1:37249/app-39.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:37249/app-39.js:7996:14)\n    at workLoopSync (http://127.0.0.1:37249/app-39.js:7893:5)\n    at renderRootSync (http://127.0.0.1:37249/app-39.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:37249/app-39.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:37249/app-39.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:37249/app-39.js:175:44)\n\n1 !== 0\n\nAssertionError [ERR_ASSERTION]: Error: candidate crash\nError: candidate crash\n    at Notice (http://127.0.0.1:37249/app-39.js:12533:9)\n    at renderWithHooks (http://127.0.0.1:37249/app-39.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:37249/app-39.js:4852:15)\n    at beginWork (http://127.0.0.1:37249/app-39.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:37249/app-39.js:7996:14)\n    at workLoopSync (http://127.0.0.1:37249/app-39.js:7893:5)\n    at renderRootSync (http://127.0.0.1:37249/app-39.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:37249/app-39.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:37249/app-39.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:37249/app-39.js:175:44)\n\n1 !== 0\n\n    at prepare (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/browser.ts:112:14)\n    at async apply (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:152:36)\n    at async rejected (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/proof.ts:473:11)\n    at processTicksAndRejections (native:7:39)"
+    }
+  ],
+  "unsupported": [
+    "Only this component cloning",
+    "Calculated or external-data-shaped text",
+    "Non-literal props, mixed content, arbitrary components, mutable data, and ambiguous source identities"
+  ]
+}

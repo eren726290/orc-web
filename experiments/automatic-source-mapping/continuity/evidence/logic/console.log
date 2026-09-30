@@ -1,0 +1,17 @@
+PASS AST basic literal successive value edits
+PASS AST basic command-created ambiguous usage rejected
+PASS AST basic prop successive value edits
+PASS AST basic collection successive value edits
+PASS AST variation literal successive value edits
+PASS AST variation command-created ambiguous usage rejected
+PASS AST variation prop successive value edits
+PASS AST variation collection successive value edits
+PASS boundary positive literal prop control
+PASS boundary nested block shadows prop
+PASS boundary nested callable shadows prop
+PASS boundary spread usage can override literal prop
+PASS boundary identical usages are structurally ambiguous
+PASS boundary local array shadows module array
+PASS boundary React keys collide after string coercion
+PASS boundary mutated collection is not a static record owner
+AST CHECKS PASSED: 6 successive-edit scenarios, 2 collision checks, 8 boundary controls

@@ -1,0 +1,9 @@
+orc-base-ui-only-this-proof@ /home/eren/D/orc-web-pr4/experiments/base-ui-only-this
+├── @babel/parser@7.29.9
+├── ast-types@0.16.3
+├── cn@0.4.0
+├── playwright@1.63.0
+├── react-dom@19.3.0
+├── react@19.3.0
+├── recast@0.24.0
+└── tailwindcss@4.3.3
