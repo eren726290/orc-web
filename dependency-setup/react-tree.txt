@@ -1,0 +1,27 @@
+orc-web@ /home/eren/D/orc-web-fresh-20260930
+├─┬ @base-ui/react@1.8.0
+│ ├─┬ @base-ui/utils@0.4.0
+│ │ ├── react-dom@19.3.0 deduped
+│ │ └── react@19.3.0 deduped
+│ ├─┬ @floating-ui/react-dom@2.1.9
+│ │ ├── react-dom@19.3.0 deduped
+│ │ └── react@19.3.0 deduped
+│ ├── react-dom@19.3.0 deduped
+│ ├── react@19.3.0 deduped
+│ └─┬ use-sync-external-store@1.7.0
+│   └── react@19.3.0 deduped
+├─┬ lucide-react@1.48.0
+│ └── react@19.3.0 deduped
+├─┬ motion@13.4.4
+│ ├─┬ framer-motion@13.4.4 overridden
+│ │ ├─┬ motion-dom@13.4.4 overridden
+│ │ │ └── motion-utils@13.3.0 deduped
+│ │ ├── motion-utils@13.3.0 overridden
+│ │ ├── react-dom@19.3.0 deduped
+│ │ └── react@19.3.0 deduped
+│ ├── react-dom@19.3.0 deduped
+│ └── react@19.3.0 deduped
+├─┬ react-dom@19.3.0
+│ └── react@19.3.0 deduped
+└── react@19.3.0
+

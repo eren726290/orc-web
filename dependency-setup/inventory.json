@@ -1,0 +1,636 @@
+{
+  "pullRequests": [
+    {
+      "pr": 1,
+      "commit": "35f53965d746c7e1f6bcccf455505af95931df66",
+      "manifests": [
+        {
+          "path": "package.json",
+          "manifest": {
+            "name": "orc-web",
+            "private": true,
+            "type": "module",
+            "dependencies": {
+              "@babel/parser": "7.29.9",
+              "@base-ui/react": "1.8.0",
+              "@codemirror/lang-javascript": "6.2.5",
+              "codemirror": "6.0.2",
+              "lucide-react": "1.48.0",
+              "motion": "13.4.6",
+              "react": "19.3.0",
+              "react-dom": "19.3.0",
+              "recast": "0.24.0"
+            },
+            "devDependencies": {
+              "@playwright/test": "1.63.0",
+              "@tailwindcss/vite": "4.3.3",
+              "@types/bun": "1.4.2",
+              "@types/react": "19.3.0",
+              "@types/react-dom": "19.3.0",
+              "@vitejs/plugin-react": "6.1.1",
+              "oxfmt": "0.71.0",
+              "oxlint": "1.86.0",
+              "shadcn": "4.21.0",
+              "tailwindcss": "4.3.3",
+              "typescript": "7.0.2",
+              "vite": "8.3.1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "pr": 2,
+      "commit": "2663a28aff8325e67e15a399ca321a365e1d9e18",
+      "manifests": [
+        {
+          "path": "experiments/automatic-source-mapping/package.json",
+          "manifest": {
+            "name": "orc-automatic-source-mapping-proof",
+            "private": true,
+            "type": "module",
+            "scripts": {
+              "proof": "bun proof.ts"
+            },
+            "dependencies": {
+              "@babel/parser": "7.29.9",
+              "ast-types": "0.16.3",
+              "recast": "0.24.0",
+              "react": "19.3.0",
+              "react-dom": "19.3.0",
+              "tailwindcss": "4.3.3",
+              "playwright": "1.63.0"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "pr": 3,
+      "commit": "c230345902e8b33d4d772916ce010a72fe8704d6",
+      "manifests": [
+        {
+          "path": "experiments/automatic-source-mapping/package.json",
+          "manifest": {
+            "name": "orc-automatic-source-mapping-proof",
+            "private": true,
+            "type": "module",
+            "scripts": {
+              "proof": "bun proof.ts"
+            },
+            "dependencies": {
+              "@babel/parser": "7.29.9",
+              "ast-types": "0.16.3",
+              "recast": "0.24.0",
+              "react": "19.3.0",
+              "react-dom": "19.3.0",
+              "tailwindcss": "4.3.3",
+              "playwright": "1.63.0"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "pr": 4,
+      "commit": "c1e0d54d215c75bf226e30510deab03b2dbb5521",
+      "manifests": [
+        {
+          "path": "experiments/automatic-source-mapping/package.json",
+          "manifest": {
+            "name": "orc-automatic-source-mapping-proof",
+            "private": true,
+            "type": "module",
+            "scripts": {
+              "proof": "bun proof.ts"
+            },
+            "dependencies": {
+              "@babel/parser": "7.29.9",
+              "ast-types": "0.16.3",
+              "recast": "0.24.0",
+              "react": "19.3.0",
+              "react-dom": "19.3.0",
+              "tailwindcss": "4.3.3",
+              "playwright": "1.63.0"
+            }
+          }
+        },
+        {
+          "path": "experiments/base-ui-only-this/package.json",
+          "manifest": {
+            "name": "orc-base-ui-only-this-proof",
+            "private": true,
+            "type": "module",
+            "scripts": {
+              "proof": "bun proof.ts"
+            },
+            "dependencies": {
+              "@babel/parser": "7.29.9",
+              "@base-ui/react": "1.8.0",
+              "@tailwindcss/node": "4.3.3",
+              "ast-types": "0.16.3",
+              "class-variance-authority": "0.7.1",
+              "cn": "0.4.0",
+              "lucide-react": "1.48.0",
+              "playwright": "1.63.0",
+              "react": "19.3.0",
+              "react-dom": "19.3.0",
+              "recast": "0.24.0",
+              "tailwindcss": "4.3.3",
+              "tw-animate-css": "1.4.0"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "imports": {
+    "ast-types": [
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/boundaries.ts",
+        "line": 2,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/proof.ts",
+        "line": 6,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/resolver.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/boundaries.ts",
+        "line": 2,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+        "line": 6,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/proof.ts",
+        "line": 6,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/resolver.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/boundaries.ts",
+        "line": 2,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+        "line": 6,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/proof.ts",
+        "line": 6,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/resolver.ts",
+        "line": 5,
+        "specifier": "ast-types"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/only-this.ts",
+        "line": 3,
+        "specifier": "ast-types"
+      }
+    ],
+    "recast": [
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/proof.ts",
+        "line": 5,
+        "specifier": "recast"
+      },
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/resolver.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+        "line": 5,
+        "specifier": "recast"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/proof.ts",
+        "line": 5,
+        "specifier": "recast"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/resolver.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+        "line": 5,
+        "specifier": "recast"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/proof.ts",
+        "line": 5,
+        "specifier": "recast"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/resolver.ts",
+        "line": 4,
+        "specifier": "recast"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/only-this.ts",
+        "line": 2,
+        "specifier": "recast"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/proof.ts",
+        "line": 6,
+        "specifier": "recast"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/styles.ts",
+        "line": 5,
+        "specifier": "recast"
+      }
+    ],
+    "tailwindcss": [
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 6,
+        "specifier": "tailwindcss"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 6,
+        "specifier": "tailwindcss"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 6,
+        "specifier": "tailwindcss"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/src/styles.css",
+        "line": 1,
+        "specifier": "tailwindcss"
+      }
+    ],
+    "playwright": [
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 7,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/proof.ts",
+        "line": 7,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 7,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+        "line": 6,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+        "line": 7,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/continuity/support.ts",
+        "line": 5,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/proof.ts",
+        "line": 7,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 7,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+        "line": 6,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+        "line": 7,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/continuity/support.ts",
+        "line": 5,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/proof.ts",
+        "line": 7,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/baseline.ts",
+        "line": 4,
+        "specifier": "playwright"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/proof.ts",
+        "line": 5,
+        "specifier": "playwright"
+      }
+    ],
+    "react-dom": [
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 64,
+        "specifier": "react-dom/client"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 64,
+        "specifier": "react-dom/client"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/browser.ts",
+        "line": 77,
+        "specifier": "react-dom/client"
+      }
+    ],
+    "@babel/parser": [
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/resolver.ts",
+        "line": 3,
+        "specifier": "@babel/parser"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/resolver.ts",
+        "line": 3,
+        "specifier": "@babel/parser"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/resolver.ts",
+        "line": 3,
+        "specifier": "@babel/parser"
+      }
+    ],
+    "react": [
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/runtime.tsx",
+        "line": 1,
+        "specifier": "react"
+      },
+      {
+        "pr": 2,
+        "file": "experiments/automatic-source-mapping/runtime.tsx",
+        "line": 2,
+        "specifier": "react"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/runtime.tsx",
+        "line": 1,
+        "specifier": "react"
+      },
+      {
+        "pr": 3,
+        "file": "experiments/automatic-source-mapping/runtime.tsx",
+        "line": 2,
+        "specifier": "react"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/runtime.tsx",
+        "line": 1,
+        "specifier": "react"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/automatic-source-mapping/runtime.tsx",
+        "line": 2,
+        "specifier": "react"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+        "line": 1,
+        "specifier": "react"
+      }
+    ],
+    "@base-ui/react": [
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/src/components/ui/button.tsx",
+        "line": 1,
+        "specifier": "@base-ui/react/button"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+        "line": 2,
+        "specifier": "@base-ui/react/dialog"
+      }
+    ],
+    "class-variance-authority": [
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/src/components/ui/button.tsx",
+        "line": 2,
+        "specifier": "class-variance-authority"
+      }
+    ],
+    "cn": [
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/src/components/ui/button.tsx",
+        "line": 3,
+        "specifier": "cn"
+      },
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+        "line": 3,
+        "specifier": "cn"
+      }
+    ],
+    "lucide-react": [
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+        "line": 6,
+        "specifier": "lucide-react"
+      }
+    ],
+    "tw-animate-css": [
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/src/styles.css",
+        "line": 2,
+        "specifier": "tw-animate-css"
+      }
+    ],
+    "@tailwindcss/node": [
+      {
+        "pr": 4,
+        "file": "experiments/base-ui-only-this/styles.ts",
+        "line": 4,
+        "specifier": "@tailwindcss/node"
+      }
+    ]
+  },
+  "originalProof": {
+    "source": "PR 1 backlog/fedora-chrome-source-editing-verification.md:20",
+    "motion": "13.4.4"
+  },
+  "motionChoice": "Original proof 13.4.4; PR 1 application declared 13.4.6. No compatibility equivalence claimed."
+}
