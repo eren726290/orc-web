@@ -17,5 +17,5 @@ OWNS: package.json, bun.lock, patches/**, README.md, dependency-setup/**, experi
   EXPECT: FOLLOWUP EVIDENCE VERIFIED
   EVIDENCE: automatic-evidence=v1; definition-sha256=c1bdcdaf02a594105a4532a97c0c6e08ccaeb0c5ed5404aec0f897bcf0cb04f0; exit=0; EXPECT=matched; output-sha256=3586a5887b78a605b9bf96012321372000ceda4334a8bc3c4be61b718c97fdd7; output-bytes=149; shell=/bin/sh; cwd=/home/eren/D/orc-web-fresh-20260930; path=fc5a54d96b0c/20 entries
 
-- [ ] F4: The report, exact diagnostics, source-owner records, screenshots, and final diff are reviewed; updates are pushed to PR5 and PRs 1–4 remain unchanged.
-  EVIDENCE: pending
+- [x] F4: The report, exact diagnostics, source-owner records, screenshots, and final diff are reviewed; updates are pushed to PR5 and PRs 1–4 remain unchanged.
+  EVIDENCE: manual: reviewed the focused diff and unchanged inherited assertions; inspected before/after Unicode screenshots; verified full and scoped checks, frozen patch installation, and affected regression evidence; pushed to existing PR5, updated its description, and checked earlier PR heads remain open and unchanged.

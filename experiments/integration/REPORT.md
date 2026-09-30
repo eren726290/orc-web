@@ -337,6 +337,7 @@ Repeating a single JSX usage through runtime loops, identical host nodes, initia
 Raw legacy analysis keeps its conservative collision refusal.
 External semantic source rewrites still discard uncertain selection; there is no general reconciliation framework.
 The previously reported view-state, closure, module-graph, async failure, Windows, and complete-editor limits remain.
+[Follow-up publication evidence](evidence/followup/publication.json) records the existing PR 5 update and unchanged open PRs 1–4.
 
 ## Publication
 
