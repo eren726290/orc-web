@@ -29,5 +29,5 @@ Scope: Integrate earlier proofs, verify checkout-local dependencies, investigate
   EXPECT: EVIDENCE VERIFIED:
   EVIDENCE: automatic-evidence=v1; definition-sha256=0479e6c417eb38431b4308a5fc09c7937f6a28c027e30f00ea51bcc99f5227c4; exit=0; EXPECT=matched; output-sha256=69f371f5e52621361068582be1eea99501a07299472b3ef81af85e3f42be797c; output-bytes=159; shell=/bin/sh; cwd=/home/eren/D/orc-web-fresh-20260930; path=b0b464a6532c/24 entries
 
-- [ ] G6: Diff, evidence, screenshots, and limitations are reviewed and PR 5 is open against master.
-  EVIDENCE: pending
+- [x] G6: Diff, evidence, screenshots, and limitations are reviewed and PR 5 is open against master.
+  EVIDENCE: manual: reviewed implementation diff, preserved assertions and generated component source, verified fresh Chrome results, visually inspected modal/Unicode screenshots, and checked https://github.com/eren726290/orc-web/pull/5 is open against master with PRs 1–4 open at unchanged heads.

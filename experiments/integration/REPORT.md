@@ -210,3 +210,9 @@ Installation, dependency checks, all four existing proofs, the four new workflow
 [Fresh reproduction provenance](evidence/fresh-reproduction/provenance.json), [dependency paths](evidence/fresh-reproduction/resolution.json), [existing-proof summary](evidence/fresh-reproduction/existing/summary.json), and [new workflow report](evidence/fresh-reproduction/integration/report.json) preserve those measurements.
 The proof implementation and dependency setup are unchanged after that reproduction.
 Subsequent commits preserve evidence, an evidence verifier, and publication records.
+
+## Publication
+
+[PR 5](https://github.com/eren726290/orc-web/pull/5) is open against `master`.
+PRs 1–4 remain open at their inspected heads.
+[Publication evidence](evidence/publication.json) records the checked state.
