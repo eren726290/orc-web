@@ -41,7 +41,7 @@ index 23a898bf2f9e4aedeb4a3e921f45294b1348d657..ce25294076299f8b4d12de3d27f88be2
 -};
 +// The Node loader delegates to its exact Tailwind dependency.
 +type DesignSystem = Awaited<ReturnType<typeof tailwindcss.__unstable__loadDesignSystem>>;
- 
+
  /**
   * The source code for one or more nodes in the AST
 diff --git a/dist/index.d.ts b/dist/index.d.ts
@@ -87,6 +87,6 @@ index 23a898bf2f9e4aedeb4a3e921f45294b1348d657..ce25294076299f8b4d12de3d27f88be2
 -};
 +// The Node loader delegates to its exact Tailwind dependency.
 +type DesignSystem = Awaited<ReturnType<typeof tailwindcss.__unstable__loadDesignSystem>>;
- 
+
  /**
   * The source code for one or more nodes in the AST
