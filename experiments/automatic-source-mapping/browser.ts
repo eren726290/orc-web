@@ -4,10 +4,19 @@ import path from "node:path";
 import * as recast from "recast";
 import { namedTypes as n } from "ast-types";
 import { compile } from "tailwindcss";
-import type { Browser } from "playwright";
+import type { Browser, Page } from "playwright";
 import { analyze, instrument, type Sources, type Aliases } from "./resolver";
 
-export async function renderer(browser: Browser, directory: string) {
+export async function renderer(
+  browser: Browser,
+  directory: string,
+  options: {
+    runtime?: string;
+    styles?: (sources: Sources) => Promise<string>;
+    instrumented?: boolean;
+    activate?: (page: Page) => Promise<void>;
+  } = {},
+) {
   const files = new Map<string, { body: string; type: string }>();
   const server = Bun.serve({
     hostname: "127.0.0.1",
@@ -29,7 +38,11 @@ export async function renderer(browser: Browser, directory: string) {
     let context: Awaited<ReturnType<Browser["newContext"]>> | null = null;
     try {
       const analysis = analyze(sources, aliases);
-      const generated = instrument(analysis, path.resolve("runtime.tsx"));
+      const generated = instrument(
+        analysis,
+        options.runtime ?? path.resolve("runtime.tsx"),
+        options.instrumented !== false,
+      );
       const classes = new Set<string>();
       for (const module of analysis.modules.values()) {
         recast.types.visit(module.ast, {
@@ -52,7 +65,7 @@ export async function renderer(browser: Browser, directory: string) {
           "--text-xl: 1.25rem; --font-weight-bold: 700; --font-weight-medium: 500; " +
           "--breakpoint-md: 48rem; --tracking-wide: 0.025em; } @tailwind utilities;",
       );
-      const css = compiler.build([...classes]);
+      const css = options.styles ? await options.styles(sources) : compiler.build([...classes]);
       for (const [file, source] of Object.entries(generated)) {
         const destination = path.join(workspace, file);
         await mkdir(path.dirname(destination), { recursive: true });
@@ -90,9 +103,12 @@ export async function renderer(browser: Browser, directory: string) {
           '<link rel="stylesheet" href="/style-' +
           id +
           '.css">' +
-          "<style>html{font-size:16px}body{font-family:system-ui;margin:24px;max-width:1000px}" +
-          "h1,h2,h3,h4{margin:10px 0}section,aside,article{border:1px solid #ddd;padding:12px;margin:8px 0}" +
-          "main>div{display:flex;gap:16px}main>div article{flex:1}</style></head><body>" +
+          (options.styles
+            ? ""
+            : "<style>html{font-size:16px}body{font-family:system-ui;margin:24px;max-width:1000px}" +
+              "h1,h2,h3,h4{margin:10px 0}section,aside,article{border:1px solid #ddd;padding:12px;margin:8px 0}" +
+              "main>div{display:flex;gap:16px}main>div article{flex:1}</style>") +
+          "</head><body>" +
           '<div id="root"></div><script type="module" src="/app-' +
           id +
           '.js"></script></body></html>',
@@ -110,10 +126,13 @@ export async function renderer(browser: Browser, directory: string) {
       await page.goto(String(server.url) + "candidate-" + id);
       await page.waitForFunction(() => Object.hasOwn(window, "__ready"), null, { timeout: 5000 });
       assert.equal(errors.length, 0, errors.join("\n"));
-      assert(
-        (await page.locator("[data-orc-node]").count()) > 0,
-        "Candidate did not render instrumented authored elements",
-      );
+      await options.activate?.(page);
+      assert.equal(errors.length, 0, errors.join("\n"));
+      if (options.instrumented !== false)
+        assert(
+          (await page.locator("[data-orc-node]").count()) > 0,
+          "Candidate did not render instrumented authored elements",
+        );
       diagnostics.push({ build: id, phase: "accepted", messages });
       return { page, context, analysis };
     } catch (error) {

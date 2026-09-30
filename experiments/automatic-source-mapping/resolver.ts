@@ -560,7 +560,7 @@ export function editRetainingSelection(
   return { sources, selection: { node, usages, record: selection.record } };
 }
 
-export function instrument(analysis: Analysis, runtimePath: string): Sources {
+export function instrument(analysis: Analysis, runtimePath: string, enabled = true): Sources {
   const generated = analyze(analysis.sources, analysis.aliases);
   const hostNodes = new Map<n.JSXElement, Host>(),
     siteNodes = new Map<n.JSXElement, Usage>();
@@ -574,6 +574,7 @@ export function instrument(analysis: Analysis, runtimePath: string): Sources {
   for (const [file, module] of generated.modules) {
     recast.types.visit(module.ast, {
       visitJSXElement(p) {
+        if (!enabled) return false;
         const host = hostNodes.get(p.node),
           site = siteNodes.get(p.node);
         this.traverse(p);
@@ -602,7 +603,9 @@ export function instrument(analysis: Analysis, runtimePath: string): Sources {
                 false,
               ),
               b.jsxClosingElement(b.jsxIdentifier("__ORCScope")),
-              [p.node],
+              // Recast preserves return-expression parentheses. Keep them in an expression,
+              // otherwise wrapping a parenthesized JSX return prints literal '(' and ')' children.
+              [b.jsxExpressionContainer(p.node)],
             ),
           );
         }
@@ -623,10 +626,11 @@ export function instrument(analysis: Analysis, runtimePath: string): Sources {
       }
     }
     output[file] =
-      "import { Host as __ORCHost, Scope as __ORCScope } from " +
-      JSON.stringify(runtimePath) +
-      ";\n" +
-      recast.print(module.ast).code;
+      (enabled
+        ? "import { Host as __ORCHost, Scope as __ORCScope } from " +
+          JSON.stringify(runtimePath) +
+          ";\n"
+        : "") + recast.print(module.ast).code;
   }
   return output;
 }

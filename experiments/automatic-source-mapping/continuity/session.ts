@@ -146,6 +146,38 @@ export async function session({
     current = candidate;
     await record("after " + label);
   }
+  async function copiedSelection(node: string, rootUsage: string, sources: Sources) {
+    const candidate = await render.prepare(sources, aliases, entry);
+    try {
+      const matches = await candidate.page.locator("[data-orc-node]").evaluateAll(
+        (elements, target) =>
+          elements.flatMap((element) => {
+            if (element.getAttribute("data-orc-node") !== target.node) return [];
+            const usages: unknown = JSON.parse(element.getAttribute("data-orc-usage") ?? "null");
+            const record: unknown = JSON.parse(element.getAttribute("data-orc-record") ?? "null");
+            return Array.isArray(usages) && usages.includes(target.rootUsage)
+              ? [{ node: target.node, usages, record }]
+              : [];
+          }),
+        { node, rootUsage },
+      );
+      if (matches.length !== 1)
+        throw new Error("Only this candidate did not produce one certain rendered binding");
+      const [selection] = matches;
+      if (
+        !selection.usages.every((usage: unknown) => typeof usage === "string") ||
+        !(
+          selection.record === null ||
+          typeof selection.record === "string" ||
+          typeof selection.record === "number"
+        )
+      )
+        throw new Error("Only this candidate produced invalid selection metadata");
+      return { node: selection.node, usages: selection.usages, record: selection.record };
+    } finally {
+      await candidate.context.close();
+    }
+  }
   return {
     handle,
     records,
@@ -189,6 +221,13 @@ export async function session({
     async sourceEdit(next: Sources, label: string) {
       // No inferred lineage for direct source edits; retain only a still-unambiguous token.
       await commit({ ...state, sources: next }, "edit", label);
+    },
+    async applyCopiedChange(
+      next: { sources: Sources; node: string; rootUsage: string },
+      label: string,
+    ) {
+      const selection = await copiedSelection(next.node, next.rootUsage, next.sources);
+      await commit({ sources: next.sources, selection, reason: null }, "edit", label);
     },
     async undo() {
       const previous = history.at(-1);
