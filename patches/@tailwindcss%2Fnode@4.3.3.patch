@@ -1,0 +1,92 @@
+diff --git a/dist/index.d.mts b/dist/index.d.mts
+index 23a898bf2f9e4aedeb4a3e921f45294b1348d657..ce25294076299f8b4d12de3d27f88be22d089d29 100644
+--- a/dist/index.d.mts
++++ b/dist/index.d.mts
+@@ -1,10 +1,3 @@
+-import { AstNode as AstNode$1 } from './ast';
+-import { Candidate, Variant } from './candidate';
+-import { compileAstNodes } from './compile';
+-import { ClassEntry, VariantEntry, CanonicalizeOptions } from './intellisense';
+-import { Theme } from './theme';
+-import { Utilities } from './utilities';
+-import { Variants } from './variants';
+ import * as tailwindcss from 'tailwindcss';
+ import { Polyfills, Features } from 'tailwindcss';
+ export { Features, Polyfills } from 'tailwindcss';
+@@ -20,28 +13,8 @@ declare const enum CompileAstFlags {
+     None = 0,
+     RespectImportant = 1
+ }
+-type DesignSystem = {
+-    theme: Theme;
+-    utilities: Utilities;
+-    variants: Variants;
+-    invalidCandidates: Set<string>;
+-    important: boolean;
+-    getClassOrder(classes: string[]): [string, bigint | null][];
+-    getClassList(): ClassEntry[];
+-    getVariants(): VariantEntry[];
+-    parseCandidate(candidate: string): Readonly<Candidate>[];
+-    parseVariant(variant: string): Readonly<Variant> | null;
+-    compileAstNodes(candidate: Candidate, flags?: CompileAstFlags): ReturnType<typeof compileAstNodes>;
+-    printCandidate(candidate: Candidate): string;
+-    printVariant(variant: Variant): string;
+-    getVariantOrder(): Map<Variant, number>;
+-    resolveThemeValue(path: string, forceInline?: boolean): string | undefined;
+-    trackUsedVariables(raw: string): void;
+-    canonicalizeCandidates(candidates: string[], options?: CanonicalizeOptions): string[];
+-    candidatesToCss(classes: string[]): (string | null)[];
+-    candidatesToAst(classes: string[]): AstNode$1[][];
+-    storage: Record<symbol, unknown>;
+-};
++// The Node loader delegates to its exact Tailwind dependency.
++type DesignSystem = Awaited<ReturnType<typeof tailwindcss.__unstable__loadDesignSystem>>;
+ 
+ /**
+  * The source code for one or more nodes in the AST
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 23a898bf2f9e4aedeb4a3e921f45294b1348d657..ce25294076299f8b4d12de3d27f88be22d089d29 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1,10 +1,3 @@
+-import { AstNode as AstNode$1 } from './ast';
+-import { Candidate, Variant } from './candidate';
+-import { compileAstNodes } from './compile';
+-import { ClassEntry, VariantEntry, CanonicalizeOptions } from './intellisense';
+-import { Theme } from './theme';
+-import { Utilities } from './utilities';
+-import { Variants } from './variants';
+ import * as tailwindcss from 'tailwindcss';
+ import { Polyfills, Features } from 'tailwindcss';
+ export { Features, Polyfills } from 'tailwindcss';
+@@ -20,28 +13,8 @@ declare const enum CompileAstFlags {
+     None = 0,
+     RespectImportant = 1
+ }
+-type DesignSystem = {
+-    theme: Theme;
+-    utilities: Utilities;
+-    variants: Variants;
+-    invalidCandidates: Set<string>;
+-    important: boolean;
+-    getClassOrder(classes: string[]): [string, bigint | null][];
+-    getClassList(): ClassEntry[];
+-    getVariants(): VariantEntry[];
+-    parseCandidate(candidate: string): Readonly<Candidate>[];
+-    parseVariant(variant: string): Readonly<Variant> | null;
+-    compileAstNodes(candidate: Candidate, flags?: CompileAstFlags): ReturnType<typeof compileAstNodes>;
+-    printCandidate(candidate: Candidate): string;
+-    printVariant(variant: Variant): string;
+-    getVariantOrder(): Map<Variant, number>;
+-    resolveThemeValue(path: string, forceInline?: boolean): string | undefined;
+-    trackUsedVariables(raw: string): void;
+-    canonicalizeCandidates(candidates: string[], options?: CanonicalizeOptions): string[];
+-    candidatesToCss(classes: string[]): (string | null)[];
+-    candidatesToAst(classes: string[]): AstNode$1[][];
+-    storage: Record<symbol, unknown>;
+-};
++// The Node loader delegates to its exact Tailwind dependency.
++type DesignSystem = Awaited<ReturnType<typeof tailwindcss.__unstable__loadDesignSystem>>;
+ 
+ /**
+  * The source code for one or more nodes in the AST

@@ -1,0 +1,23 @@
+[
+  {
+    "name": "ts7-baseline",
+    "command": [
+      "bun",
+      "run",
+      "check:types"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 1
+  },
+  {
+    "name": "ts7-settings",
+    "command": [
+      "./node_modules/.bin/tsc",
+      "--showConfig",
+      "-p",
+      "experiments/integration/tsconfig.json"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  }
+]

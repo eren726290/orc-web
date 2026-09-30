@@ -19,8 +19,9 @@ bun run check:source-types
 The four existing proofs and the new integration workflows use the root installation and Chrome channel.
 No global package CLI or dependency symlink is required.
 `check:source-types` checks the integration and PR 4 source with dependency declaration checking skipped.
-`bun run check:types` also checks dependency declarations and currently fails on seven missing internal declarations in the pinned Tailwind Node compiler package.
-That limitation is recorded in the report; the full typecheck is not claimed to pass.
+`bun run check:types` passes with dependency declaration checking enabled.
+The committed declaration-only Tailwind package patch and TS 6/TS 7 comparison are documented in the report.
+`bun experiments/integration/identical-instances.ts` verifies selection and editing of initially identical usages.
 
 All dependencies have exact direct versions and a committed Bun lockfile.
 Generated bundles, new runs, browser binaries, and `node_modules` are not committed.

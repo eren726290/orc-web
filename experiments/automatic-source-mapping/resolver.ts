@@ -300,6 +300,38 @@ export function analyze(
   return { sources, aliases, modules, hosts, usages, bindings };
 }
 
+// Distinguish separate authored usages within this exact source snapshot.
+// These addresses are not matched against later external source replacements.
+export function initialUsageBindings(analysis: Analysis): CommandBindings {
+  const duplicates = new Set(
+    [...analysis.usages.values()]
+      .filter((items) => items.length > 1)
+      .flat()
+      .map((site) => site.node),
+  );
+  const bindings: CommandBindings = {};
+  for (const [file, module] of analysis.modules) {
+    const ids: Record<string, string> = {};
+    const digest = sourceDigest(analysis.sources[file]);
+    recast.types.visit(module.ast, {
+      visitJSXElement(p) {
+        if (duplicates.has(p.node)) {
+          const key = address(p);
+          ids[key] =
+            "initial-" +
+            createHash("sha256")
+              .update(JSON.stringify([file, digest, key]))
+              .digest("hex")
+              .slice(0, 24);
+        }
+        this.traverse(p);
+      },
+    });
+    if (Object.keys(ids).length) bindings[file] = { digest, ids };
+  }
+  return bindings;
+}
+
 function functionInfo(analysis: Analysis, key: string | null) {
   if (!key) return null;
   const [file, name] = key.split("::");

@@ -1,0 +1,24 @@
+{
+  "sources": {
+    "src/App.tsx": "function Notice({ title }: { title: string }) {\n  return <h1 className=\"text-4xl font-bold\">{title}</h1>;\n}\nexport default function App() {\n  return <main><Notice title=\"Same heading\" /><Notice title={\"Second after Undo reopen\"} /></main>;\n}\n"
+  },
+  "selection": {
+    "node": "command-517089900b0ba11313034fed",
+    "usages": [
+      "command-initial-979503fd22ca71ed157cc8a4"
+    ],
+    "record": null
+  },
+  "reason": null,
+  "bindings": {
+    "src/App.tsx": {
+      "digest": "2f1187218a8d27f71795e239c3a3bb3aad40e978b367e9e8dac70e1d85de5e27",
+      "ids": {
+        "[\"program\",0,\"body\",0,\"argument\"]": "command-517089900b0ba11313034fed",
+        "[\"program\",1,\"declaration\",\"body\",0,\"argument\",1]": "command-initial-979503fd22ca71ed157cc8a4"
+      }
+    }
+  },
+  "revealed": [],
+  "revision": 5
+}

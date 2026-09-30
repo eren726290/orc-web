@@ -185,6 +185,16 @@
       "resolved": "/home/eren/D/orc-web-fresh-20260930/node_modules/recast/main.js"
     },
     {
+      "file": "experiments/integration/identical-instances.ts",
+      "specifier": "playwright",
+      "resolved": "/home/eren/D/orc-web-fresh-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "file": "experiments/integration/identical-instances.ts",
+      "specifier": "ast-types",
+      "resolved": "/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
       "file": "experiments/integration/proof.ts",
       "specifier": "playwright",
       "resolved": "/home/eren/D/orc-web-fresh-20260930/node_modules/playwright/index.js"

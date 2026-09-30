@@ -1,0 +1,1 @@
+/tmp/orc-pr5-ts6-diagnosis-xplunb7k/typescript/package/bin/tsc

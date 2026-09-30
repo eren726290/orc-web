@@ -22,4 +22,7 @@ The initial JavaScript resolution probe incorrectly treated tw-animate-css as Ja
 The checker now verifies its style-only exports through real Tailwind compilation.
 All experiment sources are present here; generated-entry resolution probes represent the directories that their builders create.
 The real Chrome runs verify their combined runtime behavior.
-Full third-party declaration checking remains unresolved for @tailwindcss/node 4.3.3, separately from dependency installation and browser behavior.
+A committed Bun patch derives the Tailwind Node design-system declaration from its exact Tailwind dependency's published loader return type.
+Only two declaration files change; package versions and runtime code remain unchanged.
+Full TS 7 checking now passes without disabling library checking.
+The PR 5 report preserves the original failures and temporary TS 6 comparison.

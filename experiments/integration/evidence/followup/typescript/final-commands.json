@@ -1,0 +1,40 @@
+[
+  {
+    "name": "ts7-full-final",
+    "command": [
+      "bun",
+      "run",
+      "check:types"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  },
+  {
+    "name": "ts7-scoped-final",
+    "command": [
+      "bun",
+      "run",
+      "check:source-types"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  },
+  {
+    "name": "ts6-full-final",
+    "command": [
+      "node",
+      "/tmp/orc-pr5-ts6-diagnosis-xplunb7k/typescript/package/bin/tsc",
+      "--noEmit",
+      "--incremental",
+      "false",
+      "--pretty",
+      "false",
+      "--skipLibCheck",
+      "false",
+      "-p",
+      "experiments/integration/tsconfig.json"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  }
+]

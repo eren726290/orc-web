@@ -8,10 +8,11 @@ No previous assertion was removed or weakened.
 The real Tailwind positioning, normal interaction, visible-text comparison, and prior mapping/continuity regressions remain green.
 This is architecture-experiment evidence, not ORC-web application implementation or Windows certification.
 
-Full third-party TypeScript declaration checking remains unresolved.
-The pinned `@tailwindcss/node@4.3.3` package references seven declaration files missing from its installed distribution.
-The runtime compiler and browser checks pass; source checking with dependency declarations skipped also passes.
-Full typechecking is explicitly not counted as green.
+The focused PR 5 follow-up resolves the full TypeScript declaration check and adds selection for two separate JSX usages that are identical from the beginning.
+Full TS 7 checking now passes with dependency declaration checking enabled.
+A committed declaration-only patch repairs the published Tailwind Node package without changing package versions or runtime code.
+The new Chrome workflow and affected regressions pass.
+[Focused follow-up](#focused-follow-up-full-types-and-initially-identical-usages) separates these results from the original PR 5 evidence below.
 
 ## Starting point and integration
 
@@ -146,7 +147,8 @@ The existing raw-hash behavior and conservative collision refusal remain tested 
 The new capability is explicit opt-in experiment behavior, not a general identity redesign.
 Direct source edits discard command metadata and cannot reuse an uncertain command selection.
 The external structural-duplication check invalidates and refuses a subsequent edit without changing the saved state again.
-Already-identical usages imported without prior command lineage remain unsupported.
+At the original PR 5 checkpoint, already-identical usages without prior command lineage remained unsupported.
+The focused follow-up below supports separate authored JSX usages through generated initial snapshot bindings in `commandIdentity: true` sessions.
 Formatting or arbitrary source Apply after command IDs may require reselection because this experiment does not reconcile those IDs across external edits.
 
 ### Only this boundary
@@ -161,19 +163,19 @@ Reopen retains the selected independent note, while normal opening of the team d
 The existing captured-binding refusal, collision-safe names, parse/build/synchronous-render rejection, and ordinary interaction checks remain in PR 4's passing suite.
 No arbitrary closures, computed classes, or complete module-graph copying were added.
 
-## Static checking and unresolved declarations
+## Original static checking and declaration failure
 
 The old TS config's removed `baseUrl` and non-relative alias paths reproduce the earlier TS5102/TS5090 blocker.
 The integrated config uses relative alias paths and explicit installed Bun/Node/React types.
 Explicit checked-node assertions and narrow guards make the scoped source check pass without disabling strict mode or using unsafe casts.
 The original browser assertions remain intact.
 
-`bun run check:source-types` passes for integration/PR 4 source and their imported implementation with `--skipLibCheck`.
-`bun run check:types` exits 1 on seven missing internal declaration imports in the installed Tailwind Node package.
+At the original PR 5 checkpoint, `bun run check:source-types` passed for integration/PR 4 source and their imported implementation with `--skipLibCheck`.
+At that checkpoint, `bun run check:types` exited 1 on seven missing internal declaration imports in the installed Tailwind Node package.
 Both the original config failure and final declaration diagnostics are preserved under [typecheck](evidence/typecheck/).
 This is a dependency declaration compatibility issue, not an observed stylesheet or Chrome runtime failure.
-The consequence is that a full strict declaration check cannot currently certify this pinned dependency tree.
-An upstream declaration fix or a separately verified compatible version is the next step; PR 5 does not upgrade packages to conceal it.
+The consequence at that checkpoint was that a full strict declaration check could not certify the dependency tree.
+The follow-up repairs those declarations using the exact Tailwind dependency's published return type, with no version change.
 Source checking does not cover the untyped preserved PR 1 runner or every inherited test/fixture as a standalone TypeScript project.
 Local Oxlint, Oxfmt, and diff whitespace checks pass for the modified implementation, integration runners, and evidence verifier.
 [Static review commands and exit codes](evidence/static-review/results.json) record their exact scope.
@@ -190,7 +192,7 @@ bun run proofs:integration
 bun run check:source-types
 ```
 
-The full declaration diagnostic is reproduced separately with `bun run check:types`, expected exit 1.
+`bun run check:types` now passes after the committed package patch; the original exit-1 diagnostic remains in historical evidence.
 The existing-proof runner records exact commands, working directories, exit codes, console output, and each proof's reports and artifacts.
 It runs PR 1 once, PR 2 once, PR 3 once, and PR 4 once per invocation.
 The initial combined environment was verified once before corrections; shared-code changes justified a broader regression invocation afterward.
@@ -208,8 +210,133 @@ A separate clone at `/tmp/orc-web-pr5-reproduction-20260930` installed dependenc
 No previous dependency directory was copied, and the clone used no shared-object Git alternates.
 Installation, dependency checks, all four existing proofs, the four new workflows, and scoped source checking each exited 0.
 [Fresh reproduction provenance](evidence/fresh-reproduction/provenance.json), [dependency paths](evidence/fresh-reproduction/resolution.json), [existing-proof summary](evidence/fresh-reproduction/existing/summary.json), and [new workflow report](evidence/fresh-reproduction/integration/report.json) preserve those measurements.
-The proof implementation and dependency setup are unchanged after that reproduction.
-Subsequent commits preserve evidence, an evidence verifier, and publication records.
+That reproduction applies to the original PR 5 checkpoint.
+The focused follow-up below records the subsequent mapping and declaration corrections separately.
+
+## Focused follow-up: full types and initially identical usages
+
+This update starts from PR 5 commit `354fa5366957db94185a37c7e46094e00c449e7a` in the existing `/home/eren/D/orc-web-fresh-20260930` checkout.
+The requested `orc-web-fresh-20600930` directory does not exist.
+The existing `codex/integrated-proof-pr5` branch was clean before this work.
+No checkout, branch, or PR was created for the update.
+
+### Full TypeScript check diagnosis
+
+The original full check reproduced all seven TS2307 imports from `@tailwindcss/node/dist/index.d.ts`, exit 1.
+The package metadata directs type resolution to that file, but its published tarball contains none of the referenced `ast`, `candidate`, `compile`, `intellisense`, `theme`, `utilities`, or `variants` modules.
+The installed declaration bytes match the registry tarball, whose SHA-512 integrity matches the committed lockfile.
+This rules out a local missing-file installation as the cause.
+The 4.3.2 tarball also contains the same unresolved imports; it was inspected without installing it in the project.
+
+TypeScript 6.0.3 was downloaded and extracted under a temporary `/tmp/orc-pr5-ts6-diagnosis-*` directory using `npm pack`, without installing a second compiler in the project.
+TS 6 and TS 7.0.2 checked the same project source and dependency tree with identical expanded compiler settings and explicit `--skipLibCheck false`.
+[Comparison commands and settings](evidence/followup/typescript/equivalent-comparison.json) record both compiler paths, versions, commands, exit codes, and the unchanged manifest/lock hashes during comparison.
+Both reported exactly the same seven TS2307 diagnostics.
+TS 6 exited 2; TS 7 exited 1.
+A downgrade would therefore retain the declaration failure.
+
+| Check | Before correction | After correction |
+| --- | --- | --- |
+| TS 7.0.2 full CLI check | 7 TS2307 errors, exit 1 | PASS, exit 0 |
+| Temporary TS 6.0.3 full CLI check | Same 7 TS2307 errors, exit 2 | PASS, exit 0 |
+| TS 7 scoped source check | PASS with library declarations skipped | PASS, exit 0 |
+| Frozen installation | Original package has broken declarations | Patch reapplied, exit 0 |
+
+The fix is [a Bun package patch](../../patches/@tailwindcss%252Fnode@4.3.3.patch) for `dist/index.d.ts` and `dist/index.d.mts` only.
+Their dangling imports served a locally repeated `DesignSystem` declaration.
+The Node loader delegates to its exact `tailwindcss@4.3.3` dependency's public loader, which already publishes that complete type.
+The patch derives `DesignSystem` as `Awaited<ReturnType<typeof tailwindcss.__unstable__loadDesignSystem>>`.
+It introduces no fabricated member declarations, `any` replacement, ambient stubs, diagnostic suppression, or disabled library checking.
+All package versions, including TS 7.0.2, remain unchanged.
+No permanent TS 6 dependency was added.
+Manifest and lockfile changes register only the patch.
+
+`bun install --frozen-lockfile --force` reapplied the patch in this same checkout.
+An exhaustive comparison against the integrity-verified published tarball found changes only in the two declaration files, with every runtime file unchanged.
+[Installed package comparison](evidence/followup/typescript/installed-after.json), [declaration rationale](evidence/followup/typescript/declaration-correction.json), and [final commands](evidence/followup/typescript/final-commands.json) preserve the evidence.
+This remains TS CLI checking; no TypeScript programmatic compiler APIs are used.
+
+### Initially identical instance selection
+
+[The focused runnable check](identical-instances.ts) authors two separate `<Notice title="Same heading" />` usages and a heading whose text comes from that prop.
+There are no distinguishing props, authored editor IDs, source tables, or resolver-specific text matches.
+One actual Chrome click selects the second heading.
+Before correction, the actual editing command failed with `Selection invalidated before editing`, exit 1.
+The cause was that structural hashing gave both usage nodes the same generated ID, and the resolver correctly refused an ambiguous owner.
+[Baseline command failure](evidence/followup/identical-baseline/console.log) and [owner records](evidence/followup/identical-baseline/report.json) preserve that result.
+The first owner-assertion probe is retained separately in `identical-baseline-owner`.
+
+The correction adds generated bindings for colliding local JSX usages at initial session creation in the existing `commandIdentity: true` mode.
+The existing metadata format binds each exact AST address to the complete source digest.
+The existing instrumentation then carries distinct usage IDs into the rendered instances before the click.
+Supported commands transport the selected AST lineage using PR 5's existing mechanism.
+Authored TSX is untouched by instrumentation.
+These are addresses within the analyzed source snapshot, not matching heuristics against a later replacement or displayed text.
+
+The final workflow verifies that only the second prop and heading change, the first stays unchanged, and the stored selection identifies only the second rendered instance.
+A second text command uses the same logical handle without another click.
+Undo/Redo compare exact source, saved source, rendering, and selection.
+Reopen preserves the selected instance and accepts another correct edit, both before any edit while the usages are identical and after Undo restores the identical pair.
+Reopening the edited design also preserves the relationship.
+A byte-changing external source replacement discards command bindings and invalidates the uncertain selection; a following edit refuses without changing the saved file.
+[Final ownership/source records](evidence/followup/identical/report.json), [before source](evidence/followup/identical/before.tsx), [after source](evidence/followup/identical/after.tsx), and [edited saved state](evidence/followup/identical/edited-saved.json) preserve the supported edits.
+[Before screenshot](evidence/followup/identical/before.png) and [after screenshot](evidence/followup/identical/after.png) record the rendered result.
+The final `saved.json` belongs to the subsequent external-replacement refusal control; it is distinct from the edited saved state.
+The screenshots were inspected for heading content, typography, and the seedling glyph.
+
+### Follow-up verification and reproduction
+
+All browser checks use Fedora 44 x64 KDE Wayland and installed Google Chrome 154.0.8037.57 through Playwright 1.63.0's Chrome channel.
+Bun remains 1.4.2 and Node remains 22.23.2.
+The checkout's single local React 19.3.0 installation serves the fixture and instrumentation.
+No previous experiment's dependencies or compiler installation are reused.
+
+| Affected suite | Result | Exit |
+| --- | --- | --- |
+| PR 2 mapping and boundary controls | 30 PASS | 0 |
+| PR 3 continuity and conservative collision controls | 14 PASS | 0 |
+| PR 4 real dialog editing, copying, and recovery | 9 PASS | 0 |
+| Existing PR 5 integration workflows | 4 PASS | 0 |
+| New initially identical workflow | PASS | 0 |
+
+[Regression commands and exits](evidence/followup/regression-commands.json) and the adjacent reports/console files preserve the runs.
+PR 1's unrelated original runner was not rerun in this follow-up.
+Its source and original assertions are unchanged; the patch changes no Tailwind runtime file or version.
+All inherited assertions remain intact.
+
+```bash
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 bun install --frozen-lockfile
+bun run check:dependencies
+bun run check:types
+bun run check:source-types
+bun experiments/integration/identical-instances.ts
+(cd experiments/automatic-source-mapping && bun proof.ts && bun continuity/proof.ts)
+(cd experiments/base-ui-only-this && bun proof.ts)
+bun run proofs:integration
+```
+
+To repeat the temporary compiler comparison without changing project dependencies:
+
+```bash
+ts6_scratch=$(mktemp -d /tmp/orc-pr5-ts6-XXXXXX)
+npm pack typescript@6.0.3 --pack-destination "$ts6_scratch" --ignore-scripts
+tar -xzf "$ts6_scratch/typescript-6.0.3.tgz" -C "$ts6_scratch"
+node "$ts6_scratch/package/bin/tsc" --noEmit --incremental false --pretty false --skipLibCheck false -p experiments/integration/tsconfig.json
+./node_modules/.bin/tsc --noEmit --incremental false --pretty false --skipLibCheck false -p experiments/integration/tsconfig.json
+```
+
+Both comparison commands now exit 0 with the committed patch.
+The initial failure diagnostics and pre-patch identical-source comparison remain historical evidence.
+
+### Remaining limits
+
+The declaration repair is a local reproducible patch, not an upstream Tailwind release.
+The full check covers the configured integration/PR 4 project and imported implementation, not every inherited fixture or the untyped original PR 1 runner.
+Initial identical selection is established for two separate authored JSX usages with literal props in `commandIdentity: true` sessions.
+Repeating a single JSX usage through runtime loops, identical host nodes, initial identical-instance copying, and arbitrary React syntax are not established by this check.
+Raw legacy analysis keeps its conservative collision refusal.
+External semantic source rewrites still discard uncertain selection; there is no general reconciliation framework.
+The previously reported view-state, closure, module-graph, async failure, Windows, and complete-editor limits remain.
 
 ## Publication
 

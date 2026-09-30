@@ -1,6 +1,7 @@
 import { writeFile, rename } from "node:fs/promises";
 import {
   analyze,
+  initialUsageBindings,
   resolve,
   editRetainingSelection,
   type Sources,
@@ -45,6 +46,8 @@ export async function session({
   revealed?: string[];
   revision?: number;
 }) {
+  if (commandIdentity && !selection && Object.keys(bindings).length === 0)
+    bindings = initialUsageBindings(analyze(sources, aliases));
   let state: State = {
     sources,
     selection,

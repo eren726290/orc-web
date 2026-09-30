@@ -1,0 +1,13 @@
+{
+  "rationale": "The exported Node loader delegates to the public Tailwind loader. Derive its actual awaited design-system type from that loader instead of unpublished internal modules. No fabricated member declarations, any types, or library-check suppression.",
+  "publicTailwindSignature": "declare function __unstable__loadDesignSystem(css: string, opts?: CompileOptions): Promise<DesignSystem>;",
+  "nodeImplementationReferences": [
+    "om\"fs\";import At from\"fs/promises\";import re from\"path\";import{pathToFileURL as wt}from\"url\";import{__unstable__loadDesignSystem as Hr,compile as Yr,compileAst as Gr,Features as lu,Polyfills as au}from\"tailwindcss\";import ge fro",
+    "windcss/node/esm-cache-loader\")))}export{lu as Features,Et as Instrumentation,au as Polyfills,pu as __unstable__loadDesignSystem,fu as compile,cu as compileAst,me as env,$t as loadModule,Ve as normalizePath,wu as optimize,Au as "
+  ],
+  "patchedFiles": [
+    "dist/index.d.ts",
+    "dist/index.d.mts"
+  ],
+  "runtimeFilesChanged": false
+}

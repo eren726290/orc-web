@@ -37,6 +37,9 @@
       },
     },
   },
+  "patchedDependencies": {
+    "@tailwindcss/node@4.3.3": "patches/@tailwindcss%2Fnode@4.3.3.patch",
+  },
   "overrides": {
     "framer-motion": "13.4.4",
     "motion-dom": "13.4.4",

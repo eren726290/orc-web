@@ -1,0 +1,1 @@
+$ tsc --noEmit --incremental false --pretty false -p experiments/integration/tsconfig.json

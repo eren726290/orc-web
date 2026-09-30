@@ -1,0 +1,16 @@
+{
+  "sources": {
+    "src/App.tsx": "function Notice({ title }: { title: string }) {\n  return <h1 className=\"text-4xl font-bold\">{title}</h1>;\n}\nexport default function App() {\n  return <main><Notice title=\"Same heading\" /><Notice title=\"Same heading\" /></main>;\n}\n"
+  },
+  "selection": {
+    "node": "517089900b0ba11313034fed",
+    "usages": [
+      "c296fc5247ea20c2a447d68f"
+    ],
+    "record": null
+  },
+  "reason": null,
+  "bindings": {},
+  "revealed": [],
+  "revision": 0
+}

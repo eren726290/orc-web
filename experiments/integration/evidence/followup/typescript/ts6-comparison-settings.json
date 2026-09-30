@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "jsx": "react-jsx",
+        "moduleResolution": "bundler",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
+        "types": [
+            "bun",
+            "node",
+            "react",
+            "react-dom"
+        ],
+        "strict": true,
+        "noEmit": true,
+        "incremental": false,
+        "skipLibCheck": false
+    },
+    "files": [
+        "./proof.ts",
+        "../base-ui-only-this/proof.ts",
+        "../base-ui-only-this/src/AccountDialog.tsx",
+        "../base-ui-only-this/src/App.tsx",
+        "../base-ui-only-this/src/Detail.tsx",
+        "../base-ui-only-this/src/UnsafeAccountDialog.tsx",
+        "../base-ui-only-this/src/UnsafeDetail.tsx",
+        "../base-ui-only-this/src/components/ui/button.tsx",
+        "../base-ui-only-this/src/components/ui/dialog.tsx"
+    ],
+    "include": [
+        "proof.ts",
+        "../base-ui-only-this/proof.ts",
+        "../base-ui-only-this/src/**/*.tsx"
+    ],
+    "exclude": [
+        "evidence",
+        "runs"
+    ]
+}

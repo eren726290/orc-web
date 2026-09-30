@@ -1,0 +1,11 @@
+PASS Raw and instrumented Base UI dialogs have identical styling, open/close/Escape and focus return
+PASS Click discovers a literal instance prop; text edit changes only that usage
+PASS Shared implementation typography edits both instances and reports shared scope
+PASS Package internals and computed local shadcn classes refuse instead of guessing
+PASS Only this discovers and copies outer plus cross-file style owner, preserves props/imports and avoids collisions
+PASS Copy plus edit is one Undo step; Undo and Redo restore references, source, selection and appearance
+PASS Save/reopen rebuilds independent and shared instances; normal dialog interaction still works
+PASS Parse, build and synchronous render failures reject candidates without partial source/save/history changes
+PASS Captured module binding refuses Only this before commit and preserves source/render/save/history
+ALL 9 CHECKS PASSED
+RUN /home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/runs/chrome-2026-09-30T13-52-50-517Z
