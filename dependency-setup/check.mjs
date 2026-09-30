@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
-import { readFileSync, realpathSync, writeFileSync } from "node:fs";
+import { readFileSync, realpathSync, writeFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -43,7 +43,7 @@ for (const [name, occurrences] of Object.entries(inventory.imports)) {
     resolutions.push({ ...occurrence, resolved });
   }
 }
-// These are resolution contexts, not a claim that earlier proof source is installed here.
+// Source and generated-build contexts all resolve through the single root installation.
 const contexts = [
   "package.json",
   "experiments/automatic-source-mapping/runtime.tsx",
@@ -67,6 +67,57 @@ assert.equal(
   realpathSync(createRequire(require.resolve("react-dom/client")).resolve("react")),
   react[0].react,
 );
+const { parse } = await import("@babel/parser");
+const actualImports = [];
+function inspect(directory) {
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if (["evidence", "runs", "node_modules"].includes(entry.name)) continue;
+    const file = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      inspect(file);
+      continue;
+    }
+    if (!/\.(?:mjs|tsx?)$/.test(file)) continue;
+    const ast = parse(readFileSync(file, "utf8"), {
+      sourceType: "module",
+      plugins: ["typescript", "jsx"],
+    });
+    for (const node of ast.program.body) {
+      if (node.type !== "ImportDeclaration") continue;
+      const specifier = node.source.value;
+      if (specifier.startsWith("node:") || specifier.startsWith(".") || specifier.startsWith("@/"))
+        continue;
+      const name = specifier.startsWith("@")
+        ? specifier.split("/").slice(0, 2).join("/")
+        : specifier.split("/")[0];
+      assert(
+        name in manifest.dependencies || name in manifest.devDependencies,
+        `Undeclared current import ${specifier}`,
+      );
+      const resolved = realpathSync(createRequire(file).resolve(specifier));
+      assert(resolved.startsWith(path.join(root, "node_modules") + path.sep));
+      actualImports.push({ file: path.relative(root, file), specifier, resolved });
+    }
+  }
+}
+inspect(path.join(root, "experiments"));
+inspect(path.join(root, "dependency-setup"));
+const compilers = [
+  "original-source-proof",
+  "automatic-source-mapping",
+  "base-ui-only-this",
+  "integration",
+].map((name) => ({
+  experiment: name,
+  package: realpathSync(
+    createRequire(path.join(root, "experiments", name, "proof.ts")).resolve(
+      "typescript/package.json",
+    ),
+  ),
+  executable: realpathSync(path.join(root, "node_modules/.bin/tsc")),
+}));
+assert.equal(new Set(compilers.map((row) => row.package)).size, 1);
+for (const row of compilers) assert(row.executable.startsWith(root + path.sep));
 const { compile } = await import("@tailwindcss/node");
 const cssDependencies = [];
 const compiler = await compile(
@@ -83,6 +134,8 @@ for (const file of cssDependencies)
   assert(file.startsWith(root + path.sep), `CSS dependency escapes checkout: ${file}`);
 const report = {
   cssDependencies,
+  actualImports,
+  compilers,
   installed,
   resolutions,
   react,

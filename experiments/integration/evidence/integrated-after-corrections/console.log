@@ -1,0 +1,119 @@
+original: exit 0
+PASS Parsing and printing without edits preserves the source exactly
+PASS Initial React TSX and Tailwind render two 36px headings in Chromium
+COMMIT 1: Edit selected Hero title
+PASS Click resolves the declared instance; text edit changes only A, with literal quotes, braces, HTML-like text and Unicode
+COMMIT 2: All copies: 36px to 48px
+PASS Shared typography changes both Heroes; rebuilt Tailwind CSS preserves hover and responsive classes
+COMMIT 3: Only this: independent Hero A with medium weight
+PASS Only this clones A in one command; shared Hero and B remain unchanged
+PASS One Undo removes the independent definition and restores A's shared reference and appearance
+COMMIT 5: Repeat independent A for final saved example
+COMMIT 6: Edit one local data entry
+PASS Repeated content edits the selected local product record only
+PASS One Undo restores the exact previous source and rendered product list
+COMMIT 8: Reapply product edit for saved example
+PASS Candidate render crash preserves applied source, visible design, history and saved file
+PASS Malformed JSX/TypeScript is rejected by the parser
+PASS Comment and Motion declaration survive; independent React button behavior still works
+PASS Reopening the saved source in a fresh browser context reproduces text, styling and data
+ALL 12 CHECKS PASSED
+
+mapping: exit 0
+RUN /home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/runs/2026-09-30T02-15-32-750Z
+PASS boundaries: positive literal prop control
+PASS boundaries: nested block shadows prop
+PASS boundaries: nested callable shadows prop
+PASS boundaries: spread usage can override literal prop
+PASS boundaries: identical usages are structurally ambiguous
+PASS boundaries: local array shadows module array
+PASS boundaries: React keys collide after string coercion
+PASS boundaries: mutated collection is not a static record owner
+COMMIT basic 1: discovered literal
+COMMIT basic 2: discovered classes
+PASS basic: 1: literal text and static Tailwind owners discovered; source and rendering edited
+COMMIT basic 3: discovered prop
+COMMIT basic 4: discovered classes
+PASS basic: 2: particular usage prop and shared component style discovered with correct scopes
+COMMIT basic 5: Undo
+PASS basic: Undo restores exact source, rebuilt mappings, and rendered typography
+COMMIT basic 6: discovered classes
+COMMIT basic 7: discovered prop
+COMMIT basic 8: discovered classes
+PASS basic: 3: aliased module and imported-name resolution edit the correct usage and implementation files
+COMMIT basic 9: discovered collection
+COMMIT basic 10: Reorder source array
+COMMIT basic 11: discovered collection
+PASS basic: 4: React key discovers stable record identity; reorder never retargets by array position
+COMMIT basic 12: discovered classes
+PASS basic: 5: calculated and external-shaped text reject atomically; safely mapped style stays usable
+COMMIT basic 13: Format all modules and insert unrelated code
+COMMIT basic 14: discovered prop
+PASS basic: 6a: formatting and unrelated insertion rebuild mappings without retargeting selections
+COMMIT basic 15: Ambiguous structural duplication
+COMMIT basic 16: Undo
+PASS basic: 6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping
+PASS basic: Only this explicitly unsupported and rejected without fixture-specific cloning
+PASS basic: Invalid source and crashing candidate preserve source, design, saved state, and history
+PASS basic: Save/reopen regenerates working mappings from uninstrumented saved source
+COMMIT variation 1: discovered literal
+COMMIT variation 2: discovered classes
+PASS variation: 1: literal text and static Tailwind owners discovered; source and rendering edited
+COMMIT variation 3: discovered prop
+COMMIT variation 4: discovered classes
+PASS variation: 2: particular usage prop and shared component style discovered with correct scopes
+COMMIT variation 5: Undo
+PASS variation: Undo restores exact source, rebuilt mappings, and rendered typography
+COMMIT variation 6: discovered classes
+COMMIT variation 7: discovered prop
+COMMIT variation 8: discovered classes
+PASS variation: 3: aliased module and imported-name resolution edit the correct usage and implementation files
+COMMIT variation 9: discovered collection
+COMMIT variation 10: Reorder source array
+COMMIT variation 11: discovered collection
+PASS variation: 4: React key discovers stable record identity; reorder never retargets by array position
+COMMIT variation 12: discovered classes
+PASS variation: 5: calculated and external-shaped text reject atomically; safely mapped style stays usable
+COMMIT variation 13: Format all modules and insert unrelated code
+COMMIT variation 14: discovered prop
+PASS variation: 6a: formatting and unrelated insertion rebuild mappings without retargeting selections
+COMMIT variation 15: Ambiguous structural duplication
+COMMIT variation 16: Undo
+PASS variation: 6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping
+PASS variation: Only this explicitly unsupported and rejected without fixture-specific cloning
+PASS variation: Invalid source and crashing candidate preserve source, design, saved state, and history
+PASS variation: Save/reopen regenerates working mappings from uninstrumented saved source
+RESULT 30 passed, 0 failed. Evidence: /home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/runs/2026-09-30T02-15-32-750Z
+
+continuity: exit 0
+RUN /home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/runs/continuity-final-2026-09-30T02-15-39-218Z
+PASS basic literal: one click, retained logical handle
+PASS basic instance: one click, retained logical handle
+PASS basic collection: one click, retained logical handle
+PASS basic delete: one click, retained logical handle
+PASS basic ambiguous: one click, retained logical handle
+PASS basic collision: one click, retained logical handle
+PASS basic rejected-candidate: one click, retained logical handle
+PASS variation literal: one click, retained logical handle
+PASS variation instance: one click, retained logical handle
+PASS variation collection: one click, retained logical handle
+PASS variation delete: one click, retained logical handle
+PASS variation ambiguous: one click, retained logical handle
+PASS variation collision: one click, retained logical handle
+PASS variation rejected-candidate: one click, retained logical handle
+CONTINUITY 14 passed, 0 failed
+
+base-ui: exit 0
+PASS Raw and instrumented Base UI dialogs have identical styling, open/close/Escape and focus return
+PASS Click discovers a literal instance prop; text edit changes only that usage
+PASS Shared implementation typography edits both instances and reports shared scope
+PASS Package internals and computed local shadcn classes refuse instead of guessing
+PASS Only this discovers and copies outer plus cross-file style owner, preserves props/imports and avoids collisions
+PASS Copy plus edit is one Undo step; Undo and Redo restore references, source, selection and appearance
+PASS Save/reopen rebuilds independent and shared instances; normal dialog interaction still works
+PASS Parse, build and synchronous render failures reject candidates without partial source/save/history changes
+PASS Captured module binding refuses Only this before commit and preserves source/render/save/history
+ALL 9 CHECKS PASSED
+RUN /home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/runs/chrome-2026-09-30T02-15-54-540Z
+
+INTEGRATION RUN /home/eren/D/orc-web-fresh-20260930/experiments/integration/runs/existing-2026-09-30T02-15-30-537Z

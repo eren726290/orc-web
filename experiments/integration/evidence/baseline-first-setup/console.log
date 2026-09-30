@@ -1,0 +1,51 @@
+FAIL Revealed dialog stays visible through supported edits without candidate trigger clicks
+Error: Heading click must select authored span; received {"node":"847305176ff76ffcc2dccc7a","usages":["5faed812eed1561c16f9b84c","f640235a82f4339d99fb997b"],"record":null}
+Error: Heading click must select authored span; received {"node":"847305176ff76ffcc2dccc7a","usages":["5faed812eed1561c16f9b84c","f640235a82f4339d99fb997b"],"record":null}
+    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:46:19)
+    at async test (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:23:62)
+    at processTicksAndRejections (native:7:39)
+FAIL basic command-created identical usages retain the selected instance
+AssertionError: Command-owned edit must retain particular usage when its syntax becomes identical
+AssertionError [ERR_ASSERTION]: Command-owned edit must retain particular usage when its syntax becomes identical
+    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:79:9)
+    at async test (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:23:62)
+    at processTicksAndRejections (native:7:39)
+FAIL variation command-created identical usages retain the selected instance
+AssertionError: Command-owned edit must retain particular usage when its syntax becomes identical
+AssertionError [ERR_ASSERTION]: Command-owned edit must retain particular usage when its syntax becomes identical
+    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:79:9)
+    at async test (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:23:62)
+    at processTicksAndRejections (native:7:39)
+FAIL Only this then successive edit, Undo/Redo and reopen preserve selected independent relationship
+AssertionError: Expected values to be strictly deep-equal:
++ actual - expected
+
++ null
+- {
+-   node: 'ba0b598a2301ac76b63fbfca',
+-   record: null,
+-   usages: [
+-     'c3ac96003f06097bec97b9f8',
+-     'f640235a82f4339d99fb997b',
+-     '2ab02bf5199a53f960e09b61'
+-   ]
+- }
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ null
+- {
+-   node: 'ba0b598a2301ac76b63fbfca',
+-   record: null,
+-   usages: [
+-     'c3ac96003f06097bec97b9f8',
+-     'f640235a82f4339d99fb997b',
+-     '2ab02bf5199a53f960e09b61'
+-   ]
+- }
+
+    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:118:20)
+    at async test (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:23:62)
+    at processTicksAndRejections (native:7:39)
+RUN /home/eren/D/orc-web-fresh-20260930/experiments/integration/runs/baseline-2026-09-30T02-09-11-000Z

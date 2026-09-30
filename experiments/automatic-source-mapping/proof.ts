@@ -553,7 +553,8 @@ try {
         "playwright",
       ].map(async (name) => [
         name,
-        JSON.parse(await readFile(path.join("node_modules", name, "package.json"), "utf8")).version,
+        JSON.parse(await readFile(path.join("../../node_modules", name, "package.json"), "utf8"))
+          .version,
       ]),
     ),
   );
@@ -570,8 +571,7 @@ try {
       dependencies,
     },
     commands: [
-      "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install --ignore-scripts --no-audit --no-fund",
-      "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci --ignore-scripts --no-audit --no-fund",
+      "From repository root: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 bun install --frozen-lockfile",
       "bun run proof",
     ],
     results,

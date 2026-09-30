@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
-import type { Page } from "playwright";
+import { fileURLToPath } from "node:url";
+import type { Page, Locator } from "playwright";
 import type { Sources, Selection } from "../resolver";
 
 // Browser click oracles only. Implementation code never imports this configuration.
@@ -34,8 +35,10 @@ export async function fixture(name: string) {
     .compilerOptions.paths;
   return { sources, aliases };
 }
-export async function clickSelection(page: Page, text: string): Promise<Selection> {
-  await page.getByRole("heading", { name: text, exact: true }).click();
+export async function clickSelection(page: Page, text: string | Locator): Promise<Selection> {
+  await (
+    typeof text === "string" ? page.getByRole("heading", { name: text, exact: true }) : text
+  ).click();
   const value: unknown = await page.evaluate(
     () => Object.getOwnPropertyDescriptor(window, "__selection")?.value,
   );
@@ -68,12 +71,14 @@ export function diagnostic(error: unknown) {
     : String(error);
 }
 export async function environment(chrome: string) {
-  const manifest = JSON.parse(await readFile("package.json", "utf8"));
+  const root = fileURLToPath(new URL("../../../", import.meta.url));
+  const manifest = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
   const dependencies = Object.fromEntries(
     await Promise.all(
       Object.keys(manifest.dependencies).map(async (name) => [
         name,
-        JSON.parse(await readFile(path.join("node_modules", name, "package.json"), "utf8")).version,
+        JSON.parse(await readFile(path.join(root, "node_modules", name, "package.json"), "utf8"))
+          .version,
       ]),
     ),
   );
@@ -87,5 +92,6 @@ export async function environment(chrome: string) {
     node: execFileSync("node", ["--version"], { encoding: "utf8" }).trim(),
     npm: execFileSync("npm", ["--version"], { encoding: "utf8" }).trim(),
     dependencies,
+    dependencyRoot: root,
   };
 }

@@ -1,0 +1,3 @@
+experiments/base-ui-only-this/tsconfig.json(4,36): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
+  Use '"paths": {"*": ["./*"]}' instead.
+experiments/base-ui-only-this/tsconfig.json(4,71): error TS5090: Non-relative paths are not allowed. Did you forget a leading './'?

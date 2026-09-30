@@ -5,7 +5,7 @@ import * as recast from "recast";
 import { namedTypes as n } from "ast-types";
 import { compile } from "tailwindcss";
 import type { Browser, Page } from "playwright";
-import { analyze, instrument, type Sources, type Aliases } from "./resolver";
+import { analyze, instrument, type Sources, type Aliases, type CommandBindings } from "./resolver";
 
 export async function renderer(
   browser: Browser,
@@ -31,13 +31,18 @@ export async function renderer(
   let serial = 0;
   const diagnostics: { build: number; phase: string; messages: string[] }[] = [];
 
-  async function prepare(sources: Sources, aliases: Aliases, entry: string) {
+  async function prepare(
+    sources: Sources,
+    aliases: Aliases,
+    entry: string,
+    metadata: { bindings?: CommandBindings; revealed?: string[] } = {},
+  ) {
     const id = ++serial;
     const workspace = path.join(directory, "generated", String(id));
     const messages: string[] = [];
     let context: Awaited<ReturnType<Browser["newContext"]>> | null = null;
     try {
-      const analysis = analyze(sources, aliases);
+      const analysis = analyze(sources, aliases, metadata.bindings);
       const generated = instrument(
         analysis,
         options.runtime ?? path.resolve("runtime.tsx"),
@@ -123,6 +128,12 @@ export async function renderer(
         errors.push(diagnostic);
         messages.push("pageerror: " + diagnostic);
       });
+      await page.addInitScript(
+        (revealed) => {
+          Object.defineProperty(window, "__orcReveal", { value: revealed, configurable: true });
+        },
+        (metadata.revealed ?? []).filter((id) => analysis.usages.get(id)?.length === 1),
+      );
       await page.goto(String(server.url) + "candidate-" + id);
       await page.waitForFunction(() => Object.hasOwn(window, "__ready"), null, { timeout: 5000 });
       assert.equal(errors.length, 0, errors.join("\n"));

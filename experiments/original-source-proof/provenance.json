@@ -1,0 +1,70 @@
+{
+  "mobile-original/package.json": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/original-pasted/package.json",
+    "sha256": "04adc71b7e0cc2f14429b985346b46f346cd3d746ae802920c63423f81e9dda5"
+  },
+  "mobile-original/package-lock.json": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/original-pasted/package-lock.json",
+    "sha256": "dbedf07a9f8d25362f6fe8b34403a0579f2a6668426b3e5343a333979fb55402"
+  },
+  "mobile-original/fixture.tsx": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/original-pasted/fixture.tsx",
+    "sha256": "10636623261f6d8ef3e270f0277f41daa60f49c82aa34472162a3decca30f12f"
+  },
+  "mobile-original/proof.ts": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/original-pasted/proof.ts",
+    "sha256": "97fc734857d5b045f65a5dab6774943223f2248cf421f0b0bc407d461753884d"
+  },
+  "mobile-original/artifacts/report.json": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/original-pasted/artifacts/report.json",
+    "sha256": "d657ea6e44381a3f00d51191127e18f2f5ba7c30933e1552840fefb4f69d0053"
+  },
+  "fedora-original/package.json": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/package.json",
+    "sha256": "04adc71b7e0cc2f14429b985346b46f346cd3d746ae802920c63423f81e9dda5"
+  },
+  "fedora-original/package-lock.json": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/package-lock.json",
+    "sha256": "dbedf07a9f8d25362f6fe8b34403a0579f2a6668426b3e5343a333979fb55402"
+  },
+  "fedora-original/fixture.tsx": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/fixture.tsx",
+    "sha256": "10636623261f6d8ef3e270f0277f41daa60f49c82aa34472162a3decca30f12f"
+  },
+  "fedora-original/proof.ts": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/proof.ts",
+    "sha256": "dc4fb89ce5db2a4b64bb3b85e715503f11d5ba01549996a656081b78f0f74210"
+  },
+  "fedora-original/artifacts/report.json": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/artifacts/report.json",
+    "sha256": "afc827df2dbd8a60d4b5afeb91b591b248f805c987b07bb20bd9bc99fedb62c2"
+  },
+  "fedora-original/artifacts/before.png": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/artifacts/before.png",
+    "sha256": "10bef2d967c944dfe30ae1ccb74f0818498ca281f8a37b2d70ad9ae8942cf348"
+  },
+  "fedora-original/artifacts/after.png": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/artifacts/after.png",
+    "sha256": "20b6328383a702c57c2ac19a8504d0eff8c606c413b093ba627947b649d52335"
+  },
+  "fedora-original/artifacts/reopened.png": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/artifacts/reopened.png",
+    "sha256": "e7dcd1ef58c320b43f77c76c860f510d1f5ab734cce0dfe9f19b1d77f261612b"
+  },
+  "fedora-original/artifacts/after.tsx": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/artifacts/after.tsx",
+    "sha256": "c0e1ee9f80845695df783dd3df718befdd7a5e0d48a8a36646a84de745387568"
+  },
+  "fedora-original/artifacts/saved-design.json": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/artifacts/saved-design.json",
+    "sha256": "1dd0cab4f7670368209fb7afe0788a693a59cb4e04ab83c34d797db6b1bd6341"
+  },
+  "fedora-original/console.log": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/console.log",
+    "sha256": "e1f1786f77935cc3bfcde1158188a41f8e311963e48026dbbe3b56a7745a3f52"
+  },
+  "fedora-original/proof.exit": {
+    "original": "/home/eren/D/orc-web-verification-bcEXsU/chrome-working/proof.exit",
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  }
+}

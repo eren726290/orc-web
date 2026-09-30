@@ -307,7 +307,7 @@ try {
   );
 
   // Collision fixtures are browser test inputs, not resolver tables or authored editor IDs.
-  const collisionSources = {
+  const collisionSources: Sources = {
     ...sources,
     "src/AccountDialog.tsx":
       sources["src/AccountDialog.tsx"] +

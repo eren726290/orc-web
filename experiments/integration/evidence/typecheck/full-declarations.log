@@ -1,0 +1,9 @@
+$ tsc --noEmit --incremental false --pretty false -p experiments/integration/tsconfig.json
+node_modules/@tailwindcss/node/dist/index.d.ts(1,38): error TS2307: Cannot find module './ast' or its corresponding type declarations.
+node_modules/@tailwindcss/node/dist/index.d.ts(2,36): error TS2307: Cannot find module './candidate' or its corresponding type declarations.
+node_modules/@tailwindcss/node/dist/index.d.ts(3,33): error TS2307: Cannot find module './compile' or its corresponding type declarations.
+node_modules/@tailwindcss/node/dist/index.d.ts(4,63): error TS2307: Cannot find module './intellisense' or its corresponding type declarations.
+node_modules/@tailwindcss/node/dist/index.d.ts(5,23): error TS2307: Cannot find module './theme' or its corresponding type declarations.
+node_modules/@tailwindcss/node/dist/index.d.ts(6,27): error TS2307: Cannot find module './utilities' or its corresponding type declarations.
+node_modules/@tailwindcss/node/dist/index.d.ts(7,26): error TS2307: Cannot find module './variants' or its corresponding type declarations.
+error: script "check:types" exited with code 1

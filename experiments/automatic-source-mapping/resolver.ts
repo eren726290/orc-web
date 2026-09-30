@@ -1,3 +1,4 @@
+import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import * as babel from "@babel/parser";
@@ -6,6 +7,7 @@ import { namedTypes as n, builders as b, type NodePath } from "ast-types";
 
 export type Sources = Record<string, string>;
 export type Aliases = Record<string, string[]>;
+export type CommandBindings = Record<string, { digest: string; ids: Record<string, string> }>;
 export type Selection = { node: string; usages: string[]; record: string | number | null };
 type FunctionInfo = { file: string; name: string; node: n.FunctionDeclaration };
 type Loop = { list: string; parameter: string; key: string; value: n.MemberExpression };
@@ -31,6 +33,7 @@ export type Analysis = {
   modules: Map<string, Module>;
   hosts: Map<string, Host[]>;
   usages: Map<string, Usage[]>;
+  bindings: CommandBindings;
 };
 export type Owner =
   | { kind: "literal"; file: string; host: string; scope: string }
@@ -54,7 +57,7 @@ export function parse(source: string): n.File {
         babel.parse(text, { sourceType: "module", plugins: ["typescript", "jsx"], tokens: true }),
     },
   });
-  n.File.assert(ast);
+  assert(n.File.check(ast));
   return ast;
 }
 
@@ -178,7 +181,20 @@ function unique<T>(map: Map<string, T[]>, key: string): T | null {
   return items?.length === 1 ? items[0] : null;
 }
 
-export function analyze(sources: Sources, aliases: Aliases): Analysis {
+function sourceDigest(source: string) {
+  return createHash("sha256").update(source).digest("hex");
+}
+function address(p: NodePath) {
+  const names: (string | number)[] = [];
+  for (let cursor = p; cursor.parent; cursor = cursor.parent) names.unshift(cursor.name);
+  return JSON.stringify(names);
+}
+
+export function analyze(
+  sources: Sources,
+  aliases: Aliases,
+  bindings: CommandBindings = {},
+): Analysis {
   const modules = new Map<string, Module>();
   const hosts = new Map<string, Host[]>(),
     usages = new Map<string, Usage[]>();
@@ -197,7 +213,11 @@ export function analyze(sources: Sources, aliases: Aliases): Analysis {
         n.ExportNamedDeclaration.check(statement) || n.ExportDefaultDeclaration.check(statement)
           ? statement.declaration
           : statement;
-      if (n.FunctionDeclaration.check(declaration) && declaration.id) {
+      if (
+        n.FunctionDeclaration.check(declaration) &&
+        declaration.id &&
+        typeof declaration.id.name === "string"
+      ) {
         const name = declaration.id.name;
         module.functions.set(name, { file, name, node: declaration });
         if (n.ExportDefaultDeclaration.check(statement)) module.exports.set("default", name);
@@ -230,7 +250,7 @@ export function analyze(sources: Sources, aliases: Aliases): Analysis {
             ? specifier.imported.name
             : null;
         const name = imported ? target.exports.get(imported) : null;
-        if (name && specifier.local)
+        if (name && specifier.local && typeof specifier.local.name === "string")
           module.imports.set(specifier.local.name, targetFile + "::" + name);
       }
     }
@@ -239,9 +259,14 @@ export function analyze(sources: Sources, aliases: Aliases): Analysis {
         const node = p.node,
           tag = node.openingElement.name;
         const fn = parentFunction(p);
-        const fnInfo = fn?.id ? module.functions.get(fn.id.name) : null;
+        const fnInfo =
+          fn?.id && typeof fn.id.name === "string" ? module.functions.get(fn.id.name) : null;
         const component = fnInfo?.node === fn && fn?.id ? file + "::" + fn.id.name : null;
-        const id = identity(file, component, node);
+        const bound = bindings[file];
+        const id =
+          bound?.digest === sourceDigest(sources[file])
+            ? (bound.ids[address(p)] ?? identity(file, component, node))
+            : identity(file, component, node);
         if (n.JSXIdentifier.check(tag) && /^[a-z]/.test(tag.name)) {
           const loop = mapLoop(p);
           let nestedCallables = 0,
@@ -272,7 +297,7 @@ export function analyze(sources: Sources, aliases: Aliases): Analysis {
       },
     });
   }
-  return { sources, aliases, modules, hosts, usages };
+  return { sources, aliases, modules, hosts, usages, bindings };
 }
 
 function functionInfo(analysis: Analysis, key: string | null) {
@@ -300,7 +325,7 @@ function collectionArray(analysis: Analysis, host: Host) {
   if (!host.loop) return null;
   const module = analysis.modules.get(host.file);
   const array = module?.arrays.get(host.loop.list);
-  if (!array || array.elements.length === 0) return null;
+  if (!module || !array || array.elements.length === 0) return null;
   const keys: (string | number)[] = [];
   for (const item of array.elements) {
     if (
@@ -370,7 +395,7 @@ export function resolve(
       ? { kind: "classes", file: host.file, host: host.id, scope }
       : unsupported("A complete static className string is required");
   }
-  const children = host.node.children.filter(
+  const children = (host.node.children ?? []).filter(
     (child) => !(n.JSXText.check(child) && !child.value.trim()),
   );
   if (children.length !== 1) return unsupported("Mixed or nested content has no single text owner");
@@ -475,7 +500,7 @@ export function edit(
     const host = unique(analysis.hosts, owner.host);
     const a = host && attribute(host.node, "className");
     const old = a && stringValue(a.value);
-    if (!a || old === undefined) throw new Error("Static classes no longer available");
+    if (!a || typeof old !== "string") throw new Error("Static classes no longer available");
     const tokens = old.split(/\s+/);
     if (tokens.filter((token) => token === value.from).length !== 1)
       throw new Error("The utility owner is ambiguous");
@@ -521,27 +546,43 @@ export function editRetainingSelection(
   selection: Selection,
   field: "text" | "classes",
   value: string | { from: string; to: string },
-): { sources: Sources; selection: Selection } {
+  carryCommandBindings = false,
+): { sources: Sources; selection: Selection; bindings?: CommandBindings } {
   const host = unique(analysis.hosts, selection.node);
   const sites = selection.usages.map((id) => unique(analysis.usages, id));
   if (!host || sites.some((site) => !site)) throw new Error("Selection invalidated before editing");
   const sources = edit(analysis, resolve(analysis, selection, field), value);
   const targets = new Set([host.node, ...sites.flatMap((site) => (site ? [site.node] : []))]);
   const ids = new Map<n.JSXElement, string>();
+  const bindings: CommandBindings = {};
+  const oldIds = new Map(
+    [...analysis.hosts.values(), ...analysis.usages.values()]
+      .flat()
+      .map((item) => [item.node, item.id]),
+  );
   for (const [file, module] of analysis.modules) {
+    const retained: Record<string, string> = {};
     recast.types.visit(module.ast, {
       visitJSXElement(p) {
-        if (targets.has(p.node)) {
+        if (carryCommandBindings && targets.has(p.node)) {
+          const prior = oldIds.get(p.node);
+          if (!prior) throw new Error("Command node lineage unavailable");
+          const stable = prior.startsWith("command-") ? prior : "command-" + prior;
+          retained[address(p)] = stable;
+          ids.set(p.node, stable);
+        } else if (targets.has(p.node)) {
           // Normalize builders through the same parser used by the candidate rebuild.
           const statement = parse("const fragment = (" + recast.print(p.node).code + ");").program
             .body[0];
-          n.VariableDeclaration.assert(statement);
+          assert(n.VariableDeclaration.check(statement));
           const variable = statement.declarations[0];
-          n.VariableDeclarator.assert(variable);
-          n.JSXElement.assert(variable.init);
+          assert(n.VariableDeclarator.check(variable));
+          assert(n.JSXElement.check(variable.init));
           const fn = parentFunction(p);
           const component =
-            fn?.id && module.functions.get(fn.id.name)?.node === fn
+            fn?.id &&
+            typeof fn.id.name === "string" &&
+            module.functions.get(fn.id.name)?.node === fn
               ? file + "::" + fn.id.name
               : null;
           ids.set(p.node, identity(file, component, variable.init));
@@ -549,6 +590,20 @@ export function editRetainingSelection(
         this.traverse(p);
       },
     });
+    if (carryCommandBindings && Object.keys(retained).length) {
+      // Exact AST addresses are carried only by this value mutation, never matched against an external rewrite.
+      const rebuilt = parse(sources[file]);
+      const found = new Set<string>();
+      recast.types.visit(rebuilt, {
+        visitJSXElement(p) {
+          found.add(address(p));
+          this.traverse(p);
+        },
+      });
+      if (Object.keys(retained).some((key) => !found.has(key)))
+        throw new Error("Command changed selected AST structure");
+      bindings[file] = { digest: sourceDigest(sources[file]), ids: retained };
+    }
   }
   const node = ids.get(host.node);
   if (!node) throw new Error("Edited node lineage unavailable");
@@ -557,11 +612,15 @@ export function editRetainingSelection(
     if (!id) throw new Error("Edited usage lineage unavailable");
     return id;
   });
-  return { sources, selection: { node, usages, record: selection.record } };
+  return {
+    sources,
+    selection: { node, usages, record: selection.record },
+    ...(carryCommandBindings ? { bindings } : {}),
+  };
 }
 
 export function instrument(analysis: Analysis, runtimePath: string, enabled = true): Sources {
-  const generated = analyze(analysis.sources, analysis.aliases);
+  const generated = analyze(analysis.sources, analysis.aliases, analysis.bindings);
   const hostNodes = new Map<n.JSXElement, Host>(),
     siteNodes = new Map<n.JSXElement, Usage>();
   for (const items of generated.hosts.values())
@@ -572,13 +631,45 @@ export function instrument(analysis: Analysis, runtimePath: string, enabled = tr
     b.jsxAttribute(b.jsxIdentifier(name), b.stringLiteral(value));
   const output: Sources = {};
   for (const [file, module] of generated.modules) {
+    const dialogImports = new Set(
+      module.ast.program.body.flatMap((statement) =>
+        n.ImportDeclaration.check(statement) && statement.source.value === "@base-ui/react/dialog"
+          ? (statement.specifiers ?? []).flatMap((specifier) =>
+              n.ImportSpecifier.check(specifier) &&
+              n.Identifier.check(specifier.imported) &&
+              specifier.imported.name === "Dialog" &&
+              specifier.local
+                ? [specifier.local.name]
+                : [],
+            )
+          : [],
+      ),
+    );
     recast.types.visit(module.ast, {
       visitJSXElement(p) {
         if (!enabled) return false;
         const host = hostNodes.get(p.node),
           site = siteNodes.get(p.node);
         this.traverse(p);
-        if (host && n.JSXIdentifier.check(p.node.openingElement.name)) {
+        const tagName = p.node.openingElement.name;
+        if (
+          n.JSXMemberExpression.check(tagName) &&
+          n.JSXIdentifier.check(tagName.object) &&
+          dialogImports.has(tagName.object.name) &&
+          tagName.property.name === "Root"
+        ) {
+          p.node.openingElement.name = b.jsxIdentifier("__ORCRevealDialog");
+          if (p.node.closingElement)
+            p.node.closingElement.name = b.jsxIdentifier("__ORCRevealDialog");
+          p.node.openingElement.attributes?.unshift(
+            b.jsxAttribute(
+              b.jsxIdentifier("_orcPrimitive"),
+              b.jsxExpressionContainer(
+                b.memberExpression(b.identifier(tagName.object.name), b.identifier("Root")),
+              ),
+            ),
+          );
+        } else if (host && n.JSXIdentifier.check(p.node.openingElement.name)) {
           const tag = p.node.openingElement.name.name;
           p.node.openingElement.name = b.jsxIdentifier("__ORCHost");
           if (p.node.closingElement) p.node.closingElement.name = b.jsxIdentifier("__ORCHost");
@@ -627,7 +718,7 @@ export function instrument(analysis: Analysis, runtimePath: string, enabled = tr
     }
     output[file] =
       (enabled
-        ? "import { Host as __ORCHost, Scope as __ORCScope } from " +
+        ? "import { Host as __ORCHost, Scope as __ORCScope, RevealDialog as __ORCRevealDialog } from " +
           JSON.stringify(runtimePath) +
           ";\n"
         : "") + recast.print(module.ast).code;

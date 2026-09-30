@@ -1,0 +1,5 @@
+{
+  "extends": "../base-ui-only-this/tsconfig.json",
+  "include": ["proof.ts", "../base-ui-only-this/proof.ts", "../base-ui-only-this/src/**/*.tsx"],
+  "exclude": ["evidence", "runs"]
+}

@@ -1,5 +1,5 @@
 import { createContext, createElement, useContext } from "react";
-import type { ReactNode } from "react";
+import type { ReactNode, ElementType } from "react";
 
 const Usage = createContext<string[]>([]);
 
@@ -32,4 +32,20 @@ export function Host({
     },
     children,
   );
+}
+
+// Supported Edit-mode view override only. Authored props and Preview defaults remain untouched.
+export function RevealDialog({
+  _orcPrimitive,
+  ...props
+}: {
+  _orcPrimitive: ElementType;
+  [key: string]: unknown;
+}) {
+  const usages = useContext(Usage);
+  const revealed: string[] = Object.getOwnPropertyDescriptor(window, "__orcReveal")?.value ?? [];
+  return createElement(_orcPrimitive, {
+    ...props,
+    ...(usages.some((id) => revealed.includes(id)) ? { open: true } : {}),
+  });
 }

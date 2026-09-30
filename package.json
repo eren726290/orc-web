@@ -3,7 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check:dependencies": "node dependency-setup/check.mjs"
+    "check:dependencies": "node dependency-setup/check.mjs",
+    "proofs:existing": "node experiments/integration/run-existing.mjs",
+    "proofs:integration": "bun experiments/integration/proof.ts",
+    "check:source-types": "tsc --noEmit --incremental false --pretty false --skipLibCheck -p experiments/integration/tsconfig.json",
+    "check:types": "tsc --noEmit --incremental false --pretty false -p experiments/integration/tsconfig.json"
   },
   "dependencies": {
     "@babel/parser": "7.29.9",

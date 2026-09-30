@@ -104,7 +104,8 @@ function rejectCapturedModuleBindings(analysis: Analysis, component: string) {
   for (const declaration of module.ast.program.body)
     if (n.ImportDeclaration.check(declaration))
       for (const specifier of declaration.specifiers ?? [])
-        if (specifier.local) imports.add(specifier.local.name);
+        if (specifier.local && typeof specifier.local.name === "string")
+          imports.add(specifier.local.name);
   recast.types.visit(statement.argument, {
     visitJSXSpreadAttribute() {
       throw new Error("Only this unavailable: spread bindings are unsupported");
@@ -163,7 +164,7 @@ function freshName(analysis: Analysis, file: string, base: string) {
 
 function cloneFunction(source: n.FunctionDeclaration, name: string) {
   const statement = parse(recast.print(source).code).program.body[0];
-  n.FunctionDeclaration.assert(statement);
+  assert(n.FunctionDeclaration.check(statement));
   assert(statement.id);
   statement.id = b.identifier(name);
   return statement;
@@ -188,7 +189,7 @@ function importIndependent(
       statement.specifiers?.some((specifier) => specifier.local?.name === oldLocal),
   );
   const declaration = one(declarations, "the copied edge must use one direct import");
-  n.ImportDeclaration.assert(declaration);
+  assert(n.ImportDeclaration.check(declaration));
   if (
     !declaration.specifiers?.some(
       (specifier) => n.ImportSpecifier.check(specifier) && specifier.local?.name === oldLocal,

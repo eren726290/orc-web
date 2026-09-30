@@ -1,0 +1,504 @@
+[
+  {
+    "build": 1,
+    "phase": "accepted",
+    "messages": [
+      "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ]
+  },
+  {
+    "build": 2,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 3,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 4,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 5,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 6,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 7,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 8,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 9,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 10,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 11,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 12,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 13,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 14,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 15,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 16,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 17,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 18,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 19,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 20,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 21,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 22,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 23,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 24,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 25,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 26,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 27,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 28,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 29,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 30,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 31,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 32,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 33,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 34,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 35,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 36,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 37,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 38,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 39,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 40,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 41,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 42,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 43,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 44,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 45,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 46,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 47,
+    "phase": "rejected",
+    "messages": [
+      "SyntaxError: Unexpected token (37:6)\nSyntaxError: Unexpected token (37:6)\n    at <parse> (:0)\n    at constructor (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:369:23)\n    at raise (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:6622:19)\n    at unexpected (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:6642:16)\n    at parseIdentifierName (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:12237:12)\n    at parseIdentifier (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:12215:23)\n    at parseVarId (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:13436:21)\n    at parseVarId (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:9775:11)\n    at parseVar (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:13417:12)\n    at parseVarStatement (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:13264:10)\n    at parseVarStatement (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:9431:31)\n    at async sourceEdit (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/continuity/session.ts:295:13)\n    at async waitForActual (node:assert:359:24)\n    at async assert.rejects (node:assert:434:77)"
+    ]
+  },
+  {
+    "build": 48,
+    "phase": "rejected",
+    "messages": [
+      "pageerror: Error: continuity candidate crash\nError: continuity candidate crash\n    at App (http://127.0.0.1:40021/app-48.js:12550:9)\n    at renderWithHooks (http://127.0.0.1:40021/app-48.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:40021/app-48.js:4852:15)\n    at beginWork (http://127.0.0.1:40021/app-48.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:40021/app-48.js:7996:14)\n    at workLoopSync (http://127.0.0.1:40021/app-48.js:7893:5)\n    at renderRootSync (http://127.0.0.1:40021/app-48.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:40021/app-48.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:40021/app-48.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:40021/app-48.js:175:44)",
+      "AssertionError: Error: continuity candidate crash\nError: continuity candidate crash\n    at App (http://127.0.0.1:40021/app-48.js:12550:9)\n    at renderWithHooks (http://127.0.0.1:40021/app-48.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:40021/app-48.js:4852:15)\n    at beginWork (http://127.0.0.1:40021/app-48.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:40021/app-48.js:7996:14)\n    at workLoopSync (http://127.0.0.1:40021/app-48.js:7893:5)\n    at renderRootSync (http://127.0.0.1:40021/app-48.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:40021/app-48.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:40021/app-48.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:40021/app-48.js:175:44)\n\n1 !== 0\n\nAssertionError [ERR_ASSERTION]: Error: continuity candidate crash\nError: continuity candidate crash\n    at App (http://127.0.0.1:40021/app-48.js:12550:9)\n    at renderWithHooks (http://127.0.0.1:40021/app-48.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:40021/app-48.js:4852:15)\n    at beginWork (http://127.0.0.1:40021/app-48.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:40021/app-48.js:7996:14)\n    at workLoopSync (http://127.0.0.1:40021/app-48.js:7893:5)\n    at renderRootSync (http://127.0.0.1:40021/app-48.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:40021/app-48.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:40021/app-48.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:40021/app-48.js:175:44)\n\n1 !== 0\n\n    at prepare (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/browser.ts:139:14)\n    at async commit (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/continuity/session.ts:135:36)\n    at async sourceEdit (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/continuity/session.ts:295:13)\n    at async waitForActual (node:assert:359:24)\n    at async assert.rejects (node:assert:434:77)\n    at processTicksAndRejections (native:7:39)"
+    ]
+  },
+  {
+    "build": 49,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 50,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 51,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 52,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 53,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 54,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 55,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 56,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 57,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 58,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 59,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 60,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 61,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 62,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 63,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 64,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 65,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 66,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 67,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 68,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 69,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 70,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 71,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 72,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 73,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 74,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 75,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 76,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 77,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 78,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 79,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 80,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 81,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 82,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 83,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 84,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 85,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 86,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 87,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 88,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 89,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 90,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 91,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 92,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 93,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 94,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 95,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 96,
+    "phase": "rejected",
+    "messages": [
+      "SyntaxError: Unexpected token (36:6)\nSyntaxError: Unexpected token (36:6)\n    at <parse> (:0)\n    at constructor (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:369:23)\n    at raise (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:6622:19)\n    at unexpected (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:6642:16)\n    at parseIdentifierName (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:12237:12)\n    at parseIdentifier (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:12215:23)\n    at parseVarId (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:13436:21)\n    at parseVarId (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:9775:11)\n    at parseVar (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:13417:12)\n    at parseVarStatement (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:13264:10)\n    at parseVarStatement (/home/eren/D/orc-web-fresh-20260930/node_modules/@babel/parser/lib/index.js:9431:31)\n    at async sourceEdit (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/continuity/session.ts:295:13)\n    at async waitForActual (node:assert:359:24)\n    at async assert.rejects (node:assert:434:77)"
+    ]
+  },
+  {
+    "build": 97,
+    "phase": "rejected",
+    "messages": [
+      "pageerror: Error: continuity candidate crash\nError: continuity candidate crash\n    at Landing (http://127.0.0.1:40021/app-97.js:12550:9)\n    at renderWithHooks (http://127.0.0.1:40021/app-97.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:40021/app-97.js:4852:15)\n    at beginWork (http://127.0.0.1:40021/app-97.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:40021/app-97.js:7996:14)\n    at workLoopSync (http://127.0.0.1:40021/app-97.js:7893:5)\n    at renderRootSync (http://127.0.0.1:40021/app-97.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:40021/app-97.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:40021/app-97.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:40021/app-97.js:175:44)",
+      "AssertionError: Error: continuity candidate crash\nError: continuity candidate crash\n    at Landing (http://127.0.0.1:40021/app-97.js:12550:9)\n    at renderWithHooks (http://127.0.0.1:40021/app-97.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:40021/app-97.js:4852:15)\n    at beginWork (http://127.0.0.1:40021/app-97.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:40021/app-97.js:7996:14)\n    at workLoopSync (http://127.0.0.1:40021/app-97.js:7893:5)\n    at renderRootSync (http://127.0.0.1:40021/app-97.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:40021/app-97.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:40021/app-97.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:40021/app-97.js:175:44)\n\n1 !== 0\n\nAssertionError [ERR_ASSERTION]: Error: continuity candidate crash\nError: continuity candidate crash\n    at Landing (http://127.0.0.1:40021/app-97.js:12550:9)\n    at renderWithHooks (http://127.0.0.1:40021/app-97.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:40021/app-97.js:4852:15)\n    at beginWork (http://127.0.0.1:40021/app-97.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:40021/app-97.js:7996:14)\n    at workLoopSync (http://127.0.0.1:40021/app-97.js:7893:5)\n    at renderRootSync (http://127.0.0.1:40021/app-97.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:40021/app-97.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:40021/app-97.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:40021/app-97.js:175:44)\n\n1 !== 0\n\n    at prepare (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/browser.ts:139:14)\n    at async commit (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/continuity/session.ts:135:36)\n    at async sourceEdit (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/continuity/session.ts:295:13)\n    at async waitForActual (node:assert:359:24)\n    at async assert.rejects (node:assert:434:77)\n    at processTicksAndRejections (native:7:39)"
+    ]
+  },
+  {
+    "build": 98,
+    "phase": "accepted",
+    "messages": []
+  }
+]

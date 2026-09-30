@@ -1,0 +1,28 @@
+{
+  "directChanges": [
+    {
+      "package": "motion",
+      "pr1Application": "13.4.6",
+      "pr1OriginalProof": "13.4.4",
+      "integrated": "13.4.4",
+      "affected": "PR1 Motion source proof; PR2\u20134 mapping fixtures do not import Motion"
+    },
+    {
+      "package": "shadcn",
+      "pr1Application": "4.21.0",
+      "pr4AcquisitionGlobal": "4.19.0",
+      "integrated": "not installed; committed component source reused"
+    }
+  ],
+  "transitiveMotionOverrides": {
+    "framer-motion": "13.4.4",
+    "motion-dom": "13.4.4",
+    "motion-utils": "13.3.0"
+  },
+  "lightningcss": {
+    "applicationRoot": "1.33.0",
+    "tailwindNodeCompilerNested": "1.32.0",
+    "pr4HistoricalCompiler": "1.32.0",
+    "explanation": "Root hoisting comparison alone is misleading; the Node stylesheet compiler resolves its own nested exact 1.32.0 dependency."
+  }
+}

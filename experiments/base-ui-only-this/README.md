@@ -4,43 +4,25 @@ This experiment uses the actual Base UI-flavored shadcn dialog and button fetche
 Read [REPORT.md](REPORT.md) for findings, reproduced failures, ownership boundaries, and limitations.
 The final Fedora Google Chrome run passed 9 workflows, and inherited mapping and continuity checks passed 30 and 14 checks respectively.
 
-## Reproduce
+## Reproduce in the integrated checkout
 
+PR 5 uses the root manifest and `bun.lock` for all experiments.
+Historical manifests and npm lockfiles are preserved under `../integration/evidence/historical-dependencies/`.
 Use Bun, Node 22 or later, and installed Google Chrome stable.
-The CLI is not needed to rerun the committed fixture.
-Dependencies are isolated here and pinned by `package-lock.json`.
+No shadcn acquisition or dependency symlink is needed.
 From the repository root:
 
 ```bash
-cd experiments/base-ui-only-this
-PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci --ignore-scripts --no-audit --no-fund
-cd ../automatic-source-mapping
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 bun install --frozen-lockfile
+bun run proofs:existing
+bun run proofs:integration
 ```
 
-If this fresh checkout has no `node_modules` entry in `experiments/automatic-source-mapping`, create the experiment-only dependency link:
-
-```bash
-ln -s ../base-ui-only-this/node_modules node_modules
-```
-
-An existing installation there should resolve the seven inherited dependencies at the versions in this experiment's manifest.
-Do not replace an existing dependency directory automatically.
-The recorded runs used the symlink so the runtime and fixture resolve the same React installation.
-Then:
-
-```bash
-cd ../base-ui-only-this
-bun proof.ts
-cd ../automatic-source-mapping
-bun proof.ts
-bun continuity/proof.ts
-```
-
-Expected exit codes are 0.
-Expected summaries are `ALL 9 CHECKS PASSED`, `RESULT 30 passed, 0 failed`, and `CONTINUITY 14 passed, 0 failed`.
-New output goes into ignored `runs/` directories.
-The preserved baseline and final output under `evidence/` remain distinguishable.
-Chrome is launched with `channel: "chrome"`; launch failures are errors.
+The existing runner expects 12 original assertions, 30 mapping checks, 14 continuity workflows, and 9 real-component workflows, all exit 0.
+The new integration runner expects four bounded workflows, all exit 0.
+New output goes into ignored `runs/` directories; original evidence remains historical.
+See [the PR 5 report](../integration/REPORT.md) for dependency reconciliation, corrections, and unresolved limits.
+Chrome launches through `channel: "chrome"` and never falls back to Chromium.
 
 ## Contents
 

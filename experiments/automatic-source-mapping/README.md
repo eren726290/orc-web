@@ -4,21 +4,25 @@ This is a runnable architecture experiment, separate from ORC-web application co
 The branch starts at `origin/master` commit `8b2158b3c84ad5fec59aa0e39ce5c8e3cda76cf1` and needs no PR 1 merge.
 The remote has `master` and no `main`, so this PR targets `master` without changing the default branch.
 
-## Run
+## Reproduce in the integrated checkout
 
-Requirements are Bun, Node 22 or newer for Recast, npm, and installed Google Chrome stable.
-Install only this directory's exact locked dependencies:
+PR 5 uses the root manifest and `bun.lock` for all experiments.
+Historical manifests and npm lockfiles are preserved under `../integration/evidence/historical-dependencies/`.
+Use Bun, Node 22 or later, and installed Google Chrome stable.
+No shadcn acquisition or dependency symlink is needed.
+From the repository root:
 
 ```bash
-cd experiments/automatic-source-mapping
-PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci --ignore-scripts --no-audit --no-fund
-bun run proof
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 bun install --frozen-lockfile
+bun run proofs:existing
+bun run proofs:integration
 ```
 
-The runner uses `chromium.launch({ channel: "chrome", headless: true })`.
-It never falls back to bundled Chromium or installs browsers.
-Every run creates a distinct ignored `runs/<timestamp>/` containing reports, ownership records, candidate diagnostics, sources, screenshots, and generated build inputs.
-The committed [Fedora report](REPORT.md) and [evidence](evidence/fedora-chrome/report.json) are preserved separately from new runs.
+The existing runner expects 12 original assertions, 30 mapping checks, 14 continuity workflows, and 9 real-component workflows, all exit 0.
+The new integration runner expects four bounded workflows, all exit 0.
+New output goes into ignored `runs/` directories; original evidence remains historical.
+See [the PR 5 report](../integration/REPORT.md) for dependency reconciliation, corrections, and unresolved limits.
+Chrome launches through `channel: "chrome"` and never falls back to Chromium.
 
 ## What is discovered
 
@@ -81,20 +85,8 @@ The experiment does not validate complete ORC-web correctness, arbitrary React c
 
 ## Dependencies and checks
 
-All dependencies are isolated here and pinned in [package.json](package.json) and [package-lock.json](package-lock.json).
-`ast-types@0.16.3` is declared directly because the resolver imports its checked node types and builders.
-It was already Recast's installed transitive dependency at this version, so declaring it introduced no new installed package version.
-Motion is unnecessary for these mapping fixtures.
-Existing application dependencies were not upgraded.
-
-The installed Oxlint and Oxfmt binaries were also used on the five experiment implementation files:
-
-```bash
-/home/eren/D/orc-web/node_modules/.bin/oxfmt --check resolver.ts browser.ts runtime.tsx boundaries.ts proof.ts
-/home/eren/D/orc-web/node_modules/.bin/oxlint resolver.ts browser.ts runtime.tsx boundaries.ts proof.ts
-git diff --cached --check
-```
-
-Those absolute binary paths describe this PC's checks; they are not dependencies of the runnable proof.
-Source formatting variation deliberately uses Recast's printer inside the proof.
-The authored fixtures and preserved before/after source are evidence, so the formatter check targets implementation files only.
+All application and experiment packages resolve from the root installation.
+`ast-types@0.16.3` remains explicitly declared for checked Recast nodes and builders.
+Motion is not imported by these mapping fixtures.
+Run the root-local Oxlint and Oxfmt commands recorded in the [PR 5 report](../integration/REPORT.md).
+The earlier report and evidence retain their historical versions and commands.
