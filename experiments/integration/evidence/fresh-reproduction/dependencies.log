@@ -1,0 +1,2 @@
+$ node dependency-setup/check.mjs
+PASS: 30 exact declared/override packages, 74 PR import contexts, one React/JSX runtime/React DOM installation across 6 contexts.

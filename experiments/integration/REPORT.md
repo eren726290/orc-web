@@ -79,6 +79,10 @@ The checker covers historical PR imports, actual integrated source imports, comp
 The fixture, instrumentation, and generated-entry resolution contexts point into this checkout's root `node_modules`.
 The actual combined Chrome runs exercise those resolutions.
 TypeScript and its typings resolve locally; no previous folder's compiler is invoked.
+TypeScript 7.0.2 is used only through its `tsc` CLI for static checking.
+Source discovery and editing use Babel and Recast, and Bun builds the browser candidates.
+The installed TypeScript package labels its compiler API exports `unstable`; this experiment imports none of them and establishes no TypeScript 7 compiler API compatibility.
+[Compiler scope](evidence/typecheck/compiler-scope.json) records that distinction.
 
 PR 1's application declared Motion 13.4.6, while its original proof used 13.4.4.
 The integrated manifest chooses the original proof version and pins its three relevant transitive Motion dependencies through overrides.
@@ -122,6 +126,7 @@ After Hide, the normal dialog starts closed, opens through its real trigger, clo
 
 Fresh contexts still remount the React tree.
 Only the explicit reveal target and generated selection metadata are restored; arbitrary hook state, focus, scroll, and animation progress are not preserved.
+Save/reopen restores source, revision, selection, and reveal metadata; the session's Undo/Redo stacks start empty.
 Show content forces the tested dialog open until the editor hides that revealed content.
 A Properties/Layers UI for revealing a never-opened region is not implemented or tested.
 Other hidden regions, menus, popovers, controlled-component protocols, multiple dialogs under one usage, and full Base UI recognition remain unproven.
@@ -170,6 +175,8 @@ This is a dependency declaration compatibility issue, not an observed stylesheet
 The consequence is that a full strict declaration check cannot currently certify this pinned dependency tree.
 An upstream declaration fix or a separately verified compatible version is the next step; PR 5 does not upgrade packages to conceal it.
 Source checking does not cover the untyped preserved PR 1 runner or every inherited test/fixture as a standalone TypeScript project.
+Local Oxlint, Oxfmt, and diff whitespace checks pass for the modified implementation, integration runners, and evidence verifier.
+[Static review commands and exit codes](evidence/static-review/results.json) record their exact scope.
 
 ## Reproduction and evidence
 
@@ -197,4 +204,9 @@ The final revealed/copy screenshots were visually inspected for typography, Unic
 All new artifacts are distinguishable from PRs 1–4's historical evidence.
 No generated JavaScript bundle, cache, browser binary, or `node_modules` is committed.
 
-Fresh committed-source installation and publication evidence are recorded when those final steps complete.
+A separate clone at `/tmp/orc-web-pr5-reproduction-20260930` installed dependencies from committed source `dd1acd7` using `bun install --frozen-lockfile` with `NODE_PATH` unset.
+No previous dependency directory was copied, and the clone used no shared-object Git alternates.
+Installation, dependency checks, all four existing proofs, the four new workflows, and scoped source checking each exited 0.
+[Fresh reproduction provenance](evidence/fresh-reproduction/provenance.json), [dependency paths](evidence/fresh-reproduction/resolution.json), [existing-proof summary](evidence/fresh-reproduction/existing/summary.json), and [new workflow report](evidence/fresh-reproduction/integration/report.json) preserve those measurements.
+The proof implementation and dependency setup are unchanged after that reproduction.
+Subsequent commits preserve evidence, an evidence verifier, and publication records.

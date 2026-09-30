@@ -1,0 +1,20 @@
+{
+  "command": [
+    "git",
+    "clone",
+    "--no-local",
+    "--branch",
+    "codex/integrated-proof-pr5",
+    "/home/eren/D/orc-web-fresh-20260930",
+    "/tmp/orc-web-pr5-reproduction-20260930"
+  ],
+  "commit": "dd1acd741838e4854bff718814732da1efd868bd",
+  "dependencies": "installed fresh using committed root Bun lockfile; NODE_PATH unset; no dependency links; no old node_modules copied",
+  "results": {
+    "install": 0,
+    "dependencies": 0,
+    "existing": 0,
+    "integration": 0,
+    "source-types": 0
+  }
+}

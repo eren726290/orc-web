@@ -1,0 +1,6 @@
+$ bun experiments/integration/proof.ts
+PASS Revealed dialog stays visible through supported edits without candidate trigger clicks
+PASS basic command-created identical usages retain the selected instance
+PASS variation command-created identical usages retain the selected instance
+PASS Only this then successive edit, Undo/Redo and reopen preserve selected independent relationship
+RUN /tmp/orc-web-pr5-reproduction-20260930/experiments/integration/runs/yellow-2026-09-30T02-36-20-256Z
