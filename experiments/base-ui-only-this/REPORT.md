@@ -10,6 +10,9 @@ This establishes the tested local composition and copying subset, not arbitrary 
 
 Starting commit: `c230345902e8b33d4d772916ce010a72fe8704d6` from unmerged PR 3.
 Branch: `codex/base-ui-only-this`, targeting existing default branch `master`.
+[PR 4](https://github.com/eren726290/orc-web/pull/4) is open against master.
+The new implementation and evidence commit is `7ff439138d8d0ab58bf3846fad9fd7f82a3c150e`; a separate publication-record commit only completes the report and gates.
+The [parent-to-implementation comparison](https://github.com/eren726290/orc-web/compare/c230345902e8b33d4d772916ce010a72fe8704d6...7ff439138d8d0ab58bf3846fad9fd7f82a3c150e) isolates PR 4's new work.
 PR 3 includes PR 2's automatic mapping experiment.
 The new work lives under this directory plus small additions to the inherited renderer, instrumentation, and command session.
 Application dependencies, product specifications, MCP, and PR 1/2/3 branches were not changed.

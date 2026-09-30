@@ -17,5 +17,5 @@ Starting commit: c230345902e8b33d4d772916ce010a72fe8704d6 (unmerged PR 3, inheri
   EVIDENCE: evidence/fedora-chrome/report.json, sixth through eighth PASS workflows; browser-diagnostics.json and ownership-records.json.
 - [x] G6: Existing mapping and continuity checks, static checks, diff review, visual inspection, and complete evidence/report are finished.
   EVIDENCE: evidence/regression, REPORT.md, final inspected before/after/reopened screenshots.
-- [ ] G7: PR 4 is open against master with dependencies stated; PR 1/2/3 remain open at their original heads.
-  EVIDENCE: pending
+- [x] G7: PR 4 is open against master with dependencies stated; PR 1/2/3 remain open at their original heads.
+  EVIDENCE: https://github.com/eren726290/orc-web/pull/4 and evidence/publication.json, checked after filing.
