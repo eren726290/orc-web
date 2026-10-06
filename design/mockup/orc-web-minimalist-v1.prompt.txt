@@ -1,0 +1,23 @@
+Use case: ui-mockup.
+Create one premium, high-fidelity desktop UI mockup image for ORC-web, a local visual design editor. This is an actual editor screen, flat straight-on full screen screenshot, landscape 16:10 composition, high resolution, crisp legible interface text. No device hardware, no perspective, no presentation board, no annotations outside the app.
+
+Art direction: Apple-inspired restraint and precise hierarchy, with Paper's warm notebook palette. Calm, useful, exceptionally polished. Bone canvas #efefe4, side panels #fcfcf9, white design artboard #ffffff, hairline separators #d7d7d6, text #181818, secondary #666666 and #83837e, inset fields #f3f3f4. Cool blue #5d8cd7 only tiny brand accent and delicate selection outline; all filled action buttons neutral dark. System/Inter-like UI typography at comfortable compact sizes, regular and medium weights. Consistent optically balanced 1.5px monochrome line icons, softly rounded corners, modest shadows only on floating objects. Avoid excessive glass, gradients in editor chrome, pill-shaped everything, oversized spacing, and illegibly tiny controls.
+
+Layout: top bar across entire width roughly 64px tall; left sidebar 230px, right Properties sidebar 280px, central canvas taking most width. Panels meet edges cleanly and have fine vertical dividers. Top left a small original geometric mark and lowercase 'orc', thin separator, project name 'Studio landing' and small 'Saved' status with a monochrome check. Center toolbar with cursor icon 'Select' active, hand icon 'Pan', T icon 'Text'. Top right code brackets icon 'Code', then a black 'Preview' button with play triangle. No macOS traffic lights, browser URL bar, avatar pile, collaboration badges, AI chat, or export button in top bar.
+
+Left panel: tabs 'Layers' active and 'Tokens' inactive. Below, one '+ Add' button dedicated to component import, then a quietly spaced tree. Indentation, disclosure arrows, consistently drawn type icons and names:
+Landing page [frame icon expanded]
+  Navigation [container]
+  Hero [container expanded, softly selected row]
+    Heading [Aa]
+    Description [Aa]
+    Get started [component diamond]
+  Form study [image icon]
+  Footer [container]
+Highlight 'Hero' with a subtle cool gray selection surface. No eyes/hide controls. Leave ample empty space below the short tree. No separate pages navigator or assets marketplace.
+
+Center canvas: large calm warm neutral workspace with one fully visible landing page frame and enough space around it to communicate an infinite workspace. Very faint sparse dot pattern optional. Small caption 'Landing page' above artboard. The design INSIDE the artboard is a beautiful minimalist fictional creative studio landing page, providing visual substance while editor stays quiet. Artboard navigation: wordmark 'still' left, 'About' and 'Journal' right. Hero has tiny eyebrow 'A considered way to create', large beautifully composed two-tone headline 'A little more space.' in ink followed by 'A little less noise.' in warm gray, a short readable paragraph 'Make room for the ideas that matter.', and small dark 'Get started' button. A tasteful editorial image beneath the hero shows pale sculptural folded paper forms in soft natural light on a muted warm-gray background. Keep this image within the design frame. Tiny footer 'Small beginnings. Good things.' Hero is selected with thin cool-blue rectangular outline and corner handles; its corresponding Layers row and Properties refer to Hero. No multiple responsive device frames, no zoom percentage, no rulers or guide lines, no bottom floating tool dock.
+
+Right panel: header 'Properties', then object name 'Hero', smaller 'Container · Landing page'. Clear sections with restrained spacing and no card-within-card clutter. 'Layout' expanded; segmented 'Free', 'Row', 'Column' with Column active. Width and Height fields: 'W 800' / 'H Fit'; sizing labels 'Fill' and 'Fit'. Nine-dot alignment diagram with upper-left dot selected, next to 'Packed'. Labeled numeric fields 'Gap 24', 'Padding 32'. Then 'Appearance' expanded: 'Fill' with small warm white color swatch and 'FCFCF9'; 'Corner radius 0'; 'Opacity 100%'. 'Border' and 'Shadow' collapsed with small plus icons. 'Export' collapsed at bottom. Precisely align labels, inputs, and units. No typography/font inspector, no made-up AI features.
+
+Code window is CLOSED; only the Code control appears in the top bar. The entire composition should feel like a real thoughtfully crafted creative tool ready to use, not a marketing landing page or a dashboard. All visible labels spelled accurately. Use generous central design space while keeping sidebars compact and readable.
