@@ -2,33 +2,156 @@
 
 ## Status
 
-Accepted human import flow with open implementation details.
+Accepted human and MCP import responsibilities with open implementation details.
 
 ## Purpose
 
 People add web components to a live ORC-web design from local source, npm packages, npx-based workflows, or shadcn registry links.
+Agents can also submit authored JSX/TSX and its required supporting files through the same component service.
 After import, a component has a root workspace object plus any accepted source-backed editable layers and declared properties.
 
 ## Human flow
 
-1. The person chooses Add, then Import component.
-2. They provide a package name, shadcn registry link, npx-based source, or local file or folder.
-3. ORC-web inspects the source before changing the document.
-4. If the source offers multiple components, the person chooses one.
-5. ORC-web shows a preview, editable properties, dependencies, and blocking diagnostics.
-6. The person chooses Add to workspace.
+1. The person clicks **+ Add** in Layers, which directly opens the component-import panel.
+2. They choose Package, Registry, or Local and provide an npm package reference, a supported shadcn registry link, or local component source.
+3. ORC-web inspects the source and shows its origin and any required executable command, including an npx command when applicable.
+4. If inspection already identifies several usable components, the person chooses the component or provided composition to place.
+5. One **Import** action authorizes preparation of that chosen source and its required command; ordinary import does not ask for repeated confirmation.
+6. The panel shows preparation progress, resolves any component choice or required inputs that become available afterward, and shows a working preview with **Ready to place**.
+7. The person clicks inside a frame to place it there or clicks empty workspace to place a loose component object.
+8. ORC-web selects the new component, highlights its Layers row, and shows its Properties automatically.
 
 Dependency details belong under a collapsed Details section until someone needs them.
 Errors must say what blocked the import and what the person can change.
+
+## MCP creation and updates
+
+The agent uses [inspect_component_import](../mcp/tools/inspect_component_import.md) for a read-only candidate check, then [import_component](../mcp/tools/import_component.md) to prepare and place the inspected entry.
+Agent-authored source can contain one file or a composition with local components, CSS or Tailwind v4 inputs, Base UI-flavored shadcn source, Motion, SVG, assets, dependencies, and initial props or sample data.
+One Import call prepares those requirements and places one live instance; it does not require separate workspace objects or tool calls for every supporting file or technology.
+The preceding inspection remains required, and changed inspected inputs require a fresh inspection.
+The agent's validated submission does not require the person to create source files or press Code Apply afterward.
+
+Later exposed instance inputs use [update_component_props](../mcp/tools/update_component_props.md).
+Implementation and related source files use [update_component_source](../mcp/tools/update_component_source.md), with explicit shared or supported Only this scope.
+The dedicated tool files own MCP responsibilities and the required combined editor proof; the shared preparation, placement, ownership, and portability rules below also serve the human import flow.
+Core MCP JSON is recorded in the dedicated tool files; extended resource/source encodings and production implementation remain open.
 
 ## Inspection before import
 
 Inspection is read-only.
 It resolves the candidate component, source files, package versions, declared dependencies, exported components, available manifest, styles, assets, and unsupported requirements.
 Inspection does not add a workspace object, write a project file, or change Undo history.
+Inspection does not execute the candidate's package commands; execution belongs to the authorized Import step.
 
 Import uses the inspected result only when the source remains the same.
-If the package version, registry content, or local files changed, ORC-web asks for a new inspection rather than importing something different from the preview.
+If the package version, registry content, or local files changed, ORC-web asks for a new inspection rather than importing something different from the inspected result.
+
+## Choosing a usable component
+
+The choice identifies a component or supplied composition that ORC-web can actually place and render.
+Hooks and utilities remain supporting files and are not placement choices.
+A package or registry item can provide several files and supporting components; preparing them does not create separate workspace objects for each export.
+A composed example, such as a login form or a dialog with its trigger and content, can be the placeable entry when its source fits the supported contract.
+ORC-web does not invent a composition from unfamiliar primitives merely to produce a preview.
+
+Choose among available usable entries before preparation when inspection can identify them reliably.
+For source generated by an npx command, resolve the component choice once preparation produces that source.
+The final preview always belongs to the chosen entry and its accepted initial inputs.
+
+## Initial inputs
+
+Use the component's declared defaults or a supported example supplied by its author or agent.
+Ask only for missing required inputs that the accepted contract can meaningfully expose, using the corresponding existing control types.
+Do not require a person to configure every optional property before placement.
+The selected instance uses the validated initial inputs from the preview, with their source or instance ownership preserved.
+
+ORC-web must not invent data or behavior to make an incomplete component appear ready.
+An unsupported provider, runtime requirement, or input that cannot be represented through the accepted contract needs an explanation before placement.
+The [React source-binding contract](../architecture/react-source-bindings.md#edit-ownership) owns the durable values and supported editing scopes.
+
+## Preparation and preview
+
+After Import is authorized, prepare the chosen source, its required dependencies, styles, theme inputs, and assets.
+Use Bun where supported; an executable or command that explicitly requires Node must use Node.
+The accepted runtime direction is recorded in the [stack proposal](../../backlog/stack-proposal.md).
+When Tailwind is required, run the Tailwind compiler and retain the authored classes and required inputs under the [Tailwind contract](tailwind-components.md).
+
+The preview uses the same supported rendering and style preparation as the placed component.
+The server's [local rendering service](../architecture/system-architecture.md#local-rendering-service) verifies the prepared candidate's initial render before readiness.
+The visible import preview uses that same prepared source, styles, and accepted inputs.
+It preserves the required appearance within its intended design scope and does not overwrite existing design source or restyle the ORC-web interface or unrelated frames.
+Show **Ready to place** only after the selected entry renders successfully with its required styles and accepted initial inputs.
+The panel shows its preview, supported editable properties and layers, and any values that require source editing.
+An unavailable build input, failed compilation, or failed initial render prevents readiness and identifies the problem.
+
+Readiness confirms the supported initial render; an interaction reached later can still fail.
+The [runtime error contract](../interface/code-window.md#runtime-component-errors) defines selection and repair if a placed component later fails.
+
+## Shared source and resource preparation
+
+Accepted preparation refinements, recorded on 2026-10-05.
+Inspection, Import, and source updates use one supported representation of source requirements and the same component preparation service.
+Reuse normal package manifests, lockfiles, source imports, and the existing managed asset service.
+This does not add another MCP tool, package manager, or saved source authority.
+
+| Required input | Preparation rule |
+| --- | --- |
+| Package dependencies | Declare the packages required by the selected source; retain exact resolved dependency records and the lockfile on success. |
+| Images, SVG, and fonts | Accept supported local/transferred files or existing managed asset references and retain required content for portability. |
+| CSS, Tailwind, and theme inputs | Retain required text files and their imports; identify the stylesheet entry and source paths needed to load or build their styles. |
+| Component entry/export | Choose the supplied entry explicitly; source updates that change it must identify and validate the replacement against affected instances. |
+
+A lockfile preserves resolved versions; it does not establish browser/runtime compatibility or correct rendering.
+Reopening uses recorded versions without silently refreshing packages to latest or substituting a different version.
+ORC prepares a changed dependency candidate before committing its coupled source and dependency records.
+Package downloads and build caches remain rebuildable local data under the [managed dependency contract](../architecture/orc-workspace-bundle.md#managed-dependencies).
+
+A local origin path alone is insufficient to reproduce an imported asset on another computer.
+Retain the managed file and resolve its reference to a browser/build URL while preserving supported authored import and CSS resource relationships.
+A component import or update can prepare newly supplied assets atomically with the source; prior standalone [import_asset](../mcp/tools/import_asset.md) registration is optional.
+An explicitly external resource remains an external dependency under the existing asset/export contract.
+
+The presence of a CSS file does not prove that its styles are loaded.
+Identify its supported import or explicit stylesheet entry and preserve required theme inputs.
+Tailwind preparation must scan the selected composition's required source, including supported dependencies ignored by default when their classes need compilation.
+Use supported source registration or equivalent compiler inputs under the [Tailwind preparation rules](tailwind-components.md#stylesheet-entry-and-source-detection).
+Do not invent classes for dynamically assembled expressions or silently render with missing styles.
+Imported CSS must retain its intended design scope without changing the editor or unrelated frames.
+
+Required entry/export changes, assets, and dependency changes validate with existing instance inputs, slots, bindings, and the candidate's initial render before one atomic commit.
+Inspection reports known requirements without executing package commands or claiming that preparation has passed.
+Exact extended MCP transfer fields, asset URL mapping, dependency-change encoding, supported build/configuration surface, and SDK integration remain implementation decisions in the [component-import](../../backlog/mcp/command-contracts.md#component-import-schema-implementation-decisions) and [component-update](../../backlog/mcp/command-contracts.md#component-update-schema-implementation-decisions) backlog.
+The current basic inline/file schemas do not yet encode all these requirements.
+Official build tooling supports the underlying package/asset/style practices; ORC-specific ownership, atomicity, and portability still need real implementation verification.
+
+## Placement and completion
+
+Before placement, the destination frame highlights so the person can see where the component will go.
+Clicking empty workspace places a loose component object at the chosen workspace position.
+Clicking a Free frame places it at the chosen position inside that frame.
+Clicking a Flex frame uses its indicated insertion position and existing child-layout rules.
+The [Flex layout](../interface/flex-layout.md) and [Constraints](../interface/constraints.md#reparenting-and-switching-layout) contracts own those destination rules.
+Placement follows the destination's supported sizing and layout rather than silently forcing every component into free positioning.
+
+Before adding the object, resolve any open draft affected by the selection change through the [Code draft safeguard](../interface/code-window.md#unapplied-code).
+Cancelling that safeguard keeps the current design, selection, and draft without placing the component.
+The shared command engine validates the destination, applicable locks, accepted source, inputs, and bindings before committing the placement as one command and one Undo entry.
+Success selects the new component root, reveals and highlights its Layers row, and shows its supported instance and outer Layout controls in Properties.
+Selecting a supported nested layer afterward shows the controls owned by that layer.
+
+Undo removes the placed instance; it does not uninstall prepared packages.
+Redo restores the instance with its applied inputs and accepted component reference.
+Source, bindings, assets, and dependency information required by the applied design follow the project's normal save and autosave rules.
+Placement in an Untitled project does not request a name or folder before the existing first-save flow.
+
+## Failure and cancellation
+
+Preparation failure preserves the existing design and shows the error with **Retry** in the import panel.
+Escape cancels placement without adding a workspace object.
+Successfully preparing a dependency is distinct from placing a design object; cancellation does not imply uninstalling prepared dependencies.
+Cancellation or placement failure leaves the previous design and selection intact and creates no placement history entry.
+Prepared previews are not workspace objects and do not become applied design content merely because preparation succeeded.
 
 ## Component contract
 
@@ -50,8 +173,13 @@ See [Editable React components](../interface/react-components.md), [React source
 ## Source and dependency storage
 
 The project bundle stores the imported source and exact dependency information needed to reopen the component.
+Its dependency manifest and lockfile preserve the recorded package versions; the server prepares their installation on each computer as needed.
+Required downloads may need internet access on a fresh computer, and an unavailable package must not trigger a silent version substitution.
+Installed packages and compiled output follow the [rebuildable local-data contract](../architecture/orc-workspace-bundle.md#managed-dependencies), separate from portable source and dependency records.
 An imported design must not silently change because a package registry later publishes a new version.
 Local source paths and registry URLs remain origin information, not the only copy needed to render a saved project.
+Required styles, CSS variables, and theme inputs are preserved for rendering, save/reopen, and supported export.
+Automatic recognition and exposure of imported tokens in the Tokens panel are scheduled for [V1.1](../../backlog/imported-token-management-v11.md); that deferral does not remove required styling inputs.
 
 ## Direct runtime policy
 
@@ -63,3 +191,21 @@ The full support policy for lifecycle scripts, native addons, environment variab
 The initial implementation should support a small clear subset before claiming broad npm compatibility.
 
 [React source-editing validation](../architecture/react-source-editing-validation.md) records the real Base UI/shadcn composition tested on Fedora and the package-internal and copying patterns that remain unverified.
+
+## Agent-led application import
+
+The proposed [orc-design-import skill](../../skills/orc-design-import/SKILL.md) guides an agent bringing a selected screen, section, or component from an existing application into an ORC project.
+It adds repository analysis, comparison with the original application, and verified editability around the supported import flow above.
+It uses implemented ORC command operations and the existing source-recognition boundary; missing operations or unsupported requirements keep its checkpoint incomplete.
+The [application integration plan](../../backlog/application-integration-skills.md) records its execution prerequisites and unassigned release.
+
+## Research references
+
+These sources informed the refinements above; they do not prove ORC-web's importer or broader package compatibility.
+
+- [Figma component preview and insertion](https://help.figma.com/hc/en-us/articles/360039150173-Create-and-insert-component-instances).
+- [Storybook component inputs and controls](https://storybook.js.org/docs/essentials/controls).
+- [shadcn registry files, dependencies, CSS, and theme inputs](https://ui.shadcn.com/docs/registry/registry-item-json).
+- [Bun lockfile storage](https://bun.sh/docs/pm/lockfile) and [frozen installation](https://github.com/oven-sh/bun/blob/main/docs/pm/cli/install.mdx).
+- [Vite static asset resolution](https://vite.dev/guide/assets.html) and [CSS imports](https://vite.dev/guide/features.html#css).
+- [Tailwind required-source detection](https://tailwindcss.com/docs/detecting-classes-in-source-files).

@@ -2,10 +2,31 @@
 
 ## Status
 
-Accepted V1 public tool inventory.
+Provisional tool inventory retained for the final MCP discussion.
+The entries below are reference candidates, not a finalized V1 tool count or release promise.
+The [active read-tool contract](../../doc_v1/mcp/read-tools.md) owns the shared applied-state rules for all six focused reads; their rows below remain historical summaries rather than exact schemas.
+The dedicated [get_context](../../doc_v1/mcp/tools/get_context.md), [get_source](../../doc_v1/mcp/tools/get_source.md), [create_frame](../../doc_v1/mcp/tools/create_frame.md), and [insert_html](../../doc_v1/mcp/tools/insert_html.md) contracts now take precedence over their historical rows.
+In particular, `insert_html` accepts a supported HTML fragment with inline CSS; its compact result does not automatically return every descendant.
+The dedicated [inspect_component_import](../../doc_v1/mcp/tools/inspect_component_import.md), [import_component](../../doc_v1/mcp/tools/import_component.md), [update_component_props](../../doc_v1/mcp/tools/update_component_props.md), and [update_component_source](../../doc_v1/mcp/tools/update_component_source.md) contracts also take precedence over their historical rows.
+They extend the accepted source descriptions to agent-authored multi-file compositions and keep inspection, one-call preparation/placement, instance inputs, and explicit source-update scope distinct.
+The dedicated [update_styles](../../doc_v1/mcp/tools/update_styles.md), [set_text](../../doc_v1/mcp/tools/set_text.md), [move_nodes](../../doc_v1/mcp/tools/move_nodes.md), [resize_node](../../doc_v1/mcp/tools/resize_node.md), and [replace_node_html](../../doc_v1/mcp/tools/replace_node_html.md) contracts also take precedence over their historical rows.
+Those visual tools reach ordinary or reliably bound React values; movement preserves the current parent, resizing requires explicit supported mode changes, and ordinary replacement retains only a compatible root identity while creating fresh descendants.
+The dedicated [reorder_nodes](../../doc_v1/mcp/tools/reorder_nodes.md), [rename_nodes](../../doc_v1/mcp/tools/rename_nodes.md), and [delete_nodes](../../doc_v1/mcp/tools/delete_nodes.md) contracts take precedence over their historical rows.
+The historical `undo` and `redo` rows are [scheduled for V1.1](undo-redo-v11.md), while application history and Undo/Redo remain V1.
+The [tool release scope](tool-release-scope.md) keeps project listing/create/open/rename and standalone fresh whole-project validation outside MCP V1, with a later release unassigned.
+Dedicated [update_design_tokens](../../doc_v1/mcp/tools/update_design_tokens.md) and [get_screenshot](../../doc_v1/mcp/tools/get_screenshot.md) contracts take precedence over their historical rows.
+Dedicated [get_node](../../doc_v1/mcp/tools/get_node.md), [get_tree](../../doc_v1/mcp/tools/get_tree.md), [list_design_tokens](../../doc_v1/mcp/tools/list_design_tokens.md), and [get_computed_styles](../../doc_v1/mcp/tools/get_computed_styles.md) contracts now own object details, hierarchy, registry reads, and browser results.
+The historical `get_document_info` and `get_selection` responsibilities fit in `get_context`; `get_children` is a shallow `get_tree` request.
+Dedicated [import_asset](../../doc_v1/mcp/tools/import_asset.md) and [update_node_settings](../../doc_v1/mcp/tools/update_node_settings.md) contracts own reusable resource registration and own locks/eligible frame modes.
+Saved Layer hide/show and MCP visibility mutations remain [V1.1](../layer-visibility-v11.md).
+Standalone font listing and conditional-style management also remain outside MCP V1 under the release scope above.
+Dedicated [export](../../doc_v1/mcp/tools/export.md) and [update_attributes](../../doc_v1/mcp/tools/update_attributes.md) contracts take precedence over their historical rows, reusing the exporter and asset/source services rather than creating separate tools per format or attribute.
+The dedicated [duplicate_nodes](../../doc_v1/mcp/tools/duplicate_nodes.md) contract takes precedence over its historical row and reuses accepted same-project Copy/Paste behavior.
+Names and useful broad responsibilities were reused from this catalog; the current behavior follows ORC-web's accepted application architecture and subsequent discussion rather than promoting these summaries into exact schemas.
 Detailed shared behavior is in [Command contracts](command-contracts.md).
 
-ORC-web exposes exactly 39 public MCP tools.
+This reference lists 39 candidate public MCP tools.
+The current [27-tool inventory](../../doc_v1/mcp/tools/README.md), focused consolidations, and explicit release decisions take precedence over these unchanged rows.
 No second public tool may duplicate an operation already represented here.
 
 An agent reads applied state with `get_context` or `get_source` before making its next change.

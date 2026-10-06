@@ -15,6 +15,7 @@ Read-only by default. Ask before destructive actions.
 
 ## Autonomy
 
+- Track deferred work: if a significant feature, future update , edge case, or idea is pushed out of the current scope, immediately document it in a backlog folder a didected backlog file. Never let important tasks get lost in the chat history.
 - You may run codebase analysis on your own judgment before edits, after generating code, or when something looks off — report what you found. This is the only autonomous-action exception; everything else needs explicit instruction.
 - When stuck, do not be strictly bound by existing documentation/structure. You are encouraged to propose novel ideas and alternative approaches.
 

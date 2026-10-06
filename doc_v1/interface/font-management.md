@@ -3,6 +3,8 @@
 ## Status
 
 Accepted V1 product behavior.
+Authored-font rendering, source preservation, and supported project save/export remain V1 responsibilities.
+The picker, Import font, Font unavailable feedback, and Replace font workflows below retain their researched plan under the [V1.1 Properties control schedule](../../backlog/properties-panel-v1x.md#v11-properties-controls).
 
 ## Goal
 
@@ -71,9 +73,14 @@ The [Export](../import-export/export.md) document defines output behavior.
 
 ## Agent access
 
-An agent can read only the local fonts that the person has approved for the current editor session through `list_fonts`.
-An agent can use the existing `import_asset` command to add an explicitly chosen font file as a managed project asset.
-The same permission, import, validation, save, and Undo rules apply to agent and human actions.
+[import_asset](../mcp/tools/import_asset.md) is an accepted V1 operation for registering a chosen supported image, SVG, or font as a reusable managed resource.
+Font registration preserves family/weight/style metadata and supplies required font loading for ordinary HTML/CSS and React without placing an object or assigning a new family.
+It retains the inclusion, validation, save/export, and application-history rules above.
+Required font files can also travel directly through supported source/import preparation and complete export.
+The human font controls remain V1.1.
+
+`list_fonts` stays [outside MCP V1](../../backlog/mcp/tool-release-scope.md#standalone-font-listing), with a later release unassigned.
+Any future local-font listing retains the person's approved-access boundary and distinguishes project/default fonts from computer-specific references.
 
 ## Open implementation details
 

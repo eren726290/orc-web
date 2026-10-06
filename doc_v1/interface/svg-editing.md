@@ -13,9 +13,12 @@ The SVG remains vector content in the saved design and in supported code exports
 ## Select and transform
 
 Select is the tool for SVG placement and transformation.
-Clicking an SVG selects the whole SVG object and shows its bounds, resize handles, and rotation handle.
+Clicking an SVG selects the whole SVG object and shows its bounds, eligible resize handles, and rotation handle.
 Dragging the object moves it under its current layout rules.
-Dragging a resize handle resizes it while preserving its proportions.
+Dragging an eligible resize handle resizes it while preserving its proportions.
+A proportional gesture is available only when the required changes on both axes are supported by their sizing rules.
+If a required axis is Fit, Fill, constraint-controlled, or otherwise not directly editable, choose supported Fixed sizing in Properties before using a proportional resize gesture.
+The gesture never silently converts either axis's sizing mode.
 Dragging the rotation handle rotates the whole SVG.
 
 These controls change the SVG object's box, position, and rotation.
@@ -56,12 +59,17 @@ Image and PDF export use the rendered SVG at its selected size and rotation.
 
 ## V1 boundary
 
+Initial SVG objects come from agent-built or imported designs.
+People replace existing SVGs through Properties.
+Manual new-file insertion through + Add is deferred to V1.x.
+
 V1 supports selecting, moving, proportionally resizing, rotating, replacing, and changing supported fill, stroke, and stroke-width values.
 It does not include drawing new paths, selecting or moving individual path points, editing Bézier handles, combining shapes, or automatic editing of arbitrary SVG source.
 
 ## Related contracts
 
-[Layers and Properties](layers-and-properties.md) defines the shared panel behavior.
+[Layers panel](layers-panel.md) defines row presentation and selection without adding vector-editing tools.
+[Properties](properties-panel.md) defines the selected artwork's controls.
 [Workspace and canvas](workspace-and-canvas.md) defines Select and workspace placement.
 [Code window](code-window.md) defines source editing and Apply.
 [Export](../import-export/export.md) defines output behavior.

@@ -43,7 +43,9 @@ Preview interactions do not overwrite the saved default design values.
 
 One Preview button enters Preview.
 A visible Exit preview button returns to Edit while preserving the person's selection and canvas position.
-The broader canvas behavior is defined in [Workspace and canvas](workspace-and-canvas.md).
+V1 Preview shows one selected frame and its nested live components in the existing browser page.
+Temporary input and open state are discarded on exit; the next session starts from saved defaults, while Edit's supported Show content choices are restored.
+The entry, selection requirements, session reset, and deferred comparison flow are defined in [Workspace and canvas](workspace-and-canvas.md#selected-frame-workflow).
 
 If a component fails while it renders or handles a Preview interaction, ORC-web contains the failure to that component and keeps the surrounding design usable.
 The error placeholder remains selectable so the person can open its applied source or ask an agent to fix it.
@@ -107,6 +109,7 @@ Preview and exported code keep the component's normal behavior.
 A dropdown, tooltip, or popover follows its trigger when the component moves or the workspace pans and zooms.
 A dialog in a top-level frame covers its owning top-level frame while the ORC-web toolbar, Layers, and Properties remain available.
 A dialog from a loose workspace object covers the visible canvas area.
+In selected-frame Preview, supported overlays use the Preview frame's boundary and leave Exit Preview usable.
 
 Image and PDF export choose an explicit named design state such as Default or Open.
 They never depend on whatever transient open state happened to be visible in a person's editor.
@@ -114,7 +117,8 @@ They never depend on whatever transient open state happened to be visible in a p
 ## Local collections
 
 An agent-built component can contain local editable sample data, such as a list of cards.
-The person can edit one card's text or image, duplicate one item, delete one item, or change the shared card design.
+The person can edit one card's text or image, delete one item, or change the shared card design.
+The dedicated action to duplicate an item is deferred to V1.x alongside the ordinary Duplicate action.
 
 Editing an item value changes that item only.
 Changing the card's shared source changes every item.
@@ -125,11 +129,14 @@ If the visible values come from an external service or an unsupported computed e
 ## Agent and human workflow
 
 An agent can build a complete page foundation through the existing MCP tools.
-After that work is applied, a designer can iterate the same components through Layers, Properties, the canvas, and Code.
+After that work is applied, the designer can review, ask the agent for more changes, or iterate through Layers, Properties, the canvas, and Code.
+The person normally waits for each agent task to finish before making human changes.
+After review, the person can ask the agent to refine the design again or create another variant.
 
 Before an agent makes a later change, it calls `get_context` or `get_source` to read the current applied source and revision.
 It then uses the same command engine as the human interface.
 The agent does not need a separate feedback loop to learn visual edits.
+The [MCP workflow](../mcp/mcp-server.md#agent-and-designer-iteration) records this continuing collaboration and the [read-tool contract](../mcp/read-tools.md) defines applied-state reads.
 
 ## V1 boundary
 
@@ -142,4 +149,5 @@ See [React source-editing validation](../architecture/react-source-editing-valid
 [Component import](../import-export/component-import.md) defines inspection and import.
 [Code window](code-window.md) defines unapplied code and Apply.
 [Motion](motion.md) defines source-authored interactive animation.
-[Layers and Properties](layers-and-properties.md) defines the shared panels.
+[Layers panel](layers-panel.md) defines row presentation, connected selection, display names, locks, expansion, and the preserved V1.1 visibility workflow.
+[Properties](properties-panel.md) defines supported controls and live editing.

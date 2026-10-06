@@ -16,7 +16,8 @@ V1 does not add a separate timeline editor.
 A developer selects a component and chooses **Edit component source** in the [Code window](code-window.md).
 They write or change the Motion behavior in that React source, then choose Apply.
 
-An agent changes the same applied source through the existing `update_component_source` MCP tool.
+An agent changes the same applied source through the accepted [update_component_source](../mcp/tools/update_component_source.md) MCP tool.
+Motion can arrive with JSX/TSX, Tailwind, Base UI-flavored shadcn, and SVG in one inspected composition through [import_component](../mcp/tools/import_component.md).
 The agent does not wait for a person to press Apply.
 Code Apply and the MCP mutation both use the shared command engine, source validation, revision checks, and Undo history.
 
@@ -40,6 +41,8 @@ Hover, press, focus, drag, menu, dialog, and other supported interactions can th
 Leaving Preview returns to Edit without changing the saved design just because a preview interaction occurred.
 Preview runs the component's normal animations even when Still view is enabled for Edit.
 An animation may restart when entering Preview or after applying a source change.
+The [selected-frame workflow and session reset](workspace-and-canvas.md#selected-frame-workflow) apply to animated components as well.
+Preview animation progress is temporary and does not become a saved design value on exit.
 
 ## Editing while motion is visible
 

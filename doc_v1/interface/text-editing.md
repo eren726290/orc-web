@@ -5,11 +5,12 @@
 The V1 text workflow below is accepted product behavior.
 This document records the intended editor behavior and does not claim that it is implemented.
 Exact rich-text storage and browser typography measurement details remain open.
-The [Layers and Properties](layers-and-properties.md) document explains which text controls appear for the current selection.
+The [Layers and Properties](properties-panel.md) document explains which text controls appear for the current selection.
 
 ## Create text
 
-Choose Add → Text or activate the Text tool with T.
+Click Text in the top bar or activate the Text tool with T.
+Text creation does not require opening + Add.
 Click an existing Text object with the Text tool to edit it.
 Click once on empty workspace to create a text object sized to its content and begin typing.
 Drag on empty workspace to choose a text box width, then type.
@@ -45,6 +46,8 @@ In a Horizontal or Vertical frame, text follows the selected Fixed, Fit, or Fill
 With a Fixed or Fill width and Fit height, the text wraps within its available width and grows taller as needed.
 Text inside a Free frame uses the same sizing and overflow controls as other free-positioned children.
 The parent frame's layout and clipping settings continue to apply.
+A Fixed-width, Fit-height Text object supports horizontal canvas resizing while its height follows wrapping.
+Fit or Fill axes do not silently become Fixed through dragging; the shared [manual resize rules](workspace-and-canvas.md#manual-resizing) determine the available handles.
 See [Flex layout](flex-layout.md) for parent layout and per-axis sizing rules.
 
 ## Overflow
@@ -94,6 +97,9 @@ That command updates the same object shown in Layers and supports document Undo.
 Save and reopen preserve the full text, its supported inline formatting, typography, and overflow choice.
 React, HTML or CSS, image, and PDF output use the rendered text at the selected design mode and frame size.
 The [Code window](code-window.md) keeps unapplied code in the current editing session until the person chooses Apply.
+MCP [set_text](../mcp/tools/set_text.md) changes ordinary content or a reliably bound React text owner through that same command path.
+Its [core JSON exchange](../mcp/tools/set_text.md#agreed-json-exchange) accepts plain-string replacement with reliable ownership and explicit shared-source scope.
+The richer payload and affected formatting-range policy remain open; unsafe plain replacement does not flatten existing formatting or add deferred typography/Overflow panel controls.
 
 ## Open decisions
 

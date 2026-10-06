@@ -3,15 +3,18 @@
 ## Status
 
 Accepted V1 output behavior with open renderer details.
+The dedicated MCP [export contract](../mcp/tools/export.md) exposes this same exporter through one tool with explicit targets, format, local destination, and applicable options.
 
 ## Human flow
 
 Export begins from the current selection.
-The person chooses Export and a format.
+The person opens Export at the bottom of Properties and chooses an available format.
 For React output, they choose CSS or Tailwind styling.
 For image or PDF output containing an interactive or animated component, they choose an explicit named design state before capture.
-They choose a destination and confirm the output.
+They click Export, choose a destination, and confirm the output.
 Advanced settings remain collapsed until requested.
+This section also supports several selected compatible objects, without requiring bulk Properties editing.
+Code-copy actions remain in the Code window.
 
 One selected frame or object creates one output.
 Multiple selected frames or objects create separate files by default when the chosen format supports separate files.
@@ -51,21 +54,42 @@ The complete project and missing-font behavior is defined in [Font management](.
 
 Exporting a workspace image crops to the visible bounds of the objects included in the export.
 It does not capture editor panels, selection outlines, resize handles, or guides unless a future diagnostic export explicitly requests them.
+Canvas constraint indicators are editor overlays and are excluded from every export format.
 It captures the selected named component state with time progression disabled.
+The [local rendering service](../architecture/system-architecture.md#local-rendering-service) performs visual capture from the committed revision using the editor's shared rendering code and prepared styles.
+Image and PDF capture can run with the editor tab closed when the local server has an active project and the required renderer is available.
 It does not capture an arbitrary in-progress animation frame or transient editor interaction.
 The chosen export state determines capture even when the editor's Still view is on or off.
 When the chosen state matches, capture uses the same defined stable appearance as Still view.
 The same capture rule applies to each PDF page.
 See [Motion](../interface/motion.md) for the animation contract.
+MCP [get_screenshot](../mcp/tools/get_screenshot.md) reuses this stable-state capture service to return an inspection image at an identified applied revision.
+That read can inspect applied state before autosave and leaves project/view/history state unchanged; file export retains its separate save and destination-publish rules below.
 
 ## Design modes and tokens
 
 Image and PDF exports use the selected Light or Dark design mode.
 React and HTML or CSS exports include the token definitions needed to reproduce supported modes.
+Existing Dark overrides and Typography values survive output even when their human value editors are deferred.
+Required imported theme variables and styles remain included despite deferred panel recognition.
+The [token release scope](../interface/tokens-and-modes.md#release-scope) and [Light/Dark V1.1 backlog](../../backlog/token-modes-v11.md) defer editing controls rather than output preservation.
 
 ## Reliability
 
 Export reads a committed document revision.
+The [Code window's clipboard actions](../interface/code-window.md#copy-and-export-boundaries) are distinct from complete export: selection snippets and source-file text do not package required dependencies, styles, or assets.
+Intentionally copying a visible component-source draft does not change the committed-state export rule.
 The server finishes pending autosave before it publishes an export result.
+MCP file export requires an Untitled project to complete its first Save through the browser; it does not choose the project name or folder from the export destination.
+Screenshot inspection remains available without that first-save requirement.
+A failed required save or rendering operation preserves the applied design and does not publish a successful export result.
 The export writer produces a complete temporary output before replacing a destination file.
 Failure or cancellation leaves an existing destination unchanged.
+
+## Agent-led application integration
+
+The proposed [orc-repo-sync skill](../../skills/orc-repo-sync/SKILL.md) guides integration of a committed ORC code export into an existing application.
+The agent traces the target codebase, preserves its application behavior, verifies the integrated result, and opens a pull request targeting `main` after the required checkpoints pass.
+Any failure needs an explanation and user discussion before the agent applies an agreed repair.
+Export readiness and successful application integration are separate checkpoints.
+The [application integration plan](../../backlog/application-integration-skills.md) records prerequisites and release status; the existing export contract does not establish that repository integration is implemented.

@@ -22,6 +22,22 @@ It does not treat Tailwind as a second design system beside HTML, CSS, SVG, and 
 
 The compiler output is rendering support for the browser.
 The saved project keeps the accepted authored source and required inputs instead of storing only generated CSS.
+The [component-import readiness contract](component-import.md#preparation-and-preview) requires the chosen entry to render with those styles and its accepted initial inputs before placement.
+Through MCP, [import_component](../mcp/tools/import_component.md) accepts Tailwind v4 inputs together with the inspected React composition and supporting files.
+[update_component_source](../mcp/tools/update_component_source.md) accepts related source/style changes together and validates their rebuilt result before one atomic commit.
+
+## Stylesheet entry and source detection
+
+Including a stylesheet in the source bundle does not automatically load it or generate its Tailwind utilities.
+Preparation must resolve the supported stylesheet import/entry, its theme inputs, and the source paths needed by the chosen composition.
+Tailwind scans source text for complete class names; a component file outside its detected inputs can otherwise render without the required utilities.
+Dependency and ignored-file locations are excluded from automatic detection by default.
+Explicitly register a required supported source path, such as through Tailwind v4 `@source`, or supply its equivalent through the accepted compiler integration.
+Do not assume that scanning ORC-web's editor source covers imported component files or classes used by their dependencies.
+Preserve the supported source-detection inputs for rebuild, save/reopen, and export.
+Rebuild affected styles when a source update changes classes or required source paths before committing the candidate.
+These rules do not make arbitrary dynamically constructed class expressions detectable or broaden the accepted configuration/plugin surface.
+The [shared preparation contract](component-import.md#shared-source-and-resource-preparation) owns package and asset requirements; the exact compiler wiring remains an implementation decision.
 
 ## Style scope
 
@@ -66,12 +82,16 @@ The future work list is in [Tailwind source workflow beyond V1](../../backlog/ta
 
 The accepted import records the Tailwind stylesheet and theme inputs needed to generate the component's visual result.
 It records exact component dependencies and managed assets with the project bundle.
+V1 preserves authored theme CSS variables without automatically registering them as editable document tokens.
+Recognizing and exposing imported tokens in the panel is scheduled for [V1.1](../../backlog/imported-token-management-v11.md), while required theme compilation and source editing remain within the supported V1 contract.
 
 An import that requires an unsupported custom plugin, arbitrary project-wide CSS, environment data, or another unavailable build input reports that requirement during inspection.
 It does not silently render with missing styles or a different theme.
 
 The exact supported Tailwind configuration surface is an implementation acceptance task.
-The V1 product rule is that an accepted component must reopen and render from the saved project without relying on a mutable package registry or the original machine's global cache.
+The V1 product rule is that an accepted component reopens from retained source, style inputs, and exact dependency records rather than mutable registry tags or the original machine's global cache.
+On a fresh computer, the server may download the recorded packages before rebuilding CSS; unavailable packages produce an error without substituting another version.
+The [workspace dependency contract](../architecture/orc-workspace-bundle.md#managed-dependencies) owns that preparation and portability boundary.
 
 ## Code, MCP, and export
 

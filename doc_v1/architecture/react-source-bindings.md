@@ -44,14 +44,19 @@ Text, classes, or props must not become the sole identity of the layer being edi
 Two separate component usages remain separate editing targets even when their displayed text and literal props match.
 Keyed collection records use their supported record identity rather than their current array position.
 
+The [same-project Paste command](../interface/workspace-and-canvas.md#copy-and-paste-inside-the-same-project) allocates fresh Layer identities and maps instance-owned bindings to the new authored usage or copied instance inputs.
+Shared implementation bindings retain their existing definition owner until an explicit supported Only this edit changes that scope.
+Paste validates the copied binding topology before committing and rejects an operation whose target ownership cannot be established reliably.
+
 The Fedora experiments keep command-owned lineage through the parsed syntax tree and generated metadata outside authored TSX.
 PR5 binds exact AST addresses to an exact source snapshot digest and transports those identities through supported commands.
 These addresses identify nodes in that snapshot; they are not a general identity match after an arbitrary source replacement.
 The experiment can reopen its saved metadata and distinguish the two tested initially identical component usages.
 
 After Code Apply, the resolver must validate identities against the new source before using an old selection.
-If it cannot prove continuity, it clears the uncertain selection and explains that the person needs to select again.
+If it cannot prove continuity for a replacement, it clears the uncertain selection and explains that the person needs to select again.
 It never silently retargets an old handle to a similar element.
+For a verified continuing layer or a known deletion with a verified surviving parent, the visible result follows [selection after Apply](../interface/code-window.md#selection-after-apply).
 General reconciliation through formatting and harmless source movement remains an implementation requirement; the latest command-metadata experiment does not establish it.
 
 Bindings are saved design data, while the current selected handle and Show content state are editor view state.
@@ -153,12 +158,22 @@ The command updates the owned source or document value, validates it, renders th
 An unbound optional visual value may remain source-editable after valid Apply.
 This does not permit Apply to discard existing required instance inputs or leave an accepted binding pointing at the wrong owner.
 
+MCP [component import](../mcp/tools/import_component.md), [instance-prop updates](../mcp/tools/update_component_props.md), and [source updates](../mcp/tools/update_component_source.md) use this same lifecycle.
+Related source files are validated and committed together rather than applying JSX while its required CSS remains at an incompatible revision.
+Read-only [component inspection](../mcp/tools/inspect_component_import.md) precedes import and does not perform that commit.
+MCP [style](../mcp/tools/update_styles.md), [text](../mcp/tools/set_text.md), [movement](../mcp/tools/move_nodes.md), and [resize](../mcp/tools/resize_node.md) operations also use this lifecycle when a reliable binding owns the requested value.
+They preserve explicit instance/shared scope and the same supported Only this limits rather than saving a runtime DOM override.
+
 ## Unapplied code and applied source
 
 The Code window keeps typing as unapplied session text until the person presses Apply.
 That text never changes bindings, the live canvas, generated exports, or MCP reads.
 It is not written into the project bundle and reopening shows the last applied source.
 Closing or reloading the editor with unapplied code asks **Discard unapplied changes?**.
+Changing Code scope or visually editing the same owning source first uses the [Code draft safeguard](../interface/code-window.md#visual-edits-with-a-draft), before any preview or mutation.
+Visual edits do not silently apply or merge that draft.
+Document Undo or Redo that changes the draft's owning source uses the [same explicit discard-or-cancel rule](../interface/code-window.md#undo-and-redo-with-a-draft); unrelated source changes leave the draft intact.
+Source display, value-owner navigation, and the distinction between applied selection copy and intentional draft-source copy belong to the [Code window](../interface/code-window.md).
 After Apply succeeds, bindings are revalidated from the new source before the new revision becomes visible.
 
 An Apply that would remove a value currently used by an instance, slot, or collection item must fail with an explanation.
@@ -171,8 +186,11 @@ It then calls an existing mutation tool with the expected revision.
 The command engine reports a revision conflict if the agent's read is stale.
 
 ORC-web does not need a separate agent-to-human feedback loop for this workflow.
-An agent normally completes its foundation work, then a person iterates visually.
-If an agent works again later, its fresh read supplies the applied human changes.
+The person and agent normally take turns throughout the session: the agent finishes its requested work, the person reviews or edits, and the agent can be asked to continue or create another design variant.
+The person usually waits while the agent works.
+Before each later agent change, its fresh read supplies the applied human and agent changes.
+This workflow adds no new simultaneous-editing controls.
+The [MCP connection workflow](../mcp/mcp-server.md#agent-and-designer-iteration) and [read-tool responsibilities](../mcp/read-tools.md) define those repeated turns without changing source ownership.
 
 ## Authoring editable foundations
 
@@ -189,8 +207,9 @@ The supported-pattern tests justify building the actual editor next; arbitrary-p
 ## Related contracts
 
 [Editable React components](../interface/react-components.md) defines the human editing experience.
+[Layers panel](../interface/layers-panel.md) defines the presentation and interaction of supported source-backed rows.
 [Code window](../interface/code-window.md) defines unapplied code and source Apply.
 [Motion](../interface/motion.md) defines source-authored animation.
 [Tailwind components](../import-export/tailwind-components.md) defines supported Tailwind source handling.
 [React source-editing validation](react-source-editing-validation.md) records PRs 1–5, measured corrections, and remaining implementation limits.
-[Command contracts](../mcp/command-contracts.md) defines IDs, revisions, atomicity, and Undo.
+[Command engine and history](command-engine-and-history.md) defines the accepted application rules for IDs, revisions, atomicity, and Undo.

@@ -20,6 +20,9 @@ The local server owns opening, saving, and exporting `.orc` project folders.
 The project workflow does not rely on a browser directory picker, so project storage remains one local-server behavior rather than a different workflow for each browser.
 
 The [Workspace bundle](orc-workspace-bundle.md) document defines Untitled projects, first Save, autosave, and recovery.
+The server also uses installed Chrome headlessly through Playwright for the accepted [local rendering service](system-architecture.md#local-rendering-service).
+Candidate validation and visual capture can run with the editor tab closed; the local server still needs an active project and an available renderer.
+Its application verification is separate from the historical headless experiment results below.
 
 ## Clipboard and shortcuts
 
@@ -59,9 +62,11 @@ Before a V1 release, verify this complete workflow on current stable Chrome for 
 
 1. Start the local server and open ORC-web through localhost.
 2. Create or open a project, then save and reopen it.
-3. Create and edit text, import a project font, and replace an unavailable font.
+3. Create and edit text, verify existing authored-font rendering and preservation, and retain saved font choices when fallback rendering is needed.
 4. Copy and paste text and canvas objects.
 5. Pan, zoom, select, edit, Preview, and export a frame.
+
+Import font, Font unavailable feedback, and Replace font controls are scheduled for [V1.1](../../backlog/properties-panel-v1x.md#v11-properties-controls) and are not required V1 release checks.
 
 Record the Chrome version and operating-system version with the result.
 Also use visible Chrome on each supported platform to review actual dragging, typing, focus, nested scrolling, shortcuts, clipboard permissions, fonts, and visual placement alongside the editor panels.

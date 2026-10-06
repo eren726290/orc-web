@@ -20,11 +20,18 @@ Implementation and platform verification happen on the Fedora and Windows PC.
 | Code window | CodeMirror 6 | Recommended. |
 | Source parsing and structured edits | `@babel/parser`, Recast, and directly imported `ast-types` helpers | Validated direction for the supported Fedora source-editing subset. |
 | Browser workflow checks | Bun test runner and Playwright driving supported Google Chrome | Recommended. |
+| Local candidate validation and visual capture | Playwright controlling installed headless Google Chrome | Accepted runtime direction; production service still requires verification. |
+| MCP transport | Streamable HTTP over plain localhost HTTP in the Bun backend | Accepted; see the connection contract. |
+| MCP server SDK | `@modelcontextprotocol/server` 2.3.0, observed on 2026-10-03 | Recommended SDK direction; exact application pin and compatibility still require implementation verification. |
 
 Bun runs the local ORC-web server and manages development packages.
 An imported command or executable that explicitly requires Node must use Node for that command.
 React and Vite are the lean recommended browser application foundation.
 ORC-web does not need Next.js, Electron, Electron Builder, or an additional application framework.
+The accepted [local rendering service](../doc_v1/architecture/system-architecture.md#local-rendering-service) makes Playwright a runtime dependency as well as a browser-testing tool.
+It shares rendering code with the visible editor and uses fresh browser contexts in one reusable local Chrome process.
+The accepted [runtime modes](../doc_v1/architecture/system-architecture.md#startup-and-runtime-modes) use one `bun run dev` command for Bun plus Vite during development and Bun serving the Vite-built frontend in the built application.
+The [normal terminal shutdown](../doc_v1/architecture/system-architecture.md#normal-terminal-shutdown) requires explicit save completion and managed browser/process cleanup.
 
 ## Source-editing direction and evidence
 
@@ -59,7 +66,9 @@ Reevaluate the patch when changing that pinned dependency; it is not an upstream
 
 The validation record lists the exact tested versions, including React 19.3.0, Babel parser 7.29.9, Recast 0.24.0, Tailwind 4.3.3, TS7 7.0.2, Oxlint 1.86.0, and Oxfmt 0.71.0.
 These are experiment pins, not a floating latest-version recommendation.
-Production dependencies need one project manifest and lockfile, local resolution, and one React installation for editor and supported component rendering.
+ORC-web application dependencies need one application manifest and lockfile with local resolution.
+Imported projects carry their own exact dependency records under the [workspace bundle contract](../doc_v1/architecture/orc-workspace-bundle.md#managed-dependencies), with rebuildable local installations and compiled output.
+Supported component rendering resolves the editor's React instance; project preparation must not introduce a conflicting second React renderer.
 Do not rely on another experiment folder's compiler or dependency tree.
 
 ## Packages to add only when their work begins
@@ -80,11 +89,14 @@ shadcn supplies selected Base UI-flavored source when acquiring components; it i
 The tested global CLI is acquisition provenance, and the combined proof reruns committed component source without requiring that global installation.
 Choose and record the CLI version when generating new source rather than installing it merely to rerun existing components.
 
-## Deliberately deferred
+## MCP decisions and remaining work
 
-MCP protocol, server, SDK, transports, and tool dependencies are intentionally settled last.
-The editor, project, import, source-binding, and export requirements determine that design.
-No MCP package choice in this document is an accepted ORC-web decision.
+The MCP stack was intentionally settled last, after reviewing editor, project, import, source-binding, and export requirements; that discussion is now underway.
+The [local HTTP connection workflow](../doc_v1/mcp/mcp-server.md) and [`get_context` / `get_source` responsibilities](../doc_v1/mcp/read-tools.md) are accepted.
+The [SDK research](../doc_v1/mcp/sdk-and-protocol-research.md) recommends the stable TypeScript server SDK through Bun's existing backend and records the `2026-07-28` protocol findings.
+No exact MCP package pin in this document is an accepted or verified ORC-web application installation.
+The client SDK and Inspector are verification tools when needed, not automatic application runtime dependencies.
+The remaining schemas, client compatibility checks, and tool inventory still need review and implementation proof.
 
 ## References
 
