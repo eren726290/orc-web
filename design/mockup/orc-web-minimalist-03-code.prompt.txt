@@ -1,0 +1,16 @@
+Reference image: orc-web-minimalist-v1.png
+Tool: built-in image generation
+
+Use case: ui-mockup. Create a companion high-fidelity ORC-web desktop editor screenshot using the supplied image as the strict visual reference. Landscape 16:10, same resolution and straight-on framing. Preserve the SAME app identity, exact top-bar geometry, sidebar proportions, warm palette, compact Inter-like UI typography, thin monochrome icons, hairline dividers, rounded fields, and restrained depth. Warm canvas #efefe4, panels #fcfcf9, white artboard, text #181818, secondary #666666 and #83837e, borders #d7d7d6, fields #f3f3f4, selection blue #5d8cd7. The original's serif typography is confined to the sample studio page inside the canvas; editor labels remain sans serif. Keep the original 'orc' mark and wordmark. Top bar has 'Studio landing', check 'Saved', centered 'Select' active, 'Pan', 'Text', and right 'Code', dark 'Preview'. Left tabs 'Layers' and 'Tokens'; right header 'Properties'. All labels sharp, legible, spelled correctly. This is one screen of the same product, not a collage, redesign, device photo, marketing page, or dashboard. No traffic lights, browser chrome, collaboration avatars, AI chat, rulers, zoom percentages, eye/hide controls, typography inspector, theme switcher, or extra tool dock. Use only the specified change below, keep the rest visually faithful to the reference.
+Screen state: Code is active and a bottom Code window is open strictly BELOW the central canvas, between the left and right sidebars. Preserve the sidebars at full height. Left Layers tree identical to reference with Hero selected. Right Properties identical with Hero. The SAME still landing page is reduced enough in the canvas to remain fully readable, and includes the folded paper image. Preserve useful breathing room around its frame.
+Code window is about 27 percent of application height, flat near-white background, thin separator above. Header displays code brackets, 'Hero', subdued 'Selection · HTML'. Right header actions 'Copy selection', 'Discard changes' disabled, 'Apply' disabled. This is applied source without a draft. Line numbers faint, monospace source readable at a comfortable size, very restrained syntax colors blue/gray/ink. Display seven concise lines exactly:
+<section style="display: flex; flex-direction: column; gap: 24px;">
+  <h1>A little more space.</h1>
+  <p>A little less noise.</p>
+  <p>Make room for the ideas that matter.</p>
+  <button>Get started</button>
+</section>
+Do not open any second source editor or show a terminal. Code is the only changed primary interface region. Keep same top bar, original mark, typography, field shapes, colors, and thin icons.
+
+Final correction prompt:
+Edit this ORC-web mockup with ONE precise correction: add the same thin cool-blue selection rectangle and four small square corner handles around the Hero content region in the CENTER landing page. Its bounds run from just below the still/About/Journal navigation to immediately above the folded paper photograph, encompassing eyebrow, headline, paragraph and Get started button. Preserve the existing Hero highlighted row in Layers. Preserve the Code window and source text exactly. Preserve every other pixel, label, spacing, palette, photograph, typography, toolbar and Properties control. Do not resize or redesign anything else.
