@@ -4,17 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "check:types": "tsc --noEmit",
+    "dev": "bun scripts/dev.ts",
+    "start": "bun server/start.ts",
+    "build": "bun run check:types && vite build",
+    "check:types": "tsc --noEmit && tsc --noEmit -p tsconfig.server.json",
     "check:tooling": "bun scripts/check-tooling.ts",
     "check:browser": "bun scripts/check-browser.ts",
     "check:browser:chromium": "bun scripts/check-browser.ts chromium",
+    "check:editor": "bun scripts/check-editor.ts",
     "check:codebase": "fallow dead-code --format json --quiet --explain",
     "check:health": "fallow health --format json --quiet --explain",
-    "check:format": "oxfmt --check src scripts tools/anti-slop/index.ts index.html vite.config.ts oxlint.config.ts tsconfig.json package.json .oxfmtrc.json .fallowrc.json",
+    "check:format": "oxfmt --check src shared server scripts tools/anti-slop/index.ts index.html vite.config.ts oxlint.config.ts tsconfig.json tsconfig.server.json package.json .oxfmtrc.json .fallowrc.json",
     "lint": "oxlint",
-    "format": "oxfmt --write src scripts tools/anti-slop/index.ts index.html vite.config.ts oxlint.config.ts tsconfig.json package.json .oxfmtrc.json .fallowrc.json"
+    "format": "oxfmt --write src shared server scripts tools/anti-slop/index.ts index.html vite.config.ts oxlint.config.ts tsconfig.json tsconfig.server.json package.json .oxfmtrc.json .fallowrc.json"
   },
   "dependencies": {
     "@babel/parser": "7.29.9",
