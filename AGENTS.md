@@ -4,6 +4,7 @@ Read-only by default. Ask before destructive actions.
 
 ## Reading
 
+- Contextual READMEs: `orc-web` uses nested documentation. Whenever you navigate into a new directory or subdirectory, you must immediately read its local `README.md` to understand that specific module's context before proceeding.
 - GitHub repos: read local `README.md`, `AGENTS.md` `package.json` or `requirements.txt`, `Makefile`, and `.env.example` when present before anything else. Never summarize from structure alone.
 - "Read all files" means every file, individually, completely.
 - Before answering, locate and cite the specific file/line. If none exists, say so — never state something as "documented" without pointing to where.
@@ -13,11 +14,20 @@ Read-only by default. Ask before destructive actions.
 
 - When writing or substantially editing long Markdown files, put each full sentence on its own line. Preserve normal Markdown structure, but avoid wrapping multiple sentences onto one physical line.
 
+## Scope
+
+- Stay strictly within the agreed release scope, defaulting to V1.
+  Add no unrequested features or mechanics.
+  Expand scope only for a hard technical blocker, after explaining the necessary addition and getting the user's agreement.
+
 ## Autonomy
 
 - Track deferred work: if a significant feature, future update , edge case, or idea is pushed out of the current scope, immediately document it in a backlog folder a didected backlog file. Never let important tasks get lost in the chat history.
 - You may run codebase analysis on your own judgment before edits, after generating code, or when something looks off — report what you found. This is the only autonomous-action exception; everything else needs explicit instruction.
-- When stuck, do not be strictly bound by existing documentation/structure. You are encouraged to propose novel ideas and alternative approaches.
+- When blocked, investigate the cause before expanding the implementation.
+  Read the relevant project documentation and existing code, and consult current official documentation or research when needed.
+  Prefer the smallest correct solution within the existing architecture and agreed scope.
+  If the blocker remains, report what you checked and propose the smallest necessary change.
 
 ## Interface
 

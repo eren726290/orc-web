@@ -78,20 +78,42 @@ Run the agreed TS7 compatibility checkpoint through a separate exact-pinned comp
 
 ## 5. Conditional packages
 
-These remain candidates or source-dependent requirements under the stack record.
-Listing them does not authorize installing all of them during scaffolding.
+This section distinguishes accepted V1 feature support, undecided implementation packages, and helpers required by selected source.
+Add packages when their implemented responsibilities require them.
+
+### Accepted V1 Motion support
+
+Motion is an accepted part of V1's React design stack under the [Motion contract](doc_v1/interface/motion.md).
+It is a planned package for that support; V1's animation support is already agreed.
+Declare it in application dependencies when ORC's implementation imports it, and retain it in a design's exact dependency records when that design imports it.
+
+| Package | Registry release | Purpose and installation timing |
+| --- | --- | --- |
+| [motion](https://registry.npmjs.org/motion/latest) | 14.0.0 | Accepted source-authored React animation support; add when implementing Motion support or preparing a design that requires it. The reviewed experiment used 13.4.4. |
+
+### Implementation candidates
+
+These specific package choices still need evaluation under the [stack record](backlog/stack-proposal.md#packages-to-add-only-when-their-work-begins).
+The underlying V1 responsibilities, such as canvas pan/zoom, schema validation, and HTML/SVG import handling, remain required by their feature contracts.
 
 | Package | Registry release | Add when |
 | --- | --- | --- |
 | [react-zoom-pan-pinch](https://registry.npmjs.org/react-zoom-pan-pinch/latest) | 4.2.0 | A workspace prototype establishes it as the chosen pan/zoom implementation. |
 | [typebox](https://registry.npmjs.org/typebox/latest) | 1.3.36 | Selected as the document/command schema authority. |
 | [dompurify](https://registry.npmjs.org/dompurify/latest) | 3.4.16 | The actual HTML/SVG import boundary requires it. |
+
+### Helpers required by selected source
+
+Install these only when selected editor components or imported design source actually require them.
+Their presence in the inventory does not require every component or design to use them.
+
+| Package | Registry release | Add when |
+| --- | --- | --- |
 | [clsx](https://registry.npmjs.org/clsx/latest) | 2.1.1 | Selected interface source imports it. |
 | [tailwind-merge](https://registry.npmjs.org/tailwind-merge/latest) | 3.7.0 | Selected interface source requires Tailwind class conflict resolution. |
 | [class-variance-authority](https://registry.npmjs.org/class-variance-authority/latest) | 0.7.1 | Selected generated components use its variant API. |
 | [cn](https://registry.npmjs.org/cn/latest) | 0.4.0 | Selected source actually imports this package; a local `cn` helper does not itself require installing it. |
 | [tw-animate-css](https://registry.npmjs.org/tw-animate-css/latest) | 1.4.0 | Selected component styles require it. |
-| [motion](https://registry.npmjs.org/motion/latest) | 14.0.0 | Implemented application code or an imported design requires it; the reviewed experiment used 13.4.4. |
 
 For imported designs, record required packages in that design's exact dependency records under the [workspace bundle contract](doc_v1/architecture/orc-workspace-bundle.md#managed-dependencies).
 Libraries such as `@paper-design/shaders-react` and `shaders` belong to the designs that use them; these shader compatibility discussions do not add them to ORC-web's application dependency baseline.

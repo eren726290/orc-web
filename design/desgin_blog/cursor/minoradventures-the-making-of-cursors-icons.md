@@ -1,11 +1,44 @@
-[Minor Adventures](https://www.minoradventures.co/)
+Source: https://www.minoradventures.co/blog/the-making-of-cursors-icons
 
-- [Products](https://www.minoradventures.co/#products)
-- [Clients](https://www.minoradventures.co/#clients)
-- [About](https://www.minoradventures.co/#about)
-- [Contact](mailto:hello@minoradventures.co)
+## Image index
 
-Menu
+30 process images (`images/`) + 13 inline icon SVGs (`images/icons/`), all stored locally — no browsing needed.
+
+| File | Shows |
+|------|-------|
+| `images/01-hero.png` | Cursor's new icon system |
+| `images/02-final-main.png` | Full icon set grid |
+| `images/03-final-filled.png` | Filled icon variants |
+| `images/04-final-ui.png` | Icons in Cursor's UI |
+| `images/05-final-compose.png` | Composer interface with icons |
+| `images/06-final-menu.png` | Context menu with icons |
+| `images/07-final-rebus.png` | Icon rebus examples |
+| `images/08-codicons-a.png` | Codicons overview |
+| `images/09-codicons-b.png` | Codicons detail view |
+| `images/10-codicons-c.png` | Codicons in context |
+| `images/11-stroke-width.png` | 1px? Too thin. 1.5px? Too thick. 1.25px? Just right. |
+| `images/12-optical-shapes.png` | Optical shapes: Square, Circle, Horizontal, and Vertical for both sizes |
+| `images/13-stroke-caps.png` | All strokes use round caps |
+| `images/14-technical-look-closed-shapes.png` | Open shapes versus closed shapes comparison |
+| `images/15-technical-look-slashes.png` | Slashed icons without shadows for a clean, diagram-like appearance |
+| `images/16-natural-proportions.png` | Proportions of objects are kept natural to avoid the toy look |
+| `images/17-sharp-exploration.png` | Large curves stay round but the stroke caps and small details go sharp |
+| `images/18-cuts.png` | Icons showing gaps between overlapping shapes with measurements |
+| `images/19-perfection.png` | Going through 156 explorations of a hamburger icon to find the perfect one |
+| `images/20-files.png` | Three core Figma files |
+| `images/21-files-explorations.png` | Figma Explorations file where everything gets explored |
+| `images/22-files-overviews.png` | Figma Overviews file for consistency tracking |
+| `images/23-files-icons.png` | Figma Icons file with all the components |
+| `images/24-companion.png` | The companion site where the team lives and works with the set |
+| `images/25-companion-sidebar.png` | Icon detail view sidebar |
+| `images/26-companion-tooltip.png` | Hovering an icon in the grid shows a tooltip with quick actions |
+| `images/27-companion-search.png` | Search is super handy when people look for an icon to portray a new concept |
+| `images/28-companion-concepts.png` | Concepts page: a table pinning each Cursor concept to its icon |
+| `images/29-companion-file-types.png` | File Types page: maps file formats to their icons |
+| `images/30-ship-it.png` | Ship it pipeline |
+
+> Icons referenced as `images/icons/NN-<name>.svg` — 01–07 optical-breaks/before, 08–13 stroke-thinning/before.
+> Text-only agent: the alt text above is your evidence. To read pixels, pass a path to a vision tool, e.g. `agy -p "describe <path>"` or ModLens.
 
 Jul 30, 2026·16 min read
 
@@ -13,23 +46,23 @@ Jul 30, 2026·16 min read
 
 A year of drawing, testing, and shipping a complete icon system for the world's favourite coding agent.
 
-![Cursor's new icon system](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fhero.png&w=3840&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Cursor's new icon system](images/01-hero.png)
 
 Earlier this year, Cursor quietly rolled out its new icon set. I designed it, and so I wanted to share the story of how it was made: partly so you can see how much care goes into a thing like this, and partly for newcomers to design who want to learn how it gets done.
 
 The work took about a year and covers 600+ icons in two sizes and two styles, every single exploration and every final icon variant drawn by hand.
 
-![Full icon set grid](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffinal-main.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Full icon set grid](images/02-final-main.png)
 
-![Filled icon variants](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffinal-filled.png&w=1080&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Filled icon variants](images/03-final-filled.png)
 
-![Icons in Cursor's UI](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffinal-ui.png&w=1080&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Icons in Cursor's UI](images/04-final-ui.png)
 
-![Composer interface with icons](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffinal-compose.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Composer interface with icons](images/05-final-compose.png)
 
-![Context menu with icons](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffinal-menu.png&w=1080&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Context menu with icons](images/06-final-menu.png)
 
-![Icon rebus examples](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffinal-rebus.png&w=1080&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Icon rebus examples](images/07-final-rebus.png)
 
 Cursor's new icon system
 
@@ -37,11 +70,11 @@ Cursor's new icon system
 
 Last year, Cursor was growing out of the VS Code ecosystem that it was built on, and its icons came along for the ride. The inherited set was [**Codicons**](https://github.com/microsoft/vscode-codicons), the open-source icons VS Code uses, plus custom additions that had accumulated over time in slightly different styles. Codicons were drawn for a different product, in a different era, and the set had drifted since then. When I counted it I got 468 icons; the documentation said 498, and some codepoints led nowhere. None of this is unusual for an inherited set. Sets drift when nobody owns them.
 
-![Codicons overview](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcodicons-a.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Codicons overview](images/08-codicons-a.png)
 
-![Codicons detail view](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcodicons-b.png&w=1080&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Codicons detail view](images/09-codicons-b.png)
 
-![Codicons in context](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcodicons-c.png&w=1080&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Codicons in context](images/10-codicons-c.png)
 
 Being built on the VS Code ecosystem meant inheriting its icon set, [Codicons](https://github.com/microsoft/vscode-codicons)
 
@@ -74,7 +107,7 @@ So from 22px up, the 24px version takes over, drawn on its own grid, with a 1.5p
 
 The 1.25px stroke took a while to find. At 1px the icons felt too thin next to text. It's hard to say exactly why – they just didn't hold their own. At 1.5px they felt too heavy. At 1.25px a 16px icon sits beside 16px Cursor Gothic, their custom typeface, and looks just right. You follow your eye on decisions like this. At some point the number is a record of a decision the eye already made.
 
-![1px? Too thin. 1.5px? Too thick. 1.25px? Just right.](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fstroke-width.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![1px? Too thin. 1.5px? Too thick. 1.25px? Just right.](images/11-stroke-width.png)
 
 1px? Too thin. 1.5px? Too thick. 1.25px? Just right.
 
@@ -95,7 +128,7 @@ Icons in Outline and Filled style
 
 Underneath both sizes sits a system of optical shapes: **Square**, **Circle**, **Horizontal**, and **Vertical**. Each one is sized so that icons built on different shapes still read as the same size – for instance a circle has to be drawn slightly larger than a square to look equally big. Most icons fit one of the four, but not all. Diagonal shapes in particular sit awkwardly in all of them, and then I pick the closest one, usually the circle, and adjust by eye.
 
-![Optical shapes: Square, Circle, Horizontal, and Vertical for both sizes](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Foptical-shapes.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Optical shapes: Square, Circle, Horizontal, and Vertical for both sizes](images/12-optical-shapes.png)
 
 Optical shapes for both sizes
 
@@ -109,7 +142,7 @@ Icons are closer to technical drawings, diagrams with a friendly finish
 
 This construction logic is what makes 600+ icons feel like the work of one hand. It also suits a coding tool: precise and engineered, with the rounded corners and round stroke caps keeping it from turning cold.
 
-![All strokes use round caps](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fstroke-caps.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![All strokes use round caps](images/13-stroke-caps.png)
 
 All strokes use round caps
 
@@ -117,13 +150,13 @@ All strokes use round caps
 
 The goal of the visual style is to be technical and stripped down, not decorative. So whenever there's a possibility for an icon to be open – could be to show elements are overlapping or just a stylistic choice – closing the shape and keeping things simple and technical is strongly preferred. It also helps keeping things a bit more legible at extremely small sizes.
 
-![Open shapes versus closed shapes comparison](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ftechnical-look-closed-shapes.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Open shapes versus closed shapes comparison](images/14-technical-look-closed-shapes.png)
 
 Closed shapes (right) over open ones (left) to keep things simple and technical
 
 Similarly, when a slash crosses an icon, there's no shadow pretending something sits behind it – just a simple cut through the shape.
 
-![Slashed icons without shadows for a clean, diagram-like appearance](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ftechnical-look-slashes.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Slashed icons without shadows for a clean, diagram-like appearance](images/15-technical-look-slashes.png)
 
 Slashes cut flat through icons (right), no fake shadows (left)
 
@@ -137,7 +170,7 @@ Lines that could be short (gray) are extended (black), borrowing from monospace 
 
 Icons aren't forced into a square. A pencil is tall and narrow, a banknote is wide, and they should look that way. Squashing every object into the same box is where the toy look comes from, shapes inflated to fill space they don't need. In a coding tool, objects should look like what they are, not like toys. In Cursor's icon set, if something is tall, it stays tall.
 
-![Proportions of objects are kept natural to avoid the toy look](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fnatural-proportions.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Proportions of objects are kept natural to avoid the toy look](images/16-natural-proportions.png)
 
 Proportions of objects are kept natural to avoid the toy look and keep things utilitarian
 
@@ -165,7 +198,7 @@ Recurring elements are drawn consistently every time they appear
 
 Early on I also tried to challenge the roundness itself. Once again inspired by type design, I explored a version where the large curves stay round but the stroke caps and small details go sharp. From a normal distance you couldn't tell the difference. Up close it was a quiet mix of sharp and soft. I liked it, but it didn't solve a problem anyone had, so the set stayed traditionally rounded.
 
-![Large curves stay round but the stroke caps and small details go sharp](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fsharp-exploration.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Large curves stay round but the stroke caps and small details go sharp](images/17-sharp-exploration.png)
 
 Inspired by type design, large curves stay round but the stroke caps and small details go sharp
 
@@ -179,9 +212,9 @@ There's a fair question here: at 16px, can you even see this? Put two versions s
 
 Where two or more lines meet, the junction reads darker than it should, because the shapes pile up and so the corner clogs optically and creates an optical build-up. So I cut a small notch at the junction, the same way a text face opens up the tight corners of an A. At small sizes like 16px the detail is almost invisible, but if you look closely, you notice why it feels just right.
 
-![At](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/optical-breaks/before/at.svg)![Globe](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/optical-breaks/before/globe.svg)![Flame](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/optical-breaks/before/flame.svg)![Paper Plane](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/optical-breaks/before/paperplane.svg)![Git Merge](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/optical-breaks/before/git-merge.svg)![Curly Brackets](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/optical-breaks/before/brackets-curly.svg)![Strikethrough](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/optical-breaks/before/text-strikethrough.svg)
+![At](images/icons/01-at.svg)![Globe](images/icons/05-globe.svg)![Flame](images/icons/03-flame.svg)![Paper Plane](images/icons/06-paperplane.svg)![Git Merge](images/icons/04-git-merge.svg)![Curly Brackets](images/icons/02-brackets-curly.svg)![Strikethrough](images/icons/07-text-strikethrough.svg)
 
-![Before](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/optical-breaks/before/at.svg)
+![Before](images/icons/01-at.svg)
 
 Before
 
@@ -191,9 +224,9 @@ Optical breaks open up the tight corners where strokes meet
 
 Similar to optical breaks, in places where too many lines meet, some of the lines go thinner, so there isn't too much visual weight in one spot.
 
-![Asterisk](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/stroke-thinning/before/asterisk.svg)![Transparent Cube](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/stroke-thinning/before/cube-transparent.svg)![Cursor Logo](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/stroke-thinning/before/cursor-logo.svg)![Flask](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/stroke-thinning/before/flask-slash-circle.svg)![Radio Tower](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/stroke-thinning/before/radio-tower.svg)![Sparkles](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/stroke-thinning/before/sparkles.svg)
+![Asterisk](images/icons/08-asterisk.svg)![Transparent Cube](images/icons/09-cube-transparent.svg)![Cursor Logo](images/icons/10-cursor-logo.svg)![Flask](images/icons/11-flask-slash-circle.svg)![Radio Tower](images/icons/12-radio-tower.svg)![Sparkles](images/icons/13-sparkles.svg)
 
-![Before](https://www.minoradventures.co/images/blog/the-making-of-cursors-icons/stroke-thinning/before/asterisk.svg)
+![Before](images/icons/08-asterisk.svg)
 
 Before
 
@@ -211,7 +244,7 @@ Sometimes icons have gaps between overlapping shapes, like when a folder has a p
 
 My rule for these gaps, or Cuts as I call them, was that they should never be less than 3 grid units (on a 16px grid). At 2.5 or less, shapes start touching and overlapping, merging into one blurry shape. 3+ pixels gives small icons the breathing space they need.
 
-![Icons showing gaps between overlapping shapes with measurements](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcuts.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Icons showing gaps between overlapping shapes with measurements](images/18-cuts.png)
 
 Minimum safe space between elements keeps them from blurring at small sizes
 
@@ -219,7 +252,7 @@ Minimum safe space between elements keeps them from blurring at small sizes
 
 Some of the versions I compared while making these calls differ by 0.25px. At 16px, rendered sometimes at 12, that difference shouldn't matter, but the versions just don't feel the same. I kept tinkering with the smallest, tiniest details, version after version after version, until one of them felt _just right_.
 
-![Going through 156 explorations of a hamburger icon to find the perfect one](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fperfection.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Going through 156 explorations of a hamburger icon to find the perfect one](images/19-perfection.png)
 
 Going through 156 explorations of a hamburger icon to find the perfect one
 
@@ -229,13 +262,13 @@ By this point you can probably tell that drawing each single icon this way takes
 
 I always keep three core Figma files:
 
-![Three core Figma files](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffiles.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Three core Figma files](images/20-files.png)
 
 ### 1\. The Explorations
 
 The private place where each icon or concept gets tens or hundreds of attempts. It looks chaotic from a distance, but it's organised – every concept has its own section and its own row of attempts.
 
-![Figma Explorations file where everything gets explored](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffiles-explorations.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Figma Explorations file where everything gets explored](images/21-files-explorations.png)
 
 Figma Explorations file where everything gets explored
 
@@ -252,7 +285,7 @@ A lookup table for the whole set, where every recurring pattern is lined up and 
 - **Perspective and diagonals.** Do the 3D and diagonal icons share one angle?
 - **Objects.** Is the folder in one icon the same folder as in the other nine?
 
-![Figma Overviews file for consistency tracking](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffiles-overviews.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Figma Overviews file for consistency tracking](images/22-files-overviews.png)
 
 In the Figma Overviews file every visual re semantic aspect of the icon set is being kept track of for consistency
 
@@ -264,7 +297,7 @@ When a pattern drifts, the drift becomes visible. It all compounds into a set th
 
 This is the core Figma file with all the final icons, each as a component with two properties: Filled (true or false) and Size (16px or 24px).
 
-![Figma Icons file with all the components](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Ffiles-icons.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Figma Icons file with all the components](images/23-files-icons.png)
 
 Figma Icons file with all the components
 
@@ -286,7 +319,7 @@ Dashboard built to keep track of the migration from the old icon set to the new 
 
 The delivery isn't just a set of files thrown over the fence. It's a package: the source Figma file, the icon fonts, the exported SVGs, and a companion site where the team lives and works with the set.
 
-![The companion site where the team lives and works with the set](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcompanion.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![The companion site where the team lives and works with the set](images/24-companion.png)
 
 The companion site where the team lives and works with the set
 
@@ -296,9 +329,9 @@ The main page shows the full set in a grid, with the usual controls for size, st
 
 Clicking opens the detail view, where you can scale the icon up and down to see how it holds at different sizes, and read its tags. The latest font files download from the same place, so the site always serves the current state of the set.
 
-![Icon detail view sidebar](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcompanion-sidebar.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Icon detail view sidebar](images/25-companion-sidebar.png)
 
-![Hovering an icon in the grid shows a tooltip with quick actions](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcompanion-tooltip.png&w=1080&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Hovering an icon in the grid shows a tooltip with quick actions](images/26-companion-tooltip.png)
 
 Icon detail view sidebar
 
@@ -308,7 +341,7 @@ Hovering an icon in the grid shows a tooltip with quick actions
 
 Search runs on tags as well as names, which matters less for finding a known icon than for the harder case: someone has a new concept and needs to know whether the set already covers it. Searching "search" should surface`magnifying-glass` even though that word isn't in its name. With 1,274 tags across the set, most of those questions get answered without anyone having to scroll through hundreds of icons.
 
-![Search is super handy when people look for an icon to portray a new concept](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcompanion-search.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Search is super handy when people look for an icon to portray a new concept](images/27-companion-search.png)
 
 Search is super handy when people look for an icon to portray a new concept
 
@@ -316,7 +349,7 @@ Search is super handy when people look for an icon to portray a new concept
 
 A table pinning each Cursor concept to its icon. The point of the table is that each "What's the icon for \[X\]?" has exactly one answer, and keeps having exactly one answer as the product grows. Without it, a set slowly develops two icons for the same idea, and at that point it stops being a system.
 
-![Concepts page: a table pinning each Cursor concept to its icon](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcompanion-concepts.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Concepts page: a table pinning each Cursor concept to its icon](images/28-companion-concepts.png)
 
 Concepts page: a table pinning each Cursor concept to its icon.
 
@@ -324,7 +357,7 @@ Concepts page: a table pinning each Cursor concept to its icon.
 
 A separate page maps file formats to their icons, with sample filenames, extension lists, and a color palette. The file type icons were a project of their own, big enough that I'm leaving them out of this article altogether.
 
-![File Types page: maps file formats to their icons](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fcompanion-file-types.png&w=1920&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![File Types page: maps file formats to their icons](images/29-companion-file-types.png)
 
 File Types page: maps file formats to their icons
 
@@ -336,7 +369,7 @@ The site also hosts the documentation: the design philosophy behind the set (whi
 
 A set that can't grow decays, so the last deliverable is the pipeline that keeps the system alive after the drawing is done.
 
-![Ship it pipeline](https://www.minoradventures.co/_next/image?url=%2Fimages%2Fblog%2Fthe-making-of-cursors-icons%2Fship-it.png&w=1200&q=75&dpl=dpl_BttS6WsSgSuQC4ytVnsLSsXj7zxU)
+![Ship it pipeline](images/30-ship-it.png)
 
 Here's how an icon gets published:
 
@@ -365,35 +398,5 @@ An icon set of this kind is mostly decisions. Which of two nearly identical vers
 Marek Minor,
 
 Founder & Designer,
-
-Minor Adventures
-
-[Products](https://www.minoradventures.co/#products) [Clients](https://www.minoradventures.co/#clients) [About](https://www.minoradventures.co/#about) [Contact](mailto:hello@minoradventures.co)
-
-Emmy Andriessestraat 357
-
-1087LS Amsterdam
-
-Netherlands
-
-KVK: 94913064
-
-VAT ID: NL005117381B20
-
-[hello@minoradventures.co](mailto:hello@minoradventures.co)
-
-[Privacy](https://www.minoradventures.co/privacy) [Terms](https://www.minoradventures.co/terms)
-
-[Instagram](https://instagram.com/minoradventures) [Threads](https://threads.net/minoradventures) [LinkedIn](https://linkedin.com/company/minoradventures)
-
-Subscribe for early drops and exclusive discounts.
-
-Subscribe
-
-All Rights Reserved. Minor Adventures © 2026
-
-## Subscribed!
-
-You'll be notified about new releases and exclusive offers.
 
 Done

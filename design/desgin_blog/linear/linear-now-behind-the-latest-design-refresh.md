@@ -1,27 +1,24 @@
-[Skip to content →](https://linear.app/now/behind-the-latest-design-refresh#skip-nav)
+Source: https://linear.app/now/behind-the-latest-design-refresh
 
-- [Navigate to home](https://linear.app/homepage)
+## Image index
 
-  - Product
-  - Resources
-  - [Customers](https://linear.app/customers)
-  - [Pricing](https://linear.app/pricing)
-  - [Now](https://linear.app/now)
-  - [Contact](https://linear.app/contact)
+| # | File | Shows |
+|---|------|-------|
+| 1 | `images/01-interface-header-system-2x.webp` | Header system: location bar + view bar above the content area |
+| 2 | `images/02-sidebar-before-after-2x.webp` | Sidebar before/after — smaller icons, muted inactive text, more vertical padding |
+| 3 | `images/03-compact-tab-bars-2x.webp` | Tab bars — more compact layout, smaller icon-only pills for the first items |
+| 4 | `images/04-softer-borders-2x.webp` | Softer borders, subtler visual separation in the updated design |
+| 5 | `images/05-theme-editor-2x.webp` | Internal theme editor — color values, contrast, design tokens |
 
-  - [Docs](https://linear.app/docs)
-  - [Open app](https://linear.app/login)
-  - [Log in](https://linear.app/login)
-  - [Sign up](https://linear.app/signup)
-
-1. [Now](https://linear.app/now)
-2. [From the team](https://linear.app/now/team)
+> `-2x` = retina (3904px wide, best for reading annotation text) · `-1x` = smaller variant of the same image.
+> All images are stored locally in `images/` — no browsing required.
+> Text-only agent: the alt text below is your evidence. To read pixels, pass a path to a vision tool, e.g. `agy -p "describe <path>"` or ModLens.
 
 # A calmer interface for a product in motion
 
-![Blueprint-like mockup of an interface header system, with the location bar and view bar separated above the main content area](https://webassets.linear.app/images/ornj730p/production/b15d343ed41c5e938c26f9e2f5a61c7b63285caa-3904x2160.png?q=95&auto=format&dpr=2)
+![Blueprint-like mockup of an interface header system, with the location bar and view bar separated above the main content area](images/01-interface-header-system-2x.webp)
 
-![Blueprint-like mockup of an interface header system, with the location bar and view bar separated above the main content area](https://webassets.linear.app/images/ornj730p/production/d11b66a705539a539b0d8301bd7484f0120dc26c-2352x1280.png?q=95&auto=format&dpr=2)
+![Blueprint-like mockup of an interface header system, with the location bar and view bar separated above the main content area](images/01-interface-header-system-1x.webp)
 
 [Charlie Aufmann](https://linear.app/now/author/charlie-aufmann) and [Maxime Heckel](https://linear.app/now/author/maxime-heckel)
 
@@ -43,15 +40,15 @@ In a product as information-dense as Linear, not every element of the interface 
 
 The navigation sidebar used to appear bright enough that it remained visually prominent even after a user had reached their destination. In the updated interface, it’s a few notches dimmer, allowing the main content area—where users work—to take precedence.
 
-![Side-by-side comparison of a dark app sidebar before and after a visual refresh, with notes calling out smaller icons, muted inactive text, and more vertical padding](https://webassets.linear.app/images/ornj730p/production/b6d6be14c96978b10553cfb9205be1065087e793-3904x2720.png?q=95&auto=format&dpr=2)
+![Side-by-side comparison of a dark app sidebar before and after a visual refresh, with notes calling out smaller icons, muted inactive text, and more vertical padding](images/02-sidebar-before-after-2x.webp)
 
-![Side-by-side comparison of a dark app sidebar before and after a visual refresh, with notes calling out smaller icons, muted inactive text, and more vertical padding](https://webassets.linear.app/images/ornj730p/production/4efc49aea4588922897902dacd39fbcbf3a6c6c1-2352x2720.png?q=95&auto=format&dpr=2)
+![Side-by-side comparison of a dark app sidebar before and after a visual refresh, with notes calling out smaller icons, muted inactive text, and more vertical padding](images/02-sidebar-before-after-1x.webp)
 
 We treated the tabs at the top of the desktop app similarly, making them more compact rather than spanning the full width of the screen, with rounded corners and smaller icon and text sizing.
 
-![Comparison of two dark interface tab bars. The updated version uses a more compact layout overall, with smaller icon-only pills for the first items.](https://webassets.linear.app/images/ornj730p/production/51c8d03e31853bae9491d8ac5f05bdf1d7921236-3904x2160.png?q=95&auto=format&dpr=2)
+![Comparison of two dark interface tab bars. The updated version uses a more compact layout overall, with smaller icon-only pills for the first items.](images/03-compact-tab-bars-2x.webp)
 
-![Comparison of two dark interface tab bars. The updated version uses a more compact layout overall, with smaller icon-only pills for the first items.](https://webassets.linear.app/images/ornj730p/production/c1611af8f3780f2dc05100205c7a2cf9c43e51a2-2352x1280.png?q=95&auto=format&dpr=2)
+![Comparison of two dark interface tab bars. The updated version uses a more compact layout overall, with smaller icon-only pills for the first items.](images/03-compact-tab-bars-1x.webp)
 
 The new tab bar (below) has a more compact layout overall, including smaller icon-only tabs
 
@@ -61,9 +58,9 @@ We applied the same thinking to icons. Linear relies on them to make projects, i
 
 Borders and separators help clarify the relationship between elements in the interface. While these dividing lines are intended to help users orient themselves, they had quietly proliferated across the platform, sometimes appearing without clear reason. By rounding out their edges and softening the contrast, the polished interface gives users structure on the page without cluttering their view.
 
-![Side-by-side comparison of a dark interface showing softer borders and subtler visual separation in the updated design.](https://webassets.linear.app/images/ornj730p/production/67561baa677fbc429d94edd080e95aecabb6bae2-3904x2720.png?q=95&auto=format&dpr=2)
+![Side-by-side comparison of a dark interface showing softer borders and subtler visual separation in the updated design.](images/04-softer-borders-2x.webp)
 
-![Side-by-side comparison of a dark interface showing softer borders and subtler visual separation in the updated design.](https://webassets.linear.app/images/ornj730p/production/36869cc79ec19741d75a35dd2beadf5d9d58e2c8-2352x1600.png?q=95&auto=format&dpr=2)
+![Side-by-side comparison of a dark interface showing softer borders and subtler visual separation in the updated design.](images/04-softer-borders-1x.webp)
 
 The new borders (left) reduce visual noise with fewer separators
 
@@ -89,9 +86,9 @@ The dev toolbar in action, with the feature flag for the refresh toggled on and 
 
 But experimenting with these changes was painfully slow: mocking it up in Figma, implementing the update in a PR, spinning up a preview build, reviewing it, and repeating the process. To speed things up, we used Claude Code to build a color tool inside Linear’s dev toolbar. The tool allows us to do everything the user-facing theme builder can do, while also exposing controls for tweaking the hue, chroma, and lightness of individual design tokens. Anyone at Linear could experiment with different combinations and share their preferred “recipe” with us.
 
-![Internal theme editor interface used to adjust color values, contrast, and design tokens for the UI palette.](https://webassets.linear.app/images/ornj730p/production/dc2fb694f3a1a1b6fe85acc17260705a8d674be6-3924x2936.png?q=95&auto=format&dpr=2)
+![Internal theme editor interface used to adjust color values, contrast, and design tokens for the UI palette.](images/05-theme-editor-2x.webp)
 
-![Internal theme editor interface used to adjust color values, contrast, and design tokens for the UI palette.](https://webassets.linear.app/images/ornj730p/production/e710d0e4acd1b0807d91481bdd6623015c43e306-2352x2936.png?q=95&auto=format&dpr=2)
+![Internal theme editor interface used to adjust color values, contrast, and design tokens for the UI palette.](images/05-theme-editor-1x.webp)
 
 Once we landed on a palette we liked, we copied the token values as JSON and imported them directly into Figma using a plugin built by one of our designers, Yann-Edern Gillet. This created an alignment between what we were experimenting with in the interface and what lived in the design system.
 
@@ -108,62 +105,3 @@ Much of this project came down to tweaking a series of small details, reviewing 
 [Charlie Aufmann](https://linear.app/now/author/charlie-aufmann) and [Maxime Heckel](https://linear.app/now/author/maxime-heckel)
 
 ·March 12, 2026
-
-Copy link
-
-### Product
-
-- [Intake](https://linear.app/intake)
-- [Plan](https://linear.app/plan)
-- [AI](https://linear.app/ai)
-- [Build](https://linear.app/build)
-- [Pricing](https://linear.app/pricing)
-- [Security](https://linear.app/security)
-
-### Features
-
-- [Asks](https://linear.app/asks)
-- [Agents](https://linear.app/agents)
-- [Coding Sessions](https://linear.app/coding-sessions)
-- [Customer Requests](https://linear.app/customer-requests)
-- [Insights](https://linear.app/insights)
-- [Mobile](https://linear.app/mobile)
-- [Integrations](https://linear.app/integrations)
-- [Changelog](https://linear.app/changelog)
-
-### Company
-
-- [About](https://linear.app/about)
-- [Customers](https://linear.app/customers)
-- [Careers](https://linear.app/careers)
-- [Now](https://linear.app/now)
-- [Method](https://linear.app/method)
-- [Quality](https://linear.app/quality)
-- [Brand](https://linear.app/brand)
-
-### Resources
-
-- [Switch](https://linear.app/switch)
-- [Download](https://linear.app/download)
-- [DocumentationDocs](https://linear.app/docs)
-- [Developers](https://linear.app/developers)
-- [Status](https://linearstatus.com/)
-- [Enterprise](https://linear.app/enterprise)
-- [Startups](https://linear.app/startups)
-
-### Connect
-
-- [Contact us](https://linear.app/contact)
-- [Community](https://linear.app/join-slack)
-- [X (Twitter)](https://x.com/linear)
-- [GitHub](https://github.com/linear)
-- [YouTube](https://www.youtube.com/@linear)
-
-### Legal
-
-- [Privacy](https://linear.app/privacy)
-- [Terms](https://linear.app/terms)
-- [DPA](https://linear.app/dpa)
-- [AUP](https://linear.app/legal/aup)
-
-[Privacy](https://linear.app/privacy) [Terms](https://linear.app/terms) [DPA](https://linear.app/dpa) [AUP](https://linear.app/legal/aup)
