@@ -70,6 +70,8 @@ Additional editor extensions need a concrete feature or direct import before ent
 | [@types/react-dom](https://registry.npmjs.org/@types%2Freact-dom/latest) | 19.3.0 | React DOM type declarations. |
 
 Use Bun's test runner for application logic and Playwright for browser workflows.
+During interactive development in the Codex desktop app, the agent can use its built-in [@Browser](https://learn.chatgpt.com/docs/browser) for focused local UI checks and DOM/style inspection.
+Codex provides @Browser; it is not an ORC-web package dependency.
 The [@playwright/test](https://registry.npmjs.org/@playwright%2Ftest/latest) runner, observed at 1.63.0, is optional if the implemented browser suite uses it; it is not an automatic additional dependency.
 Declare `@types/node` directly if the selected Node tooling/type setup requires it, and choose a version matching that setup rather than automatically taking the newest Node type major.
 Run the agreed TS7 compatibility checkpoint through a separate exact-pinned compiler installation, following the [migration policy](doc_v1/architecture/typescript-tooling.md#required-and-compatibility-checks).

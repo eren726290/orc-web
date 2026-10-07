@@ -43,6 +43,10 @@ The complete font workflow is defined in [Font management](../interface/font-man
 
 ## Automated browser checks
 
+During interactive development in the Codex desktop app, use its built-in [@Browser](https://learn.chatgpt.com/docs/browser) to open the local editor and check focused UI workflows.
+With Developer mode enabled, it can inspect the page's DOM, applied styles, and console while we debug.
+Use Playwright below for repeatable automated checks and the local rendering service.
+
 Use Playwright with installed Google Chrome and `channel: "chrome"` for supported-browser checks.
 Headless mode is the normal repeatable automation path for source edits, computed styles, interactions, and regression assertions.
 Chrome runs the browser without displaying its window.
