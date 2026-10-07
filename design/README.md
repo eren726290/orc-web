@@ -4,6 +4,15 @@
 Use these materials as visual inspiration for ORC-web.
 ORC-web's accepted features and workflows are defined in [doc_v1](../doc_v1/README.md).
 
+## Using the references
+
+Use mockups only as inspiration for the workspace's rough structure.
+Do not reproduce their exact pixels, dimensions, typography, colors, or sample content.
+Use `doc_v1` for layout and behavior, `desgin_system/` for visual foundations, and `desgin_blog/` for design reasoning.
+Adapt these references into a coherent ORC-web interface.
+
+## Paper style reference
+
 | File | Contents |
 | --- | --- |
 | [DESIGN.md](desgin_system/DESIGN.md) | Detailed Paper style reference covering colors, typography, spacing, surfaces, components, guidelines, and CSS examples. |
@@ -16,3 +25,4 @@ The files describe Paper's visual language and are reference material rather tha
 Their CSS and JSON are not connected to an application build in this checkout.
 
 - [`desgin_blog/`](desgin_blog/README.md) contains reference articles with locally stored images and their image-path convention.
+- [`mockup/`](mockup/README.md) identifies the feedback sheet and workspace skeleton and links their accepted layout rules.

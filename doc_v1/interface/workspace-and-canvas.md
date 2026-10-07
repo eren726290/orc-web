@@ -37,6 +37,9 @@ Hiding Code with unapplied changes follows the discard safeguard in [Code window
 The side panels and Code window are resizable.
 Custom docking and panel rearrangement are deferred.
 
+The [mockup reference index](../../design/mockup/README.md) distinguishes the annotated feedback sheet from the clean editor mockup.
+The behavior in this specification takes precedence over illustrative details in those images.
+
 ### Project tabs and Dashboard
 
 Several project tabs can remain open, with one project active at a time.
