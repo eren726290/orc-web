@@ -11,7 +11,7 @@ Code is useful when visual controls are not enough, but unfinished typing must n
 
 ## Opening and placement
 
-Code is a top-bar control.
+Code is a control in the vertical toolbar between the left panel and canvas.
 The Code window is closed initially and opens below the canvas when the person clicks Code.
 Clicking Code again hides it, subject to the unapplied-change safeguard below.
 Opening the window preserves the current selection.
@@ -138,6 +138,8 @@ See [Editable React components](react-components.md), [Motion](motion.md), and [
 ## Unapplied code
 
 Unapplied code stays in the current editing session until the person applies or discards it.
+Switching [project tabs](workspace-and-canvas.md#project-tabs-and-dashboard) retains the draft with its open project and restores it when that project becomes active again.
+The draft is never applied or transferred to another project by switching tabs.
 Changing or clearing selection with unapplied code first asks **Discard unapplied changes?**.
 The person can cancel and retain the current selection and draft, or discard the draft and continue to the requested selection.
 To keep the edit, they cancel, Apply successfully, and then change selection.
@@ -146,7 +148,8 @@ Choosing Apply prepares and validates the candidate before committing it; failur
 Generated exports and MCP source reads use applied design state and exclude unapplied code.
 
 If a person closes or reloads the editor with unapplied code, ORC-web asks **Discard unapplied changes?**.
-Closing the Code window through its top-bar toggle asks the same question when unapplied code is present.
+Closing the Code window through its vertical-toolbar toggle asks the same question when unapplied code is present.
+Closing a project tab applies this safeguard to that project's draft before the [project-close save choice](../architecture/orc-workspace-bundle.md#starting-and-opening-projects).
 Cancelling keeps the window and draft open; choosing Discard hides the window and clears that draft.
 Choosing Discard closes the editing session and reopening shows the last applied source.
 

@@ -21,6 +21,12 @@ Browser editor ----------> shared command engine -> same active project
 ```
 
 The Bun backend owns the active project, revisions, and Undo history.
+The browser can keep several separate project tabs open, but MCP operates on the currently active project under the [project-session contract](../architecture/orc-workspace-bundle.md#starting-and-opening-projects).
+Selecting another project tab changes that active project for subsequent tool calls.
+The agent reads fresh `get_context` / `get_source` after a project switch before making further edits.
+Commands retain their explicit target project; a request addressed to an inactive or closed project is rejected rather than redirected into the current project.
+Dashboard keeps the open tabs and most recently active backend project available; closing the last project tab leaves no active project.
+Project creation, opening, and tab switching remain browser actions, with public MCP project-management tools outside V1.
 The MCP adapter translates tool inputs into the existing application commands.
 It does not keep a separate design document, source copy, or Undo history.
 Completed agent edits follow the same validation, source ownership, initial-render checks, and atomic commit rules as human edits.
@@ -82,16 +88,21 @@ The next fresh read supplies those changes.
 | --- | --- |
 | Agent completes a task while both programs remain running | Its configured access remains available for the next request. |
 | Person closes the agent | That client's connection ends; the ORC-web backend and browser editor can keep running. |
-| Person closes only the editor tab | The Bun backend keeps the active project available; an agent can continue using supported server operations. |
-| Person reopens the editor while the backend is still running | The browser reconnects to the server's current applied project. |
+| Person switches an ORC project tab | The selected project becomes active for subsequent MCP calls; other open projects retain their own state and history. |
+| Person closes an ORC project tab | Resolve that project's draft/save safeguards and release only its session; another remaining tab becomes active if the closed tab was active. |
+| Person closes the last ORC project tab | Dashboard remains available, with no active project for MCP until one is opened or created. |
+| Person closes only the Chrome browser tab containing the editor | The Bun backend keeps open project sessions and the active project available; an agent can continue using supported server operations. |
+| Person reopens the editor while the backend is still running | The browser reconnects to the open server project sessions and current applied active project. |
 | Person stops ORC-web from the terminal | The backend becomes unavailable to the agent and browser after normal application shutdown. |
 
-Closing an editor tab follows the existing Code draft safeguards; it does not apply unfinished code.
-Stopping ORC-web uses the accepted [normal terminal shutdown](../architecture/system-architecture.md#normal-terminal-shutdown): finish work, confirm Saved, then Ctrl+C.
+ORC project tabs and the Chrome browser tab have different lifetimes.
+Closing either follows the applicable existing Code draft safeguards; it does not apply unfinished code.
+Stopping ORC-web uses the accepted [normal terminal shutdown](../architecture/system-architecture.md#normal-terminal-shutdown): finish work, save open projects, then Ctrl+C.
 The shutdown handler completes pending saves and releases the managed application resources.
 Source reads and edits use server-owned applied state.
 Candidate rendering and image/PDF capture with the tab closed still require the available [local rendering service](../architecture/system-architecture.md#local-rendering-service).
 Browser-only view state is not made canonical or required for `get_context` / `get_source`.
+Context reads report the active project's full save status even when its routine Saved badge is not displayed in the editor.
 
 ## Remaining MCP work
 

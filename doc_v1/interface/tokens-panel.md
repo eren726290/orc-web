@@ -11,7 +11,9 @@ This document is a product contract, not a claim of implemented behavior.
 
 Tokens shares the left panel with Layers.
 Opening Tokens or a token editor preserves canvas selection, the workspace view, and the selected object's Properties.
-The header provides a token count, Search, and a dedicated **Create token** control.
+Search sits directly below the Layers/Tokens tabs.
+V1 has no redundant **Design tokens** heading or total token count above Search.
+The panel retains a dedicated **Create token** control.
 The Layers **+ Add** button remains dedicated to component import; token creation is separate.
 
 V1 provides creation and default-value editing for Color, Spacing, and Corner radius tokens.
@@ -22,7 +24,7 @@ Imported components still use their required authored styles and theme values in
 ## Empty panel and grouped list
 
 An empty registry shows **No tokens yet** and a centered **Create token** button.
-It opens the same creation flow as the header control.
+It opens the same creation flow as the panel's dedicated control.
 A design made entirely with direct values can have an empty Tokens panel and still render correctly.
 The panel lists explicit document tokens; it does not create definitions by scanning matching colors or dimensions.
 
@@ -38,7 +40,7 @@ Each row shows a readable name and a compact preview or value.
 | Existing Typography | Its name and the appropriate preserved value, such as Heading size and 32 px. |
 
 Numeric values retain meaningful units in the list and editor.
-The token count describes the document registry rather than the number of objects that happen to have matching values.
+The [total token count display](../../backlog/token-count-v11.md) is scheduled for V1.1.
 The effect of a shared token is shown through its reference count in the editor.
 
 Search matches readable names across all categories, including collapsed groups.
@@ -49,7 +51,7 @@ Searching and collapsing groups change editor view state only.
 
 ## Create a token
 
-1. Click **Create token** in the header or empty-panel state.
+1. Click the panel's **Create token** control or the centered empty-panel button.
 2. Choose an available V1 category: Color, Spacing, or Corner radius.
 3. A small editor opens beside the panel with **Name** and the appropriate **Value** controls.
 4. Enter a readable name and valid value, then confirm **Create**.
@@ -153,6 +155,7 @@ These are acceptance scenarios for the actual editor, not results of the documen
 - Create a token in an empty panel and confirm existing direct values remain unchanged until linked.
 - Create from Properties and verify one atomic definition-and-binding command, including cancellation and stale-target rejection.
 - Search across collapsed categories, clear the query, and retain canvas selection and Properties throughout.
+- Verify Search sits directly below Layers/Tokens, without a duplicate panel heading or total token count; individual token editors retain their reference counts.
 - Preview color, opacity, spacing, and radius changes across linked uses; verify cancellation and one Undo per completed adjustment.
 - Rename a token and verify its CSS identifier and references survive, including save/reopen.
 - Delete an unused token, reject deletion when hidden or recognized source references remain, and verify Undo.

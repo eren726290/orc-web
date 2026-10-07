@@ -20,7 +20,7 @@ It shares the left panel with the Tokens tab.
 Switching between Layers and Tokens preserves the current selection and Properties.
 
 The Layers tab has one **+ Add** button that directly opens [component import](../import-export/component-import.md).
-Text creation uses the top-bar Text tool.
+Text creation uses the vertical toolbar's Text tool.
 Manual frame creation and new image/SVG insertion remain outside the V1 entry points, as defined in [Workspace and canvas](workspace-and-canvas.md#human-content-entry-points).
 When the project has no layers, the panel shows **No layers yet** and keeps the existing **+ Add** button visible.
 

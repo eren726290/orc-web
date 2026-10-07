@@ -9,7 +9,7 @@ The [Layers and Properties](properties-panel.md) document explains which text co
 
 ## Create text
 
-Click Text in the top bar or activate the Text tool with T.
+Click Text in the vertical toolbar or activate the Text tool with T.
 Text creation does not require opening + Add.
 Click an existing Text object with the Text tool to edit it.
 Click once on empty workspace to create a text object sized to its content and begin typing.

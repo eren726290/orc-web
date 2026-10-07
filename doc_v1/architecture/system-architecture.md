@@ -33,12 +33,15 @@ Browser editor ──HTTP or WebSocket──▶ local ORC-web server
                                            agent client
 ```
 
-The local server owns one authoritative active project and serializes its completed commands.
+The local server owns authoritative applied state and Undo history for each open project session and serializes completed commands.
+One project is active at a time, selected through the browser's [horizontal project tabs](../interface/workspace-and-canvas.md#project-tabs-and-dashboard).
+Inactive open projects retain their state and history, and their pending saves continue against their own bundles under the [project-session contract](orc-workspace-bundle.md#starting-and-opening-projects).
 Completed edits update that active project and Undo history before disk autosave finishes, following [Command engine and history](command-engine-and-history.md#command-lifecycle).
 The [workspace bundle](orc-workspace-bundle.md#managed-dependencies) separates portable component dependency records from rebuildable installations and output.
-The browser owns temporary view state such as zoom, open panels, hover, and drag previews.
+The browser owns temporary view state such as zoom, open panels, hover, and drag previews, retaining applicable view state separately for each open project.
 The browser does not save a second authoritative copy of the document.
 MCP calls and human edits reach the same command engine.
+MCP operates on the active project; project switching does not retarget an already addressed command to another project's state.
 Agents connect through Streamable HTTP at the Bun backend's plain localhost `/mcp` endpoint.
 The browser opens the normal editor address; `/mcp` is the agent endpoint, not the editor page.
 The [MCP server contract](../mcp/mcp-server.md#browser-agent-and-server-lifetime) defines continued access between tasks and when the editor tab, agent, or backend closes.
@@ -62,11 +65,11 @@ Bun supplies the local HTTP server and file responses through its [HTTP server A
 
 ## Normal terminal shutdown
 
-The person finishes editing, saves an Untitled project if needed, confirms Saved, and stops the local server from the terminal with Ctrl+C.
+The person finishes editing, saves each Untitled project if needed, confirms the open projects' applied changes are written through contextual save feedback, and stops the local server from the terminal with Ctrl+C.
 V1 keeps this terminal workflow without a separate Stop ORC-web control in the editor.
 
 ORC-web must implement the shutdown handler explicitly.
-It stops accepting new work, finishes pending saves of applied project state, closes the managed Chrome browser, stops the development Vite process when present, and releases the writable project session before exiting.
+It stops accepting new work, finishes pending saves for all open projects, closes the managed Chrome browser, stops the development Vite process when present, and releases the open writable project sessions before exiting.
 Bun's graceful HTTP server stop waits for active requests; ORC-web must also await its own save work and perform browser/process cleanup.
 A failed write does not count as a completed save and must leave unsaved applied work available through the existing [save recovery](orc-workspace-bundle.md#autosave) flow.
 Shutdown does not apply or persist unfinished Code drafts.
@@ -93,7 +96,7 @@ Those experiments support implementation of this architecture; they are not the 
 | --- | --- |
 | Browser editor | Canvas rendering, Layers, Properties, Tokens, Code window, selection, viewport, Edit mode, Preview mode, and temporary gesture feedback. |
 | Command engine | Validation, completed mutations, revisions, Undo, Redo, invariant checking, and changed-document publication. |
-| Local project service | Opening and saving `.orc` bundles, managed assets, imported component records, package inspection, package execution, and exports. |
+| Local project service | Open project sessions, active-project switching, saving `.orc` bundles, managed assets, imported component records, package inspection, package execution, and exports. |
 | Local rendering service | Initial candidate rendering and visual export capture in background Chrome, using the shared renderer and prepared styles. |
 | MCP adapter | MCP protocol handling and translation into documented command inputs. |
 | Imported component | Live rendering inside the workspace through its declared component contract. |

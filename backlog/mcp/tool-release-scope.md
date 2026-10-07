@@ -10,10 +10,10 @@ It does not change the accepted design-editing tools or the application's existi
 ## Project management
 
 Keep `list_documents`, `create_document`, `open_document`, and `rename_document` outside MCP V1.
-The person uses the browser's New/Open/recent-project and existing naming workflows, then the agent works on the active project.
-The [project contract](../../doc_v1/architecture/orc-workspace-bundle.md#starting-and-opening-projects) retains one active project and the Untitled first-save flow.
+The person uses Dashboard, the browser's New/Open/recent-project flows, horizontal project tabs, and existing naming workflows, then the agent works on the active project.
+The [project contract](../../doc_v1/architecture/orc-workspace-bundle.md#starting-and-opening-projects) supports several open project sessions with one active project and retains the Untitled first-save flow.
 The [MCP server](../../doc_v1/mcp/mcp-server.md#purpose-and-application-authority) continues serving that same active project to the agent.
-This decision does not introduce another project selector or automatically rename a saved folder.
+This MCP release decision does not add an agent-controlled project selector or automatically rename a saved folder.
 
 Revisit public project-management operations if a concrete workflow needs agent-controlled project listing, creation, opening, or naming.
 At that time, define their relationship to active state, pending saves, unapplied Code, and browser project changes before writing tool contracts.

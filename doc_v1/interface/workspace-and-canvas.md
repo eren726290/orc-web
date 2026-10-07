@@ -17,7 +17,12 @@ Resizing a frame updates its live content and supported responsive layout immedi
 
 ## Editor layout
 
-The top bar contains the project name, save status, Select, Pan, Text, Preview, and Code.
+The top bar contains Dashboard at the far left, horizontal project tabs, and a separate **+** project button.
+Each tab represents one separate `.orc` project, like a Figma file, and shows its project name and a close action.
+The selected tab is visibly active.
+V1 editor chrome has no ORC logo or version label.
+One vertical toolbar between the left panel and canvas contains Select, Pan, Text, Code, and Preview, in that order.
+Each control has a readable label and is accessible by keyboard.
 The left panel has Layers and Tokens tabs.
 Layers shows loose objects, frames, and their supported nested content.
 [Layers panel](layers-panel.md) defines row presentation, renaming, locking, expansion, and the preserved V1.1 visibility workflow.
@@ -26,16 +31,43 @@ Switching left tabs preserves canvas selection and the selected object's Propert
 The infinite canvas occupies the center, and Properties occupies the right panel.
 
 Code is closed initially.
-Clicking Code in the top bar opens the Code window below the canvas; clicking it again hides the window.
+Clicking Code in the vertical toolbar opens the Code window below the canvas; clicking it again hides the window.
 Opening Code preserves the selection so its source stays connected to the selected visual object.
 Hiding Code with unapplied changes follows the discard safeguard in [Code window](code-window.md).
 The side panels and Code window are resizable.
 Custom docking and panel rearrangement are deferred.
 
+### Project tabs and Dashboard
+
+Several project tabs can remain open, with one project active at a time.
+Clicking a tab activates that project's canvas, Layers, Properties, Tokens, and Code.
+Each open project retains its own selection, pan/zoom, panel state, unapplied Code draft, Undo history, and save state for the current session.
+Switching tabs does not apply a Code draft, combine designs, or create a document Undo entry.
+The [workspace bundle](../architecture/orc-workspace-bundle.md#starting-and-opening-projects) owns project-session and close behavior.
+
+The top-bar **+** offers **New project** and **Open project**, using the existing project flows.
+It is separate from the Layers panel's component-import **+ Add** button.
+Opening an already open project activates its existing tab.
+Dashboard returns to the existing New/Open/recent-project screen without closing open project tabs.
+The backend retains the most recently active open project for MCP while Dashboard is displayed, following the [MCP active-project contract](../mcp/mcp-server.md#purpose-and-application-authority).
+
+Closing a project tab uses that project's existing Code-draft and unsaved-design safeguards.
+Cancel keeps the tab and its state open.
+Closing the active tab activates another remaining project, or shows Dashboard with no active project when none remain.
+A project tab is distinct from the Chrome browser tab containing the whole editor.
+
+### Contextual save feedback
+
+Show save feedback beside the relevant project tab or in its save/close flow when needed.
+Show Saving while a write is in progress and brief Saved feedback after the current applied revision is written.
+An idle, successfully saved project has no permanent Saved badge.
+Not saved and Save failed remain visible while unresolved, with the existing first-save and recovery actions.
+Autosave and the underlying save status continue under the [save contract](../architecture/orc-workspace-bundle.md#autosave) even when no badge is displayed.
+
 ## Human content entry points
 
 The Layers tab has one **+ Add** button that directly opens [component import](../import-export/component-import.md).
-Text creation uses the top-bar Text tool directly or its T shortcut.
+Text creation uses the vertical toolbar's Text tool directly or its T shortcut.
 V1 does not provide a manual draw-frame action.
 Existing and imported frames remain editable, and this UI restriction does not remove frame support from the document or agent workflow.
 Agents provide the initial image and SVG objects; people replace and adjust them through Properties.
@@ -101,7 +133,8 @@ Exact wrapper placement, coordinate conversion, browser mapping, and platform sh
 
 ## Canvas tools
 
-In Edit mode, the top bar has Select, Pan, and Text, in that order.
+In Edit mode, the vertical toolbar starts with Select, Pan, and Text, followed by Code and Preview.
+Select, Pan, and Text choose the active canvas tool; Code toggles its window and Preview enters the existing interaction mode.
 Select is active by default.
 
 Select uses the cursor icon.
@@ -265,7 +298,7 @@ Preview stays on the same localhost, in the same browser tab and existing canvas
 It uses the existing live rendering path and applied design rather than creating another editable design or requiring another server.
 
 1. Select one frame on the canvas or in Layers.
-2. Click the top-bar **Preview** control.
+2. Click **Preview** in the vertical toolbar.
 3. The canvas area shows only that frame and its nested content, with selection outlines, resize handles, and constraint indicators hidden.
 4. Try its supported buttons, inputs, menus, scrolling, and animations.
 5. Click the visible **Exit Preview** control to return to the infinite workspace.
@@ -312,6 +345,15 @@ Verify the following with the actual workspace renderer rather than treating doc
 
 [Webflow's canvas Preview workflow](https://help.webflow.com/hc/en-us/articles/33961334731411-Overflow-hidden) and [GrapesJS's Preview implementation](https://github.com/GrapesJS/grapesjs/blob/7fe07c839c37cf724346a7b5948551570e61680b/packages/core/src/commands/view/Preview.ts) support the editor-mode approach.
 GrapesJS uses an [iframe canvas](https://grapesjs.com/docs/api/canvas.html) inside its editor, so this precedent establishes the interaction pattern rather than proving ORC-web's direct same-page renderer.
+
+## Editor layout verification
+
+These are implementation acceptance checks, not recorded application results.
+
+- Verify the logo-free header, horizontal project tabs, Dashboard, project **+**, and the single Select/Pan/Text/Code/Preview toolbar, including keyboard access.
+- Open two separate projects, switch between them, and verify independent design state, selection, view, Code drafts, Undo histories, save locations, and save feedback.
+- Verify Dashboard preserves open tabs, opening an existing project focuses its tab, and project-tab closing preserves the existing Save/Discard/Cancel and Code-draft safeguards.
+- Verify contextual Saving/Saved feedback, persistent unresolved Not saved/Save failed, active-project MCP reads, and rejection of edits addressed to another project without modifying either design.
 
 ## Performance boundary
 

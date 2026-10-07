@@ -74,6 +74,7 @@ The dedicated [Properties V1.x backlog](properties-panel-v1x.md) records deferre
 Its [V1.1 control schedule](properties-panel-v1x.md#v11-properties-controls) records the listed Text typography/Overflow, font import/unavailable-font/replacement, and Replace SVG controls while preserving their original research documents.
 
 The dedicated [Light and Dark token editing backlog](token-modes-v11.md) schedules the Tokens panel's mode-value editing controls for V1.1 while retaining default-value editing and preservation of existing mode values in V1.
+The [total token count display](token-count-v11.md) is scheduled for V1.1; V1 keeps Search directly below Layers/Tokens and preserves individual token reference counts.
 
 The dedicated [Typography token backlog](typography-tokens-v11.md) schedules creation and individual value editors for V1.1 while preserving existing typography tokens and their supported rendering and export in V1.
 

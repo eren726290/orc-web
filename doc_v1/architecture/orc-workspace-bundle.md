@@ -38,16 +38,32 @@ Desktop conversion is a separate future feature.
 
 ## Starting and opening projects
 
-The local server opens one active project at a time.
-The welcome screen offers **New project**, **Open project**, and recent projects.
+The local server can retain several open project sessions, with one active project at a time.
+The browser presents each separate `.orc` project as a horizontal project tab under the [workspace navigation contract](../interface/workspace-and-canvas.md#project-tabs-and-dashboard).
+The Dashboard welcome screen offers **New project**, **Open project**, and recent projects.
+The editor's top-bar **+** offers the same New/Open flows.
 
-New project immediately opens an empty infinite workspace named **Untitled**.
+New project immediately opens an empty infinite workspace named **Untitled** in a new active project tab.
 It does not ask for a project name, folder, frame, device preset, or template before a person or agent can begin work.
 Untitled shows **Not saved** until its first successful save.
 
 First Save asks for a project name and folder, then creates the matching `.orc` folder.
 After that, applied design changes autosave to that folder.
-Open project selects an existing `.orc` folder or a recent project.
+Open project selects an existing `.orc` folder or a recent project and opens its tab.
+Opening a project already present in the session activates its existing tab rather than opening another writable copy.
+
+Each open project has its own applied state, revision, Undo history, save location, save status, and pending writes.
+The browser retains selection, viewport, panel state, and unapplied Code drafts separately for each open project.
+Switching project tabs changes the active project without closing either session, applying drafts, clearing history, or reloading older disk state over applied changes.
+Pending autosave remains attached to the project that produced it, including while that project's tab is inactive.
+Dashboard keeps project tabs open and retains the most recently active open project on the backend.
+Project-tab and view state are session information outside the portable design document.
+
+Closing a project tab resolves that project's unapplied-Code and unsaved-design safeguards before releasing its session and writable lock.
+Cancel leaves the project tab and its state open.
+Closing an inactive tab leaves the active project unchanged.
+Closing the active tab activates another remaining project; closing the last tab leaves Dashboard with no active project.
+Undo history lasts while the project session remains open; closing and reopening a project does not restore runtime history from its `.orc` folder.
 
 Closing an Untitled project that contains applied design changes offers **Save**, **Discard**, or **Cancel**.
 Save opens the first-save flow.
@@ -61,10 +77,17 @@ For a project with a save location, applied design commands then autosave `docum
 Untitled remains Not saved until its first successful save.
 Edit success and disk-save success are separate states.
 The editor reports Saving, Saved, or Save failed.
+These states belong to each project, not to a shared global badge.
+Show Saving and brief Saved feedback beside the relevant project tab or in the save/close flow when needed.
+An idle saved project has no permanent Saved badge.
+Unresolved Not saved and Save failed remain visible with their existing actions.
+Hiding routine Saved feedback does not stop autosave or remove save status from server-owned context reads.
 Saved means that the applied design is written to the project folder on disk.
-The save result identifies the revision written; an older completed write cannot mark a newer unsaved revision as Saved.
+The save result identifies its project and the revision written; an older completed write cannot mark a newer unsaved revision as Saved.
+Completion of one project's save cannot mark another project's tab as Saved.
 Unapplied Code window text stays only in the current editing session and never changes the document revision.
 Closing or reloading with unapplied code asks **Discard unapplied changes?** before the editor leaves the session.
+Merely switching project tabs keeps each draft with its open project and does not invoke that close safeguard.
 Reopening a project shows the last applied source included in its last successful disk save.
 
 If a save cannot finish, the editor shows **Save failed**.
@@ -85,8 +108,8 @@ An interrupted save must preserve the last valid document rather than leave a ha
 Save source, bindings, assets, and dependency records consistently with the document revision that references them.
 The last valid saved revision must retain its required managed files if a later save is interrupted.
 The exact multi-file replacement and recovery mechanism remains an implementation decision to verify on Fedora and Windows.
-The [normal terminal shutdown](system-architecture.md#normal-terminal-shutdown) contract finishes pending saves of applied state before the local server exits.
-Save an Untitled project through its first-save flow before stopping; shutdown does not invent a project name or location or save an unapplied Code draft.
+The [normal terminal shutdown](system-architecture.md#normal-terminal-shutdown) contract finishes pending saves for every open project before the local server exits.
+Save each Untitled project through its first-save flow before stopping; shutdown does not invent a project name or location or save an unapplied Code draft.
 
 ## Managed dependencies
 
@@ -105,6 +128,6 @@ The [Font management](../interface/font-management.md) document defines when a f
 
 ## Locking
 
-One local server holds the writable project session.
+One local server holds each open project's writable session.
 If another local process has the project open for writing, ORC-web reports that state and avoids concurrent writes.
 The exact locking mechanism must work on Fedora and Windows.

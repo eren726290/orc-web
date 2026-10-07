@@ -51,6 +51,9 @@ When a caller supplies an outdated revision, the command returns a revision-conf
 Undo reverses one completed command.
 Redo reapplies one reversed command.
 Undo history is runtime state for an open local project session and is not the portable project’s canonical state.
+Each open project session has its own history and revision.
+Switching [project tabs](../interface/workspace-and-canvas.md#project-tabs-and-dashboard) retains those histories; Undo and Redo act on the active project's history.
+Closing a project session releases its runtime history after the existing close safeguards.
 Dragging and numeric scrubbing may show many temporary updates, but committing the gesture creates one history entry.
 Applying shared component source is one history entry even when it changes many component instances.
 With canvas focus, Ctrl+Z undoes the last completed design command and Ctrl+Shift+Z redoes it.
@@ -64,6 +67,7 @@ Undo or Redo affecting unrelated source leaves the draft intact and proceeds nor
 ## Command requirements
 
 Every document mutation identifies its target document and a unique command ID.
+Validate the addressed project against the active project before applying the command; never reinterpret a request for another or closed project as an edit to the current tab.
 Every mutation validates target IDs, expected revision, property values, locks, component manifests, parent and child rules, and document invariants before committing the active project.
 Lock validation includes applicable ancestor locks and distinguishes the explicit Unlock action from ordinary design edits.
 Batch mutations either complete for every target or fail completely.
@@ -72,6 +76,7 @@ Commands target stable node, token, asset, and component IDs rather than Layer l
 ## UI-only state
 
 Selection, hover, expanded Layers rows, panel tabs, viewport position, and temporary drag previews are browser state.
+Project tabs and per-project selection, viewport, panel state, and Code drafts are session state outside the portable design.
 Token search, category expansion, inspection, and temporary value previews also remain editor state.
 Code scope and highlighting, draft discard, and clipboard copying remain editor actions; the [Code window](../interface/code-window.md) defines their draft safeguards and copy boundaries.
 They do not increment document revision and are not added to Undo history.

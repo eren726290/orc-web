@@ -14,7 +14,7 @@ The comparison uses existing frames rather than creating linked variants, respon
 ## Human workflow
 
 1. Select both frames.
-2. Click **Preview** in the top bar.
+2. Click **Preview** in the vertical toolbar.
 3. See the selected frames side by side in the existing browser page and canvas area.
 4. Try each frame's supported buttons, inputs, menus, scrolling, and animations independently.
 5. Click **Exit Preview** to return to the previous workspace view and selection.
