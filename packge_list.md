@@ -4,6 +4,7 @@ Registry snapshot: 2026-10-06.
 The initial application scaffold was created on 2026-10-07 with `package.json`, `bun.lock`, and a local dependency installation.
 The manifest and lockfile are the source of truth for its exact direct pins and resolved transitive versions.
 The tables retain the registry observations and package-selection rationale.
+Development tooling was configured and reverified on 2026-10-08; see [scaffold verification](SCAFFOLD_VERIFICATION.md).
 Use the [stack decisions](backlog/stack-proposal.md), [TypeScript policy](doc_v1/architecture/typescript-tooling.md), and [implementation status](IMPLEMENTATION_STATUS.md) alongside this inventory.
 
 ## 1. Runtime and application foundation
@@ -65,16 +66,22 @@ Additional editor extensions need a concrete feature or direct import before ent
 | [@vitejs/plugin-react](https://registry.npmjs.org/@vitejs%2Fplugin-react/latest) | 6.1.2 | React integration for Vite. |
 | [@tailwindcss/vite](https://registry.npmjs.org/@tailwindcss%2Fvite/latest) | 4.3.3 | Tailwind integration for the editor frontend build. |
 | [oxlint](https://registry.npmjs.org/oxlint/latest) | 1.87.0 | TypeScript/React linting. |
+| [@oxlint/plugins](https://registry.npmjs.org/@oxlint%2Fplugins/latest) | 1.87.0 selected on 2026-10-08 | Development support for the selected vendored anti-slop rules; keep exactly aligned with Oxlint. |
+| [fallow](https://registry.npmjs.org/fallow/latest) | 3.32.0 selected on 2026-10-08 | Exact-pinned development CLI for codebase checks; built-in framework detection with reference-asset exclusions and visible unused-dependency warnings. |
 | [oxfmt](https://registry.npmjs.org/oxfmt/latest) | 0.72.0 | Source formatting. |
+| [@types/node](https://registry.npmjs.org/@types%2Fnode) | 22.20.5 selected on 2026-10-08 | Explicit Node 22 declarations for Vite and development scripts, matching the verified Node 22 runtime family. |
 | [@types/bun](https://registry.npmjs.org/@types%2Fbun/latest) | 1.4.2 | Bun runtime type declarations. |
 | [@types/react](https://registry.npmjs.org/@types%2Freact/latest) | 19.3.0 | React type declarations. |
 | [@types/react-dom](https://registry.npmjs.org/@types%2Freact-dom/latest) | 19.3.0 | React DOM type declarations. |
 
-Use Bun's test runner for application logic and Playwright for browser workflows.
+Prefer E2E browser checks for application workflows.
+Use Bun's test runner for justified isolated checks of concrete failures that E2E cannot reliably or practically cover, following [development verification](doc_v1/architecture/system-architecture.md#development-verification).
 During interactive development in the Codex desktop app, the agent can use its built-in [@Browser](https://learn.chatgpt.com/docs/browser) for focused local UI checks and DOM/style inspection.
 Codex provides @Browser; it is not an ORC-web package dependency.
 The [@playwright/test](https://registry.npmjs.org/@playwright%2Ftest/latest) runner, observed at 1.63.0, is optional if the implemented browser suite uses it; it is not an automatic additional dependency.
 Declare `@types/node` directly if the selected Node tooling/type setup requires it, and choose a version matching that setup rather than automatically taking the newest Node type major.
+The scaffold now declares it directly and uses explicit Node/Vite ambient types for frontend and tooling checks.
+The [backend type-scope checkpoint](backlog/development-tooling.md#bun-backend-type-scope) records the Bun/Vite ambient-declaration collision and the separate Bun scope required when backend implementation begins.
 Run the agreed TS7 compatibility checkpoint through a separate exact-pinned compiler installation, following the [migration policy](doc_v1/architecture/typescript-tooling.md#required-and-compatibility-checks).
 
 ## 5. Conditional packages
@@ -97,6 +104,7 @@ The underlying V1 responsibilities, such as canvas pan/zoom, schema validation, 
 
 Install these only when selected editor components or imported design source actually require them.
 Their presence in the inventory does not require every component or design to use them.
+The accepted `@shadcn/lint` development plugin will be installed when editor tokens and component contracts exist, following the [editor tooling checkpoint](backlog/development-tooling.md#shadcn-lint).
 
 | Package | Registry release | Add when |
 | --- | --- | --- |
@@ -114,7 +122,7 @@ Libraries such as `@paper-design/shaders-react` and `shaders` belong to the desi
 | Tool | Registry release, when checked | Role |
 | --- | --- | --- |
 | [shadcn](https://registry.npmjs.org/shadcn/latest) | 4.21.3 | Acquire selected Base UI-flavored component source; record the CLI version used for generation. |
-| Fallow CLI | Not checked in this snapshot | Existing codebase analysis tool; the stack record does not require a new application dependency. |
+| Fallow CLI | 3.32.0 verified on 2026-10-08 | Installed as the exact-pinned development dependency listed above; no separate global installation is required. |
 | [@modelcontextprotocol/client](https://registry.npmjs.org/@modelcontextprotocol%2Fclient/latest) | 2.3.1 | Optional MCP integration verification client. |
 | [@modelcontextprotocol/inspector](https://registry.npmjs.org/@modelcontextprotocol%2Finspector/latest) | 2.9.0 | Optional MCP inspection tool. |
 
@@ -126,6 +134,11 @@ Research/browser utilities used by agents are separate from the application's de
 The initial scaffold provides exact direct pins, `bun.lock`, Vite React/Tailwind configuration, and `dev`, `build`, `check:types`, `lint`, and `format` scripts.
 It selected TypeScript 6.0.3 and `@babel/parser` 7.29.9 from the recorded compatible experiment direction.
 The first type check, lint, and production build passed with Bun 1.4.2.
+The 2026-10-08 tooling checkpoint added `check:tooling`, `check:format`, `check:codebase`, and browser smoke-check scripts.
+Oxlint loads three selected vendored anti-slop rules plus native `oxc/no-accumulating-spread`, and their positive and negative CLI controls pass.
+Formatter scripts target scaffold source and configuration without rewriting documentation or unmodified upstream rule files.
+TypeScript checks application source, scripts, lint configuration, and vendored plugin code with `skipLibCheck: false`.
+An isolated TypeScript 7.0.2 check passed against the same source, dependency tree, and configuration without replacing TypeScript 6.0.3.
 The [PR1–5 validation record](doc_v1/architecture/react-source-editing-validation.md) remains experiment evidence rather than complete editor or Windows verification.
 
 Update this file from the manifest and lockfile when dependencies change, linking affected verification results through [implementation status](IMPLEMENTATION_STATUS.md).

@@ -62,3 +62,26 @@ Read-only by default. Ask before destructive actions.
 
 ## ponytail-full ##
 - ponytail always in full mode .
+
+## Testing
+
+- Prefer E2E tests for user workflows and complex features.
+- Before implementation, identify expected behavior and concrete failure cases.
+  Derive test assertions from requirements, not from the implementation.
+- Add isolated tests only when they catch a concrete failure that E2E tests cannot reliably or practically cover.
+  State that reason before writing the test.
+- For bug fixes, reproduce the failure first and retain a regression check.
+- Keep tests focused on observable behavior.
+  Avoid assertions tied to internal call sequences or component structure.
+- For E2E verification, record the tested commit, command, inputs, and results.
+  Preserve relevant screenshots, traces, or output files so the result can be checked and repeated.
+
+## Codebase checks
+
+- Use Fallow's CLI for focused codebase checks after substantial changes and before release.
+  Review findings before removing code or dependencies.
+- Start with Fallow's built-in framework detection.
+  Add configuration only for demonstrated entry-point or analysis needs.
+- Enable only reviewed anti-slop rules that catch concrete problems.
+- Apply shadcn/lint to ORC's editor UI once its tokens and component contracts are established.
+  Keep imported designs and dynamic canvas rendering outside blanket editor styling restrictions.

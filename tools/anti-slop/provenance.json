@@ -1,0 +1,31 @@
+{
+  "repository": "https://github.com/dmmulroy/anti-slop",
+  "revision": "c44ef22ca116d0ba62a3ff663a0bd13a3f3fa40b",
+  "files": [
+    {
+      "upstreamPath": "LICENSE",
+      "localPath": "LICENSE",
+      "sha256": "10ed33bf340d6d63dc0633dfc917a346b369b6aa41fe20734aefc6a3fb75ba17"
+    },
+    {
+      "upstreamPath": "src/rules/no-chained-type-assertions.ts",
+      "localPath": "rules/no-chained-type-assertions.ts",
+      "sha256": "72f8e981520f94adac0ffbdab8f8e84e5f2a4595f14e4a6471be917a85a20a15"
+    },
+    {
+      "upstreamPath": "src/rules/no-reduce-accumulator-copy.ts",
+      "localPath": "rules/no-reduce-accumulator-copy.ts",
+      "sha256": "dce4b08ee7ac4bbedfe743f6fa4a3d423cde50b37691130b899cc4573c05d2ae"
+    },
+    {
+      "upstreamPath": "src/rules/require-safety-comment-for-type-assertion.ts",
+      "localPath": "rules/require-safety-comment-for-type-assertion.ts",
+      "sha256": "c8ed9f50f1c6e3592b77165dd8847d187ee9b0ef955d50f8099498d3139aa27c"
+    },
+    {
+      "upstreamPath": "src/shared/array-method.ts",
+      "localPath": "shared/array-method.ts",
+      "sha256": "e360557253c56ab7c256623f3338415743e5027e9d999f801fb79d98240d217b"
+    }
+  ]
+}

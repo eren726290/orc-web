@@ -84,7 +84,8 @@ Do not rely on another experiment folder's compiler or dependency tree.
 
 Do not inherit Zustand, Mutative, Vitest, Electron, Electron Builder, Electron-specific build setup, a second TypeScript compiler, or packages from the original ORC merely because the desktop application used them.
 The agreed TS7 compatibility checkpoint is an explicit development task and can use an isolated compiler installation.
-Fallow is already installed as a CLI for codebase analysis and does not need to become a project dependency for documentation work.
+Fallow is exact-pinned as a development CLI in the application scaffold for codebase analysis.
+It does not participate in the application runtime.
 shadcn supplies selected Base UI-flavored source when acquiring components; it is not a browser runtime requirement.
 The tested global CLI is acquisition provenance, and the combined proof reruns committed component source without requiring that global installation.
 Choose and record the CLI version when generating new source rather than installing it merely to rerun existing components.

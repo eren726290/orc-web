@@ -58,7 +58,8 @@ For the built application, Vite produces the editor's frontend files and Bun ser
 The normal built-app session does not require the Vite development server.
 The launch script prints the local URL to open in Chrome.
 Exact ports, built-app command names, and cross-platform process orchestration remain implementation details.
-These are planned runtime commands; this documentation checkout does not provide application scripts yet.
+The current scaffold provides Vite development and frontend build scripts.
+Combined Bun/Vite startup and Bun serving the built application remain implementation work, as recorded in [implementation status](../../IMPLEMENTATION_STATUS.md).
 
 The development and production separation follows [Vite backend integration](https://vite.dev/guide/backend-integration) and its [development proxy support](https://vite.dev/config/server-options#server-proxy).
 Bun supplies the local HTTP server and file responses through its [HTTP server APIs](https://bun.sh/docs/runtime/http/server).
@@ -142,6 +143,31 @@ Exact package pins, render-completion detection, operation deadlines, and unavai
 Verify the service on Fedora and Windows, including closed-tab operation, rejected candidates, shared styles, process cleanup, and capture without document mutation.
 The existing source-editing experiments do not establish this complete service.
 See [Playwright browser channels](https://playwright.dev/docs/browsers#google-chrome--microsoft-edge) and [browser contexts](https://playwright.dev/docs/api/class-browsercontext) for the underlying browser controls.
+
+## Development verification
+
+Prefer E2E tests for user workflows and complex features, including editing, Undo/Redo, save/reopen, component import, and exports.
+Before implementation, identify expected behavior and concrete failure cases, and derive test assertions from requirements rather than the implementation.
+Use isolated tests only when they catch a concrete failure that E2E tests cannot reliably or practically cover, and state that reason before writing the test.
+For bug fixes, reproduce the failure through the user workflow first and retain a regression check.
+Keep assertions focused on observable behavior rather than internal call sequences or component structure.
+
+For E2E verification, record the tested commit, command, inputs, and results.
+Preserve relevant screenshots, traces, or output files so the result can be checked and repeated.
+Type checking, linting, and builds remain separate checks and do not establish that editor workflows work.
+
+## Development codebase checks
+
+Use Fallow's CLI for focused codebase checks after substantial changes and before release.
+Start with its built-in framework detection, and add configuration only for demonstrated entry-point or analysis needs.
+Review findings before removing code or dependencies, including packages installed for accepted features that are not implemented yet.
+
+Enable only reviewed anti-slop rules that catch concrete problems.
+Apply shadcn/lint to ORC's editor UI once its tokens and component contracts are established.
+Keep imported designs and dynamic canvas rendering outside blanket editor styling restrictions.
+These tools support development verification; they do not participate in the application's command, save, or rendering services.
+The scaffold configures selected anti-slop rules and an exact-pinned Fallow development CLI.
+The [editor tooling checkpoint](../../backlog/development-tooling.md) tracks shadcn/lint configuration once the editor tokens and component contracts exist.
 
 ## Local-only operation
 

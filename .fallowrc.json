@@ -1,0 +1,11 @@
+{
+  "ignorePatterns": [
+    "design/**",
+    "Desgin/**",
+    "tools/anti-slop/rules/**",
+    "tools/anti-slop/shared/**"
+  ],
+  "rules": {
+    "unused-dependencies": "warn"
+  }
+}

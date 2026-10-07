@@ -5,7 +5,9 @@
 Accepted V1 development policy.
 TypeScript 6 is the required type checker for ORC-web V1.
 TypeScript 7 has a separate compatibility checkpoint for a future migration.
-The commands below describe the implementation contract; this documentation branch does not yet provide application scripts or compiler installations.
+The scaffold provides an exact-pinned TypeScript 6 `check:types` command.
+An isolated TypeScript 7 checkpoint passed against its current source and configuration; [scaffold verification](../../SCAFFOLD_VERIFICATION.md) records the executable and result.
+The commands below describe the continuing implementation contract.
 
 ## Responsibilities
 

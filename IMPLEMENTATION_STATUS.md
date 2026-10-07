@@ -1,6 +1,6 @@
 # ORC-web implementation status
 
-Last updated: 2026-10-07.
+Last updated: 2026-10-08.
 Current stage: the initial Bun, React, Vite, and Tailwind application scaffold is installed and builds; editor implementation has not started.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
 
@@ -9,6 +9,7 @@ This overview describes this checkout and links to reviewed evidence from the PC
 | Area | Implementation status | Evidence or contract |
 | --- | --- | --- |
 | Application foundation and startup | Implemented initial scaffold with a Bun lockfile, React/Vite/Tailwind entry point, and development, type-check, lint, format, and build scripts. | [`package.json`](package.json), [`bun.lock`](bun.lock), [stack choices](backlog/stack-proposal.md). |
+| Development tooling | Selected anti-slop rules and Fallow CLI configured; TypeScript 6, lint controls, formatting, build, and Chromium frontend mounting pass on Fedora. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [remaining editor tooling](backlog/development-tooling.md). |
 | Editor workspace, Layers, Properties, Tokens, and Code | Not started as a complete application. | [Specification index](doc_v1/README.md#product-map). |
 | Shared commands, application Undo/Redo, and project saving | Not started as production services. | [Command engine](doc_v1/architecture/command-engine-and-history.md), [workspace bundle](doc_v1/architecture/orc-workspace-bundle.md). |
 | Ordinary HTML/CSS authoring | Not started as an application workflow. | [insert_html](doc_v1/mcp/tools/insert_html.md). |
@@ -28,6 +29,10 @@ These results apply to those experiments; full editor integration and Windows ch
 
 Application implementation is the immediate work; the initial scaffold's type check, lint, and production build do not verify editor workflows or runtime services.
 The scaffold records exact direct dependency pins and startup configuration under the [stack record](backlog/stack-proposal.md).
+The current `dev` command starts Vite only; combined Bun/Vite startup remains part of the next backend checkpoint.
+Shadcn/lint awaits editor tokens and component contracts.
+The Chrome paths supplied from the previous session are absent in this environment, and the Fedora RPM inventory reports no installed `google-chrome-stable` package.
+The supported Chrome scaffold check is blocked until Chrome is available; Chromium and Codex @Browser smoke checks passed.
 Detailed tool value grammars, resource-transfer fields, and SDK integration are tracked in the [MCP implementation backlog](backlog/mcp/command-contracts.md).
 Resolve those details when implementing the corresponding services.
 Record a blocker here when an actual failure prevents the next checkpoint, with a link to its diagnosis.
