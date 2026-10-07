@@ -32,6 +32,8 @@ Read-only by default. Ask before destructive actions.
 ## Interface
 
 - Keep orc-web feature designs, interfaces, and workflows dead simple. Strive for such clarity that even a 12-year-old can navigate and understand each feature without confusion.
+- When building or reviewing ORC-web's UI, read [design/README.md](design/README.md) and consult the relevant references under `/home/eren/D/orc-web/design/`.
+  Use them for visual inspiration while following `doc_v1` for accepted features, layout, and behavior.
 
 ## Complexity
 

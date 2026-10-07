@@ -2,7 +2,8 @@
 
 ORC-web V1 is a local browser editor under development.
 This checkout provides the verified frontend scaffold and development checks.
-The Bun backend, editor workflows, saving, exports, and MCP services are the next implementation checkpoint.
+Build and verify the Bun backend, editor workflows, saving, and exports first.
+Implement MCP afterward on top of the working ORC-web V1 services.
 See [implementation status](IMPLEMENTATION_STATUS.md) and the [V1 specification](doc_v1/README.md).
 
 ## Development

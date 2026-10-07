@@ -41,7 +41,11 @@ Record a blocker here when an actual failure prevents the next checkpoint, with 
 
 1. Implement the Bun backend and the agreed editor panel layout on the established React/Vite foundation.
 2. Complete the first editing workflow with ordinary HTML/CSS content and one React component: nested selection, Properties edits, reflected source, application Undo/Redo, and save/reopen.
-3. Expose working shared services through their agreed MCP tools and verify actual calls.
+3. Complete and verify the remaining agreed ORC-web V1 application workflows, including imports, rendering, and exports.
+
+Build the MCP server and tools only after the ORC-web V1 application is working and its workflows have recorded E2E verification.
+MCP then exposes the existing application services, followed by verification through actual client calls.
+The [implementation order](backlog/mcp/implementation-order.md) records this prerequisite.
 
 ## Maintaining this overview
 
