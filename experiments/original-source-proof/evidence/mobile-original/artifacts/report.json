@@ -1,0 +1,89 @@
+{
+  "runtime": "1.3.14",
+  "platform": "linux/arm64",
+  "browser": "153.0.8010.12",
+  "results": [
+    {
+      "name": "Parsing and printing without edits preserves the source exactly",
+      "result": "PASS"
+    },
+    {
+      "name": "Initial React TSX and Tailwind render two 36px headings in Chromium",
+      "result": "PASS"
+    },
+    {
+      "name": "Click resolves the declared instance; text edit changes only A, with literal quotes, braces, HTML-like text and Unicode",
+      "result": "PASS"
+    },
+    {
+      "name": "Shared typography changes both Heroes; rebuilt Tailwind CSS preserves hover and responsive classes",
+      "result": "PASS"
+    },
+    {
+      "name": "Only this clones A in one command; shared Hero and B remain unchanged",
+      "result": "PASS"
+    },
+    {
+      "name": "One Undo removes the independent definition and restores A's shared reference and appearance",
+      "result": "PASS"
+    },
+    {
+      "name": "Repeated content edits the selected local product record only",
+      "result": "PASS"
+    },
+    {
+      "name": "One Undo restores the exact previous source and rendered product list",
+      "result": "PASS"
+    },
+    {
+      "name": "Candidate render crash preserves applied source, visible design, history and saved file",
+      "result": "PASS"
+    },
+    {
+      "name": "Malformed JSX/TypeScript is rejected by the parser",
+      "result": "PASS"
+    },
+    {
+      "name": "Comment and Motion declaration survive; independent React button behavior still works",
+      "result": "PASS"
+    },
+    {
+      "name": "Reopening the saved source in a fresh browser context reproduces text, styling and data",
+      "result": "PASS"
+    }
+  ],
+  "finalView": {
+    "heroes": [
+      {
+        "id": "hero-a",
+        "text": "Build \"ORC\" & <teams> {together} 🌱",
+        "fontSize": "48px",
+        "fontWeight": "500",
+        "classes": "text-5xl font-medium hover:underline md:tracking-wide"
+      },
+      {
+        "id": "hero-b",
+        "text": "Meet the team",
+        "fontSize": "48px",
+        "fontWeight": "700",
+        "classes": "text-5xl font-bold hover:underline md:tracking-wide"
+      }
+    ],
+    "products": [
+      {
+        "id": "p1",
+        "text": "Desk lamp"
+      },
+      {
+        "id": "p2",
+        "text": "Reading chair 🌱"
+      }
+    ]
+  },
+  "limitations": [
+    "Explicit fixture bindings, not a general component recognizer",
+    "One TSX file; no cross-file symbol resolution or arbitrary computed expressions",
+    "Scratch source persistence, not the ORC-web bundle or command-engine implementation",
+    "Debian ARM64 Chromium, not Fedora/Windows Chrome certification"
+  ]
+}

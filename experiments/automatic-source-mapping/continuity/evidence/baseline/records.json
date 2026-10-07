@@ -1,0 +1,584 @@
+[
+  {
+    "variant": "basic",
+    "scenario": "literal",
+    "label": "one browser click",
+    "selection": {
+      "node": "e83b42d80d96a0d98cc68811",
+      "usages": [],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "literal",
+        "file": "src/App.tsx",
+        "host": "e83b42d80d96a0d98cc68811",
+        "scope": "This element"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/App.tsx",
+        "host": "e83b42d80d96a0d98cc68811",
+        "scope": "This element"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"lamp\", label: \"Desk lamp\" },\n  { sku: \"chair\", label: \"Reading chair\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Ordinary literal heading</h1>\n      <Hero title=\"First instance\" />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "basic",
+    "scenario": "literal",
+    "label": "after first edit, exact original token",
+    "selection": {
+      "node": "e83b42d80d96a0d98cc68811",
+      "usages": [],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: source element is missing or structurally ambiguous"
+      },
+      "classes": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: source element is missing or structurally ambiguous"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"lamp\", label: \"Desk lamp\" },\n  { sku: \"chair\", label: \"Reading chair\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">{\"Selected once 🌱\"}</h1>\n      <Hero title=\"First instance\" />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "basic",
+    "scenario": "instance",
+    "label": "one browser click",
+    "selection": {
+      "node": "c976d43b26fc11a9d0c2e542",
+      "usages": [
+        "2df00014d1fe71479cdf2342"
+      ],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "prop",
+        "file": "src/App.tsx",
+        "site": "2df00014d1fe71479cdf2342",
+        "property": "title",
+        "scope": "This instance"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/App.tsx",
+        "host": "c976d43b26fc11a9d0c2e542",
+        "scope": "Every Hero instance"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"lamp\", label: \"Desk lamp\" },\n  { sku: \"chair\", label: \"Reading chair\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Ordinary literal heading</h1>\n      <Hero title=\"First instance\" />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "basic",
+    "scenario": "instance",
+    "label": "after first edit, exact original token",
+    "selection": {
+      "node": "c976d43b26fc11a9d0c2e542",
+      "usages": [
+        "2df00014d1fe71479cdf2342"
+      ],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: component usage is missing or structurally ambiguous"
+      },
+      "classes": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: component usage is missing or structurally ambiguous"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"lamp\", label: \"Desk lamp\" },\n  { sku: \"chair\", label: \"Reading chair\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Ordinary literal heading</h1>\n      <Hero title={\"Selected once 🌱\"} />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "basic",
+    "scenario": "collection",
+    "label": "one browser click",
+    "selection": {
+      "node": "6baa7b93be2f5f2812f47161",
+      "usages": [],
+      "record": "chair"
+    },
+    "owners": {
+      "text": {
+        "kind": "collection",
+        "file": "src/App.tsx",
+        "list": "cards",
+        "key": "sku",
+        "record": "chair",
+        "property": "label",
+        "scope": "This item"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/App.tsx",
+        "host": "6baa7b93be2f5f2812f47161",
+        "scope": "Every cards item"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"lamp\", label: \"Desk lamp\" },\n  { sku: \"chair\", label: \"Reading chair\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Ordinary literal heading</h1>\n      <Hero title=\"First instance\" />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "basic",
+    "scenario": "collection",
+    "label": "after first edit, exact original token",
+    "selection": {
+      "node": "6baa7b93be2f5f2812f47161",
+      "usages": [],
+      "record": "chair"
+    },
+    "owners": {
+      "text": {
+        "kind": "collection",
+        "file": "src/App.tsx",
+        "list": "cards",
+        "key": "sku",
+        "record": "chair",
+        "property": "label",
+        "scope": "This item"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/App.tsx",
+        "host": "6baa7b93be2f5f2812f47161",
+        "scope": "Every cards item"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"lamp\", label: \"Desk lamp\" },\n  { sku: \"chair\", label: \"Selected once 🌱\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Ordinary literal heading</h1>\n      <Hero title=\"First instance\" />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "basic",
+    "scenario": "collection",
+    "label": "after data reorder",
+    "selection": {
+      "node": "6baa7b93be2f5f2812f47161",
+      "usages": [],
+      "record": "chair"
+    },
+    "owners": {
+      "text": {
+        "kind": "collection",
+        "file": "src/App.tsx",
+        "list": "cards",
+        "key": "sku",
+        "record": "chair",
+        "property": "label",
+        "scope": "This item"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/App.tsx",
+        "host": "6baa7b93be2f5f2812f47161",
+        "scope": "Every cards item"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"chair\", label: \"Selected once 🌱\" },\n  { sku: \"lamp\", label: \"Desk lamp\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Ordinary literal heading</h1>\n      <Hero title=\"First instance\" />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "basic",
+    "scenario": "collection",
+    "label": "after second record edit",
+    "selection": {
+      "node": "6baa7b93be2f5f2812f47161",
+      "usages": [],
+      "record": "chair"
+    },
+    "owners": {
+      "text": {
+        "kind": "collection",
+        "file": "src/App.tsx",
+        "list": "cards",
+        "key": "sku",
+        "record": "chair",
+        "property": "label",
+        "scope": "This item"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/App.tsx",
+        "host": "6baa7b93be2f5f2812f47161",
+        "scope": "Every cards item"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"chair\", label: \"Same key after reorder\" },\n  { sku: \"lamp\", label: \"Desk lamp\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Ordinary literal heading</h1>\n      <Hero title=\"First instance\" />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "basic",
+    "scenario": "style-only",
+    "label": "one browser click",
+    "selection": {
+      "node": "e83b42d80d96a0d98cc68811",
+      "usages": [],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "literal",
+        "file": "src/App.tsx",
+        "host": "e83b42d80d96a0d98cc68811",
+        "scope": "This element"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/App.tsx",
+        "host": "e83b42d80d96a0d98cc68811",
+        "scope": "This element"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"lamp\", label: \"Desk lamp\" },\n  { sku: \"chair\", label: \"Reading chair\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Ordinary literal heading</h1>\n      <Hero title=\"First instance\" />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "basic",
+    "scenario": "style-only",
+    "label": "after first edit, exact original token",
+    "selection": {
+      "node": "e83b42d80d96a0d98cc68811",
+      "usages": [],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: source element is missing or structurally ambiguous"
+      },
+      "classes": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: source element is missing or structurally ambiguous"
+      }
+    },
+    "sources": {
+      "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"lamp\", label: \"Desk lamp\" },\n  { sku: \"chair\", label: \"Reading chair\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-5xl font-bold\">Ordinary literal heading</h1>\n      <Hero title=\"First instance\" />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "literal",
+    "label": "one browser click",
+    "selection": {
+      "node": "7f63a88a69aea835f5d85d1f",
+      "usages": [],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "literal",
+        "file": "src/Landing.tsx",
+        "host": "7f63a88a69aea835f5d85d1f",
+        "scope": "This element"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/Landing.tsx",
+        "host": "7f63a88a69aea835f5d85d1f",
+        "scope": "This element"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 87, name: \"Oak stool\" },\n  { code: 42, name: \"Wool rug\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Another authored heading</h1>\n      <Notice caption=\"Alpha instance\" />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "literal",
+    "label": "after first edit, exact original token",
+    "selection": {
+      "node": "7f63a88a69aea835f5d85d1f",
+      "usages": [],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: source element is missing or structurally ambiguous"
+      },
+      "classes": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: source element is missing or structurally ambiguous"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 87, name: \"Oak stool\" },\n  { code: 42, name: \"Wool rug\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">{\"Selected once 🌱\"}</h1>\n      <Notice caption=\"Alpha instance\" />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "instance",
+    "label": "one browser click",
+    "selection": {
+      "node": "ec8b46497e56cb3846b6f8ec",
+      "usages": [
+        "15c0329a390fd030050aaba6"
+      ],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "prop",
+        "file": "src/Landing.tsx",
+        "site": "15c0329a390fd030050aaba6",
+        "property": "caption",
+        "scope": "This instance"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/Landing.tsx",
+        "host": "ec8b46497e56cb3846b6f8ec",
+        "scope": "Every Notice instance"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 87, name: \"Oak stool\" },\n  { code: 42, name: \"Wool rug\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Another authored heading</h1>\n      <Notice caption=\"Alpha instance\" />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "instance",
+    "label": "after first edit, exact original token",
+    "selection": {
+      "node": "ec8b46497e56cb3846b6f8ec",
+      "usages": [
+        "15c0329a390fd030050aaba6"
+      ],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: component usage is missing or structurally ambiguous"
+      },
+      "classes": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: component usage is missing or structurally ambiguous"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 87, name: \"Oak stool\" },\n  { code: 42, name: \"Wool rug\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Another authored heading</h1>\n      <Notice caption={\"Selected once 🌱\"} />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "collection",
+    "label": "one browser click",
+    "selection": {
+      "node": "c170739e4a025ea7a6d8ad04",
+      "usages": [],
+      "record": 42
+    },
+    "owners": {
+      "text": {
+        "kind": "collection",
+        "file": "src/Landing.tsx",
+        "list": "inventory",
+        "key": "code",
+        "record": 42,
+        "property": "name",
+        "scope": "This item"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/Landing.tsx",
+        "host": "c170739e4a025ea7a6d8ad04",
+        "scope": "Every inventory item"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 87, name: \"Oak stool\" },\n  { code: 42, name: \"Wool rug\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Another authored heading</h1>\n      <Notice caption=\"Alpha instance\" />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "collection",
+    "label": "after first edit, exact original token",
+    "selection": {
+      "node": "c170739e4a025ea7a6d8ad04",
+      "usages": [],
+      "record": 42
+    },
+    "owners": {
+      "text": {
+        "kind": "collection",
+        "file": "src/Landing.tsx",
+        "list": "inventory",
+        "key": "code",
+        "record": 42,
+        "property": "name",
+        "scope": "This item"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/Landing.tsx",
+        "host": "c170739e4a025ea7a6d8ad04",
+        "scope": "Every inventory item"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 87, name: \"Oak stool\" },\n  { code: 42, name: \"Selected once 🌱\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Another authored heading</h1>\n      <Notice caption=\"Alpha instance\" />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "collection",
+    "label": "after data reorder",
+    "selection": {
+      "node": "c170739e4a025ea7a6d8ad04",
+      "usages": [],
+      "record": 42
+    },
+    "owners": {
+      "text": {
+        "kind": "collection",
+        "file": "src/Landing.tsx",
+        "list": "inventory",
+        "key": "code",
+        "record": 42,
+        "property": "name",
+        "scope": "This item"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/Landing.tsx",
+        "host": "c170739e4a025ea7a6d8ad04",
+        "scope": "Every inventory item"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 42, name: \"Selected once 🌱\" },\n  { code: 87, name: \"Oak stool\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Another authored heading</h1>\n      <Notice caption=\"Alpha instance\" />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "collection",
+    "label": "after second record edit",
+    "selection": {
+      "node": "c170739e4a025ea7a6d8ad04",
+      "usages": [],
+      "record": 42
+    },
+    "owners": {
+      "text": {
+        "kind": "collection",
+        "file": "src/Landing.tsx",
+        "list": "inventory",
+        "key": "code",
+        "record": 42,
+        "property": "name",
+        "scope": "This item"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/Landing.tsx",
+        "host": "c170739e4a025ea7a6d8ad04",
+        "scope": "Every inventory item"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 42, name: \"Same key after reorder\" },\n  { code: 87, name: \"Oak stool\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Another authored heading</h1>\n      <Notice caption=\"Alpha instance\" />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "style-only",
+    "label": "one browser click",
+    "selection": {
+      "node": "7f63a88a69aea835f5d85d1f",
+      "usages": [],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "literal",
+        "file": "src/Landing.tsx",
+        "host": "7f63a88a69aea835f5d85d1f",
+        "scope": "This element"
+      },
+      "classes": {
+        "kind": "classes",
+        "file": "src/Landing.tsx",
+        "host": "7f63a88a69aea835f5d85d1f",
+        "scope": "This element"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 87, name: \"Oak stool\" },\n  { code: 42, name: \"Wool rug\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Another authored heading</h1>\n      <Notice caption=\"Alpha instance\" />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  },
+  {
+    "variant": "variation",
+    "scenario": "style-only",
+    "label": "after first edit, exact original token",
+    "selection": {
+      "node": "7f63a88a69aea835f5d85d1f",
+      "usages": [],
+      "record": null
+    },
+    "owners": {
+      "text": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: source element is missing or structurally ambiguous"
+      },
+      "classes": {
+        "kind": "unsupported",
+        "scope": "Edit source",
+        "reason": "Selection invalidated: source element is missing or structurally ambiguous"
+      }
+    },
+    "sources": {
+      "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className=\"text-4xl font-bold hover:underline md:tracking-wide\">{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 87, name: \"Oak stool\" },\n  { code: 42, name: \"Wool rug\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className=\"text-5xl font-bold\">Another authored heading</h1>\n      <Notice caption=\"Alpha instance\" />\n      <Notice caption=\"Beta instance\" />\n      <Spotlight message=\"Aliased sibling module\" />\n      <Spotlight message=\"Another cross-file instance\" />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className=\"text-xl font-bold\">{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+      "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+    }
+  }
+]

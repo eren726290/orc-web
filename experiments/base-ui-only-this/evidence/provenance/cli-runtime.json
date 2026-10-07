@@ -1,0 +1,9 @@
+{
+  "shadcn": "4.19.0",
+  "engines": {
+    "node": ">=20.18.1"
+  },
+  "cli": "/home/eren/.nvm/versions/node/v24.19.0/lib/node_modules/shadcn/dist/index.js",
+  "node": "24.19.0",
+  "scope": "global Node 24 installation; not installed as a proof dependency"
+}

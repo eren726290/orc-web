@@ -1,0 +1,95 @@
+{
+  "inheritedCommit": "2663a28aff8325e67e15a399ca321a365e1d9e18",
+  "environment": {
+    "os": "NAME=\"Fedora Linux\"\nVERSION=\"44 (KDE Plasma Desktop Edition)\"\nRELEASE_TYPE=stable\nID=fedora\nVERSION_ID=44\nVERSION_CODENAME=\"\"\nPRETTY_NAME=\"Fedora Linux 44 (KDE Plasma Desktop Edition)\"\nANSI_COLOR=\"0;38;2;60;110;180\"\nLOGO=fedora-logo-icon\nCPE_NAME=\"cpe:/o:fedoraproject:fedora:44\"\nDEFAULT_HOSTNAME=\"fedora\"\nHOME_URL=\"https://fedoraproject.org/\"\nDOCUMENTATION_URL=\"https://docs.fedoraproject.org/en-US/fedora/f44/\"\nSUPPORT_URL=\"https://ask.fedoraproject.org/\"\nBUG_REPORT_URL=\"https://bugzilla.redhat.com/\"\nREDHAT_BUGZILLA_PRODUCT=\"Fedora\"\nREDHAT_BUGZILLA_PRODUCT_VERSION=44\nREDHAT_SUPPORT_PRODUCT=\"Fedora\"\nREDHAT_SUPPORT_PRODUCT_VERSION=44\nSUPPORT_END=2027-05-19\nVARIANT=\"KDE Plasma Desktop Edition\"\nVARIANT_ID=kde\n",
+    "architecture": "x64",
+    "session": "wayland",
+    "desktop": "KDE",
+    "bun": "1.4.2",
+    "chrome": "154.0.8037.57",
+    "node": "v22.23.2",
+    "npm": "10.9.8",
+    "dependencies": {
+      "@babel/parser": "7.29.9",
+      "ast-types": "0.16.3",
+      "recast": "0.24.0",
+      "react": "19.3.0",
+      "react-dom": "19.3.0",
+      "tailwindcss": "4.3.3",
+      "playwright": "1.63.0"
+    }
+  },
+  "command": "bun continuity/proof.ts",
+  "results": [
+    {
+      "variant": "basic",
+      "scenario": "literal",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "scenario": "instance",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "scenario": "collection",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "scenario": "delete",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "scenario": "ambiguous",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "scenario": "collision",
+      "result": "PASS"
+    },
+    {
+      "variant": "basic",
+      "scenario": "rejected-candidate",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "scenario": "literal",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "scenario": "instance",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "scenario": "collection",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "scenario": "delete",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "scenario": "ambiguous",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "scenario": "collision",
+      "result": "PASS"
+    },
+    {
+      "variant": "variation",
+      "scenario": "rejected-candidate",
+      "result": "PASS"
+    }
+  ]
+}

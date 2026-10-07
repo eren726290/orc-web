@@ -1,0 +1,8 @@
+{
+  "name": "orc-base-ui-only-this-proof",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "proof": "bun proof.ts"
+  }
+}

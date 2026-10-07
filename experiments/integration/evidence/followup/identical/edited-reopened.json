@@ -1,0 +1,24 @@
+{
+  "sources": {
+    "src/App.tsx": "function Notice({ title }: { title: string }) {\n  return <h1 className=\"text-4xl font-bold\">{title}</h1>;\n}\nexport default function App() {\n  return <main><Notice title=\"Same heading\" /><Notice title={\"Second after edited reopen\"} /></main>;\n}\n"
+  },
+  "selection": {
+    "node": "command-517089900b0ba11313034fed",
+    "usages": [
+      "command-initial-979503fd22ca71ed157cc8a4"
+    ],
+    "record": null
+  },
+  "reason": null,
+  "bindings": {
+    "src/App.tsx": {
+      "digest": "82859462e63c7d9cd2baf3bcec4a02120fd4879e8e0cb7a86361746fe511cc07",
+      "ids": {
+        "[\"program\",0,\"body\",0,\"argument\"]": "command-517089900b0ba11313034fed",
+        "[\"program\",1,\"declaration\",\"body\",0,\"argument\",1]": "command-initial-979503fd22ca71ed157cc8a4"
+      }
+    }
+  },
+  "revealed": [],
+  "revision": 7
+}

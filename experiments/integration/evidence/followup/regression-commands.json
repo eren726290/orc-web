@@ -1,0 +1,795 @@
+[
+  {
+    "name": "mapping",
+    "command": [
+      "bun",
+      "/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/proof.ts"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping",
+    "exit": 0,
+    "results": [
+      {
+        "variant": "boundaries",
+        "name": "positive literal prop control",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "nested block shadows prop",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "nested callable shadows prop",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "spread usage can override literal prop",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "identical usages are structurally ambiguous",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "local array shadows module array",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "React keys collide after string coercion",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "mutated collection is not a static record owner",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "1: literal text and static Tailwind owners discovered; source and rendering edited",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "2: particular usage prop and shared component style discovered with correct scopes",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "Undo restores exact source, rebuilt mappings, and rendered typography",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "3: aliased module and imported-name resolution edit the correct usage and implementation files",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "4: React key discovers stable record identity; reorder never retargets by array position",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "5: calculated and external-shaped text reject atomically; safely mapped style stays usable",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "6a: formatting and unrelated insertion rebuild mappings without retargeting selections",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "Only this explicitly unsupported and rejected without fixture-specific cloning",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "Invalid source and crashing candidate preserve source, design, saved state, and history",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "Save/reopen regenerates working mappings from uninstrumented saved source",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "1: literal text and static Tailwind owners discovered; source and rendering edited",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "2: particular usage prop and shared component style discovered with correct scopes",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "Undo restores exact source, rebuilt mappings, and rendered typography",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "3: aliased module and imported-name resolution edit the correct usage and implementation files",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "4: React key discovers stable record identity; reorder never retargets by array position",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "5: calculated and external-shaped text reject atomically; safely mapped style stays usable",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "6a: formatting and unrelated insertion rebuild mappings without retargeting selections",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "Only this explicitly unsupported and rejected without fixture-specific cloning",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "Invalid source and crashing candidate preserve source, design, saved state, and history",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "Save/reopen regenerates working mappings from uninstrumented saved source",
+        "result": "PASS"
+      }
+    ],
+    "result": null
+  },
+  {
+    "name": "continuity",
+    "command": [
+      "bun",
+      "/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/continuity/proof.ts"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping",
+    "exit": 0,
+    "results": [
+      {
+        "variant": "basic",
+        "scenario": "literal",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "instance",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "collection",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "delete",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "ambiguous",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "collision",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "rejected-candidate",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "literal",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "instance",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "collection",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "delete",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "ambiguous",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "collision",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "rejected-candidate",
+        "result": "PASS"
+      }
+    ],
+    "result": null
+  },
+  {
+    "name": "base-ui",
+    "command": [
+      "bun",
+      "/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/proof.ts"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this",
+    "exit": 0,
+    "results": [
+      {
+        "name": "Raw and instrumented Base UI dialogs have identical styling, open/close/Escape and focus return",
+        "result": "PASS",
+        "evidence": {
+          "rawViews": [
+            {
+              "name": "Open personal",
+              "closing": "Escape",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open personal",
+              "closing": "Done",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open personal",
+              "closing": "Close",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Escape",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Done",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Close",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            }
+          ],
+          "mappedViews": [
+            {
+              "name": "Open personal",
+              "closing": "Escape",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open personal",
+              "closing": "Done",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open personal",
+              "closing": "Close",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Escape",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Done",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Close",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Click discovers a literal instance prop; text edit changes only that usage",
+        "result": "PASS",
+        "evidence": {
+          "owner": {
+            "kind": "prop",
+            "file": "src/App.tsx",
+            "site": "5faed812eed1561c16f9b84c",
+            "property": "title",
+            "scope": "This instance"
+          },
+          "view": [
+            {
+              "title": "Personal \"ORC\" & <teams> {together} \ud83c\udf31",
+              "headingSize": "20px",
+              "note": "Local account guidance \ud83c\udf31",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            },
+            {
+              "title": "Team account",
+              "headingSize": "20px",
+              "note": "Local account guidance \ud83c\udf31",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Shared implementation typography edits both instances and reports shared scope",
+        "result": "PASS",
+        "evidence": {
+          "owner": {
+            "kind": "classes",
+            "file": "src/AccountDialog.tsx",
+            "host": "847305176ff76ffcc2dccc7a",
+            "scope": "Every AccountDialog instance"
+          },
+          "view": [
+            {
+              "title": "Personal \"ORC\" & <teams> {together} \ud83c\udf31",
+              "headingSize": "24px",
+              "note": "Local account guidance \ud83c\udf31",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            },
+            {
+              "title": "Team account",
+              "headingSize": "24px",
+              "note": "Local account guidance \ud83c\udf31",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Package internals and computed local shadcn classes refuse instead of guessing",
+        "result": "PASS",
+        "evidence": {
+          "owner": {
+            "kind": "unsupported",
+            "scope": "Edit source",
+            "reason": "Spread attributes may override the authored value"
+          },
+          "boundary": "Local literal child values are mapped; package internals and cn/spread values are not"
+        }
+      },
+      {
+        "name": "Only this discovers and copies outer plus cross-file style owner, preserves props/imports and avoids collisions",
+        "result": "PASS",
+        "evidence": {
+          "owner": {
+            "kind": "classes",
+            "file": "src/Detail.tsx",
+            "host": "0ed8a7fd990a988169e779a4",
+            "scope": "Every Detail instance"
+          },
+          "selection": {
+            "node": "0ed8a7fd990a988169e779a4",
+            "usages": [
+              "5faed812eed1561c16f9b84c",
+              "f640235a82f4339d99fb997b",
+              "36d7244a01bdeace9b9bcfac"
+            ],
+            "record": null
+          },
+          "boundary": [
+            {
+              "from": "src/AccountDialog.tsx::AccountDialog",
+              "to": "src/AccountDialog.tsx::AccountDialogIndependent2"
+            },
+            {
+              "from": "src/Detail.tsx::Detail",
+              "to": "src/Detail.tsx::DetailIndependent2"
+            }
+          ],
+          "view": [
+            {
+              "title": "Personal account",
+              "headingSize": "20px",
+              "note": "Local account guidance \ud83c\udf31",
+              "noteSize": "14px",
+              "noteWeight": "500"
+            },
+            {
+              "title": "Team account",
+              "headingSize": "20px",
+              "note": "Local account guidance \ud83c\udf31",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            }
+          ],
+          "shared": [
+            "Original definitions",
+            "CLI dialog/button source",
+            "CSS tokens",
+            "Base UI and utility packages"
+          ]
+        }
+      },
+      {
+        "name": "Copy plus edit is one Undo step; Undo and Redo restore references, source, selection and appearance",
+        "result": "PASS"
+      },
+      {
+        "name": "Save/reopen rebuilds independent and shared instances; normal dialog interaction still works",
+        "result": "PASS"
+      },
+      {
+        "name": "Parse, build and synchronous render failures reject candidates without partial source/save/history changes",
+        "result": "PASS"
+      },
+      {
+        "name": "Captured module binding refuses Only this before commit and preserves source/render/save/history",
+        "result": "PASS",
+        "evidence": {
+          "reason": "Error: Only this unavailable: UnsafeDetail captures module binding suffix; arbitrary closures are unsupported\nError: Only this unavailable: UnsafeDetail captures module binding suffix; arbitrary closures are unsupported\n    at visitJSXExpressionContainer (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/only-this.ts:117:21)\n    at invokeVisitorMethod (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:283:51)\n    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:158:32)\n    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)\n    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:179:18)\n    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)\n    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:105:29)\n    at rejectCapturedModuleBindings (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/only-this.ts:109:16)\n    at onlyThis (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/only-this.ts:226:5)\n    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/proof.ts:502:11)\n    at async check (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/proof.ts:37:28)"
+        }
+      }
+    ],
+    "result": null
+  },
+  {
+    "name": "integration",
+    "command": [
+      "bun",
+      "/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0,
+    "results": [
+      {
+        "name": "Revealed dialog stays visible through supported edits without candidate trigger clicks",
+        "result": "PASS",
+        "evidence": {
+          "view": [
+            {
+              "text": "Visible while editing \ud83c\udf31",
+              "size": "24px",
+              "weight": "500",
+              "classes": "text-2xl font-medium"
+            }
+          ],
+          "retained": "Show content target and selected source owner",
+          "reset": "Uncontrolled component state remounts",
+          "sourceDefault": "unchanged"
+        }
+      },
+      {
+        "name": "basic command-created identical usages retain the selected instance",
+        "result": "PASS",
+        "evidence": {
+          "view": [
+            {
+              "text": "Ordinary literal heading",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold"
+            },
+            {
+              "text": "Same selected copy after collision \ud83c\udf31",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold hover:underline md:tracking-wide"
+            },
+            {
+              "text": "Second instance",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold hover:underline md:tracking-wide"
+            },
+            {
+              "text": "Across the file boundary",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold"
+            },
+            {
+              "text": "Another cross-file instance",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold"
+            },
+            {
+              "text": "Desk lamp",
+              "size": "20px",
+              "weight": "700",
+              "classes": "text-xl font-bold"
+            },
+            {
+              "text": "Reading chair",
+              "size": "20px",
+              "weight": "700",
+              "classes": "text-xl font-bold"
+            },
+            {
+              "text": "Price: 21",
+              "size": "20px",
+              "weight": "700",
+              "classes": "text-xl"
+            },
+            {
+              "text": "From external-shaped input",
+              "size": "20px",
+              "weight": "700",
+              "classes": "text-xl"
+            }
+          ],
+          "externalReplacement": "invalidated safely"
+        }
+      },
+      {
+        "name": "variation command-created identical usages retain the selected instance",
+        "result": "PASS",
+        "evidence": {
+          "view": [
+            {
+              "text": "Another authored heading",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold"
+            },
+            {
+              "text": "Alpha instance",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold hover:underline md:tracking-wide"
+            },
+            {
+              "text": "Same selected copy after collision \ud83c\udf31",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold hover:underline md:tracking-wide"
+            },
+            {
+              "text": "Aliased sibling module",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold"
+            },
+            {
+              "text": "Another cross-file instance",
+              "size": "36px",
+              "weight": "700",
+              "classes": "text-4xl font-bold"
+            },
+            {
+              "text": "Oak stool",
+              "size": "20px",
+              "weight": "700",
+              "classes": "text-xl font-bold"
+            },
+            {
+              "text": "Wool rug",
+              "size": "20px",
+              "weight": "700",
+              "classes": "text-xl font-bold"
+            },
+            {
+              "text": "Price: 21",
+              "size": "20px",
+              "weight": "700",
+              "classes": "text-xl"
+            },
+            {
+              "text": "From external-shaped input",
+              "size": "20px",
+              "weight": "700",
+              "classes": "text-xl"
+            }
+          ],
+          "externalReplacement": "invalidated safely"
+        }
+      },
+      {
+        "name": "Only this then successive edit, Undo/Redo and reopen preserve selected independent relationship",
+        "result": "PASS",
+        "evidence": {
+          "boundary": [
+            {
+              "from": "src/AccountDialog.tsx::AccountDialog",
+              "to": "src/AccountDialog.tsx::AccountDialogIndependent"
+            },
+            {
+              "from": "src/Detail.tsx::Detail",
+              "to": "src/Detail.tsx::DetailIndependent"
+            }
+          ],
+          "selected": {
+            "node": "ba0b598a2301ac76b63fbfca",
+            "usages": [
+              "c3ac96003f06097bec97b9f8",
+              "f640235a82f4339d99fb997b",
+              "2ab02bf5199a53f960e09b61"
+            ],
+            "record": null
+          },
+          "state": {
+            "label": "after successive independent edit",
+            "revision": 2,
+            "selection": {
+              "node": "ba0b598a2301ac76b63fbfca",
+              "usages": [
+                "c3ac96003f06097bec97b9f8",
+                "f640235a82f4339d99fb997b",
+                "2ab02bf5199a53f960e09b61"
+              ],
+              "record": null
+            },
+            "reason": null,
+            "owners": {
+              "text": {
+                "kind": "literal",
+                "file": "src/Detail.tsx",
+                "host": "ba0b598a2301ac76b63fbfca",
+                "scope": "Every DetailIndependent instance"
+              },
+              "classes": {
+                "kind": "classes",
+                "file": "src/Detail.tsx",
+                "host": "ba0b598a2301ac76b63fbfca",
+                "scope": "Every DetailIndependent instance"
+              }
+            },
+            "view": [
+              {
+                "text": "Independent guidance after copying \ud83c\udf31",
+                "size": "14px",
+                "weight": "500",
+                "classes": "text-sm font-medium text-muted-foreground"
+              }
+            ],
+            "sources": {
+              "src/AccountDialog.tsx": "import { Button } from \"@/components/ui/button\";\nimport {\n  Dialog,\n  DialogTrigger,\n  DialogContent,\n  DialogHeader,\n  DialogTitle,\n  DialogDescription,\n  DialogFooter,\n  DialogClose,\n} from \"@/components/ui/dialog\";\nimport { Detail as Note, DetailIndependent } from \"@/Detail\";\n\nexport function AccountDialog({ title, trigger }: { title: string; trigger: string }) {\n  return (\n    <Dialog>\n      <DialogTrigger render={<Button variant=\"outline\" />}>{trigger}</DialogTrigger>\n      <DialogContent>\n        <DialogHeader>\n          <DialogTitle>\n            <span className=\"text-xl font-bold\">{title}</span>\n          </DialogTitle>\n          <DialogDescription>Review your account before continuing.</DialogDescription>\n        </DialogHeader>\n        <Note />\n        <DialogFooter>\n          <DialogClose render={<Button variant=\"outline\" />}>Done</DialogClose>\n        </DialogFooter>\n      </DialogContent>\n    </Dialog>\n  );\n}\n\nexport function AccountDialogIndependent({ title, trigger }: { title: string; trigger: string }) {\n  return (\n    <Dialog>\n      <DialogTrigger render={<Button variant=\"outline\" />}>{trigger}</DialogTrigger>\n      <DialogContent>\n        <DialogHeader>\n          <DialogTitle>\n            <span className=\"text-xl font-bold\">{title}</span>\n          </DialogTitle>\n          <DialogDescription>Review your account before continuing.</DialogDescription>\n        </DialogHeader>\n        <DetailIndependent />\n        <DialogFooter>\n          <DialogClose render={<Button variant=\"outline\" />}>Done</DialogClose>\n        </DialogFooter>\n      </DialogContent>\n    </Dialog>\n  );\n}\n",
+              "src/App.tsx": "import { AccountDialog as Panel, AccountDialogIndependent } from \"@/AccountDialog\";\nimport { UnsafeAccountDialog } from \"@/UnsafeAccountDialog\";\n\n// Unrelated source and instance props must survive the copy: caf\u00e9 \ud83c\udf31.\nexport default function App() {\n  return (\n    <main className=\"flex min-h-screen flex-col items-center justify-center gap-6 p-8\">\n      <h1 className=\"text-2xl font-semibold\">Real Base UI dialog experiment</h1>\n      <div className=\"flex gap-4\">\n        <AccountDialogIndependent title=\"Personal account\" trigger=\"Open personal\" />\n        <Panel title=\"Team account\" trigger=\"Open team\" />\n        <UnsafeAccountDialog />\n      </div>\n    </main>\n  );\n}\n",
+              "src/Detail.tsx": "// The shared nested style lives in a different local module.\nexport function Detail() {\n  return <p className=\"text-sm font-bold text-muted-foreground\">Local account guidance \ud83c\udf31</p>;\n}\n\nexport function DetailIndependent() {\n  return <p className=\"text-sm font-medium text-muted-foreground\">{\"Independent guidance after copying \ud83c\udf31\"}</p>;\n}\n",
+              "src/UnsafeAccountDialog.tsx": "import { Button } from \"@/components/ui/button\";\nimport {\n  Dialog,\n  DialogTrigger,\n  DialogContent,\n  DialogHeader,\n  DialogTitle,\n  DialogDescription,\n  DialogFooter,\n  DialogClose,\n} from \"@/components/ui/dialog\";\nimport { UnsafeDetail } from \"@/UnsafeDetail\";\n\nexport function UnsafeAccountDialog() {\n  return (\n    <Dialog>\n      <DialogTrigger render={<Button variant=\"outline\" />}>Open unsupported</DialogTrigger>\n      <DialogContent>\n        <DialogHeader>\n          <DialogTitle>Unsupported copy control</DialogTitle>\n          <DialogDescription>This path captures a module binding.</DialogDescription>\n        </DialogHeader>\n        <UnsafeDetail />\n        <DialogFooter>\n          <DialogClose render={<Button variant=\"outline\" />}>Done</DialogClose>\n        </DialogFooter>\n      </DialogContent>\n    </Dialog>\n  );\n}\n",
+              "src/UnsafeDetail.tsx": "const suffix = \" from module state\";\n\nexport function UnsafeDetail() {\n  return <p className=\"text-sm font-bold\">Cannot copy this safely{suffix}</p>;\n}\n",
+              "src/components/ui/button.tsx": "import { Button as ButtonPrimitive } from \"@base-ui/react/button\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"cn\"\n\nconst buttonVariants = cva(\n  \"group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/80\",\n        outline:\n          \"border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground\",\n        ghost:\n          \"hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50\",\n        destructive:\n          \"bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default:\n          \"h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2\",\n        xs: \"h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5\",\n        lg: \"h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2\",\n        icon: \"size-8\",\n        \"icon-xs\":\n          \"size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\":\n          \"size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg\",\n        \"icon-lg\": \"size-9\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  ...props\n}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {\n  return (\n    <ButtonPrimitive\n      data-slot=\"button\"\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+              "src/components/ui/dialog.tsx": "import * as React from \"react\"\nimport { Dialog as DialogPrimitive } from \"@base-ui/react/dialog\"\nimport { cn } from \"cn\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { XIcon } from \"lucide-react\"\n\nfunction Dialog({ ...props }: DialogPrimitive.Root.Props) {\n  return <DialogPrimitive.Root data-slot=\"dialog\" {...props} />\n}\n\nfunction DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {\n  return <DialogPrimitive.Trigger data-slot=\"dialog-trigger\" {...props} />\n}\n\nfunction DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {\n  return <DialogPrimitive.Portal data-slot=\"dialog-portal\" {...props} />\n}\n\nfunction DialogClose({ ...props }: DialogPrimitive.Close.Props) {\n  return <DialogPrimitive.Close data-slot=\"dialog-close\" {...props} />\n}\n\nfunction DialogOverlay({\n  className,\n  ...props\n}: DialogPrimitive.Backdrop.Props) {\n  return (\n    <DialogPrimitive.Backdrop\n      data-slot=\"dialog-overlay\"\n      className={cn(\n        \"fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DialogContent({\n  className,\n  children,\n  showCloseButton = true,\n  ...props\n}: DialogPrimitive.Popup.Props & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <DialogPortal>\n      <DialogOverlay />\n      <DialogPrimitive.Popup\n        data-slot=\"dialog-content\"\n        className={cn(\n          \"fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        {showCloseButton && (\n          <DialogPrimitive.Close\n            data-slot=\"dialog-close\"\n            render={\n              <Button\n                variant=\"ghost\"\n                className=\"absolute top-2 right-2\"\n                size=\"icon-sm\"\n              />\n            }\n          >\n            <XIcon\n            />\n            <span className=\"sr-only\">Close</span>\n          </DialogPrimitive.Close>\n        )}\n      </DialogPrimitive.Popup>\n    </DialogPortal>\n  )\n}\n\nfunction DialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"dialog-header\"\n      className={cn(\"flex flex-col gap-2\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogFooter({\n  className,\n  showCloseButton = false,\n  children,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <div\n      data-slot=\"dialog-footer\"\n      className={cn(\n        \"-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      {showCloseButton && (\n        <DialogPrimitive.Close render={<Button variant=\"outline\" />}>\n          Close\n        </DialogPrimitive.Close>\n      )}\n    </div>\n  )\n}\n\nfunction DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {\n  return (\n    <DialogPrimitive.Title\n      data-slot=\"dialog-title\"\n      className={cn(\n        \"text-base leading-none font-medium\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DialogDescription({\n  className,\n  ...props\n}: DialogPrimitive.Description.Props) {\n  return (\n    <DialogPrimitive.Description\n      data-slot=\"dialog-description\"\n      className={cn(\n        \"text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Dialog,\n  DialogClose,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogOverlay,\n  DialogPortal,\n  DialogTitle,\n  DialogTrigger,\n}\n"
+            },
+            "bindings": {},
+            "revealed": [
+              "c3ac96003f06097bec97b9f8"
+            ],
+            "history": 2,
+            "future": 0
+          }
+        }
+      }
+    ],
+    "result": null
+  },
+  {
+    "name": "identical",
+    "command": [
+      "bun",
+      "/home/eren/D/orc-web-fresh-20260930/experiments/integration/identical-instances.ts"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0,
+    "results": null,
+    "result": "PASS"
+  }
+]

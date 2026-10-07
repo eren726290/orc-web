@@ -1,0 +1,25 @@
+{
+  "sources": {
+    "src/Landing.tsx": "import { Feature as Spotlight } from \"@/panels/Feature\";\n\n// Different names, file paths, record keys, texts, and declaration order.\nfunction Notice({ caption }: { caption: string }) {\n  return <section><h2 className={\"text-4xl font-bold hover:underline md:tracking-wide\"}>{caption}</h2></section>;\n}\nfunction inputAdapter(input: { headline: string }) {\n  return input;\n}\nconst calculated = \"Price: \" + 21;\nconst remote = inputAdapter({ headline: \"From external-shaped input\" });\nconst inventory = [\n  { code: 87, name: \"Oak stool\" },\n  { code: 42, name: \"Wool rug\" },\n];\n\nexport default function Landing() {\n  return (\n    <main>\n      <h1 className={\"text-4xl font-bold\"}>Another authored heading</h1>\n      <Notice caption={\"Alpha instance\"} />\n      <Notice caption={\"Reopened selected copy\"} />\n      <Spotlight message={\"Aliased sibling module\"} />\n      <Spotlight message={\"Another cross-file instance\"} />\n      <div>\n        {inventory.map(entry => (\n          <article key={entry.code}><h3 className={\"text-xl font-bold\"}>{entry.name}</h3></article>\n        ))}\n      </div>\n      <h4 className={\"text-xl\"}>{calculated}</h4>\n      <h4 className={\"text-xl\"}>{remote.headline}</h4>\n    </main>\n  );\n}\n",
+    "src/panels/Feature.tsx": "export function Feature({ message }: { message: string }) {\n  return <aside><h2 className={\"text-4xl font-bold\"}>{message}</h2></aside>;\n}\n\n// Reordered export, unlike the first fixture.\nexport const untouched = \"Unrelated module value\";\n"
+  },
+  "selection": {
+    "node": "command-66d67933bd65eb472e41bf6d",
+    "usages": [
+      "command-40c651d191e67ef1fd5db3a1"
+    ],
+    "record": null
+  },
+  "reason": null,
+  "bindings": {
+    "src/Landing.tsx": {
+      "digest": "6b730d0ee63f30870caedc58fa96c4dc8e625c19c39e7846443d4e5752b7921e",
+      "ids": {
+        "[\"program\",1,\"body\",0,\"argument\",0]": "command-66d67933bd65eb472e41bf6d",
+        "[\"program\",6,\"declaration\",\"body\",0,\"argument\",5]": "command-40c651d191e67ef1fd5db3a1"
+      }
+    }
+  },
+  "revealed": [],
+  "revision": 7
+}

@@ -1,0 +1,72 @@
+FAIL Raw and instrumented Base UI dialogs have identical styling, open/close/Escape and focus return
+AssertionError: Instrumentation must preserve all visible text without printer artifacts
++ actual - expected
+
+  'Real Base UI dialog experiment\n' +
+    'Open personal\n' +
++   '()\n' +
+    'Open team\n' +
++   '()\n' +
+    'Open unsupported\n' +
++   '()\n' +
+    'Personal account\n' +
+    '\n' +
+    'Review your account before continuing.\n' +
+    '\n' +
+    'Local account guidance 🌱\n' +
+
+AssertionError [ERR_ASSERTION]: Instrumentation must preserve all visible text without printer artifacts
++ actual - expected
+
+  'Real Base UI dialog experiment\n' +
+    'Open personal\n' +
++   '()\n' +
+    'Open team\n' +
++   '()\n' +
+    'Open unsupported\n' +
++   '()\n' +
+    'Personal account\n' +
+    '\n' +
+    'Review your account before continuing.\n' +
+    '\n' +
+    'Local account guidance 🌱\n' +
+
+    at <anonymous> (/tmp/orc-web-pr4-active/experiments/base-ui-only-this/proof.ts:143:12)
+    at async check (/tmp/orc-web-pr4-active/experiments/base-ui-only-this/proof.ts:30:28)
+    at processTicksAndRejections (native:7:39)
+AssertionError: Instrumentation must preserve all visible text without printer artifacts
++ actual - expected
+
+  'Real Base UI dialog experiment\n' +
+    'Open personal\n' +
++   '()\n' +
+    'Open team\n' +
++   '()\n' +
+    'Open unsupported\n' +
++   '()\n' +
+    'Personal account\n' +
+    '\n' +
+    'Review your account before continuing.\n' +
+    '\n' +
+    'Local account guidance 🌱\n' +
+
+AssertionError [ERR_ASSERTION]: Instrumentation must preserve all visible text without printer artifacts
++ actual - expected
+
+  'Real Base UI dialog experiment\n' +
+    'Open personal\n' +
++   '()\n' +
+    'Open team\n' +
++   '()\n' +
+    'Open unsupported\n' +
++   '()\n' +
+    'Personal account\n' +
+    '\n' +
+    'Review your account before continuing.\n' +
+    '\n' +
+    'Local account guidance 🌱\n' +
+
+    at <anonymous> (/tmp/orc-web-pr4-active/experiments/base-ui-only-this/proof.ts:143:12)
+    at async check (/tmp/orc-web-pr4-active/experiments/base-ui-only-this/proof.ts:30:28)
+    at processTicksAndRejections (native:7:39)
+RUN /tmp/orc-web-pr4-active/experiments/base-ui-only-this/runs/chrome-2026-09-30T00-49-33-052Z

@@ -1,0 +1,57 @@
+FAIL Revealed dialog stays visible through supported edits without candidate trigger clicks
+ReferenceError: source is not defined
+ReferenceError: source is not defined
+    at visitJSXElement (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/resolver.ts:254:57)
+    at invokeVisitorMethod (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:283:51)
+    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:158:32)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:179:18)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)
+    at async test (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:23:62)
+FAIL basic command-created identical usages retain the selected instance
+ReferenceError: source is not defined
+ReferenceError: source is not defined
+    at visitJSXElement (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/resolver.ts:254:57)
+    at invokeVisitorMethod (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:283:51)
+    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:158:32)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:179:18)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:179:18)
+    at async test (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:23:62)
+FAIL variation command-created identical usages retain the selected instance
+ReferenceError: source is not defined
+ReferenceError: source is not defined
+    at visitJSXElement (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/resolver.ts:254:57)
+    at invokeVisitorMethod (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:283:51)
+    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:158:32)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:179:18)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:179:18)
+    at async test (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:23:62)
+FAIL Only this then successive edit, Undo/Redo and reopen preserve selected independent relationship
+ReferenceError: source is not defined
+ReferenceError: source is not defined
+    at visitJSXElement (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/resolver.ts:254:57)
+    at invokeVisitorMethod (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:283:51)
+    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:158:32)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:179:18)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)
+    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)
+    at async test (/home/eren/D/orc-web-fresh-20260930/experiments/integration/proof.ts:23:62)
+RUN /home/eren/D/orc-web-fresh-20260930/experiments/integration/runs/yellow-2026-09-30T02-12-59-696Z

@@ -1,0 +1,967 @@
+{
+  "cssDependencies": [
+    "/tmp/orc-web-pr5-reproduction-20260930/node_modules/tailwindcss/index.css",
+    "/tmp/orc-web-pr5-reproduction-20260930/node_modules/tw-animate-css/dist/tw-animate.css"
+  ],
+  "actualImports": [
+    {
+      "file": "experiments/automatic-source-mapping/boundaries.ts",
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "specifier": "tailwindcss",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/tailwindcss/dist/lib.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/continuity/support.ts",
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "specifier": "@babel/parser",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/runtime.tsx",
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "file": "experiments/automatic-source-mapping/runtime.tsx",
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/baseline.ts",
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/only-this.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/only-this.ts",
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/proof.ts",
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/proof.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/src/components/ui/button.tsx",
+      "specifier": "@base-ui/react/button",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@base-ui/react/button/index.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/src/components/ui/button.tsx",
+      "specifier": "class-variance-authority",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/class-variance-authority/dist/index.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/src/components/ui/button.tsx",
+      "specifier": "cn",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/cn/dist/index.cjs"
+    },
+    {
+      "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+      "specifier": "@base-ui/react/dialog",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@base-ui/react/dialog/index.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+      "specifier": "cn",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/cn/dist/index.cjs"
+    },
+    {
+      "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+      "specifier": "lucide-react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/lucide-react/dist/cjs/lucide-react.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/styles.ts",
+      "specifier": "@tailwindcss/node",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@tailwindcss/node/dist/index.js"
+    },
+    {
+      "file": "experiments/base-ui-only-this/styles.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/integration/proof.ts",
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "file": "experiments/integration/proof.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/integration/proof.ts",
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "file": "experiments/original-source-proof/fixture.tsx",
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "file": "experiments/original-source-proof/fixture.tsx",
+      "specifier": "motion/react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/motion/dist/cjs/react.js"
+    },
+    {
+      "file": "experiments/original-source-proof/proof.ts",
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "file": "experiments/original-source-proof/proof.ts",
+      "specifier": "@babel/parser",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js"
+    },
+    {
+      "file": "experiments/original-source-proof/proof.ts",
+      "specifier": "tailwindcss",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/tailwindcss/dist/lib.js"
+    },
+    {
+      "file": "experiments/original-source-proof/proof.ts",
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    }
+  ],
+  "compilers": [
+    {
+      "experiment": "original-source-proof",
+      "package": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/typescript/package.json",
+      "executable": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/typescript/bin/tsc"
+    },
+    {
+      "experiment": "automatic-source-mapping",
+      "package": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/typescript/package.json",
+      "executable": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/typescript/bin/tsc"
+    },
+    {
+      "experiment": "base-ui-only-this",
+      "package": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/typescript/package.json",
+      "executable": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/typescript/bin/tsc"
+    },
+    {
+      "experiment": "integration",
+      "package": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/typescript/package.json",
+      "executable": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/typescript/bin/tsc"
+    }
+  ],
+  "installed": [
+    {
+      "name": "@babel/parser",
+      "version": "7.29.9",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/package.json"
+    },
+    {
+      "name": "@base-ui/react",
+      "version": "1.8.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@base-ui/react/package.json"
+    },
+    {
+      "name": "@codemirror/lang-javascript",
+      "version": "6.2.5",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@codemirror/lang-javascript/package.json"
+    },
+    {
+      "name": "@tailwindcss/node",
+      "version": "4.3.3",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@tailwindcss/node/package.json"
+    },
+    {
+      "name": "ast-types",
+      "version": "0.16.3",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/package.json"
+    },
+    {
+      "name": "class-variance-authority",
+      "version": "0.7.1",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/class-variance-authority/package.json"
+    },
+    {
+      "name": "cn",
+      "version": "0.4.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/cn/package.json"
+    },
+    {
+      "name": "codemirror",
+      "version": "6.0.2",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/codemirror/package.json"
+    },
+    {
+      "name": "lucide-react",
+      "version": "1.48.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/lucide-react/package.json"
+    },
+    {
+      "name": "motion",
+      "version": "13.4.4",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/motion/package.json"
+    },
+    {
+      "name": "playwright",
+      "version": "1.63.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/package.json"
+    },
+    {
+      "name": "react",
+      "version": "19.3.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/package.json"
+    },
+    {
+      "name": "react-dom",
+      "version": "19.3.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/package.json"
+    },
+    {
+      "name": "recast",
+      "version": "0.24.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/package.json"
+    },
+    {
+      "name": "tw-animate-css",
+      "version": "1.4.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/tw-animate-css/package.json"
+    },
+    {
+      "name": "@playwright/test",
+      "version": "1.63.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@playwright/test/package.json"
+    },
+    {
+      "name": "@tailwindcss/vite",
+      "version": "4.3.3",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@tailwindcss/vite/package.json"
+    },
+    {
+      "name": "@types/bun",
+      "version": "1.4.2",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@types/bun/package.json"
+    },
+    {
+      "name": "@types/node",
+      "version": "26.6.3",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@types/node/package.json"
+    },
+    {
+      "name": "@types/react",
+      "version": "19.3.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@types/react/package.json"
+    },
+    {
+      "name": "@types/react-dom",
+      "version": "19.3.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@types/react-dom/package.json"
+    },
+    {
+      "name": "@vitejs/plugin-react",
+      "version": "6.1.1",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@vitejs/plugin-react/package.json"
+    },
+    {
+      "name": "oxfmt",
+      "version": "0.71.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/oxfmt/package.json"
+    },
+    {
+      "name": "oxlint",
+      "version": "1.86.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/oxlint/package.json"
+    },
+    {
+      "name": "tailwindcss",
+      "version": "4.3.3",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/tailwindcss/package.json"
+    },
+    {
+      "name": "typescript",
+      "version": "7.0.2",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/typescript/package.json"
+    },
+    {
+      "name": "vite",
+      "version": "8.3.1",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/vite/package.json"
+    },
+    {
+      "name": "framer-motion",
+      "version": "13.4.4",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/framer-motion/package.json"
+    },
+    {
+      "name": "motion-dom",
+      "version": "13.4.4",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/motion-dom/package.json"
+    },
+    {
+      "name": "motion-utils",
+      "version": "13.3.0",
+      "packagePath": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/motion-utils/package.json"
+    }
+  ],
+  "resolutions": [
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/boundaries.ts",
+      "line": 2,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "line": 6,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/boundaries.ts",
+      "line": 2,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+      "line": 6,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "line": 6,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/boundaries.ts",
+      "line": 2,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+      "line": 6,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "line": 6,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "line": 5,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/only-this.ts",
+      "line": 3,
+      "specifier": "ast-types",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/ast-types/lib/main.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "line": 5,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+      "line": 5,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "line": 5,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/continuity/logic-check.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+      "line": 5,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "line": 5,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "line": 4,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/only-this.ts",
+      "line": 2,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/proof.ts",
+      "line": 6,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/styles.ts",
+      "line": 5,
+      "specifier": "recast",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/recast/main.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 6,
+      "specifier": "tailwindcss",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/tailwindcss/dist/lib.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 6,
+      "specifier": "tailwindcss",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/tailwindcss/dist/lib.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 6,
+      "specifier": "tailwindcss",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/tailwindcss/dist/lib.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 7,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "line": 7,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 7,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+      "line": 6,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+      "line": 7,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/continuity/support.ts",
+      "line": 5,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "line": 7,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 7,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/continuity/baseline.ts",
+      "line": 6,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/continuity/proof.ts",
+      "line": 7,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/continuity/support.ts",
+      "line": 5,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/proof.ts",
+      "line": 7,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/baseline.ts",
+      "line": 4,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/proof.ts",
+      "line": 5,
+      "specifier": "playwright",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/playwright/index.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 64,
+      "specifier": "react-dom/client",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/client.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 64,
+      "specifier": "react-dom/client",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/client.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/browser.ts",
+      "line": 77,
+      "specifier": "react-dom/client",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/client.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "line": 3,
+      "specifier": "@babel/parser",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "line": 3,
+      "specifier": "@babel/parser",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/resolver.ts",
+      "line": 3,
+      "specifier": "@babel/parser",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/runtime.tsx",
+      "line": 1,
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "pr": 2,
+      "file": "experiments/automatic-source-mapping/runtime.tsx",
+      "line": 2,
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/runtime.tsx",
+      "line": 1,
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "pr": 3,
+      "file": "experiments/automatic-source-mapping/runtime.tsx",
+      "line": 2,
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/runtime.tsx",
+      "line": 1,
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/automatic-source-mapping/runtime.tsx",
+      "line": 2,
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+      "line": 1,
+      "specifier": "react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/src/components/ui/button.tsx",
+      "line": 1,
+      "specifier": "@base-ui/react/button",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@base-ui/react/button/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+      "line": 2,
+      "specifier": "@base-ui/react/dialog",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@base-ui/react/dialog/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/src/components/ui/button.tsx",
+      "line": 2,
+      "specifier": "class-variance-authority",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/class-variance-authority/dist/index.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/src/components/ui/button.tsx",
+      "line": 3,
+      "specifier": "cn",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/cn/dist/index.cjs"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+      "line": 3,
+      "specifier": "cn",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/cn/dist/index.cjs"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+      "line": 6,
+      "specifier": "lucide-react",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/lucide-react/dist/cjs/lucide-react.js"
+    },
+    {
+      "pr": 4,
+      "file": "experiments/base-ui-only-this/styles.ts",
+      "line": 4,
+      "specifier": "@tailwindcss/node",
+      "resolved": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/@tailwindcss/node/dist/index.js"
+    }
+  ],
+  "react": [
+    {
+      "from": "package.json",
+      "react": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js",
+      "jsxRuntime": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/jsx-runtime.js",
+      "reactDom": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/client.js"
+    },
+    {
+      "from": "experiments/automatic-source-mapping/runtime.tsx",
+      "react": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js",
+      "jsxRuntime": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/jsx-runtime.js",
+      "reactDom": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/client.js"
+    },
+    {
+      "from": "experiments/automatic-source-mapping/runs/check/generated/1/mount.tsx",
+      "react": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js",
+      "jsxRuntime": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/jsx-runtime.js",
+      "reactDom": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/client.js"
+    },
+    {
+      "from": "experiments/base-ui-only-this/src/components/ui/dialog.tsx",
+      "react": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js",
+      "jsxRuntime": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/jsx-runtime.js",
+      "reactDom": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/client.js"
+    },
+    {
+      "from": "experiments/base-ui-only-this/runs/check/generated/1/mount.tsx",
+      "react": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js",
+      "jsxRuntime": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/jsx-runtime.js",
+      "reactDom": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/client.js"
+    },
+    {
+      "from": "experiments/original-source-proof/artifacts/component-1.tsx",
+      "react": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/index.js",
+      "jsxRuntime": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react/jsx-runtime.js",
+      "reactDom": "/tmp/orc-web-pr5-reproduction-20260930/node_modules/react-dom/client.js"
+    }
+  ],
+  "scope": "Dependency declaration, exact versions and Node module resolution; no browser proof or source typecheck.",
+  "result": "PASS"
+}

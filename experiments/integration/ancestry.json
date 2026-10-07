@@ -1,0 +1,11 @@
+{
+  "startingCommit": "8b2158b3c84ad5fec59aa0e39ce5c8e3cda76cf1",
+  "defaultBranch": "master",
+  "prHeads": {
+    "1": "35f53965d746c7e1f6bcccf455505af95931df66",
+    "2": "2663a28aff8325e67e15a399ca321a365e1d9e18",
+    "3": "c230345902e8b33d4d772916ce010a72fe8704d6",
+    "4": "c1e0d54d215c75bf226e30510deab03b2dbb5521"
+  },
+  "integration": "PR4 inherits PR3 and PR2; merged PR4 once and PR1 separately; no previous installations copied"
+}

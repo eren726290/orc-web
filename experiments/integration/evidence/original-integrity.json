@@ -1,0 +1,5 @@
+{
+  "fixture": "byte-identical to preserved supplied original",
+  "runner": "one Chrome-channel launch adjustment only",
+  "runnerSha256": "dc4fb89ce5db2a4b64bb3b85e715503f11d5ba01549996a656081b78f0f74210"
+}

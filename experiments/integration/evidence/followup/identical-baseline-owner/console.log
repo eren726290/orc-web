@@ -1,0 +1,15 @@
+RUN /home/eren/D/orc-web-fresh-20260930/experiments/integration/runs/initial-identical-1790775807036
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ 'unsupported'
+- 'prop'
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'unsupported'
+- 'prop'
+
+    at check (/home/eren/D/orc-web-fresh-20260930/experiments/integration/identical-instances.ts:44:12)
+    at processTicksAndRejections (native:7:39)

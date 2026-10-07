@@ -1,0 +1,14 @@
+{
+  "name": "orc-react-source-proof",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@babel/parser": "7.29.9",
+    "recast": "0.24.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwindcss": "4.3.3",
+    "motion": "13.4.4",
+    "playwright": "1.63.0"
+  }
+}

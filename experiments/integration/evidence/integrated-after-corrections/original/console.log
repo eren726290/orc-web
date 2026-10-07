@@ -1,0 +1,19 @@
+PASS Parsing and printing without edits preserves the source exactly
+PASS Initial React TSX and Tailwind render two 36px headings in Chromium
+COMMIT 1: Edit selected Hero title
+PASS Click resolves the declared instance; text edit changes only A, with literal quotes, braces, HTML-like text and Unicode
+COMMIT 2: All copies: 36px to 48px
+PASS Shared typography changes both Heroes; rebuilt Tailwind CSS preserves hover and responsive classes
+COMMIT 3: Only this: independent Hero A with medium weight
+PASS Only this clones A in one command; shared Hero and B remain unchanged
+PASS One Undo removes the independent definition and restores A's shared reference and appearance
+COMMIT 5: Repeat independent A for final saved example
+COMMIT 6: Edit one local data entry
+PASS Repeated content edits the selected local product record only
+PASS One Undo restores the exact previous source and rendered product list
+COMMIT 8: Reapply product edit for saved example
+PASS Candidate render crash preserves applied source, visible design, history and saved file
+PASS Malformed JSX/TypeScript is rejected by the parser
+PASS Comment and Motion declaration survive; independent React button behavior still works
+PASS Reopening the saved source in a fresh browser context reproduces text, styling and data
+ALL 12 CHECKS PASSED

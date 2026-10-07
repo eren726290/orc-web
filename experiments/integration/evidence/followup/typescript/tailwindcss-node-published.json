@@ -1,0 +1,69 @@
+{
+  "id": "@tailwindcss/node@4.3.3",
+  "name": "@tailwindcss/node",
+  "version": "4.3.3",
+  "size": 41528,
+  "unpackedSize": 130939,
+  "shasum": "38ff04309ff036ea3589a7bad9069c44ec9d3883",
+  "integrity": "sha512-/T8IKEsf9VTU6tLjgC7+sv2mOPtQxzE2jMw7u4Tt40Tx+QSZxpzh95/H6cMKoja9XuW7iMdLJYBB0o9G1CaAgg==",
+  "filename": "tailwindcss-node-4.3.3.tgz",
+  "files": [
+    {
+      "path": "LICENSE",
+      "size": 1071,
+      "mode": 420
+    },
+    {
+      "path": "README.md",
+      "size": 1838,
+      "mode": 420
+    },
+    {
+      "path": "dist/esm-cache.loader.d.mts",
+      "size": 171,
+      "mode": 420
+    },
+    {
+      "path": "dist/esm-cache.loader.mjs",
+      "size": 409,
+      "mode": 420
+    },
+    {
+      "path": "dist/index.d.mts",
+      "size": 7387,
+      "mode": 420
+    },
+    {
+      "path": "dist/index.d.ts",
+      "size": 7387,
+      "mode": 420
+    },
+    {
+      "path": "dist/index.js",
+      "size": 55836,
+      "mode": 420
+    },
+    {
+      "path": "dist/index.mjs",
+      "size": 54924,
+      "mode": 420
+    },
+    {
+      "path": "dist/require-cache.d.ts",
+      "size": 90,
+      "mode": 420
+    },
+    {
+      "path": "dist/require-cache.js",
+      "size": 579,
+      "mode": 420
+    },
+    {
+      "path": "package.json",
+      "size": 1247,
+      "mode": 420
+    }
+  ],
+  "entryCount": 11,
+  "bundled": []
+}

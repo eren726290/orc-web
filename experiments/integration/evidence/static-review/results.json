@@ -1,0 +1,68 @@
+[
+  {
+    "command": [
+      "./node_modules/.bin/oxlint",
+      "dependency-setup/check.mjs",
+      "experiments/integration/run-existing.mjs",
+      "experiments/integration/verify-evidence.mjs",
+      "experiments/integration/proof.ts",
+      "experiments/automatic-source-mapping/browser.ts",
+      "experiments/automatic-source-mapping/resolver.ts",
+      "experiments/automatic-source-mapping/runtime.tsx",
+      "experiments/automatic-source-mapping/proof.ts",
+      "experiments/automatic-source-mapping/continuity/session.ts",
+      "experiments/automatic-source-mapping/continuity/support.ts",
+      "experiments/base-ui-only-this/proof.ts"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  },
+  {
+    "command": [
+      "./node_modules/.bin/oxfmt",
+      "--check",
+      "dependency-setup/check.mjs",
+      "experiments/integration/run-existing.mjs",
+      "experiments/integration/verify-evidence.mjs",
+      "experiments/integration/proof.ts",
+      "experiments/automatic-source-mapping/browser.ts",
+      "experiments/automatic-source-mapping/resolver.ts",
+      "experiments/automatic-source-mapping/runtime.tsx",
+      "experiments/automatic-source-mapping/proof.ts",
+      "experiments/automatic-source-mapping/continuity/session.ts",
+      "experiments/automatic-source-mapping/continuity/support.ts",
+      "experiments/base-ui-only-this/proof.ts"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "dd1acd7",
+      "--",
+      "package.json",
+      "bun.lock",
+      "experiments/automatic-source-mapping/resolver.ts",
+      "experiments/automatic-source-mapping/runtime.tsx",
+      "experiments/automatic-source-mapping/browser.ts",
+      "experiments/automatic-source-mapping/continuity/session.ts",
+      "experiments/integration/proof.ts",
+      "experiments/base-ui-only-this/only-this.ts",
+      "experiments/base-ui-only-this/src"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  }
+]

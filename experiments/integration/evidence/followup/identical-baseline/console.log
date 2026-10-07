@@ -1,0 +1,7 @@
+RUN /home/eren/D/orc-web-fresh-20260930/experiments/integration/runs/initial-identical-1790775895391
+Error: Selection invalidated before editing
+Error: Selection invalidated before editing
+    at editRetainingSelection (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/resolver.ts:553:55)
+    at change (/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/continuity/session.ts:276:20)
+    at /home/eren/D/orc-web-fresh-20260930/experiments/integration/identical-instances.ts:41:13
+    at processTicksAndRejections (native:7:39)

@@ -1,0 +1,45 @@
+{
+  "commands": [
+    {
+      "compiler": "ts6",
+      "version": "Version 6.0.3",
+      "command": [
+        "node",
+        "/tmp/orc-pr5-ts6-diagnosis-xplunb7k/typescript/package/bin/tsc",
+        "--noEmit",
+        "--incremental",
+        "false",
+        "--pretty",
+        "false",
+        "--skipLibCheck",
+        "false",
+        "-p",
+        "experiments/integration/tsconfig.json"
+      ],
+      "exit": 2,
+      "cwd": "/home/eren/D/orc-web-fresh-20260930"
+    },
+    {
+      "compiler": "ts7",
+      "version": "Version 7.0.2",
+      "command": [
+        "./node_modules/.bin/tsc",
+        "--noEmit",
+        "--incremental",
+        "false",
+        "--pretty",
+        "false",
+        "--skipLibCheck",
+        "false",
+        "-p",
+        "experiments/integration/tsconfig.json"
+      ],
+      "exit": 1,
+      "cwd": "/home/eren/D/orc-web-fresh-20260930"
+    }
+  ],
+  "equivalentExpandedSettings": true,
+  "dependencyDeclarationChecking": true,
+  "manifestSha256": "eaabefc6a22557a6ebcd0048ae01f443634fa89400bb614a717528ac7668b989",
+  "lockSha256": "c0b0b8b91245c5c0fbd236db7165904a03784ae2f149ae3ec7a70a0386c69295"
+}

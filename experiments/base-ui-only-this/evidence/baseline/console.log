@@ -1,0 +1,133 @@
+PASS Existing instrumentation preserves dialog open, Escape, and focus return
+FAIL Existing discovery finds an instance-owned literal title inside the real dialog
+TimeoutError: click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('heading', { name: 'Personal account', exact: true })[22m
+[2m    - locator resolved to <h2 id="base-ui-_r_8_" data-slot="dialog-title" class="text-base leading-none font-medium">…</h2>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    58 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('heading', { name: 'Personal account', exact: true })[22m
+[2m    - locator resolved to <h2 id="base-ui-_r_8_" data-slot="dialog-title" class="text-base leading-none font-medium">…</h2>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    58 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+    at clickSelection (/home/eren/D/orc-web-pr4/experiments/automatic-source-mapping/continuity/support.ts:38:64)
+    at <anonymous> (/home/eren/D/orc-web-pr4/experiments/base-ui-only-this/baseline.ts:36:29)
+    at check (/home/eren/D/orc-web-pr4/experiments/base-ui-only-this/baseline.ts:22:32)
+    at /home/eren/D/orc-web-pr4/experiments/base-ui-only-this/baseline.ts:35:9
+    at processTicksAndRejections (native:7:39)
+FAIL Existing discovery finds the nested cross-file shared style owner
+TimeoutError: click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByText('Local account guidance 🌱', { exact: true })[22m
+[2m    - locator resolved to <p data-orc-record="null" data-orc-node="0ed8a7fd990a988169e779a4" class="text-sm font-bold text-muted-foreground" data-orc-usage="["5faed812eed1561c16f9b84c","f640235a82f4339d99fb997b","36d7244a01bdeace9b9bcfac"]">Local account guidance 🌱</p>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    58 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByText('Local account guidance 🌱', { exact: true })[22m
+[2m    - locator resolved to <p data-orc-record="null" data-orc-node="0ed8a7fd990a988169e779a4" class="text-sm font-bold text-muted-foreground" data-orc-usage="["5faed812eed1561c16f9b84c","f640235a82f4339d99fb997b","36d7244a01bdeace9b9bcfac"]">Local account guidance 🌱</p>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    58 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div aria-hidden="true" role="presentation" data-base-ui-inert=""></div> intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+    at <anonymous> (/home/eren/D/orc-web-pr4/experiments/base-ui-only-this/baseline.ts:41:72)
+    at check (/home/eren/D/orc-web-pr4/experiments/base-ui-only-this/baseline.ts:22:32)
+    at /home/eren/D/orc-web-pr4/experiments/base-ui-only-this/baseline.ts:40:9
+    at processTicksAndRejections (native:7:39)
+FAIL Existing renderer supplies the actual dialog's Tailwind position and padding
+AssertionError: Expected values to be strictly equal:
+
+'static' !== 'fixed'
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+'static' !== 'fixed'
+
+    at <anonymous> (/home/eren/D/orc-web-pr4/experiments/base-ui-only-this/baseline.ts:49:12)
+    at async check (/home/eren/D/orc-web-pr4/experiments/base-ui-only-this/baseline.ts:22:32)
+    at processTicksAndRejections (native:7:39)
+BASELINE /home/eren/D/orc-web-pr4/experiments/base-ui-only-this/runs/baseline-2026-09-29T22-22-25-335Z

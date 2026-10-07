@@ -1,0 +1,5 @@
+PASS Revealed dialog stays visible through supported edits without candidate trigger clicks
+PASS basic command-created identical usages retain the selected instance
+PASS variation command-created identical usages retain the selected instance
+PASS Only this then successive edit, Undo/Redo and reopen preserve selected independent relationship
+RUN /home/eren/D/orc-web-fresh-20260930/experiments/integration/runs/yellow-2026-09-30T13-53-14-018Z

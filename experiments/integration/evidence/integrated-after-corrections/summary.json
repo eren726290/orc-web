@@ -1,0 +1,609 @@
+[
+  {
+    "name": "original",
+    "cwd": "/home/eren/D/orc-web-fresh-20260930/experiments/integration/runs/existing-2026-09-30T02-15-30-537Z/original",
+    "command": [
+      "bun",
+      "/home/eren/D/orc-web-fresh-20260930/experiments/original-source-proof/proof.ts"
+    ],
+    "exit": 0,
+    "results": [
+      {
+        "name": "Parsing and printing without edits preserves the source exactly",
+        "result": "PASS"
+      },
+      {
+        "name": "Initial React TSX and Tailwind render two 36px headings in Chromium",
+        "result": "PASS"
+      },
+      {
+        "name": "Click resolves the declared instance; text edit changes only A, with literal quotes, braces, HTML-like text and Unicode",
+        "result": "PASS"
+      },
+      {
+        "name": "Shared typography changes both Heroes; rebuilt Tailwind CSS preserves hover and responsive classes",
+        "result": "PASS"
+      },
+      {
+        "name": "Only this clones A in one command; shared Hero and B remain unchanged",
+        "result": "PASS"
+      },
+      {
+        "name": "One Undo removes the independent definition and restores A's shared reference and appearance",
+        "result": "PASS"
+      },
+      {
+        "name": "Repeated content edits the selected local product record only",
+        "result": "PASS"
+      },
+      {
+        "name": "One Undo restores the exact previous source and rendered product list",
+        "result": "PASS"
+      },
+      {
+        "name": "Candidate render crash preserves applied source, visible design, history and saved file",
+        "result": "PASS"
+      },
+      {
+        "name": "Malformed JSX/TypeScript is rejected by the parser",
+        "result": "PASS"
+      },
+      {
+        "name": "Comment and Motion declaration survive; independent React button behavior still works",
+        "result": "PASS"
+      },
+      {
+        "name": "Reopening the saved source in a fresh browser context reproduces text, styling and data",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "mapping",
+    "cwd": "/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping",
+    "command": [
+      "bun",
+      "/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/proof.ts"
+    ],
+    "exit": 0,
+    "results": [
+      {
+        "variant": "boundaries",
+        "name": "positive literal prop control",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "nested block shadows prop",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "nested callable shadows prop",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "spread usage can override literal prop",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "identical usages are structurally ambiguous",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "local array shadows module array",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "React keys collide after string coercion",
+        "result": "PASS"
+      },
+      {
+        "variant": "boundaries",
+        "name": "mutated collection is not a static record owner",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "1: literal text and static Tailwind owners discovered; source and rendering edited",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "2: particular usage prop and shared component style discovered with correct scopes",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "Undo restores exact source, rebuilt mappings, and rendered typography",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "3: aliased module and imported-name resolution edit the correct usage and implementation files",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "4: React key discovers stable record identity; reorder never retargets by array position",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "5: calculated and external-shaped text reject atomically; safely mapped style stays usable",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "6a: formatting and unrelated insertion rebuild mappings without retargeting selections",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "Only this explicitly unsupported and rejected without fixture-specific cloning",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "Invalid source and crashing candidate preserve source, design, saved state, and history",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "name": "Save/reopen regenerates working mappings from uninstrumented saved source",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "1: literal text and static Tailwind owners discovered; source and rendering edited",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "2: particular usage prop and shared component style discovered with correct scopes",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "Undo restores exact source, rebuilt mappings, and rendered typography",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "3: aliased module and imported-name resolution edit the correct usage and implementation files",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "4: React key discovers stable record identity; reorder never retargets by array position",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "5: calculated and external-shaped text reject atomically; safely mapped style stays usable",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "6a: formatting and unrelated insertion rebuild mappings without retargeting selections",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "6b: ambiguous structural replacement explicitly invalidates old selection; Undo restores mapping",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "Only this explicitly unsupported and rejected without fixture-specific cloning",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "Invalid source and crashing candidate preserve source, design, saved state, and history",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "name": "Save/reopen regenerates working mappings from uninstrumented saved source",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "continuity",
+    "cwd": "/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping",
+    "command": [
+      "bun",
+      "/home/eren/D/orc-web-fresh-20260930/experiments/automatic-source-mapping/continuity/proof.ts"
+    ],
+    "exit": 0,
+    "results": [
+      {
+        "variant": "basic",
+        "scenario": "literal",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "instance",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "collection",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "delete",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "ambiguous",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "collision",
+        "result": "PASS"
+      },
+      {
+        "variant": "basic",
+        "scenario": "rejected-candidate",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "literal",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "instance",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "collection",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "delete",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "ambiguous",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "collision",
+        "result": "PASS"
+      },
+      {
+        "variant": "variation",
+        "scenario": "rejected-candidate",
+        "result": "PASS"
+      }
+    ]
+  },
+  {
+    "name": "base-ui",
+    "cwd": "/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this",
+    "command": [
+      "bun",
+      "/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/proof.ts"
+    ],
+    "exit": 0,
+    "results": [
+      {
+        "name": "Raw and instrumented Base UI dialogs have identical styling, open/close/Escape and focus return",
+        "result": "PASS",
+        "evidence": {
+          "rawViews": [
+            {
+              "name": "Open personal",
+              "closing": "Escape",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open personal",
+              "closing": "Done",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open personal",
+              "closing": "Close",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Escape",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Done",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Close",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            }
+          ],
+          "mappedViews": [
+            {
+              "name": "Open personal",
+              "closing": "Escape",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open personal",
+              "closing": "Done",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open personal",
+              "closing": "Close",
+              "view": {
+                "title": "Personal account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Escape",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Done",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            },
+            {
+              "name": "Open team",
+              "closing": "Close",
+              "view": {
+                "title": "Team account",
+                "position": "fixed",
+                "padding": "16px",
+                "radius": "12px",
+                "width": "384px",
+                "background": "oklch(1 0 0)"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Click discovers a literal instance prop; text edit changes only that usage",
+        "result": "PASS",
+        "evidence": {
+          "owner": {
+            "kind": "prop",
+            "file": "src/App.tsx",
+            "site": "5faed812eed1561c16f9b84c",
+            "property": "title",
+            "scope": "This instance"
+          },
+          "view": [
+            {
+              "title": "Personal \"ORC\" & <teams> {together} 🌱",
+              "headingSize": "20px",
+              "note": "Local account guidance 🌱",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            },
+            {
+              "title": "Team account",
+              "headingSize": "20px",
+              "note": "Local account guidance 🌱",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Shared implementation typography edits both instances and reports shared scope",
+        "result": "PASS",
+        "evidence": {
+          "owner": {
+            "kind": "classes",
+            "file": "src/AccountDialog.tsx",
+            "host": "847305176ff76ffcc2dccc7a",
+            "scope": "Every AccountDialog instance"
+          },
+          "view": [
+            {
+              "title": "Personal \"ORC\" & <teams> {together} 🌱",
+              "headingSize": "24px",
+              "note": "Local account guidance 🌱",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            },
+            {
+              "title": "Team account",
+              "headingSize": "24px",
+              "note": "Local account guidance 🌱",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Package internals and computed local shadcn classes refuse instead of guessing",
+        "result": "PASS",
+        "evidence": {
+          "owner": {
+            "kind": "unsupported",
+            "scope": "Edit source",
+            "reason": "Spread attributes may override the authored value"
+          },
+          "boundary": "Local literal child values are mapped; package internals and cn/spread values are not"
+        }
+      },
+      {
+        "name": "Only this discovers and copies outer plus cross-file style owner, preserves props/imports and avoids collisions",
+        "result": "PASS",
+        "evidence": {
+          "owner": {
+            "kind": "classes",
+            "file": "src/Detail.tsx",
+            "host": "0ed8a7fd990a988169e779a4",
+            "scope": "Every Detail instance"
+          },
+          "selection": {
+            "node": "0ed8a7fd990a988169e779a4",
+            "usages": [
+              "5faed812eed1561c16f9b84c",
+              "f640235a82f4339d99fb997b",
+              "36d7244a01bdeace9b9bcfac"
+            ],
+            "record": null
+          },
+          "boundary": [
+            {
+              "from": "src/AccountDialog.tsx::AccountDialog",
+              "to": "src/AccountDialog.tsx::AccountDialogIndependent2"
+            },
+            {
+              "from": "src/Detail.tsx::Detail",
+              "to": "src/Detail.tsx::DetailIndependent2"
+            }
+          ],
+          "view": [
+            {
+              "title": "Personal account",
+              "headingSize": "20px",
+              "note": "Local account guidance 🌱",
+              "noteSize": "14px",
+              "noteWeight": "500"
+            },
+            {
+              "title": "Team account",
+              "headingSize": "20px",
+              "note": "Local account guidance 🌱",
+              "noteSize": "14px",
+              "noteWeight": "700"
+            }
+          ],
+          "shared": [
+            "Original definitions",
+            "CLI dialog/button source",
+            "CSS tokens",
+            "Base UI and utility packages"
+          ]
+        }
+      },
+      {
+        "name": "Copy plus edit is one Undo step; Undo and Redo restore references, source, selection and appearance",
+        "result": "PASS"
+      },
+      {
+        "name": "Save/reopen rebuilds independent and shared instances; normal dialog interaction still works",
+        "result": "PASS"
+      },
+      {
+        "name": "Parse, build and synchronous render failures reject candidates without partial source/save/history changes",
+        "result": "PASS"
+      },
+      {
+        "name": "Captured module binding refuses Only this before commit and preserves source/render/save/history",
+        "result": "PASS",
+        "evidence": {
+          "reason": "Error: Only this unavailable: UnsafeDetail captures module binding suffix; arbitrary closures are unsupported\nError: Only this unavailable: UnsafeDetail captures module binding suffix; arbitrary closures are unsupported\n    at visitJSXExpressionContainer (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/only-this.ts:116:21)\n    at invokeVisitorMethod (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:283:51)\n    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:158:32)\n    at each (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path.js:88:26)\n    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:179:18)\n    at visitChildren (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:204:25)\n    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/node_modules/ast-types/lib/path-visitor.js:105:29)\n    at rejectCapturedModuleBindings (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/only-this.ts:108:16)\n    at onlyThis (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/only-this.ts:225:5)\n    at <anonymous> (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/proof.ts:502:11)\n    at async check (/home/eren/D/orc-web-fresh-20260930/experiments/base-ui-only-this/proof.ts:37:28)"
+        }
+      }
+    ]
+  }
+]

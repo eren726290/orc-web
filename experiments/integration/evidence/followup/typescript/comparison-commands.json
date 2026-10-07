@@ -1,0 +1,829 @@
+[
+  {
+    "command": [
+      "npm",
+      "pack",
+      "typescript@6.0.3",
+      "--pack-destination",
+      "/tmp/orc-pr5-ts6-diagnosis-xplunb7k",
+      "--json",
+      "--ignore-scripts"
+    ],
+    "exit": 0,
+    "metadata": {
+      "id": "typescript@6.0.3",
+      "name": "typescript",
+      "version": "6.0.3",
+      "size": 4515854,
+      "unpackedSize": 24346827,
+      "shasum": "90251dc007916e972786cb94d74d15b185577d21",
+      "integrity": "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==",
+      "filename": "typescript-6.0.3.tgz",
+      "files": [
+        {
+          "path": "LICENSE.txt",
+          "size": 9197,
+          "mode": 420
+        },
+        {
+          "path": "README.md",
+          "size": 2842,
+          "mode": 420
+        },
+        {
+          "path": "SECURITY.md",
+          "size": 2577,
+          "mode": 420
+        },
+        {
+          "path": "ThirdPartyNoticeText.txt",
+          "size": 37824,
+          "mode": 420
+        },
+        {
+          "path": "bin/tsc",
+          "size": 45,
+          "mode": 493
+        },
+        {
+          "path": "bin/tsserver",
+          "size": 50,
+          "mode": 493
+        },
+        {
+          "path": "lib/_tsc.js",
+          "size": 6239091,
+          "mode": 420
+        },
+        {
+          "path": "lib/_tsserver.js",
+          "size": 27889,
+          "mode": 420
+        },
+        {
+          "path": "lib/_typingsInstaller.js",
+          "size": 10364,
+          "mode": 420
+        },
+        {
+          "path": "lib/cs/diagnosticMessages.generated.json",
+          "size": 322179,
+          "mode": 420
+        },
+        {
+          "path": "lib/de/diagnosticMessages.generated.json",
+          "size": 345510,
+          "mode": 420
+        },
+        {
+          "path": "lib/es/diagnosticMessages.generated.json",
+          "size": 341947,
+          "mode": 420
+        },
+        {
+          "path": "lib/fr/diagnosticMessages.generated.json",
+          "size": 347990,
+          "mode": 420
+        },
+        {
+          "path": "lib/it/diagnosticMessages.generated.json",
+          "size": 340423,
+          "mode": 420
+        },
+        {
+          "path": "lib/ja/diagnosticMessages.generated.json",
+          "size": 383553,
+          "mode": 420
+        },
+        {
+          "path": "lib/ko/diagnosticMessages.generated.json",
+          "size": 347991,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.d.ts",
+          "size": 953,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.decorators.d.ts",
+          "size": 13153,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.decorators.legacy.d.ts",
+          "size": 1287,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.dom.asynciterable.d.ts",
+          "size": 933,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.dom.d.ts",
+          "size": 2349483,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.dom.iterable.d.ts",
+          "size": 933,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es5.d.ts",
+          "size": 218972,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es6.d.ts",
+          "size": 993,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.collection.d.ts",
+          "size": 5305,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.core.d.ts",
+          "size": 22824,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.d.ts",
+          "size": 1202,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.generator.d.ts",
+          "size": 2518,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.iterable.d.ts",
+          "size": 18185,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.promise.d.ts",
+          "size": 3161,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.proxy.d.ts",
+          "size": 5212,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.reflect.d.ts",
+          "size": 6454,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.symbol.d.ts",
+          "size": 1610,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2015.symbol.wellknown.d.ts",
+          "size": 10971,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2016.array.include.d.ts",
+          "size": 5165,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2016.d.ts",
+          "size": 926,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2016.full.d.ts",
+          "size": 993,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2016.intl.d.ts",
+          "size": 1445,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2017.arraybuffer.d.ts",
+          "size": 876,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2017.d.ts",
+          "size": 1123,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2017.date.d.ts",
+          "size": 1877,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2017.full.d.ts",
+          "size": 993,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2017.intl.d.ts",
+          "size": 1410,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2017.object.d.ts",
+          "size": 2434,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2017.sharedmemory.d.ts",
+          "size": 7170,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2017.string.d.ts",
+          "size": 2339,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2017.typedarrays.d.ts",
+          "size": 1503,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2018.asyncgenerator.d.ts",
+          "size": 2653,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2018.asynciterable.d.ts",
+          "size": 2218,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2018.d.ts",
+          "size": 1049,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2018.full.d.ts",
+          "size": 1035,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2018.intl.d.ts",
+          "size": 2982,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2018.promise.d.ts",
+          "size": 1314,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2018.regexp.d.ts",
+          "size": 1193,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2019.array.d.ts",
+          "size": 3124,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2019.d.ts",
+          "size": 1032,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2019.full.d.ts",
+          "size": 1035,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2019.intl.d.ts",
+          "size": 919,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2019.object.d.ts",
+          "size": 1434,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2019.string.d.ts",
+          "size": 1489,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2019.symbol.d.ts",
+          "size": 967,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.bigint.d.ts",
+          "size": 38258,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.d.ts",
+          "size": 1162,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.date.d.ts",
+          "size": 2917,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.full.d.ts",
+          "size": 1035,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.intl.d.ts",
+          "size": 22399,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.number.d.ts",
+          "size": 1548,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.promise.d.ts",
+          "size": 1764,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.sharedmemory.d.ts",
+          "size": 5089,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.string.d.ts",
+          "size": 2451,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2020.symbol.wellknown.d.ts",
+          "size": 1566,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2021.d.ts",
+          "size": 997,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2021.full.d.ts",
+          "size": 1035,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2021.intl.d.ts",
+          "size": 8206,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2021.promise.d.ts",
+          "size": 2223,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2021.string.d.ts",
+          "size": 1553,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2021.weakref.d.ts",
+          "size": 3132,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2022.array.d.ts",
+          "size": 4637,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2022.d.ts",
+          "size": 1069,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2022.error.d.ts",
+          "size": 2340,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2022.full.d.ts",
+          "size": 1035,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2022.intl.d.ts",
+          "size": 7653,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2022.object.d.ts",
+          "size": 1046,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2022.regexp.d.ts",
+          "size": 1304,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2022.string.d.ts",
+          "size": 1116,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2023.array.d.ts",
+          "size": 40197,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2023.collection.d.ts",
+          "size": 861,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2023.d.ts",
+          "size": 960,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2023.full.d.ts",
+          "size": 1035,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2023.intl.d.ts",
+          "size": 2854,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2024.arraybuffer.d.ts",
+          "size": 2598,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2024.collection.d.ts",
+          "size": 1185,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2024.d.ts",
+          "size": 1127,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2024.full.d.ts",
+          "size": 1035,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2024.object.d.ts",
+          "size": 1220,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2024.promise.d.ts",
+          "size": 1350,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2024.regexp.d.ts",
+          "size": 1034,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2024.sharedmemory.d.ts",
+          "size": 3038,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2024.string.d.ts",
+          "size": 1155,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2025.collection.d.ts",
+          "size": 3839,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2025.d.ts",
+          "size": 1079,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2025.float16.d.ts",
+          "size": 20489,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2025.full.d.ts",
+          "size": 1035,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2025.intl.d.ts",
+          "size": 9390,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2025.iterator.d.ts",
+          "size": 8637,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2025.promise.d.ts",
+          "size": 1619,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.es2025.regexp.d.ts",
+          "size": 1255,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.array.d.ts",
+          "size": 1752,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.collection.d.ts",
+          "size": 2598,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.d.ts",
+          "size": 1244,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.date.d.ts",
+          "size": 917,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.decorators.d.ts",
+          "size": 1031,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.disposable.d.ts",
+          "size": 6767,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.error.d.ts",
+          "size": 990,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.full.d.ts",
+          "size": 1035,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.intl.d.ts",
+          "size": 5305,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.sharedmemory.d.ts",
+          "size": 1028,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.temporal.d.ts",
+          "size": 22011,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.esnext.typedarrays.d.ts",
+          "size": 3350,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.scripthost.d.ts",
+          "size": 9412,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.webworker.asynciterable.d.ts",
+          "size": 933,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.webworker.d.ts",
+          "size": 787076,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.webworker.importscripts.d.ts",
+          "size": 1002,
+          "mode": 420
+        },
+        {
+          "path": "lib/lib.webworker.iterable.d.ts",
+          "size": 933,
+          "mode": 420
+        },
+        {
+          "path": "lib/pl/diagnosticMessages.generated.json",
+          "size": 343981,
+          "mode": 420
+        },
+        {
+          "path": "lib/pt-br/diagnosticMessages.generated.json",
+          "size": 332413,
+          "mode": 420
+        },
+        {
+          "path": "lib/ru/diagnosticMessages.generated.json",
+          "size": 444708,
+          "mode": 420
+        },
+        {
+          "path": "lib/tr/diagnosticMessages.generated.json",
+          "size": 332492,
+          "mode": 420
+        },
+        {
+          "path": "lib/tsc.js",
+          "size": 267,
+          "mode": 420
+        },
+        {
+          "path": "lib/tsserver.js",
+          "size": 272,
+          "mode": 420
+        },
+        {
+          "path": "lib/tsserverlibrary.d.ts",
+          "size": 866,
+          "mode": 420
+        },
+        {
+          "path": "lib/tsserverlibrary.js",
+          "size": 1013,
+          "mode": 420
+        },
+        {
+          "path": "lib/typescript.d.ts",
+          "size": 588452,
+          "mode": 420
+        },
+        {
+          "path": "lib/typescript.js",
+          "size": 9144216,
+          "mode": 420
+        },
+        {
+          "path": "lib/typesMap.json",
+          "size": 16788,
+          "mode": 420
+        },
+        {
+          "path": "lib/typingsInstaller.js",
+          "size": 280,
+          "mode": 420
+        },
+        {
+          "path": "lib/watchGuard.js",
+          "size": 2314,
+          "mode": 420
+        },
+        {
+          "path": "lib/zh-cn/diagnosticMessages.generated.json",
+          "size": 297608,
+          "mode": 420
+        },
+        {
+          "path": "lib/zh-tw/diagnosticMessages.generated.json",
+          "size": 293400,
+          "mode": 420
+        },
+        {
+          "path": "package.json",
+          "size": 3527,
+          "mode": 420
+        }
+      ],
+      "entryCount": 140,
+      "bundled": []
+    },
+    "extracted": "/tmp/orc-pr5-ts6-diagnosis-xplunb7k/typescript/package"
+  },
+  {
+    "command": [
+      "npm",
+      "pack",
+      "@tailwindcss/node@4.3.3",
+      "--pack-destination",
+      "/tmp/orc-pr5-ts6-diagnosis-xplunb7k",
+      "--json",
+      "--ignore-scripts"
+    ],
+    "exit": 0,
+    "metadata": {
+      "id": "@tailwindcss/node@4.3.3",
+      "name": "@tailwindcss/node",
+      "version": "4.3.3",
+      "size": 41528,
+      "unpackedSize": 130939,
+      "shasum": "38ff04309ff036ea3589a7bad9069c44ec9d3883",
+      "integrity": "sha512-/T8IKEsf9VTU6tLjgC7+sv2mOPtQxzE2jMw7u4Tt40Tx+QSZxpzh95/H6cMKoja9XuW7iMdLJYBB0o9G1CaAgg==",
+      "filename": "tailwindcss-node-4.3.3.tgz",
+      "files": [
+        {
+          "path": "LICENSE",
+          "size": 1071,
+          "mode": 420
+        },
+        {
+          "path": "README.md",
+          "size": 1838,
+          "mode": 420
+        },
+        {
+          "path": "dist/esm-cache.loader.d.mts",
+          "size": 171,
+          "mode": 420
+        },
+        {
+          "path": "dist/esm-cache.loader.mjs",
+          "size": 409,
+          "mode": 420
+        },
+        {
+          "path": "dist/index.d.mts",
+          "size": 7387,
+          "mode": 420
+        },
+        {
+          "path": "dist/index.d.ts",
+          "size": 7387,
+          "mode": 420
+        },
+        {
+          "path": "dist/index.js",
+          "size": 55836,
+          "mode": 420
+        },
+        {
+          "path": "dist/index.mjs",
+          "size": 54924,
+          "mode": 420
+        },
+        {
+          "path": "dist/require-cache.d.ts",
+          "size": 90,
+          "mode": 420
+        },
+        {
+          "path": "dist/require-cache.js",
+          "size": 579,
+          "mode": 420
+        },
+        {
+          "path": "package.json",
+          "size": 1247,
+          "mode": 420
+        }
+      ],
+      "entryCount": 11,
+      "bundled": []
+    },
+    "extracted": "/tmp/orc-pr5-ts6-diagnosis-xplunb7k/tailwindcss-node/package"
+  },
+  {
+    "command": [
+      "node",
+      "/tmp/orc-pr5-ts6-diagnosis-xplunb7k/typescript/package/bin/tsc",
+      "--noEmit",
+      "--incremental",
+      "false",
+      "--pretty",
+      "false",
+      "--skipLibCheck",
+      "false",
+      "-p",
+      "experiments/integration/tsconfig.json"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 2,
+    "version": "Version 6.0.3"
+  }
+]

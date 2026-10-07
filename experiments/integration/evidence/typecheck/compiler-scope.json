@@ -1,0 +1,24 @@
+{
+  "installedVersion": "7.0.2",
+  "packagePath": "/home/eren/D/orc-web-fresh-20260930/node_modules/typescript/package.json",
+  "executablePath": "/home/eren/D/orc-web-fresh-20260930/node_modules/typescript/bin/tsc",
+  "installedPackageExports": {
+    "./package.json": "./package.json",
+    ".": "./lib/version.cjs",
+    "./unstable/sync": "./dist/api/sync/api.js",
+    "./unstable/async": "./dist/api/async/api.js",
+    "./unstable/fs": "./dist/api/fs.js",
+    "./unstable/proto": "./dist/api/proto.js",
+    "./unstable/ast": "./dist/ast/index.js",
+    "./unstable/ast/is": "./dist/ast/is.js",
+    "./unstable/ast/factory": "./dist/ast/factory.generated.js",
+    "./unstable/ast/utils": "./dist/ast/utils.js",
+    "./unstable/ast/scanner": "./dist/ast/scanner.js",
+    "./unstable/ast/visitor": "./dist/ast/visitor.js",
+    "./unstable/ast/clone": "./dist/ast/clone.js"
+  },
+  "usage": "tsc CLI only; no TypeScript compiler API imports in the authored experiment or dependency checker",
+  "sourceAnalysis": "@babel/parser with typescript and jsx plugins; recast parsing/printing; ast-types checked builders",
+  "browserCandidateBuild": "Bun.build",
+  "apiCompatibility": "Not tested or claimed. The installed package exposes compiler APIs under unstable paths."
+}

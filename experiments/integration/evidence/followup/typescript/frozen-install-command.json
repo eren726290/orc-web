@@ -1,0 +1,10 @@
+{
+  "command": [
+    "bun",
+    "install",
+    "--frozen-lockfile",
+    "--force"
+  ],
+  "cwd": "/home/eren/D/orc-web-fresh-20260930",
+  "exit": 0
+}

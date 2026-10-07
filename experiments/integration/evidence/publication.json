@@ -1,0 +1,45 @@
+{
+  "previousPRs": [
+    {
+      "baseRefName": "master",
+      "headRefName": "codex/base-ui-only-this",
+      "headRefOid": "c1e0d54d215c75bf226e30510deab03b2dbb5521",
+      "number": 4,
+      "state": "OPEN",
+      "url": "https://github.com/eren726290/orc-web/pull/4"
+    },
+    {
+      "baseRefName": "master",
+      "headRefName": "codex/selection-continuity",
+      "headRefOid": "c230345902e8b33d4d772916ce010a72fe8704d6",
+      "number": 3,
+      "state": "OPEN",
+      "url": "https://github.com/eren726290/orc-web/pull/3"
+    },
+    {
+      "baseRefName": "master",
+      "headRefName": "codex/automatic-source-mapping",
+      "headRefOid": "2663a28aff8325e67e15a399ca321a365e1d9e18",
+      "number": 2,
+      "state": "OPEN",
+      "url": "https://github.com/eren726290/orc-web/pull/2"
+    },
+    {
+      "baseRefName": "master",
+      "headRefName": "codex/work",
+      "headRefOid": "35f53965d746c7e1f6bcccf455505af95931df66",
+      "number": 1,
+      "state": "OPEN",
+      "url": "https://github.com/eren726290/orc-web/pull/1"
+    }
+  ],
+  "pr5": {
+    "baseRefName": "master",
+    "headRefName": "codex/integrated-proof-pr5",
+    "headRefOid": "96f0d0d5fe4b4183892ebc31846c095198e2b6ee",
+    "number": 5,
+    "state": "OPEN",
+    "url": "https://github.com/eren726290/orc-web/pull/5"
+  },
+  "publicationCommit": "96f0d0d5fe4b4183892ebc31846c095198e2b6ee"
+}

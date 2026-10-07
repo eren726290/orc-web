@@ -1,0 +1,10 @@
+{
+  "sources": {
+    "src/App.tsx": "function Notice({ title }: { title: string }) {\n  return <h1 className=\"text-4xl font-bold\">{title}</h1>;\n}\nexport default function App() {\n  return <main><Notice title=\"Same heading\" /><Notice title=\"Same heading\" /></main>;\n}\n\n// External source replacement\n"
+  },
+  "selection": null,
+  "reason": "Selection invalidated: missing or uncertain source/rendered binding",
+  "bindings": {},
+  "revealed": [],
+  "revision": 7
+}

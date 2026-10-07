@@ -1,0 +1,130 @@
+{
+  "command": [
+    "npm",
+    "pack",
+    "@tailwindcss/node@4.3.2",
+    "--pack-destination",
+    "/tmp/orc-pr5-ts6-diagnosis-xplunb7k",
+    "--json",
+    "--ignore-scripts"
+  ],
+  "exit": 0,
+  "metadata": {
+    "id": "@tailwindcss/node@4.3.2",
+    "name": "@tailwindcss/node",
+    "version": "4.3.2",
+    "size": 41273,
+    "unpackedSize": 130328,
+    "shasum": "2ba563b05ff662b9172c9645d78a5edd59f96eb3",
+    "integrity": "sha512-yWP/sqEcBLaD8JuA6zNwxoYKr75qxTioYwlRwekj5Jr/I5GXnoJfjetH/psLUIv74cYTH2lBUEzBkinthoYcBg==",
+    "filename": "tailwindcss-node-4.3.2.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1071,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 1838,
+        "mode": 420
+      },
+      {
+        "path": "dist/esm-cache.loader.d.mts",
+        "size": 171,
+        "mode": 420
+      },
+      {
+        "path": "dist/esm-cache.loader.mjs",
+        "size": 409,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.mts",
+        "size": 7387,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 7387,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js",
+        "size": 55531,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.mjs",
+        "size": 54619,
+        "mode": 420
+      },
+      {
+        "path": "dist/require-cache.d.ts",
+        "size": 90,
+        "mode": 420
+      },
+      {
+        "path": "dist/require-cache.js",
+        "size": 579,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 1246,
+        "mode": 420
+      }
+    ],
+    "entryCount": 11,
+    "bundled": []
+  },
+  "package": {
+    "name": "@tailwindcss/node",
+    "version": "4.3.2",
+    "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/tailwindlabs/tailwindcss.git",
+      "directory": "packages/@tailwindcss-node"
+    },
+    "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
+    "homepage": "https://tailwindcss.com",
+    "files": [
+      "dist/"
+    ],
+    "publishConfig": {
+      "provenance": true,
+      "access": "public"
+    },
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js"
+      },
+      "./require-cache": {
+        "types": "./dist/require-cache.d.ts",
+        "default": "./dist/require-cache.js"
+      },
+      "./esm-cache-loader": {
+        "types": "./dist/esm-cache.loader.d.mts",
+        "default": "./dist/esm-cache.loader.mjs"
+      }
+    },
+    "dependencies": {
+      "@jridgewell/remapping": "^2.3.5",
+      "enhanced-resolve": "5.21.6",
+      "jiti": "^2.7.0",
+      "lightningcss": "1.32.0",
+      "magic-string": "^0.30.21",
+      "source-map-js": "^1.2.1",
+      "tailwindcss": "4.3.2"
+    },
+    "scripts": {
+      "build": "tsup-node",
+      "dev": "pnpm run build -- --watch"
+    }
+  },
+  "declaration": "import { AstNode as AstNode$1 } from './ast';\nimport { Candidate, Variant } from './candidate';\nimport { compileAstNodes } from './compile';\nimport { ClassEntry, VariantEntry, CanonicalizeOptions } from './intellisense';\nimport { Theme } from './theme';\nimport { Utilities } from './utilities';\nimport { Variants } from './variants';\nimport * as tailwindcss from 'tailwindcss';\nimport { Polyfills, Features } from 'tailwindcss';\nexport { Features, Polyfills } from 'tailwindcss';\n\ndeclare const DEBUG: boolean;\n\ndeclare const env_DEBUG: typeof DEBUG;\ndeclare namespace env {\n  export { env_DEBUG as DEBUG };\n}\n\ndeclare const enum CompileAstFlags {\n    None = 0,\n    RespectImportant = 1\n}\ntype DesignSystem = {\n    theme: Theme;\n    utilities: Utilities;\n    variants: Variants;\n    invalidCandidates: Set<string>;\n    important: boolean;\n    getClassOrder(classes: string[]): [string, bigint | null][];\n    getClassList(): ClassEntry[];\n    getVariants(): VariantEntry[];\n    parseCandidate(candidate: string): Readonly<Candidate>[];\n    parseVariant(variant: string): Readonly<Variant> | null;\n    compileAstNodes(candidate: Candidate, flags?: CompileAstFlags): ReturnType<typeof compileAstNodes>;\n    printCandidate(candidate: Candidate): string;\n    printVariant(variant: Variant): string;\n    getVariantOrder(): Map<Variant, number>;\n    resolveThemeValue(path: string, forceInline?: boolean): string | undefined;\n    trackUsedVariables(raw: string): void;\n    canonicalizeCandidates(candidates: string[], options?: CanonicalizeOptions): string[];\n    candidatesToCss(classes: string[]): (string | null)[];\n    candidatesToAst(classes: string[]): AstNode$1[][];\n    storage: Record<symbol, unknown>;\n};\n\n/**\n * The source code for one or more nodes in the AST\n *\n * This generally corresponds to a stylesheet\n */\ninterface Source {\n    /**\n     * The path to the file that contains the referenced source code\n     *\n     * If this references the *output* source code, this is `null`.\n     */\n    file: string | null;\n    /**\n     * The referenced source code\n     */\n    code: string;\n}\n/**\n * The file and offsets within it that this node covers\n *\n * This can represent either:\n * - A location in the original CSS which caused this node to be created\n * - A location in the output CSS where this node resides\n */\ntype SourceLocation = [source: Source, start: number, end: number];\n\n/**\n * Line offset tables are the key to generating our source maps. They allow us\n * to store indexes with our AST nodes and later convert them into positions as\n * when given the source that the indexes refer to.\n */\n/**\n * A position in source code\n *\n * https://tc39.es/ecma426/#sec-position-record-type\n */\ninterface Position {\n    /** The line number, one-based */\n    line: number;\n    /** The column/character number, one-based */\n    column: number;\n}\n\ninterface OriginalPosition extends Position {\n    source: DecodedSource;\n}\n/**\n * A \"decoded\" sourcemap\n *\n * @see https://tc39.es/ecma426/#decoded-source-map-record\n */\ninterface DecodedSourceMap {\n    file: string | null;\n    sources: DecodedSource[];\n    mappings: DecodedMapping[];\n}\n/**\n * A \"decoded\" source\n *\n * @see https://tc39.es/ecma426/#decoded-source-record\n */\ninterface DecodedSource {\n    url: string | null;\n    content: string | null;\n    ignore: boolean;\n}\n/**\n * A \"decoded\" mapping\n *\n * @see https://tc39.es/ecma426/#decoded-mapping-record\n */\ninterface DecodedMapping {\n    originalPosition: OriginalPosition | null;\n    generatedPosition: Position;\n    name: string | null;\n}\n\ntype StyleRule = {\n    kind: 'rule';\n    selector: string;\n    nodes: AstNode[];\n    src?: SourceLocation;\n    dst?: SourceLocation;\n};\ntype AtRule = {\n    kind: 'at-rule';\n    name: string;\n    params: string;\n    nodes: AstNode[];\n    src?: SourceLocation;\n    dst?: SourceLocation;\n};\ntype Declaration = {\n    kind: 'declaration';\n    property: string;\n    value: string | undefined;\n    important: boolean;\n    src?: SourceLocation;\n    dst?: SourceLocation;\n};\ntype Comment = {\n    kind: 'comment';\n    value: string;\n    src?: SourceLocation;\n    dst?: SourceLocation;\n};\ntype Context = {\n    kind: 'context';\n    context: Record<string, string | boolean>;\n    nodes: AstNode[];\n    src?: undefined;\n    dst?: undefined;\n};\ntype AtRoot = {\n    kind: 'at-root';\n    nodes: AstNode[];\n    src?: undefined;\n    dst?: undefined;\n};\ntype AstNode = StyleRule | AtRule | Declaration | Comment | Context | AtRoot;\n\ntype Resolver = (id: string, base: string) => Promise<string | false | undefined>;\ninterface CompileOptions {\n    base: string;\n    from?: string;\n    onDependency: (path: string) => void;\n    shouldRewriteUrls?: boolean;\n    polyfills?: Polyfills;\n    customCssResolver?: Resolver;\n    customJsResolver?: Resolver;\n}\ndeclare function compileAst(ast: AstNode[], options: CompileOptions): Promise<{\n    sources: {\n        base: string;\n        pattern: string;\n        negated: boolean;\n    }[];\n    root: \"none\" | {\n        base: string;\n        pattern: string;\n    } | null;\n    features: Features;\n    build(candidates: string[]): AstNode[];\n}>;\ndeclare function compile(css: string, options: CompileOptions): Promise<{\n    sources: {\n        base: string;\n        pattern: string;\n        negated: boolean;\n    }[];\n    root: \"none\" | {\n        base: string;\n        pattern: string;\n    } | null;\n    features: Features;\n    build(candidates: string[]): string;\n    buildSourceMap(): tailwindcss.DecodedSourceMap;\n}>;\ndeclare function __unstable__loadDesignSystem(css: string, { base }: {\n    base: string;\n}): Promise<DesignSystem>;\ndeclare function loadModule(id: string, base: string, onDependency: (path: string) => void, customJsResolver?: Resolver): Promise<{\n    path: string;\n    base: string;\n    module: any;\n}>;\n\ndeclare class Instrumentation implements Disposable {\n    #private;\n    private shouldReport;\n    private defaultFlush;\n    constructor(shouldReport?: boolean, defaultFlush?: (message: string) => undefined);\n    hit(label: string): void;\n    start(label: string): void;\n    end(label: string): void;\n    track(label: string): {\n        [Symbol.dispose]: () => void;\n        [Symbol.asyncDispose]: () => void;\n    };\n    span<T>(label: string, fn: () => T): T;\n    reset(): void;\n    report(flush?: (message: string) => undefined): void;\n    [Symbol.dispose](): void;\n}\n\ndeclare function normalizePath(originalPath: string): string;\n\ninterface OptimizeOptions {\n    /**\n     * The file being transformed\n     */\n    file?: string;\n    /**\n     * Enabled minified output\n     */\n    minify?: boolean;\n    /**\n     * The output source map before optimization\n     *\n     * If omitted a resulting source map will not be available\n     */\n    map?: string;\n}\ninterface TransformResult {\n    code: string;\n    map: string | undefined;\n}\ndeclare function optimize(input: string, { file, minify, map }?: OptimizeOptions): TransformResult;\n\ninterface SourceMap {\n    readonly raw: string;\n    readonly inline: string;\n    comment(url: string): string;\n}\ndeclare function toSourceMap(map: DecodedSourceMap | string): SourceMap;\n\nexport { type CompileOptions, type DecodedSource, type DecodedSourceMap, Instrumentation, type OptimizeOptions, type Resolver, type SourceMap, type TransformResult, __unstable__loadDesignSystem, compile, compileAst, env, loadModule, normalizePath, optimize, toSourceMap };\n"
+}

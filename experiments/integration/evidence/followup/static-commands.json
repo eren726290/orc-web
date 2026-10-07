@@ -1,0 +1,63 @@
+[
+  {
+    "command": [
+      "./node_modules/.bin/oxlint",
+      "experiments/automatic-source-mapping/resolver.ts",
+      "experiments/automatic-source-mapping/continuity/session.ts",
+      "experiments/integration/identical-instances.ts",
+      "experiments/integration/verify-followup.mjs"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  },
+  {
+    "command": [
+      "./node_modules/.bin/oxfmt",
+      "--check",
+      "experiments/automatic-source-mapping/resolver.ts",
+      "experiments/automatic-source-mapping/continuity/session.ts",
+      "experiments/integration/identical-instances.ts",
+      "experiments/integration/verify-followup.mjs",
+      "experiments/integration/tsconfig.json"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  },
+  {
+    "command": [
+      "bun",
+      "run",
+      "check:source-types"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "354fa5366957db94185a37c7e46094e00c449e7a",
+      "--",
+      "AGENTS.md",
+      "doc_v1",
+      "experiments/original-source-proof",
+      "experiments/automatic-source-mapping/proof.ts",
+      "experiments/automatic-source-mapping/continuity/proof.ts",
+      "experiments/base-ui-only-this/proof.ts",
+      "experiments/base-ui-only-this/src",
+      "experiments/integration/proof.ts"
+    ],
+    "cwd": "/home/eren/D/orc-web-fresh-20260930",
+    "exit": 0
+  }
+]

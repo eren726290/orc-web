@@ -1,0 +1,18 @@
+{
+  "frozenInstallExit": 0,
+  "changedPackageFiles": [
+    "dist/index.d.mts",
+    "dist/index.d.ts"
+  ],
+  "runtimeUnchanged": true,
+  "packageVersionsUnchanged": true,
+  "typescript": "7.0.2",
+  "nodeCompiler": "4.3.3",
+  "declarationSha256": "4c6b2aabbf3faa7301e50970b389bcf16f1ef8ebe1d2ac99f108a3433087c24c",
+  "versionComparisonAgainst": "354fa5366957db94185a37c7e46094e00c449e7a",
+  "comparedManifestSections": [
+    "dependencies",
+    "devDependencies",
+    "overrides"
+  ]
+}

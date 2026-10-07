@@ -1,0 +1,17 @@
+{
+  "sources": {
+    "src/App.tsx": "import { Promo as Offer } from \"@/ui/Promo\";\n\n// Unrelated authored comment: preserve café and Unicode 🌱.\nconst cards = [\n  { sku: \"lamp\", label: \"Desk lamp\" },\n  { sku: \"chair\", label: \"Reading chair\" },\n];\nconst remote = externalSnapshot({ headline: \"From external-shaped input\" });\nconst calculated = \"Price: \" + 21;\nfunction externalSnapshot(input: { headline: string }) {\n  return input;\n}\n\nfunction Hero({ title }: { title: string }) {\n  return <section><h2 className=\"text-5xl font-medium hover:underline md:tracking-wide\">{title}</h2></section>;\n}\n\nexport default function App() {\n  return (\n    <main>\n      <h1 className=\"text-4xl font-bold\">Ordinary literal heading</h1>\n      <Hero title={\"One retained selection \\\"ORC\\\" & <safe> {literal} 🌱\"} />\n      <Hero title=\"Second instance\" />\n      <Offer label=\"Across the file boundary\" />\n      <Offer label=\"Another cross-file instance\" />\n      <div>\n        {cards.map(card => (\n          <article key={card.sku}><h3 className=\"text-xl font-bold\">{card.label}</h3></article>\n        ))}\n      </div>\n      <h4 className=\"text-xl\">{calculated}</h4>\n      <h4 className=\"text-xl\">{remote.headline}</h4>\n    </main>\n  );\n}\n",
+    "src/ui/Promo.tsx": "// Keep this independent module comment and helper unchanged.\nexport const untouched = \"Unrelated module value\";\n\nexport function Promo({ label }: { label: string }) {\n  return <aside><h2 className=\"text-4xl font-bold\">{label}</h2></aside>;\n}\n"
+  },
+  "selection": {
+    "node": "4aa44afc94152d1ec1bb6189",
+    "usages": [
+      "7849ecdb2ca52522cb08b2f0"
+    ],
+    "record": null
+  },
+  "reason": null,
+  "bindings": {},
+  "revealed": [],
+  "revision": 9
+}

@@ -1,0 +1,214 @@
+[
+  {
+    "build": 1,
+    "phase": "accepted",
+    "messages": [
+      "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ]
+  },
+  {
+    "build": 2,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 3,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 4,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 5,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 6,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 7,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 8,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 9,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 10,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 11,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 12,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 13,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 14,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 15,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 16,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 17,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 18,
+    "phase": "rejected",
+    "messages": [
+      "SyntaxError: Unexpected token (55:6)\nSyntaxError: Unexpected token (55:6)\n    at <parse> (:0)\n    at constructor (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:369:23)\n    at raise (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:6622:19)\n    at unexpected (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:6642:16)\n    at parseIdentifierName (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:12237:12)\n    at parseIdentifier (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:12215:23)\n    at parseVarId (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:13436:21)\n    at parseVarId (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:9775:11)\n    at parseVar (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:13417:12)\n    at parseVarStatement (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:13264:10)\n    at parseVarStatement (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:9431:31)\n    at async scenario (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/proof.ts:449:11)"
+    ]
+  },
+  {
+    "build": 19,
+    "phase": "rejected",
+    "messages": [
+      "pageerror: Error: candidate crash\nError: candidate crash\n    at Hero (http://127.0.0.1:42365/app-19.js:12547:9)\n    at renderWithHooks (http://127.0.0.1:42365/app-19.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:42365/app-19.js:4852:15)\n    at beginWork (http://127.0.0.1:42365/app-19.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:42365/app-19.js:7996:14)\n    at workLoopSync (http://127.0.0.1:42365/app-19.js:7893:5)\n    at renderRootSync (http://127.0.0.1:42365/app-19.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:42365/app-19.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:42365/app-19.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:42365/app-19.js:175:44)",
+      "AssertionError: Error: candidate crash\nError: candidate crash\n    at Hero (http://127.0.0.1:42365/app-19.js:12547:9)\n    at renderWithHooks (http://127.0.0.1:42365/app-19.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:42365/app-19.js:4852:15)\n    at beginWork (http://127.0.0.1:42365/app-19.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:42365/app-19.js:7996:14)\n    at workLoopSync (http://127.0.0.1:42365/app-19.js:7893:5)\n    at renderRootSync (http://127.0.0.1:42365/app-19.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:42365/app-19.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:42365/app-19.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:42365/app-19.js:175:44)\n\n1 !== 0\n\nAssertionError [ERR_ASSERTION]: Error: candidate crash\nError: candidate crash\n    at Hero (http://127.0.0.1:42365/app-19.js:12547:9)\n    at renderWithHooks (http://127.0.0.1:42365/app-19.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:42365/app-19.js:4852:15)\n    at beginWork (http://127.0.0.1:42365/app-19.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:42365/app-19.js:7996:14)\n    at workLoopSync (http://127.0.0.1:42365/app-19.js:7893:5)\n    at renderRootSync (http://127.0.0.1:42365/app-19.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:42365/app-19.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:42365/app-19.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:42365/app-19.js:175:44)\n\n1 !== 0\n\n    at prepare (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/browser.ts:139:14)\n    at async apply (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/proof.ts:152:36)\n    at async rejected (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/proof.ts:473:11)\n    at processTicksAndRejections (native:7:39)"
+    ]
+  },
+  {
+    "build": 20,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 21,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 22,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 23,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 24,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 25,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 26,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 27,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 28,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 29,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 30,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 31,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 32,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 33,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 34,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 35,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 36,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 37,
+    "phase": "accepted",
+    "messages": []
+  },
+  {
+    "build": 38,
+    "phase": "rejected",
+    "messages": [
+      "SyntaxError: Unexpected token (55:6)\nSyntaxError: Unexpected token (55:6)\n    at <parse> (:0)\n    at constructor (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:369:23)\n    at raise (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:6622:19)\n    at unexpected (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:6642:16)\n    at parseIdentifierName (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:12237:12)\n    at parseIdentifier (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:12215:23)\n    at parseVarId (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:13436:21)\n    at parseVarId (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:9775:11)\n    at parseVar (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:13417:12)\n    at parseVarStatement (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:13264:10)\n    at parseVarStatement (/tmp/orc-web-pr5-reproduction-20260930/node_modules/@babel/parser/lib/index.js:9431:31)\n    at async scenario (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/proof.ts:449:11)"
+    ]
+  },
+  {
+    "build": 39,
+    "phase": "rejected",
+    "messages": [
+      "pageerror: Error: candidate crash\nError: candidate crash\n    at Notice (http://127.0.0.1:42365/app-39.js:12533:9)\n    at renderWithHooks (http://127.0.0.1:42365/app-39.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:42365/app-39.js:4852:15)\n    at beginWork (http://127.0.0.1:42365/app-39.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:42365/app-39.js:7996:14)\n    at workLoopSync (http://127.0.0.1:42365/app-39.js:7893:5)\n    at renderRootSync (http://127.0.0.1:42365/app-39.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:42365/app-39.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:42365/app-39.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:42365/app-39.js:175:44)",
+      "AssertionError: Error: candidate crash\nError: candidate crash\n    at Notice (http://127.0.0.1:42365/app-39.js:12533:9)\n    at renderWithHooks (http://127.0.0.1:42365/app-39.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:42365/app-39.js:4852:15)\n    at beginWork (http://127.0.0.1:42365/app-39.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:42365/app-39.js:7996:14)\n    at workLoopSync (http://127.0.0.1:42365/app-39.js:7893:5)\n    at renderRootSync (http://127.0.0.1:42365/app-39.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:42365/app-39.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:42365/app-39.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:42365/app-39.js:175:44)\n\n1 !== 0\n\nAssertionError [ERR_ASSERTION]: Error: candidate crash\nError: candidate crash\n    at Notice (http://127.0.0.1:42365/app-39.js:12533:9)\n    at renderWithHooks (http://127.0.0.1:42365/app-39.js:3694:21)\n    at updateFunctionComponent (http://127.0.0.1:42365/app-39.js:4852:15)\n    at beginWork (http://127.0.0.1:42365/app-39.js:5323:14)\n    at performUnitOfWork (http://127.0.0.1:42365/app-39.js:7996:14)\n    at workLoopSync (http://127.0.0.1:42365/app-39.js:7893:5)\n    at renderRootSync (http://127.0.0.1:42365/app-39.js:7876:9)\n    at performWorkOnRoot (http://127.0.0.1:42365/app-39.js:7648:40)\n    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:42365/app-39.js:8503:3)\n    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:42365/app-39.js:175:44)\n\n1 !== 0\n\n    at prepare (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/browser.ts:139:14)\n    at async apply (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/proof.ts:152:36)\n    at async rejected (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/proof.ts:197:13)\n    at async scenario (/tmp/orc-web-pr5-reproduction-20260930/experiments/automatic-source-mapping/proof.ts:473:11)\n    at processTicksAndRejections (native:7:39)"
+    ]
+  },
+  {
+    "build": 40,
+    "phase": "accepted",
+    "messages": []
+  }
+]
