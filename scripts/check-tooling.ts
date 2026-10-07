@@ -33,6 +33,11 @@ const controls = [
       "export const values = [1, 2].reduce((acc: number[], value) => { acc.push(value); return acc; }, []);",
     invalid: "export const values = [1, 2].reduce((acc: number[], value) => [...acc, value], []);",
   },
+  {
+    rule: "eslint/max-lines-per-function",
+    valid: ["export function example() {", ...Array(38).fill("  Math.random();"), "}"].join("\n"),
+    invalid: ["export function example() {", ...Array(39).fill("  Math.random();"), "}"].join("\n"),
+  },
 ];
 
 const dependencies = { ...manifest.dependencies, ...manifest.devDependencies };

@@ -23,6 +23,7 @@ bun run check:format
 bun run build
 bun run check:browser
 bun run check:codebase
+bun run check:health
 ```
 
 `check:browser` requires installed Google Chrome and verifies development and production-preview mounting.
@@ -30,5 +31,8 @@ Set `ORC_CHROME_EXECUTABLE` to the full Chrome executable path if it is installe
 `check:browser:chromium` is an explicit fallback smoke check with Playwright Chromium and does not certify Chrome support.
 Browser and tooling results go to ignored `artifacts/scaffold/`.
 Fallow findings require review before any removal; a finding is not automatic deletion authority.
+Run `check:codebase` and `check:health` after substantial changes and before release.
+`check:health` enforces the cyclomatic complexity limit in `.fallowrc.json`.
+`lint` enforces its function-size limit through Oxlint's native rule, including blank lines, comments, and immediately invoked functions.
 `bun run format` formats scaffold source and configuration without rewriting project documentation or vendored upstream rules.
 See [scaffold verification](SCAFFOLD_VERIFICATION.md) for tested versions, results, and limitations.

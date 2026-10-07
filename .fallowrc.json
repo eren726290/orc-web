@@ -5,6 +5,10 @@
     "tools/anti-slop/rules/**",
     "tools/anti-slop/shared/**"
   ],
+  "health": {
+    "maxCyclomatic": 10,
+    "maxUnitSize": 40
+  },
   "rules": {
     "unused-dependencies": "warn"
   }

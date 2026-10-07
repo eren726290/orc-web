@@ -17,6 +17,13 @@ Bun and Vite declarations conflict when their ambient globals are loaded togethe
 When implementing the Bun backend, give its source a separate type scope with Bun ambient types and retain complete library checking in both scopes.
 Do not silence the collision with `skipLibCheck`.
 
+## Fallow function-size reporting
+
+Fallow 3.32.0 accepts `health.maxUnitSize: 40`, but a control containing a 44-line function produced no size finding and exited successfully.
+Recheck this behavior when updating Fallow before relying on its health command to enforce function length.
+Oxlint's native `max-lines-per-function` rule enforces the limit now and reads it from `.fallowrc.json`.
+The tooling controls accept a 40-line function and reject a 41-line function.
+
 ## Supported-platform verification
 
 The scaffold's Chromium smoke checks do not certify installed Google Chrome or Windows.
