@@ -1,16 +1,16 @@
 # ORC-web V1 package list
 
 Registry snapshot: 2026-10-06.
-This checkout contains documentation and reviewed experiment records; it has no application `package.json`, `bun.lock`, or installed application dependency inventory.
-The tables list the V1 package direction and observed npm releases, not resolved application pins.
-Exact application versions will be selected and verified during implementation, then recorded here from the application manifest and lockfile.
+The initial application scaffold was created on 2026-10-07 with `package.json`, `bun.lock`, and a local dependency installation.
+The manifest and lockfile are the source of truth for its exact direct pins and resolved transitive versions.
+The tables retain the registry observations and package-selection rationale.
 Use the [stack decisions](backlog/stack-proposal.md), [TypeScript policy](doc_v1/architecture/typescript-tooling.md), and [implementation status](IMPLEMENTATION_STATUS.md) alongside this inventory.
 
 ## 1. Runtime and application foundation
 
 | Item | V1 role | Version policy |
 | --- | --- | --- |
-| Bun | Local application runtime, development package manager, and component bundling. | Record the exact verified runtime version when scaffolding begins. |
+| Bun | Local application runtime, development package manager, and component bundling. | 1.4.2 verified while creating the initial scaffold. |
 | Google Chrome | Visible editor and background rendering/capture through Playwright. | Record the tested browser version and platform with each verification checkpoint. |
 | Node | Execute imported tools that explicitly require Node. | Match the supported tool's requirements; it does not replace Bun as the application runtime. |
 
@@ -26,12 +26,13 @@ The registry release column reports what npm returned on the snapshot date; it d
 | [react-dom](https://registry.npmjs.org/react-dom/latest) | 19.3.0 | Browser mounting and rendering. |
 | [@base-ui/react](https://registry.npmjs.org/@base-ui%2Freact/latest) | 1.8.0 | Interface primitives used by selected Base UI-flavored shadcn source. |
 | [lucide-react](https://registry.npmjs.org/lucide-react/latest) | 1.52.0 | Recommended single application icon library. |
-| [@babel/parser](https://registry.npmjs.org/@babel%2Fparser/latest) | 8.0.6 | Parse JavaScript, TypeScript, JSX, and TSX; the reviewed experiment used 7.29.9, so adopting version 8 requires checking parser/Recast compatibility. |
+| [@babel/parser](https://registry.npmjs.org/@babel%2Fparser/latest) | 8.0.6 observed; 7.29.9 selected | Parse JavaScript, TypeScript, JSX, and TSX; the selected 7.29.9 pin matches the reviewed Recast experiment, while version 8 still requires compatibility checking. |
 | [recast](https://registry.npmjs.org/recast/latest) | 0.24.0 | Structured source edits and preservation of unchanged source where possible. |
 | [ast-types](https://registry.npmjs.org/ast-types/latest) | 0.16.3 | AST checks/builders when directly imported by the editing service; declare it directly in that case. |
 | [playwright](https://registry.npmjs.org/playwright/latest) | 1.63.0 | Runtime Chrome candidate validation and screenshot/PDF capture; also usable in browser checks. |
 | [@modelcontextprotocol/server](https://registry.npmjs.org/@modelcontextprotocol%2Fserver/latest) | 2.3.1 | MCP adapter through the existing Bun backend; earlier SDK research examined 2.3.0. |
 | [tailwindcss](https://registry.npmjs.org/tailwindcss/latest) | 4.3.3 | Tailwind v4 styling and compiler inputs; required at runtime when Bun prepares imported Tailwind designs. |
+| [motion](https://registry.npmjs.org/motion/latest) | 14.0.0 selected | Source-authored React animation support. |
 
 The Tailwind backend loader/integration is still an implementation choice.
 If it directly uses the tested [@tailwindcss/node](https://registry.npmjs.org/@tailwindcss%2Fnode/latest) loader, declare that package as a runtime dependency too; its observed release is 4.3.3.
@@ -78,18 +79,8 @@ Run the agreed TS7 compatibility checkpoint through a separate exact-pinned comp
 
 ## 5. Conditional packages
 
-This section distinguishes accepted V1 feature support, undecided implementation packages, and helpers required by selected source.
+This section distinguishes undecided implementation packages and helpers required by selected source.
 Add packages when their implemented responsibilities require them.
-
-### Accepted V1 Motion support
-
-Motion is an accepted part of V1's React design stack under the [Motion contract](doc_v1/interface/motion.md).
-It is a planned package for that support; V1's animation support is already agreed.
-Declare it in application dependencies when ORC's implementation imports it, and retain it in a design's exact dependency records when that design imports it.
-
-| Package | Registry release | Purpose and installation timing |
-| --- | --- | --- |
-| [motion](https://registry.npmjs.org/motion/latest) | 14.0.0 | Accepted source-authored React animation support; add when implementing Motion support or preparing a design that requires it. The reviewed experiment used 13.4.4. |
 
 ### Implementation candidates
 
@@ -132,12 +123,11 @@ Research/browser utilities used by agents are separate from the application's de
 
 ## 7. Configuration and verification status
 
-Application package classification, exact pins, scripts, and lockfile are not created in this checkout yet.
-The planned required checker is TS6; Oxlint/Oxfmt, Vite/React, Tailwind, and Bun configuration will be recorded from the actual application setup.
-The [PR1–5 validation record](doc_v1/architecture/react-source-editing-validation.md) contains the tested experiment versions and results.
-Its passing checks do not establish that every registry release listed here works together.
+The initial scaffold provides exact direct pins, `bun.lock`, Vite React/Tailwind configuration, and `dev`, `build`, `check:types`, `lint`, and `format` scripts.
+It selected TypeScript 6.0.3 and `@babel/parser` 7.29.9 from the recorded compatible experiment direction.
+The first type check, lint, and production build passed with Bun 1.4.2.
+The [PR1–5 validation record](doc_v1/architecture/react-source-editing-validation.md) remains experiment evidence rather than complete editor or Windows verification.
 
-When the application is scaffolded, replace proposed selections with actual direct dependency pins and record the installed Bun/Node/Chrome versions where relevant.
 Update this file from the manifest and lockfile when dependencies change, linking affected verification results through [implementation status](IMPLEMENTATION_STATUS.md).
 Keep required application packages, conditional design packages, development tools, and globally installed utilities distinguishable.
 
