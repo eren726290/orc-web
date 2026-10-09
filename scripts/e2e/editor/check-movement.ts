@@ -65,6 +65,7 @@ async function verifyMode(mode: "development" | "built") {
   await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
   try {
     await prepareMovementFixture(page, app.url);
+    await parentPositionFields(page);
     await initialMovement(page);
     await freeMovement(page, mode);
     await constraintMovement(page, mode);
@@ -88,6 +89,40 @@ async function verifyMode(mode: "development" | "built") {
     assert.equal(await app.stop(), 0, app.output.join("\n"));
     checks.push(`${mode}: owned app shut down gracefully`);
   }
+}
+
+async function parentPositionFields(page: Page) {
+  for (const [id, parent] of [
+    ["rb", "row"],
+    ["cb", "column"],
+    ["wb", "wrap"],
+  ]) {
+    await select(page, [id]);
+    await renderSettled(page);
+    const before = await session(page);
+    for (const label of ["X", "Y"]) {
+      const field = page.getByLabel(label, { exact: true });
+      assert.equal(await field.getAttribute("readonly"), "", "Flex position must be read-only");
+      await field.press("Control+a");
+      await field.press("9");
+      await field.press("Tab");
+    }
+    await page.getByText(`Position controlled by ${parent}`, { exact: true }).waitFor();
+    await page.getByRole("button", { name: "Select parent", exact: true }).click();
+    assert.deepEqual(await selection(page), [parent]);
+    assert.deepEqual(
+      await session(page),
+      before,
+      "Inspecting controlled positions creates no edits or history",
+    );
+  }
+  await select(page, ["loose"]);
+  assert.equal(await page.getByLabel("X", { exact: true }).getAttribute("readonly"), null);
+  await select(page, ["absolute"]);
+  assert.equal(await page.getByLabel("X", { exact: true }).getAttribute("readonly"), null);
+  checks.push(
+    "Flex position fields are read-only, explain their parent and select it without editing; roots and Absolute children retain position controls",
+  );
 }
 
 function text(id: string, parentId: string | null, style: DesignNode["style"] = {}): DesignNode {
