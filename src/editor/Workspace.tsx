@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import type { Mutation } from "../../shared/commands/commands";
 import {
   containsNode,
@@ -76,6 +76,7 @@ function WorkspaceProperties({ controller: c }: { controller: Controller }) {
 
 function useWorkspace(props: Props) {
   const { view, setView } = useViewState(props.project.document.id);
+  useSelectedAncestors(props.project.document, view, setView);
   const guard = useDraftGuard();
   const [notice, setNotice] = useState<string | null>(null);
   const [preview, setPreview] = useState<PropertyPreview>(null);
@@ -215,13 +216,33 @@ function selectionChange(
     selected = view.selected.includes(id)
       ? view.selected.filter((value) => value !== id)
       : [...view.selected, id];
-  const expanded = new Set(view.expanded);
+  const expanded = new Set([...view.expanded, ...selectedAncestors(document, id)]);
+  return { selected, expanded: [...expanded] };
+}
+
+function selectedAncestors(document: DesignDocument, id: string | null) {
+  const parents: string[] = [];
   let parent = id ? document.nodes[id]?.parentId : null;
   while (parent) {
-    expanded.add(parent);
+    parents.push(parent);
     parent = document.nodes[parent]?.parentId;
   }
-  return { selected, expanded: [...expanded] };
+  return parents;
+}
+
+function useSelectedAncestors(
+  document: DesignDocument,
+  view: ViewState,
+  setView: (patch: Partial<ViewState>) => void,
+) {
+  const projectId = document.id;
+  const parents = view.selected.flatMap((id) => selectedAncestors(document, id)).join("\0");
+  useEffect(() => {
+    const expanded = projectView(projectId).expanded;
+    const required = parents ? parents.split("\0") : [];
+    if (required.some((id) => !expanded.includes(id)))
+      setView({ expanded: [...new Set([...expanded, ...required])] });
+  }, [parents, projectId, setView]);
 }
 
 function WorkspaceLeft({ controller: c }: { controller: Controller }) {
@@ -280,6 +301,7 @@ function WorkspaceCanvas({ controller: c }: { controller: Controller }) {
         mutate={c.mutate}
         disabled={c.disabled}
         beforeEdit={() => c.guard.request(c.project.document.id)}
+        notice={c.setNotice}
         keyDown={(event) => workspaceKey(event, c)}
       />
       {c.view.codeOpen && <WorkspaceCode controller={c} />}

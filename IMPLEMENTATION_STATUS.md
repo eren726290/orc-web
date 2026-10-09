@@ -1,7 +1,7 @@
 # ORC-web implementation status
 
 Last updated: 2026-10-09.
-Current stage: paused at a verified ordinary-editor checkpoint; full V1 remains in progress.
+Current stage: paused at the user's request after pointer and sizing corrections; full V1 remains in progress.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
 
 ## Current state
@@ -11,7 +11,7 @@ This overview describes this checkout and links to reviewed evidence from the PC
 | Application foundation and startup | Implemented combined Bun/Vite development launch and built-app serving; Linux startup failure cleanup, normal shutdown, and failed-save shutdown recovery pass focused process checks. | [Launcher](scripts/dev.ts), [backend](server/start.ts), [lifecycle check](scripts/runtime/check-lifecycle.ts). |
 | Development tooling | Selected anti-slop rules and Fallow CLI configured; TypeScript 6, lint controls, formatting, build, and Chromium frontend mounting pass on Fedora. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [remaining editor tooling](backlog/development-tooling.md). |
 | Editor workspace, Layers, Properties, and Code | In progress; Dashboard/tabs, selection, basic Properties previews, text editing, Code Apply/Discard, draft safeguards, panel resizing, in-place Layer naming, and atomic subtree deletion pass focused development/built checks. | [Editor workflow](scripts/e2e/editor/check-editor.ts), [panel check](scripts/e2e/editor/check-panels.ts), [naming check](scripts/e2e/editor/check-layers.ts), [deletion check](scripts/e2e/editor/check-deletion.ts). |
-| Tokens, layout, constraints, and canvas transforms | In progress; ordinary keyboard Free movement and single Flex reordering pass focused development/built checks alongside atomic batch, CSS removal, and reorder/reparent commands. Pointer gestures, layout/constraint controls, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
+| Tokens, layout, constraints, and canvas transforms | In progress; ordinary keyboard and pointer movement, single Flex reordering, and single-object/frame pointer reparenting between ordinary Free/Flex frames and workspace root pass focused development/built checks. Layout/constraint controls, general sizing ownership, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
 | Selected-frame Preview | In progress; ordinary frames retain their native sizing and saved defaults, isolate temporary form inputs and scrolling, restore Edit selection/pan/zoom, and preserve Code drafts and document/history in focused development/built Chromium checks. React components, portals, Motion, and supported-platform verification remain pending. | [Preview](src/editor/preview/Preview.tsx), [native workflow check](scripts/e2e/editor/check-preview.ts), [accepted Preview](doc_v1/interface/workspace-and-canvas.md#selected-frame-workflow). |
 | Shared commands, application Undo/Redo, and project saving | In progress; authoritative sessions, revision checks, command history, save/reopen, independent projects, existing-save recovery, failed first Save/Save as recovery, and exclusive locks pass focused checks on Linux. | [Services](server/projects/projects.ts), [pending-response history check](scripts/e2e/editor/check-history.ts), [saving regression check](scripts/e2e/projects/check-saving.ts), [saving contract](doc_v1/architecture/orc-workspace-bundle.md). |
 | Ordinary HTML/CSS/SVG authoring | In progress; reproduced SVG geometry/source disagreement, lost explicit line breaks and inline separators, and invalid SVG render acceptance are corrected and pass focused development/built checks; complete V1 source support remains pending. | [Source service](server/source/html.ts), [importer](src/editor/code/html-import.ts), [rendering regression check](scripts/e2e/rendering/check-rendering.ts), [Code workflow check](scripts/e2e/editor/editor-source.ts). |
@@ -169,6 +169,113 @@ Older evidence may refer to the source paths used at that run; current workflow 
 Both review agents are finished.
 The changes were uncommitted during verification and are included in this master checkpoint.
 This checkpoint completes folder organization; full V1 and supported Chrome/Windows verification remain unfinished.
+
+## Ordinary Free pointer movement checkpoint
+
+The current uncommitted working tree adds Select dragging for selected and initially unselected ordinary Free objects through the existing CSS movement and shared command services.
+Frozen starting CSS prevents repeated preview updates from accumulating offsets.
+Escape restores the original rendering without changing applied document revision, and release submits one command with exact Undo/Redo.
+Pointer capture starts at the drag threshold so ordinary double-click text editing continues to work.
+Changes to revision, selection, tool, zoom, or busy state cancel active movement.
+Zoomed dragging preserves unscaled CSS coordinates, and cancelling the Code draft safeguard preserves selection, draft, document, and history.
+Movement validation runs after the drag threshold so holding a Flex child for selection creates no movement warning.
+The initial absent unselected drag and premature Flex warning were reproduced through the running editor before their corrections.
+Window pointer release/cancellation and blur also clear pending gestures so a released pointer cannot resume after a delayed safeguard.
+
+`bun run check:movement` passed all 46 recorded checkpoints in development and built modes using Playwright Chromium 153.0.8010.12 on Linux.
+Its [result](artifacts/editor/movement-verification-result.json) records identical before/after source hashes, source commit `cfa5f82`, uncommitted source hashes, inputs, traces, and screenshots.
+`bun run check:editor` and `bun run check:panels` also passed both modes.
+TypeScript, build, lint, formatting, Fallow health, and Fallow dead-code checks passed.
+The health report retains existing estimated-coverage advisories; no complexity suppression or threshold change was introduced.
+
+This does not complete the accepted gesture contract.
+Frame reparenting and destination drop slots, resize/rotation handles, broader gesture edge cases, and supported-platform verification remain tracked in [canvas pointer gestures](backlog/canvas-pointer-gestures.md).
+MCP remains unimplemented until the application is complete.
+
+## Current-parent Flex pointer placement checkpoint
+
+A single ordinary Flex child now previews a drop slot within its current Row, Column, or wrapped Row parent.
+Temporary receiving-frame outlines and insertion lines show that slot without becoming saved design nodes.
+The planner uses frozen native browser bounds and the current canvas scale, while the preview projects temporary child order through the canonical-node renderer.
+Release submits the existing reorder command; no new protocol, dependency, saved geometry, or independently editable Layers hierarchy was added.
+Authored child CSS, sizing, identity, parent, and non-flow sibling order are preserved.
+Dropping in the current flow slot creates no revision or Undo entry.
+Escape restores the original order and retains selection without changing applied state.
+
+The [movement workflow](scripts/e2e/editor/check-movement.ts) verifies forward/backward placement, Row, Column, wrapped Row, zoom, native live preview, cancellation, exact one-step Undo/Redo, and original-slot no-op behavior.
+Its [46-checkpoint result](artifacts/editor/movement-verification-result.json) passed development and built modes with identical before/after source hashes using Chromium 153.0.8010.12 on Linux.
+The absent Flex preview was reproduced and retained in [baseline evidence](artifacts/editor/movement-flex-pointer-baseline-result.json).
+Build, TypeScript, lint, formatting, Fallow health, Fallow dead-code, and the development/built ordinary editor workflows passed.
+Fallow reports no unused files/exports or cycles, and retains the seven planned-dependency warnings.
+`bun run check:preview` also passed development and built modes after the pointer changes.
+Three scoped Flex checkpoint gates passed; this certifies the stated slice rather than full V1.
+Cross-frame placement, source-controlled layout boundaries, resizing, and supported Chrome/Windows checks remain open in [the gesture record](backlog/canvas-pointer-gestures.md).
+The work remains uncommitted on master.
+
+## Pointer selection after draft Discard
+
+The real editor reproduced a selection failure when the pointer was released before choosing Discard in the Code draft dialog.
+The draft was discarded but the requested new selection was lost.
+The [baseline result](artifacts/editor/movement-pointer-draft-baseline-result.json) retains that exact failure and its trace.
+Pointer startup now uses the existing guarded workspace selection for a new target before checking whether the drag is still active.
+Discard completes selection after release, while the released gesture stays cancelled.
+The retained E2E check verifies the new selection, removed draft, unchanged native position, and unchanged applied document and history after further pointer movement.
+Existing Cancel safeguards continue to pass.
+
+The movement check passed 46 checkpoints across development and built Chromium, and the editor and Preview workflows also passed both modes.
+Their recorded executable source hashes were checked against the current worktree.
+Build, TypeScript, lint, formatting, and Fallow checks passed with complexity 10 and function size 40 unchanged.
+Fallow reports zero enforced errors, 99 static-estimated coverage advisories, and the seven planned unused dependencies.
+Three scoped safeguard gates passed with zero unmet gates or abandonments.
+The change remains uncommitted on master; full V1 and installed Chrome/Windows verification remain unfinished.
+
+## Ordinary pointer reparenting checkpoint
+
+Single ordinary objects and nested frames now preview their receiving Free/Flex frame or workspace root through the canonical renderer.
+Release changes parent, sibling order, placement, and applicable constraint conversion together through one existing atomic command.
+Free conversion preserves the dropped native box, authored margins, and supported End/Both/Center relationships against the destination's inner border edge.
+Flex conversion preserves tested Fixed frame dimensions, Fit text dimensions, and existing same-axis Fill behavior without freezing Fill into Fixed.
+The checks resize receiving parents to verify the preserved constraint and Fill relationships rather than checking CSS strings alone.
+Selected ancestors are revealed after reparenting and history changes without creating document history.
+
+Real editor checks reproduced and corrected accidental flattening out of ordinary HTML wrappers, hidden selected rows, stale unavailable notices, Fixed frame shrinkage, and nonlinear constraints misclassified as Center.
+The original failures remain in `artifacts/editor/movement-reparent-wrapper-baseline-result.json`, `movement-reparent-notice-baseline-result.json`, `movement-reparent-fixed-size-baseline-result.json`, and `movement-reparent-sizing-fixed-result.json`.
+The [final movement result](artifacts/editor/movement-reparent-verification-result.json) passed 92 checks and 616 recorded inputs across development and built modes using Chromium 153.0.8010.12 on Linux at source commit `cfa5f82` plus recorded uncommitted hashes.
+Before/after movement hashes match, and movement, editor, Preview, and atomic result hashes were checked against the checkout at this checkpoint.
+Screenshots of Free frame and Flex Fill previews were visually reviewed.
+Build, TypeScript, lint, formatting, health, and dead-code checks passed, and all three scoped reparenting gates passed.
+Health retains 118 static-estimated CRAP advisories and no enforced errors; dead-code analysis retains seven planned unused dependencies and no unused files/exports or cycles.
+Cyclomatic complexity 10, cognitive complexity 15, and function size 40 remain unchanged.
+
+Screenshot review also exposed Properties displaying a Fill width as Fit; the following checkpoint records its correction.
+Cross-axis Fill conversion, general Fill controls, source-controlled constraint expressions, broader transforms, and several-object reparenting remain open V1 work in [the gesture record](backlog/canvas-pointer-gestures.md).
+No commit, push, MCP implementation, installed Chrome verification, or Windows verification occurred in this checkpoint.
+
+## Sizing ownership correction and stopping checkpoint
+
+The real editor reproduced Fill and both-edge-controlled dimensions incorrectly displayed as Fit.
+It also reproduced an explicit cross-axis stretch becoming intrinsic `max-content` after reparenting when the original parent had different alignment.
+The failures remain in `artifacts/editor/movement-sizing-owner-baseline-result.json`, `movement-cross-stretch-baseline-result.json`, and `movement-cross-fill-placement-baseline-result.json`.
+
+Properties and pointer placement now share native Flex sizing recognition under [layout ownership](src/editor/layout/README.md).
+Properties reads the committed native canvas after document or selection changes and labels supported Fill and both-edge-controlled dimensions accurately while keeping them read-only.
+Explicit child stretch overrides the parent's alignment, while cross-axis automatic margins retain intrinsic sizing.
+The correction adds no saved geometry or second sizing authority.
+General sizing-mode controls and broader ownership mappings remain unfinished V1 work.
+
+The [final movement result](artifacts/editor/movement-sizing-ownership-result.json) passed 100 checks and 644 recorded inputs across development and built Chromium 153.0.8010.12 on Linux.
+It verifies Fill/Constraints/Fit labels, read-only controlled fields, retained native dimensions, explicit stretch, automatic margins, reparenting, exact history, and save/reopen.
+Before/after movement hashes match, and the final movement, editor, Preview, and atomic result hashes match the executable checkout.
+Fill and intrinsic automatic-margin screenshots were visually reviewed.
+All three scoped sizing gates passed after correcting formatting, a synchronous effect warning, and two functions above complexity 10 without suppressions or threshold changes.
+Build, TypeScript, lint, formatting, health, and dead-code checks passed.
+Health reports zero enforced errors and 123 static-estimated CRAP advisories; dead-code analysis retains seven planned unused dependencies and no unused files/exports or cycles.
+
+The user requested a good stopping point after fixing current issues, with no subagents started.
+No new subagents were started, and the agent inventory confirms no child agent is running.
+Implementation is paused here with changes uncommitted on master.
+Full V1, general layout/constraint controls, MCP, installed Chrome verification, and Windows verification remain unfinished.
+The [gesture record](backlog/canvas-pointer-gestures.md) retains the remaining ownership and gesture work.
 
 ## Next checkpoint
 

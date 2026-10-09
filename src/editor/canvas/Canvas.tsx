@@ -3,6 +3,9 @@ import { isLocked, textContent, type DesignDocument } from "../../../shared/docu
 import type { Mutation } from "../../../shared/commands/commands";
 import { createTextNode, RenderNode } from "../rendering/renderer";
 import { replaceText } from "../rendering/text-runs";
+import { usePointerMovement } from "./pointer-movement";
+import { DropIndicator } from "./DropIndicator";
+import { pointerDocument, type PointerPreview } from "./pointer-layout";
 import type { ViewState } from "../view-state";
 
 type Props = {
@@ -12,6 +15,7 @@ type Props = {
   select: (id: string | null, extend: boolean) => Promise<boolean>;
   beforeEdit: () => Promise<boolean>;
   mutate: (mutation: Mutation) => Promise<boolean>;
+  notice: (message: string | null) => void;
   disabled: boolean;
   keyDown: (event: React.KeyboardEvent) => void;
 };
@@ -21,8 +25,15 @@ type Editing =
 
 export function Canvas(props: Props) {
   const editor = useCanvasEditor(props);
-  const { canvas, handlers } = useCanvasEvents(props, editor.setEditing);
-  useCanvasWheel(canvas, props.view.pan, props.setView);
+  const movement = usePointerMovement({
+    ...props,
+    tool: props.view.tool,
+    selected: props.view.selected,
+    scale: props.view.pan.scale,
+  });
+  const { canvas, handlers } = useCanvasEvents(props, editor.setEditing, movement);
+  const rendered = { ...props, document: pointerDocument(props.document, movement.preview) };
+  useCanvasWheel(canvas, props.view.pan, props.setView, movement.cancel);
   /* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- This application canvas implements custom keyboard commands and requires focus. */
   return (
     <div
@@ -32,7 +43,7 @@ export function Canvas(props: Props) {
       role="application"
       aria-label="Canvas"
       tabIndex={0}
-      onKeyDown={props.keyDown}
+      onKeyDown={(event) => canvasKey(event, props, movement)}
       onClickCapture={(event) => {
         if (event.target instanceof Element && event.target.closest("[data-orc-id]")) {
           event.preventDefault();
@@ -41,13 +52,8 @@ export function Canvas(props: Props) {
       }}
       {...handlers}
     >
-      <CanvasContent props={props} editing={editor.editing} finish={editor.finish} />
-      <SelectionOutline
-        canvas={canvas}
-        selected={props.view.selected}
-        document={props.document}
-        pan={props.view.pan}
-      />
+      <CanvasContent props={rendered} editing={editor.editing} finish={editor.finish} />
+      <CanvasOverlays canvas={canvas} props={rendered} preview={movement.preview} />
     </div>
   );
   /* eslint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */
@@ -79,19 +85,16 @@ function useCanvasEditor(props: Props) {
   return { editing, setEditing, finish };
 }
 
-function useCanvasEvents(props: Props, edit: (value: Editing) => void) {
+function useCanvasEvents(
+  props: Props,
+  edit: (value: Editing) => void,
+  movement: ReturnType<typeof usePointerMovement>,
+) {
   const canvas = useRef<HTMLDivElement>(null);
   const pan = useRef<{ startX: number; startY: number; x: number; y: number } | null>(null);
   const move = (event: PointerEvent<HTMLDivElement>) => {
-    const start = pan.current;
-    if (start)
-      props.setView({
-        pan: {
-          ...props.view.pan,
-          x: start.x + event.clientX - start.startX,
-          y: start.y + event.clientY - start.startY,
-        },
-      });
+    movement.move(event);
+    panCanvas(event, props, pan.current);
   };
   const stop = () => {
     pan.current = null;
@@ -102,10 +105,20 @@ function useCanvasEvents(props: Props, edit: (value: Editing) => void) {
     canvas,
     handlers: {
       onPointerDown: (event: PointerEvent<HTMLDivElement>) =>
-        canvasPointer(event, props, pan, edit),
+        canvasPointer(event, props, pan, edit, movement),
       onPointerMove: move,
-      onPointerUp: stop,
-      onPointerCancel: stop,
+      onPointerUp: (event: PointerEvent<HTMLDivElement>) => {
+        stop();
+        movement.finish(event);
+      },
+      onPointerCancel: () => {
+        stop();
+        movement.cancel();
+      },
+      onLostPointerCapture: () => {
+        stop();
+        movement.cancel();
+      },
       onDoubleClick: doubleClick,
     },
   };
@@ -148,6 +161,7 @@ function canvasPointer(
   props: Props,
   pan: React.RefObject<{ startX: number; startY: number; x: number; y: number } | null>,
   edit: (value: Editing) => void,
+  movement: ReturnType<typeof usePointerMovement>,
 ) {
   if (
     event.button !== 0 ||
@@ -166,7 +180,7 @@ function canvasPointer(
     event.currentTarget.setPointerCapture(event.pointerId);
     return;
   }
-  canvasSelection(event, props, edit);
+  selectOrMove(event, props, edit, movement);
 }
 
 async function canvasSelection(
@@ -240,11 +254,13 @@ function useCanvasWheel(
   canvas: React.RefObject<HTMLDivElement | null>,
   pan: ViewState["pan"],
   change: Props["setView"],
+  cancel: () => void,
 ) {
   useEffect(() => {
     const element = canvas.current;
     const wheel = (event: WheelEvent) => {
       event.preventDefault();
+      cancel();
       const bounds = element?.getBoundingClientRect();
       if (!bounds) return;
       const scale = Math.max(0.1, Math.min(8, pan.scale * Math.exp(-event.deltaY * 0.0015)));
@@ -260,7 +276,7 @@ function useCanvasWheel(
     };
     element?.addEventListener("wheel", wheel, { passive: false });
     return () => element?.removeEventListener("wheel", wheel);
-  }, [canvas, pan, change]);
+  }, [canvas, pan, change, cancel]);
 }
 
 function SelectionOutline(props: {
@@ -317,4 +333,71 @@ function measureSelection(surface: HTMLDivElement, selected: string[]) {
       },
     ];
   });
+}
+
+function canvasKey(
+  event: React.KeyboardEvent,
+  props: Props,
+  movement: ReturnType<typeof usePointerMovement>,
+) {
+  if (!movement.active()) return props.keyDown(event);
+  if (event.key === "Escape") movement.cancel();
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+function panCanvas(
+  event: PointerEvent<HTMLDivElement>,
+  props: Props,
+  start: { startX: number; startY: number; x: number; y: number } | null,
+) {
+  if (start)
+    props.setView({
+      pan: {
+        ...props.view.pan,
+        x: start.x + event.clientX - start.startX,
+        y: start.y + event.clientY - start.startY,
+      },
+    });
+}
+
+function selectOrMove(
+  event: PointerEvent<HTMLDivElement>,
+  props: Props,
+  edit: (value: Editing) => void,
+  movement: ReturnType<typeof usePointerMovement>,
+) {
+  const target = event.target instanceof Element ? event.target.closest("[data-orc-id]") : null;
+  const id = target?.getAttribute("data-orc-id");
+  if (props.view.tool === "select" && id && !isLocked(props.document, id) && !event.shiftKey) {
+    event.preventDefault();
+    void movement.begin(event, id);
+  } else canvasSelection(event, props, edit);
+}
+
+function CanvasOverlays({
+  canvas,
+  props,
+  preview,
+}: {
+  canvas: React.RefObject<HTMLDivElement | null>;
+  props: Props;
+  preview: PointerPreview;
+}) {
+  return (
+    <>
+      <DropIndicator
+        canvas={canvas}
+        document={props.document}
+        preview={preview}
+        pan={props.view.pan}
+      />
+      <SelectionOutline
+        canvas={canvas}
+        selected={props.view.selected}
+        document={props.document}
+        pan={props.view.pan}
+      />
+    </>
+  );
 }

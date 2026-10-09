@@ -30,6 +30,10 @@ const requirements = [
   "Flex Shift still reorders; cross-axis and edge keys preserve history.",
   "Text, Properties, Code, menus and Preview preserve local key behavior without document movement.",
   "Draft Cancel preserves draft/source/history; Discard allows movement; immediate Undo waits for acknowledgement.",
+  "Pointer previews use unscaled CSS positions; release commits once and Escape restores without history.",
+  "Flex pointer slots show the receiving outline and insertion line in Row, Column and wrapped Row.",
+  "Draft Discard after pointer release completes selection without resuming movement or creating history.",
+  "Frame drops convert Free placement and constraints or join the marked Flex slot atomically.",
   "Exact Undo/Redo and save/reopen retain CSS, hierarchy and native geometry.",
 ];
 let failure: string | null = null;
@@ -60,12 +64,7 @@ async function verifyMode(mode: "development" | "built") {
   browserErrors(page, errors);
   await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
   try {
-    await page.goto(app.url);
-    await page.getByRole("button", { name: "New project", exact: true }).click();
-    await page.getByText("No layers yet", { exact: true }).waitFor();
-    await accepted(page, { kind: "insert", nodes: fixture() });
-    await refresh(page);
-    await page.locator('.canvas-world [data-orc-id="loose"]').click();
+    await prepareMovementFixture(page, app.url);
     await initialMovement(page);
     await freeMovement(page, mode);
     await constraintMovement(page, mode);
@@ -75,6 +74,7 @@ async function verifyMode(mode: "development" | "built") {
     await draftProtection(page, mode);
     await pendingHistory(page, mode);
     await queuedHistory(page, mode);
+    await pointerReparenting(page);
     await saveReopen(page, mode);
     assert.deepEqual(errors, [], "No uncaught browser errors");
     await page.screenshot({ path: artifact(`${mode}.png`), fullPage: true });
@@ -106,7 +106,20 @@ function text(id: string, parentId: string | null, style: DesignNode["style"] = 
   };
 }
 
+async function prepareMovementFixture(page: Page, url: string) {
+  await page.goto(url);
+  await page.getByRole("button", { name: "New project", exact: true }).click();
+  await page.getByText("No layers yet", { exact: true }).waitFor();
+  await accepted(page, { kind: "insert", nodes: fixture() });
+  await refresh(page);
+  await page.locator('.canvas-world [data-orc-id="loose"]').click();
+}
+
 async function initialMovement(page: Page) {
+  await pointerMovement(page);
+  await unselectedPointer(page);
+  await flexPointerSelection(page);
+  await flexPointerMovement(page);
   const before = (await session(page)).projects[0].document;
   const bounds = await geometry(page, "loose");
   const pending = page.waitForResponse(isCommand, { timeout: 2000 }).catch(() => null);
@@ -177,6 +190,99 @@ function frame(id: string, children: string[], style: DesignNode["style"]): Desi
 
 function fixture(): DesignNode[] {
   return [...freeFixture(), ...flexFixture()];
+}
+
+function reparentFixture(): DesignNode[] {
+  return [
+    frame("drop-free", [], {
+      left: "700px",
+      top: "100px",
+      width: "300px",
+      height: "250px",
+      border: "6px solid #8c96a4",
+      padding: "12px",
+      "box-sizing": "border-box",
+    }),
+    { ...frame("drop-locked", [], { left: "700px", top: "440px", height: "70px" }), locked: true },
+    text("reparent-margin", null, {
+      position: "absolute",
+      left: "260px",
+      top: "40px",
+      margin: "3px 7px",
+    }),
+    ...reparentWrapperFixture(),
+    ...reparentFrameFixture(),
+    ...reparentSizingFixture(),
+    text("bounded-center", "free", { position: "absolute", left: "min(50%, 100px)", top: "200px" }),
+  ];
+}
+
+function reparentWrapperFixture(): DesignNode[] {
+  return [
+    {
+      id: "reparent-wrapper",
+      name: "reparent-wrapper",
+      parentId: "free",
+      children: ["inside-wrapper"],
+      visible: true,
+      locked: false,
+      attributes: {},
+      kind: "element",
+      tag: "div",
+      style: { position: "absolute", left: "160px", top: "10px", width: "100px", height: "50px" },
+    },
+    text("inside-wrapper", "reparent-wrapper", { position: "absolute", left: "10px", top: "10px" }),
+  ];
+}
+
+function reparentFrameFixture(): DesignNode[] {
+  return [
+    frame("movable-frame", ["frame-child"], {
+      left: "40px",
+      top: "650px",
+      width: "200px",
+      height: "70px",
+    }),
+    {
+      ...frame("frame-child", ["nested-label"], {
+        left: "16px",
+        top: "12px",
+        width: "80px",
+        height: "40px",
+      }),
+      parentId: "movable-frame",
+    },
+    text("nested-label", "frame-child", { position: "absolute", left: "4px", top: "4px" }),
+  ];
+}
+
+function reparentSizingFixture(): DesignNode[] {
+  return [
+    frame("fill-row", ["fill-a", "fill-b", "cross-fill", "cross-auto-margin"], {
+      left: "700px",
+      top: "570px",
+      width: "300px",
+      height: "60px",
+      display: "flex",
+      gap: "8px",
+      "align-items": "center",
+    }),
+    text("fill-a", "fill-row", { width: "auto", flex: "1 1 0px" }),
+    text("fill-b", "fill-row", { width: "auto", flex: "1 1 0px" }),
+    text("cross-fill", "fill-row", { height: "auto", "align-self": "stretch" }),
+    text("cross-auto-margin", "fill-row", {
+      height: "auto",
+      "align-self": "stretch",
+      "margin-top": "auto",
+    }),
+    text("fit-text", null, {
+      position: "absolute",
+      left: "280px",
+      top: "580px",
+      width: "max-content",
+      height: "auto",
+    }),
+  ];
 }
 
 function freeFixture(): DesignNode[] {
@@ -255,12 +361,17 @@ function flexFixture(): DesignNode[] {
 
 async function select(page: Page, ids: string[]) {
   for (const id of ids) {
-    const node = (await session(page)).projects[0].document.nodes[id];
-    if (
-      node.parentId &&
-      (await page.getByRole("button", { name: `Expand ${node.parentId}`, exact: true }).count())
-    )
-      await page.getByRole("button", { name: `Expand ${node.parentId}`, exact: true }).click();
+    const document = (await session(page)).projects[0].document;
+    const parents: string[] = [];
+    let parent = document.nodes[id].parentId;
+    while (parent) {
+      parents.unshift(parent);
+      parent = document.nodes[parent].parentId;
+    }
+    for (const parent of parents) {
+      const expand = page.getByRole("button", { name: `Expand ${parent}`, exact: true });
+      if (await expand.count()) await expand.click();
+    }
     await page
       .locator(".layer-name")
       .filter({ has: page.getByText(id, { exact: true }) })
@@ -412,6 +523,8 @@ async function zoomMovement(page: Page) {
     (await session(page)).projects[0].document.nodes.loose.style.left,
     `${parseFloat(document.nodes.loose.style.left) + 8}px`,
   );
+  await flexPointerDrop(page, "row", "ra", "rc", ["absolute", "hidden", "none", "rb", "rc", "ra"]);
+  await zoomPointer(page);
   await page.mouse.wheel(0, -420);
   await renderSettled(page);
 }
@@ -708,6 +821,7 @@ async function draftProtection(page: Page, mode: string) {
   await codeFocus(page);
   const draft = await page.getByRole("textbox", { name: "Object source", exact: true }).innerText();
   const before = await session(page);
+  await pointerDraftCancel(page, before, draft);
   await page.getByRole("application", { name: "Canvas" }).press("ArrowRight");
   const dialog = page.getByRole("dialog", { name: "Discard unapplied changes?", exact: true });
   await dialog.waitFor();
@@ -731,6 +845,7 @@ async function draftProtection(page: Page, mode: string) {
   assert.equal(await page.getByText("Unapplied changes", { exact: true }).count(), 0);
   await undoRedo(page, before.projects[0].document, after);
   await page.getByRole("button", { name: "Code", exact: true }).click();
+  await pointerDraftDiscard(page);
   checks.push(
     `${mode}: draft Cancel preserves source/selection/history, dialog arrows stay local, Discard completes nudge and exact one-step history`,
   );
@@ -964,5 +1079,611 @@ async function queuedHistory(page: Page, mode: string) {
   }
   checks.push(
     `${mode}: three queued arrows use fresh revisions once each; immediate Undo reverses the final movement after acknowledgement`,
+  );
+}
+
+async function pointerMovement(page: Page) {
+  const before = (await session(page)).projects[0].document;
+  const element = page.locator('.canvas-world [data-orc-id="loose"]');
+  const bounds = await element.boundingBox();
+  assert.ok(bounds);
+  const x = bounds.x + bounds.width / 2;
+  const y = bounds.y + bounds.height / 2;
+  await cancelledPointer(page, element, before, bounds, x, y);
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + 24, y + 12, { steps: 4 });
+  const response = page.waitForResponse(isCommand);
+  await page.mouse.up();
+  await response;
+  const after = (await session(page)).projects[0].document;
+  assert.equal(after.revision, before.revision + 1);
+  assert.equal(after.nodes.loose.style.left, "64px");
+  await undoRedo(page, before, after);
+  await history(page, "undo");
+  await renderSettled(page);
+  checks.push("Pointer preview, Escape, release and one-step history verified");
+}
+
+async function cancelledPointer(
+  page: Page,
+  element: Locator,
+  before: DesignDocument,
+  bounds: { x: number; y: number },
+  x: number,
+  y: number,
+) {
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + 12, y + 6, { steps: 4 });
+  await page.mouse.move(x + 24, y + 12, { steps: 4 });
+  assert.deepEqual(
+    (await session(page)).projects[0].document,
+    before,
+    "Preview must not change applied document",
+  );
+  const preview = await element.boundingBox();
+  assert.ok(preview);
+  near(preview.x - bounds.x, 24);
+  near(preview.y - bounds.y, 12);
+  await page.keyboard.press("Escape");
+  await page.mouse.up();
+  assert.deepEqual(
+    (await session(page)).projects[0].document,
+    before,
+    "Escape must create no revision",
+  );
+  const restored = await element.boundingBox();
+  assert.ok(restored);
+  near(restored.x, bounds.x);
+}
+
+async function unselectedPointer(page: Page) {
+  await page.getByRole("application", { name: "Canvas" }).press("Escape");
+  assert.deepEqual(await selection(page), []);
+  const before = (await session(page)).projects[0].document;
+  const element = page.locator('.canvas-world [data-orc-id="loose"]');
+  const bounds = await element.boundingBox();
+  assert.ok(bounds);
+  const x = bounds.x + bounds.width / 2;
+  const y = bounds.y + bounds.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + 30, y + 15, { steps: 8 });
+  const response = page.waitForResponse(isCommand, { timeout: 2000 });
+  await page.mouse.up();
+  await response;
+  const after = (await session(page)).projects[0].document;
+  assert.equal(after.revision, before.revision + 1);
+  assert.equal(after.nodes.loose.style.left, "70px");
+  assert.deepEqual(await selection(page), ["loose"]);
+  await undoRedo(page, before, after);
+  await history(page, "undo");
+  checks.push("Dragging an initially unselected target selects it and commits exactly one move");
+}
+
+async function zoomPointer(page: Page) {
+  const before = (await session(page)).projects[0].document;
+  const original = await geometry(page, "loose");
+  const bounds = await page.locator('.canvas-world [data-orc-id="loose"]').boundingBox();
+  assert.ok(bounds);
+  const x = bounds.x + bounds.width / 2;
+  const y = bounds.y + bounds.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + 20 * original.scale, y + 10 * original.scale, { steps: 8 });
+  const pending = page.waitForResponse(isCommand);
+  await page.mouse.up();
+  assert.equal((await pending).status(), 200);
+  await renderSettled(page);
+  const moved = await geometry(page, "loose");
+  near(moved.x - original.x, 20);
+  near(moved.y - original.y, 10);
+  const after = (await session(page)).projects[0].document;
+  assert.equal(after.revision, before.revision + 1);
+  await undoRedo(page, before, after);
+  await history(page, "undo");
+  checks.push("Zoomed pointer movement preserves unscaled CSS coordinates and one-step history");
+}
+
+async function pointerDraftCancel(
+  page: Page,
+  before: Awaited<ReturnType<typeof session>>,
+  draft: string,
+) {
+  await page.locator('.canvas-world [data-orc-id="loose"]').click();
+  const dialog = page.getByRole("dialog", { name: "Discard unapplied changes?", exact: true });
+  await dialog.waitFor();
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  assert.deepEqual(await session(page), before);
+  assert.deepEqual(await selection(page), ["start"]);
+  assert.equal(
+    await page.getByRole("textbox", { name: "Object source", exact: true }).innerText(),
+    draft,
+  );
+  checks.push(
+    "Pointer selection draft Cancel preserves selection, draft, applied document and history",
+  );
+}
+
+async function pointerReparenting(page: Page) {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await accepted(page, { kind: "insert", nodes: reparentFixture() });
+  await refresh(page);
+  await pointerReparent(page, "inside-wrapper", "reparent-wrapper");
+  for (const id of ["loose", "end", "both", "center", "reparent-margin", "ra"])
+    await pointerReparent(page, id, "drop-free");
+  await pointerReparent(page, "loose", "row");
+  await pointerReparent(page, "ra", "column");
+  await pointerReparent(page, "start", "wrap");
+  await pointerReparent(page, "start", null);
+  await pointerReparent(page, "movable-frame", "drop-free");
+  await pointerReparent(page, "movable-frame", "column");
+  await pointerReparent(page, "fit-text", "row");
+  await pointerReparent(page, "cross-fill", "row");
+  await pointerReparent(page, "cross-auto-margin", "row");
+  await pointerReparent(page, "fill-a", "row");
+  await zoomReparent(page);
+  await rejectedPointerDrop(page, "loose", "drop-locked");
+  await rejectedPointerDrop(page, "transformed", "drop-free");
+  await rejectedPointerDrop(page, "fill-a", "column");
+  await rejectedPointerDrop(page, "bounded-center", "drop-free");
+  await pointerReparent(page, "loose", "drop-free");
+  await history(page, "redo");
+  checks.push("A completed pointer reparent remains applied for Save/Close/Open verification");
+}
+
+async function zoomReparent(page: Page) {
+  await page.getByRole("application", { name: "Canvas" }).hover();
+  await page.mouse.wheel(0, 420);
+  await renderSettled(page);
+  await pointerReparent(page, "reparent-margin", "drop-free");
+  await page.getByRole("application", { name: "Canvas" }).hover();
+  await page.mouse.wheel(0, -420);
+  await renderSettled(page);
+  checks.push("Zoomed reparenting preserves native coordinates and authored margins");
+}
+
+async function pointerReparent(page: Page, id: string, parentId: string | null) {
+  await select(page, [id]);
+  const before = (await session(page)).projects[0].document;
+  const bounds = await geometry(page, id);
+  const point = await reparentPoint(page, parentId);
+  await reparentPreview(page, id, parentId, point, before);
+  await page.keyboard.press("Escape");
+  await page.mouse.up();
+  assert.deepEqual((await session(page)).projects[0].document, before);
+  const restored = await geometry(page, id);
+  near(restored.x, bounds.x);
+  near(restored.y, bounds.y);
+  await reparentPreview(page, id, parentId, point, before);
+  const pending = page.waitForResponse(isCommand, { timeout: 2000 });
+  await page.mouse.up();
+  assert.equal((await pending).status(), 200);
+  await renderSettled(page);
+  const after = (await session(page)).projects[0].document;
+  assert.equal(after.revision, before.revision + 1);
+  assert.equal(after.nodes[id].parentId, parentId);
+  assert.deepEqual(await selection(page), [id]);
+  await reparentRelationship(page, id, parentId, before, after);
+  await reparentSizingGeometry(page, id, bounds, before, after);
+  await undoRedo(page, before, after);
+  await history(page, "undo");
+  checks.push(
+    `Pointer reparent ${id} into ${parentId ?? "workspace"}: preview, Escape, one command and exact history`,
+  );
+}
+
+async function reparentSizingGeometry(
+  page: Page,
+  id: string,
+  bounds: Awaited<ReturnType<typeof geometry>>,
+  before: DesignDocument,
+  after: DesignDocument,
+) {
+  if (id === "movable-frame") await reparentFrameGeometry(page, before, after);
+  if (id === "fit-text") await reparentFitGeometry(page, bounds);
+  if (id === "fill-a") await reparentFillGeometry(page, before, after);
+  if (id === "cross-fill") await reparentCrossFillGeometry(page, after);
+  if (id === "cross-auto-margin") {
+    near((await geometry(page, id)).height, bounds.height);
+    await assertSizeOwner(page, "Height", "Fit");
+    checks.push("Cross-axis automatic margins retain intrinsic sizing rather than becoming Fill");
+  }
+}
+
+async function reparentFrameGeometry(page: Page, before: DesignDocument, after: DesignDocument) {
+  assert.deepEqual(after.nodes["frame-child"], before.nodes["frame-child"]);
+  assert.deepEqual(after.nodes["nested-label"], before.nodes["nested-label"]);
+  const frame = await geometry(page, "movable-frame");
+  near(frame.width, 200);
+  near(frame.height, 70);
+  const child = await geometry(page, "frame-child");
+  near(child.x - frame.x, 16);
+  near(child.y - frame.y, 12);
+}
+
+async function reparentFitGeometry(page: Page, before: Awaited<ReturnType<typeof geometry>>) {
+  const after = await geometry(page, "fit-text");
+  near(after.width, before.width);
+  near(after.height, before.height);
+  const node = (await session(page)).projects[0].document.nodes["fit-text"];
+  assert.equal(node.style.width, "max-content");
+  assert.equal(node.style.height, "max-content");
+  await assertSizeOwner(page, "Width", "Fit");
+  await assertSizeOwner(page, "Height", "Fit");
+}
+
+async function reparentPoint(page: Page, parentId: string | null) {
+  if (parentId === null)
+    return page.locator(".canvas-world").evaluate((world) => {
+      const bounds = world.getBoundingClientRect();
+      const scale = new DOMMatrix(getComputedStyle(world).transform).a;
+      return { x: bounds.x + 220 * scale, y: bounds.y + 40 * scale, flow: false };
+    });
+  return page.locator(`.canvas-world [data-orc-id="${parentId}"]`).evaluate((parent) => {
+    const bounds = parent.getBoundingClientRect();
+    const style = getComputedStyle(parent);
+    const flow = ["flex", "inline-flex"].includes(style.display);
+    return {
+      x: bounds.x + bounds.width * (flow && style.flexDirection === "row" ? 0.85 : 0.5),
+      y: bounds.y + bounds.height * (flow && style.flexDirection === "column" ? 0.9 : 0.5),
+      flow,
+    };
+  });
+}
+
+async function reparentPreview(
+  page: Page,
+  id: string,
+  parentId: string | null,
+  point: Awaited<ReturnType<typeof reparentPoint>>,
+  before: DesignDocument,
+) {
+  const element = page.locator(`.canvas-world [data-orc-id="${id}"]`);
+  const grab = await reparentGrab(element);
+  await page.mouse.move(grab.x, grab.y);
+  await page.mouse.down();
+  await page.mouse.move(
+    point.x + (point.flow ? 0 : grab.offsetX),
+    point.y + (point.flow ? 0 : grab.offsetY),
+    { steps: 10 },
+  );
+  await renderSettled(page);
+  const actualParent = await element.evaluate(
+    (node) => node.parentElement?.getAttribute("data-orc-id") ?? null,
+  );
+  inputs.push({ trigger: `Pointer preview ${id} into ${parentId}`, actualParent, point, before });
+  assert.equal(actualParent, parentId, "Live drop preview must project the receiving parent");
+  assert.equal(
+    await page.locator(".workspace-notice").count(),
+    0,
+    "A valid new gesture clears previous unavailable notices",
+  );
+  assert.deepEqual((await session(page)).projects[0].document, before);
+  if (parentId !== null && before.nodes[parentId].kind === "frame")
+    assert.equal(await page.locator(`[data-orc-drop-parent="${parentId}"]`).count(), 1);
+  if (point.flow) assert.equal(await page.locator(`[data-orc-drop-object="${id}"]`).count(), 1);
+  if (!point.flow) {
+    const bounds = await element.boundingBox();
+    assert.ok(bounds);
+    near(bounds.x + bounds.width / 2, point.x);
+    near(bounds.y + bounds.height / 2, point.y);
+  }
+  await captureReparentPreview(page, before, id, parentId);
+}
+
+async function captureReparentPreview(
+  page: Page,
+  before: DesignDocument,
+  id: string,
+  parentId: string | null,
+) {
+  const screenshot = artifact(`${before.id}-${parentId ?? "root"}-${id}-reparent-preview.png`);
+  await page.screenshot({ path: screenshot });
+  inputs.push({ trigger: "Receiving frame preview", screenshot });
+}
+
+async function reparentGrab(element: Locator) {
+  return element.evaluate((node) => {
+    const bounds = node.getBoundingClientRect();
+    const id = node.getAttribute("data-orc-id");
+    for (const [fx, fy] of [
+      [0.1, 0.1],
+      [0.9, 0.1],
+      [0.1, 0.9],
+      [0.9, 0.9],
+      [0.5, 0.5],
+    ]) {
+      const x = bounds.x + bounds.width * fx;
+      const y = bounds.y + bounds.height * fy;
+      if (
+        document.elementFromPoint(x, y)?.closest("[data-orc-id]")?.getAttribute("data-orc-id") ===
+        id
+      )
+        return {
+          x,
+          y,
+          offsetX: x - bounds.x - bounds.width / 2,
+          offsetY: y - bounds.y - bounds.height / 2,
+        };
+    }
+    throw new Error(`No visible pointer grab point for ${id}`);
+  });
+}
+
+async function reparentRelationship(
+  page: Page,
+  id: string,
+  parentId: string | null,
+  before: DesignDocument,
+  after: DesignDocument,
+) {
+  assert.equal(after.nodes[id].style.margin, before.nodes[id].style.margin);
+  if (parentId === "drop-free" && ["end", "both", "center"].includes(id)) {
+    if (id === "both") await assertSizeOwner(page, "Width", "Constraints");
+    const bounds = await geometry(page, id);
+    await select(page, [parentId]);
+    const width = page.getByRole("spinbutton", { name: "Width", exact: true });
+    await width.fill("380");
+    const pending = page.waitForResponse(isCommand);
+    await width.press("Enter");
+    assert.equal((await pending).status(), 200);
+    await renderSettled(page);
+    const resized = await geometry(page, id);
+    near(resized.x - bounds.x, id === "end" ? 80 : id === "center" ? 40 : 0);
+    near(resized.width - bounds.width, id === "both" ? 80 : 0);
+    await history(page, "undo");
+    await select(page, [id]);
+    assertContent((await session(page)).projects[0].document, after);
+  }
+  if (["row", "column", "wrap"].includes(parentId ?? "")) {
+    assert.equal(after.nodes[id].style.left, undefined);
+    assert.equal(after.nodes[id].style.right, undefined);
+    assert.equal(after.nodes[id].style.top, undefined);
+    assert.equal(after.nodes[id].style.bottom, undefined);
+    assert.notEqual(after.nodes[id].style.position, "absolute");
+  }
+}
+
+async function reparentFillGeometry(page: Page, before: DesignDocument, after: DesignDocument) {
+  assert.equal(after.nodes["fill-a"].style.flex, before.nodes["fill-a"].style.flex);
+  assert.equal(after.nodes["fill-a"].style.width, "auto");
+  await assertSizeOwner(page, "Width", "Fill");
+  const bounds = await geometry(page, "fill-a");
+  await select(page, ["row"]);
+  const width = page.getByRole("spinbutton", { name: "Width", exact: true });
+  await width.fill("380");
+  const pending = page.waitForResponse(isCommand);
+  await width.press("Enter");
+  assert.equal((await pending).status(), 200);
+  await renderSettled(page);
+  near((await geometry(page, "fill-a")).width - bounds.width, 80);
+  await history(page, "undo");
+  await select(page, ["fill-a"]);
+  assertContent((await session(page)).projects[0].document, after);
+}
+
+async function reparentCrossFillGeometry(page: Page, after: DesignDocument) {
+  assert.equal(after.nodes["cross-fill"].style.height, "auto");
+  assert.equal(after.nodes["cross-fill"].style["align-self"], "stretch");
+  near((await geometry(page, "cross-fill")).height, 60);
+  await assertSizeOwner(page, "Height", "Fill");
+  checks.push(
+    "Explicit cross-axis stretch overrides parent alignment and retains Fill after reparenting",
+  );
+}
+
+async function assertSizeOwner(page: Page, label: string, owner: string) {
+  const field = page.getByRole("textbox", { name: label, exact: true });
+  assert.equal(await field.inputValue(), owner);
+  assert.equal(await field.getAttribute("readonly"), "");
+}
+
+async function rejectedPointerDrop(page: Page, id: string, parentId: string) {
+  await select(page, [id]);
+  const before = await session(page);
+  const point = await reparentPoint(page, parentId);
+  const grab = await reparentGrab(page.locator(`.canvas-world [data-orc-id="${id}"]`));
+  await page.mouse.move(grab.x, grab.y);
+  await page.mouse.down();
+  await page.mouse.move(point.x, point.y, { steps: 10 });
+  await page.mouse.up();
+  await renderSettled(page);
+  assert.deepEqual(
+    await session(page),
+    before,
+    "Unavailable conversion must reject the whole drop",
+  );
+  assert.deepEqual(await selection(page), [id]);
+  checks.push(
+    `${id} into ${parentId}: unavailable pointer destination or conversion rejects without partial changes`,
+  );
+}
+
+async function pointerDraftDiscard(page: Page) {
+  await select(page, ["start"]);
+  await codeFocus(page);
+  const before = await session(page);
+  const element = page.locator('.canvas-world [data-orc-id="loose"]');
+  const bounds = await element.boundingBox();
+  assert.ok(bounds);
+  await element.click();
+  const dialog = page.getByRole("dialog", { name: "Discard unapplied changes?", exact: true });
+  await dialog.waitFor();
+  await dialog.getByRole("button", { name: "Discard", exact: true }).click();
+  await renderSettled(page);
+  const selected = await selection(page);
+  inputs.push({ trigger: "Pointer release then draft Discard", before, selected });
+  assert.deepEqual(selected, ["loose"], "Discard must complete the requested canvas selection");
+  assert.equal(await page.getByText("Unapplied changes", { exact: true }).count(), 0);
+  await page.mouse.move(bounds.x + bounds.width + 40, bounds.y + bounds.height + 20, { steps: 4 });
+  await page.mouse.up();
+  await renderSettled(page);
+  assert.deepEqual(await session(page), before, "Released pointer must not resume movement");
+  assert.deepEqual(await selection(page), ["loose"]);
+  const afterBounds = await element.boundingBox();
+  assert.ok(afterBounds);
+  near(afterBounds.x, bounds.x);
+  near(afterBounds.y, bounds.y);
+  await page.getByRole("button", { name: "Code", exact: true }).click();
+  checks.push(
+    "Draft Discard after pointer release completes selection without movement or history",
+  );
+}
+
+async function flexPointerSelection(page: Page) {
+  await page.locator('.canvas-world [data-orc-id="ra"]').hover();
+  await page.mouse.down();
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
+  assert.deepEqual(await selection(page), ["ra"]);
+  const notices = await page.locator(".workspace-notice").allTextContents();
+  inputs.push({ trigger: "Hold Flex child without dragging", notices });
+  assert.deepEqual(notices, [], "Selecting a Flex child must not invoke movement validation");
+  await page.mouse.up();
+  await select(page, ["loose"]);
+  checks.push("Clicking a Flex child selects without invoking drag validation");
+}
+
+async function flexPointerMovement(page: Page) {
+  await flexPointerDrop(page, "row", "ra", "rc", ["absolute", "hidden", "none", "rb", "rc", "ra"]);
+  await flexPointerDrop(page, "row", "rc", "ra", ["ra", "absolute", "hidden", "none", "rc", "rb"]);
+  await flexPointerDrop(page, "column", "ca", "cc", ["cb", "cc", "ca"]);
+  await flexPointerDrop(page, "wrap", "wa", "wc", ["wb", "wc", "wa"]);
+  await noopFlexDrop(page);
+  await select(page, ["loose"]);
+}
+
+async function flexPointerDrop(
+  page: Page,
+  parent: string,
+  dragged: string,
+  target: string,
+  expected: string[],
+) {
+  const before = await previewFlexPointer(page, parent, dragged, target, expected);
+  await cancelFlexPointer(page, before, dragged);
+  await previewFlexPointer(page, parent, dragged, target, expected);
+  const response = page.waitForResponse(isCommand, { timeout: 2000 });
+  await page.mouse.up();
+  assert.equal((await response).status(), 200);
+  const after = (await session(page)).projects[0].document;
+  assert.equal(after.revision, before.revision + 1);
+  assert.deepEqual(after.nodes[parent].children, expected);
+  assert.deepEqual(
+    after.nodes[dragged],
+    before.nodes[dragged],
+    "Flow drop preserves authored CSS, dimensions, identity and parent",
+  );
+  await undoRedo(page, before, after);
+  await history(page, "undo");
+  assert.equal(
+    await page.locator(".flex-drop-marker").count(),
+    0,
+    "Release removes the editor insertion overlay",
+  );
+  checks.push(
+    `${parent}: native Flex pointer slot preview and one-step reorder preserve authored CSS`,
+  );
+}
+
+async function previewFlexPointer(
+  page: Page,
+  parent: string,
+  dragged: string,
+  target: string,
+  expected: string[],
+) {
+  const before = (await session(page)).projects[0].document;
+  const object = page.locator(`.canvas-world [data-orc-id="${dragged}"]`);
+  const destination = page.locator(`.canvas-world [data-orc-id="${target}"]`);
+  const start = await object.boundingBox();
+  const end = await destination.boundingBox();
+  assert.ok(start && end);
+  await page.mouse.move(start.x + start.width / 2, start.y + start.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(end.x + end.width * 0.8, end.y + end.height * 0.8, { steps: 10 });
+  assert.deepEqual(
+    (await session(page)).projects[0].document,
+    before,
+    "Flex preview must not publish applied state",
+  );
+  const preview = await page
+    .locator(`.canvas-world [data-orc-id="${parent}"] > [data-orc-id]`)
+    .evaluateAll((elements) => elements.map((element) => element.getAttribute("data-orc-id")));
+  assert.deepEqual(
+    preview,
+    expected.filter((id) => before.nodes[id].visible),
+    "Live flow preview shows the intended sibling slot",
+  );
+  await verifyFlexMarker(page, parent, dragged);
+  return before;
+}
+
+async function noopFlexDrop(page: Page) {
+  const before = (await session(page)).projects[0].document;
+  await previewFlexPointer(page, "row", "ra", "ra", before.nodes.row.children);
+  await page.mouse.up();
+  assert.deepEqual(
+    (await session(page)).projects[0].document,
+    before,
+    "Dropping in the current Flex slot creates no revision or history",
+  );
+  checks.push("Returning to the current Flex slot creates no saved change");
+}
+
+async function verifyFlexMarker(page: Page, parent: string, dragged: string) {
+  const outline = page.locator(`.flex-drop-outline[data-orc-drop-parent="${parent}"]`);
+  const marker = page.locator(`.flex-drop-marker[data-orc-drop-object="${dragged}"]`);
+  await outline.waitFor({ state: "visible", timeout: 1500 });
+  await marker.waitFor({ state: "visible", timeout: 1500 });
+  const frame = await page.locator(`.canvas-world [data-orc-id="${parent}"]`).boundingBox();
+  const child = await page.locator(`.canvas-world [data-orc-id="${dragged}"]`).boundingBox();
+  const receiving = await outline.boundingBox();
+  const insertion = await marker.boundingBox();
+  assert.ok(frame && child && receiving && insertion);
+  for (const key of ["x", "y", "width", "height"] satisfies (keyof typeof frame)[])
+    near(receiving[key], frame[key]);
+  const row = await page
+    .locator(`.canvas-world [data-orc-id="${parent}"]`)
+    .evaluate((element) => getComputedStyle(element).flexDirection === "row");
+  near(insertion.x, child.x - (row ? 3 : 0));
+  near(insertion.y, child.y - (row ? 0 : 3));
+  near(insertion.width, row ? 2 : child.width);
+  near(insertion.height, row ? child.height : 2);
+  assert.equal(await marker.evaluate((element) => getComputedStyle(element).pointerEvents), "none");
+  const document = (await session(page)).projects[0].document;
+  const path = artifact(`${document.id}-${parent}-${dragged}-pointer-slot.png`);
+  await page.screenshot({ path, fullPage: true });
+  inputs.push({
+    trigger: "Flex drop cues",
+    parent,
+    dragged,
+    frame,
+    child,
+    receiving,
+    insertion,
+    screenshot: path,
+  });
+}
+
+async function cancelFlexPointer(page: Page, before: DesignDocument, dragged: string) {
+  await page.keyboard.press("Escape");
+  await page.mouse.up();
+  assert.deepEqual(
+    (await session(page)).projects[0].document,
+    before,
+    "Flex cancellation creates no revision or history",
+  );
+  assert.deepEqual(await selection(page), [dragged]);
+  assert.equal(
+    await page.locator(".flex-drop-marker").count(),
+    0,
+    "Escape removes the editor insertion overlay",
   );
 }

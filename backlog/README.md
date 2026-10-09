@@ -9,6 +9,8 @@ Backlog entries are not product requirements until they are accepted and recorde
 
 ## Open topics
 
+- Complete the accepted V1 [canvas pointer gestures](canvas-pointer-gestures.md), including general sizing ownership, several-object reparenting, and sizing-owned handles.
+
 - Review the [SVG source parser's initial bundle cost](source-parser-bundle-size.md) before release while preserving the verified source and rendering behavior.
 - Resolve [orphaned project-lock recovery](project-lock-recovery.md) after removing the reproduced automatic-reclamation race.
 - Resolve the measured [native layout projection limits](native-layout-projection.md) before claiming general Flex Fill and constraint support.

@@ -8,6 +8,7 @@ import type { Mutation } from "../../../shared/commands/commands";
 import { replaceText } from "../rendering/text-runs";
 import { PropertyField } from "./property-field";
 import type { PropertyPreview } from "./property-preview";
+import { useSizingOwners } from "./use-sizing-owners";
 
 type Props = {
   document: DesignDocument;
@@ -17,12 +18,22 @@ type Props = {
   prepare: () => boolean | Promise<boolean>;
   preview: (value: PropertyPreview) => void;
 };
-type EditProps = Pick<Props, "mutate" | "prepare" | "preview"> & { node: DesignNode };
+type EditProps = Pick<Props, "mutate" | "prepare" | "preview"> & {
+  node: DesignNode;
+  sizing: ReturnType<typeof useSizingOwners>;
+};
 
 export function Properties(props: Props) {
   const node = props.selected.length === 1 ? props.document.nodes[props.selected[0]] : null;
+  const sizing = useSizingOwners(props.document, node?.id);
   if (!node) return <EmptyProperties count={props.selected.length} />;
-  const editing = { node, mutate: props.mutate, prepare: props.prepare, preview: props.preview };
+  const editing = {
+    node,
+    sizing,
+    mutate: props.mutate,
+    prepare: props.prepare,
+    preview: props.preview,
+  };
   return (
     <aside className="properties-panel">
       <div className="property-title">
@@ -223,16 +234,7 @@ type StyleProps = EditProps & {
 };
 
 function StyleField(props: StyleProps) {
-  const authored = props.node.style[props.property] ?? props.fallback;
-  const fixed = /^-?\d+(?:\.\d+)?px$/u.test(authored);
-  const readOnly = props.numeric === "px" && !fixed;
-  const fit = ["auto", "max-content", "fit-content"].includes(authored);
-  const value =
-    fixed && props.numeric === "px"
-      ? String(parseFloat(authored))
-      : readOnly && fit
-        ? "Fit"
-        : authored;
+  const { value, readOnly } = styleFieldValue(props);
   const change = (value: string): Extract<Mutation, { kind: "style" }> => ({
     kind: "style",
     id: props.node.id,
@@ -254,6 +256,22 @@ function StyleField(props: StyleProps) {
       commit={(value) => props.mutate(change(value))}
     />
   );
+}
+
+function styleFieldValue(props: StyleProps) {
+  const authored = props.node.style[props.property] ?? props.fallback;
+  const fixed = /^-?\d+(?:\.\d+)?px$/u.test(authored);
+  const owner =
+    props.property === "width" || props.property === "height" ? props.sizing[props.property] : null;
+  const readOnly = Boolean(owner) || (props.numeric === "px" && !fixed);
+  const value = owner ?? styleFieldDisplay(authored, props.numeric, readOnly);
+  return { value, readOnly };
+}
+
+function styleFieldDisplay(authored: string, numeric: StyleProps["numeric"], readOnly: boolean) {
+  if (numeric === "px" && !readOnly) return String(parseFloat(authored));
+  const fit = ["auto", "max-content", "fit-content"].includes(authored);
+  return readOnly && fit ? "Fit" : authored;
 }
 
 function decodeStyle(value: string, props: StyleProps): string | null {

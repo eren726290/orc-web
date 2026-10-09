@@ -1,3 +1,4 @@
+import { prepareFlexDrop } from "./pointer-layout";
 import type { AtomicMutation, Mutation } from "../../../shared/commands/commands";
 import {
   containsNode,
@@ -32,7 +33,7 @@ export function keyboardMovement(
   const mutations: AtomicMutation[] = objects.map((object) => ({
     kind: "style",
     id: object.node.id,
-    values: movedStyle(object, delta),
+    values: movedStyle({ style: object.element.style, computed: object.computed }, delta),
   }));
   return { kind: "batch", mutations };
 }
@@ -45,7 +46,7 @@ function renderedObject(document: DesignDocument, id: string, surface: HTMLEleme
   return { node, element, computed: getComputedStyle(element) };
 }
 
-function checkMovementCoordinates(element: Element, surface: HTMLElement) {
+export function checkMovementCoordinates(element: Element, surface: HTMLElement) {
   for (
     let parent = element.parentElement;
     parent && parent !== surface;
@@ -63,7 +64,7 @@ function checkMovementCoordinates(element: Element, surface: HTMLElement) {
   }
 }
 
-function flowChildren(document: DesignDocument, parent: DesignNode, surface: HTMLElement) {
+export function flowChildren(document: DesignDocument, parent: DesignNode, surface: HTMLElement) {
   return parent.children
     .filter((id) => document.nodes[id].visible)
     .map((id) => renderedObject(document, id, surface))
@@ -119,23 +120,25 @@ function reorderFlow(
   };
 }
 
-function movedStyle(object: ReturnType<typeof renderedObject>, delta: { x: number; y: number }) {
-  const { element, computed } = object;
+type Position = { style: CSSStyleDeclaration; computed: CSSStyleDeclaration };
+
+function movedStyle(object: Position, delta: { x: number; y: number }) {
+  const { style, computed } = object;
   if (!["static", "relative", "absolute"].includes(computed.position))
     throw new Error("Use Code to edit this object's positioning.");
   if (
     ["inset-inline-start", "inset-inline-end", "inset-block-start", "inset-block-end"].some(
-      (property) => element.style.getPropertyValue(property),
+      (property) => style.getPropertyValue(property),
     )
   )
     throw new Error("Use Code to edit this source-controlled inset relationship.");
   if (computed.position === "static")
     return {
-      position: withPriority(element.style, "position", "relative"),
-      left: withPriority(element.style, "left", `${delta.x}px`),
-      top: withPriority(element.style, "top", `${delta.y}px`),
-      right: withPriority(element.style, "right", "auto"),
-      bottom: withPriority(element.style, "bottom", "auto"),
+      position: withPriority(style, "position", "relative"),
+      left: withPriority(style, "left", `${delta.x}px`),
+      top: withPriority(style, "top", `${delta.y}px`),
+      right: withPriority(style, "right", "auto"),
+      bottom: withPriority(style, "bottom", "auto"),
     };
   return {
     ...movedAxis(object, "left", "right", delta.x),
@@ -144,26 +147,26 @@ function movedStyle(object: ReturnType<typeof renderedObject>, delta: { x: numbe
 }
 
 function movedAxis(
-  object: ReturnType<typeof renderedObject>,
+  object: Position,
   start: "left" | "top",
   end: "right" | "bottom",
   delta: number,
 ) {
   if (!delta) return {};
-  const { element, computed } = object;
+  const { style, computed } = object;
   const values: Record<string, string> = {};
   for (const property of [start, end]) {
     const change = property === start ? delta : -delta;
-    const value = element.style.getPropertyValue(property);
+    const value = style.getPropertyValue(property);
     if (["", "auto"].includes(value)) continue;
     if (computed.getPropertyValue(property) === "auto")
       throw new Error("This position cannot be resolved. Review its value in Code.");
-    values[property] = withPriority(element.style, property, shiftedValue(value, change));
+    values[property] = withPriority(style, property, shiftedValue(value, change));
   }
   if (!Object.keys(values).length) {
     const value = computed.position === "relative" ? "0px" : computed.getPropertyValue(start);
     if (["", "auto"].includes(value)) throw new Error("This object's position is unavailable.");
-    values[start] = withPriority(element.style, start, shiftedValue(value, delta));
+    values[start] = withPriority(style, start, shiftedValue(value, delta));
   }
   return values;
 }
@@ -176,4 +179,74 @@ function shiftedValue(value: string, delta: number) {
 
 function withPriority(style: CSSStyleDeclaration, property: string, value: string) {
   return value + (style.getPropertyPriority(property) ? " !important" : "");
+}
+
+export function preparePointerMovement(
+  document: DesignDocument,
+  selected: string[],
+  surface: HTMLElement,
+  scale: number,
+) {
+  keyboardMovement(document, selected, { x: 0, y: 0 }, surface);
+  const roots = selected.filter(
+    (id) => !selected.some((other) => other !== id && containsNode(document, other, id)),
+  );
+  const flow = preparePointerFlow(document, roots, surface, scale);
+  if (flow) return flow;
+  const positions = roots.map((id) => frozenPosition(renderedObject(document, id, surface)));
+  return (delta: {
+    x: number;
+    y: number;
+  }): { kind: "batch"; mutations: Extract<AtomicMutation, { kind: "style" }>[] } => ({
+    kind: "batch",
+    mutations: positions.map((position) => ({
+      kind: "style",
+      id: position.id,
+      values: movedStyle(position, delta),
+    })),
+  });
+}
+
+function frozenPosition(object: ReturnType<typeof renderedObject>) {
+  const style = window.document.createElement("div").style;
+  style.cssText = object.element.style.cssText;
+  const computed = window.document.createElement("div").style;
+  for (const property of ["position", "left", "right", "top", "bottom"])
+    computed.setProperty(property, object.computed.getPropertyValue(property));
+  return { id: object.node.id, style, computed };
+}
+
+function preparePointerFlow(
+  document: DesignDocument,
+  roots: string[],
+  surface: HTMLElement,
+  scale: number,
+) {
+  if (roots.length !== 1) return null;
+  const object = renderedObject(document, roots[0], surface);
+  const direction = flowDirection(document, object, surface);
+  const parentId = object.node.parentId;
+  if (!direction || parentId === null) return null;
+  const parent = renderedObject(document, parentId, surface);
+  if (
+    parent.computed.flexWrap === "wrap-reverse" ||
+    (direction === "column" && parent.computed.flexWrap !== "nowrap")
+  )
+    throw new Error("Use Code to move objects in this wrapping direction.");
+  const bounds = object.element.getBoundingClientRect();
+  const drop = prepareFlexDrop({
+    id: object.node.id,
+    parentId,
+    siblings: parent.node.children,
+    direction,
+    boxes: flowChildren(document, parent.node, surface).map(({ node, element }) => ({
+      id: node.id,
+      bounds: element.getBoundingClientRect(),
+    })),
+  });
+  return (delta: { x: number; y: number }) =>
+    drop({
+      x: bounds.x + bounds.width / 2 + delta.x * scale,
+      y: bounds.y + bounds.height / 2 + delta.y * scale,
+    });
 }
