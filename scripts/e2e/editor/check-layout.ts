@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { chromium, type Page, type Response } from "playwright";
+import { chromium, type Page, type Request, type Response } from "playwright";
 import type { Mutation } from "../../../shared/commands/commands";
 import type { DesignDocument, DesignNode } from "../../../shared/document/model";
 import { parseSession } from "../../../shared/session/session";
@@ -69,6 +69,9 @@ async function verifyMode(mode: "development" | "built") {
   const page = await context.newPage();
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.text().includes("flushSync")) errors.push(message.text());
+  });
   await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
   try {
     await prepareFixture(page, app.url);
@@ -77,14 +80,7 @@ async function verifyMode(mode: "development" | "built") {
       1,
       "Selected frame exposes Free, Row and Column",
     );
-    await ordinarySwitches(page);
-    await absoluteRoundTrip(page);
-    await complexFrames(page);
-    await nestedAndWrapped(page);
-    await select(page, "row");
-    await unavailableSwitches(page);
-    await draftSwitch(page);
-    await saveReopen(page, mode);
+    await layoutWorkflow(page, mode);
     assert.deepEqual(errors, []);
     await page.screenshot({ path: artifact(`${mode}.png`), fullPage: true });
     checks.push(`${mode}: full layout workflow has no uncaught errors`);
@@ -98,6 +94,20 @@ async function verifyMode(mode: "development" | "built") {
     assert.ok(app.output.includes("ORC_SHUTDOWN_COMPLETE"));
     inputs.push({ mode, errors, appOutput: app.output });
   }
+}
+
+async function layoutWorkflow(page: Page, mode: string) {
+  await ordinarySwitches(page);
+  await automaticMargins(page);
+  await zoomedSwitches(page);
+  await absoluteRoundTrip(page);
+  await complexFrames(page);
+  await nestedAndWrapped(page);
+  await select(page, "row");
+  await unavailableSwitches(page);
+  await draftSwitch(page);
+  await saveReopen(page, mode);
+  await repairSource(page);
 }
 
 async function prepareFixture(page: Page, url: string) {
@@ -217,6 +227,11 @@ async function switchMode(page: Page, mode: "Free" | "Row" | "Column") {
   assert.equal(after.revision, before.revision + 1);
   assertHierarchy(after, before);
   assert.equal(await modeButton(page, mode).getAttribute("aria-pressed"), "true");
+  assert.equal(
+    await modeButton(page, mode).evaluate((button) => button === document.activeElement),
+    true,
+    "Layout activation retains button focus",
+  );
   const boxes = await nativeBoxes(page, request.mutation.mutations[0].id);
   await history(page, "undo");
   assertContent((await session(page)).projects[0].document, before);
@@ -252,6 +267,64 @@ async function absoluteRoundTrip(page: Page) {
   );
 }
 
+async function automaticMargins(page: Page) {
+  await select(page, "free");
+  for (const [mode, values] of [
+    ["Row", { "margin-left": "auto" }],
+    ["Row", { "margin-left": "var(--space)", "--space": "auto" }],
+    ["Column", { "margin-top": "auto" }],
+    ["Column", { margin: "auto" }],
+  ] as const) {
+    if ((await modeButton(page, mode).getAttribute("aria-pressed")) !== "true")
+      await switchMode(page, mode);
+    await accepted(page, {
+      kind: "style",
+      id: "a",
+      values: { margin: "0" },
+      unset: ["margin-left", "margin-top", "--space"],
+    });
+    await accepted(page, { kind: "style", id: "a", values });
+    const before = await nativeBoxes(page, "free");
+    const authored = (await session(page)).projects[0].document.nodes.a.style;
+    await switchMode(page, "Free");
+    assertBoxes(await nativeBoxes(page, "free"), before);
+    const after = (await session(page)).projects[0].document.nodes.a.style;
+    for (const property of ["margin", "margin-left", "margin-top", "--space"])
+      assert.equal(after[property], authored[property], `Retain authored ${property}`);
+  }
+  checks.push(
+    "Automatic and variable-resolved margins preserve native boxes and authored CSS when leaving either Flex axis",
+  );
+}
+
+async function zoomedSwitches(page: Page) {
+  await select(page, "free");
+  for (const delta of [420, -840]) {
+    await switchMode(page, "Row");
+    const previous = await canvasScale(page);
+    await page.getByRole("application", { name: "Canvas" }).hover();
+    await page.mouse.wheel(0, delta);
+    await page.waitForFunction((value) => {
+      const world = document.querySelector(".canvas-world")!;
+      return new DOMMatrix(getComputedStyle(world).transform).a !== value;
+    }, previous);
+    await settled(page);
+    const before = await nativeBoxes(page, "free");
+    await switchMode(page, "Free");
+    assertBoxes(await nativeBoxes(page, "free"), before);
+    inputs.push({ trigger: "Canvas zoom", delta, scale: await canvasScale(page) });
+  }
+  await page.mouse.wheel(0, 420);
+  await settled(page);
+  checks.push("Zoomed-out and zoomed-in conversions preserve unzoomed geometry");
+}
+
+function canvasScale(page: Page) {
+  return page
+    .locator(".canvas-world")
+    .evaluate((world) => new DOMMatrix(getComputedStyle(world).transform).a);
+}
+
 async function complexFrames(page: Page) {
   await accepted(page, { kind: "insert", nodes: extraFrames() });
   await select(page, "fit");
@@ -264,17 +337,18 @@ async function complexFrames(page: Page) {
     "Intrinsic frame freezes its box when its children leave flow",
   );
   await switchMode(page, "Row");
+  await select(page, "variable-fit");
+  await unavailable(page, "Free", /preserve|render|Code/u);
   await select(page, "empty");
   for (const mode of ["Row", "Column", "Free"] as const) await switchMode(page, mode);
   await select(page, "logical");
   await switchMode(page, "Row");
   const boxes = await nativeBoxes(page, "logical");
-  assert.equal(
-    boxes["logical-child"].x,
-    15,
-    "Removed logical offsets cannot shift the new flow box",
-  );
-  assert.equal(boxes["logical-child"].y, 15);
+  for (const axis of ["x", "y"] as const)
+    assert.ok(
+      Math.abs(boxes["logical-child"][axis] - 15) < 0.1,
+      "Removed logical offsets cannot shift the new flow box",
+    );
   await switchMode(page, "Free");
   assertBoxes(await nativeBoxes(page, "logical"), boxes);
   checks.push(
@@ -291,6 +365,15 @@ function extraFrames(): DesignNode[] {
       height: "max-content",
     }),
     text("fit-child", "fit", { position: "relative", "flex-shrink": "0" }),
+    frame("variable-fit", ["variable-fit-child"], 700, {
+      left: "auto",
+      right: "50px",
+      display: "flex",
+      width: "var(--frame-size)",
+      "--frame-size": "fit-content",
+      height: "max-content",
+    }),
+    text("variable-fit-child", "variable-fit", { position: "relative", "flex-shrink": "0" }),
     frame("logical", ["logical-child"], 380, { top: "360px" }),
     text("logical-child", "logical", {
       position: "absolute",
@@ -391,10 +474,33 @@ function flowFixtures(): DesignNode[] {
 
 async function unavailable(page: Page, mode: "Free" | "Row" | "Column", message: RegExp) {
   const before = await session(page);
-  await modeButton(page, mode).click();
-  await page.locator(".layout-controls [role=alert]").waitFor();
-  assert.match(await page.locator(".layout-controls [role=alert]").innerText(), message);
-  assert.deepEqual(await session(page), before);
+  const id = await page.getByLabel("Name", { exact: true }).inputValue();
+  const frame = page.locator(`.canvas-world [data-orc-id="${id}"]`);
+  const bounds = await frame.boundingBox();
+  const boxes = await nativeBoxes(page, id);
+  const requests: string[] = [];
+  const record = (request: Request) => {
+    if (new URL(request.url()).pathname === "/api/commands")
+      requests.push(request.postData() ?? "");
+  };
+  page.on("request", record);
+  try {
+    await modeButton(page, mode).click();
+    await page.locator(".layout-controls [role=alert]").waitFor({ timeout: 3000 });
+    assert.match(await page.locator(".layout-controls [role=alert]").innerText(), message);
+    assert.deepEqual(await session(page), before);
+    assert.deepEqual(await frame.boundingBox(), bounds);
+    assertBoxes(await nativeBoxes(page, id), boxes);
+    assert.deepEqual(requests, [], "Rejected previews send no mutation");
+    assert.equal(
+      await modeButton(page, mode).evaluate((button) => button === document.activeElement),
+      true,
+      "Rejected layout switches retain button focus",
+    );
+  } finally {
+    page.off("request", record);
+    inputs.push({ trigger: `Unavailable ${mode}`, id, requests, bounds, boxes });
+  }
 }
 
 async function draftSwitch(page: Page) {
@@ -476,14 +582,45 @@ async function sourceRoundTrip(page: Page) {
   );
 }
 
-async function applySourceText(page: Page, value: string) {
+async function repairSource(page: Page) {
+  const node = { ...frame("repair", [], 700), attributes: { class: "legacy-class" } };
+  await accepted(page, { kind: "insert", nodes: [node] });
+  await select(page, "repair");
+  await page.getByRole("button", { name: "Code", exact: true }).click();
+  const before = (await session(page)).projects[0].document;
+  const source = nodeSource(before, "repair");
+  const repaired = source.replace(' class="legacy-class"', "");
+  assert.notEqual(repaired, source);
+  await applySourceText(page, repaired);
+  const after = (await session(page)).projects[0].document;
+  assert.equal(after.nodes.repair.attributes.class, undefined);
+  assert.equal(after.revision, before.revision + 1);
+  await history(page, "undo");
+  assertContent((await session(page)).projects[0].document, before);
+  await history(page, "redo");
+  assertContent((await session(page)).projects[0].document, after);
+  const saved = await session(page);
+  const invalid = nodeSource(after, "repair").replace("<div", '<div class="unsupported"');
+  await applySourceText(page, invalid, 400);
+  assert.deepEqual(await session(page), saved);
+  await page.getByRole("button", { name: "Discard changes", exact: true }).click();
+  checks.push(
+    "Code Apply repairs unsupported existing source without weakening incoming-source validation",
+  );
+}
+
+async function applySourceText(page: Page, value: string, expectedStatus = 200) {
   const source = page.getByRole("textbox", { name: "Object source", exact: true });
   await source.press("Control+a");
   await page.keyboard.insertText(value);
   await page.getByText("Unapplied changes", { exact: true }).waitFor();
   const pending = page.waitForResponse(isCommand);
   await page.getByRole("button", { name: "Apply", exact: true }).click();
-  assert.equal((await pending).status(), 200);
+  const response = await pending;
+  const body = await response.text();
+  inputs.push({ trigger: "Code Apply", source: value, status: response.status(), response: body });
+  assert.equal(response.status(), expectedStatus, body);
+  if (expectedStatus !== 200) return;
   await page.getByText("Unapplied changes", { exact: true }).waitFor({ state: "hidden" });
   await settled(page);
 }

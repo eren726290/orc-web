@@ -4,8 +4,10 @@ import { frameReference, prepareFreePlacement } from "./free-placement";
 import { prepareFlowPlacement } from "./flow-placement";
 import { readSizingOwners } from "./sizing";
 import { absolutePosition, isExplicitAbsolute } from "./participation";
+import { frameLayoutValidation } from "./frame-layout-validation";
 
 export type FrameLayout = "Free" | "Row" | "Column";
+type StyleEdit = Extract<AtomicMutation, { kind: "style" }>;
 
 export function readFrameLayout(node: DesignNode): FrameLayout | null {
   const style = window.document.createElement("div").style;
@@ -18,11 +20,7 @@ export function readFrameLayout(node: DesignNode): FrameLayout | null {
   return style.flexDirection === "column" ? "Column" : null;
 }
 
-export function prepareFrameLayout(
-  document: DesignDocument,
-  id: string,
-  target: FrameLayout,
-): Mutation | null {
+export function prepareFrameLayout(document: DesignDocument, id: string, target: FrameLayout) {
   const node = document.nodes[id];
   if (!node || node.kind !== "frame") throw new Error("Select a frame to change its layout.");
   const current = readFrameLayout(node);
@@ -31,14 +29,17 @@ export function prepareFrameLayout(
   if ([id, ...node.children].some((child) => isLocked(document, child)))
     throw new Error("Unlock the frame and its children before changing layout.");
   const conversion = frameConversion(document, id, current, target);
-  const mutations: AtomicMutation[] = [parentLayout(document, node, conversion.element, target)];
+  const mutations: StyleEdit[] = [parentLayout(document, node, conversion.element, target)];
   for (const childId of node.children) {
     const child = document.nodes[childId];
     const childElement = renderedChild(conversion.element, childId);
     const change = childLayout(child, childElement, conversion);
     if (change) mutations.push(change);
   }
-  return { kind: "batch", mutations };
+  return {
+    mutation: { kind: "batch", mutations } satisfies Mutation,
+    validate: frameLayoutValidation(conversion.element, target, conversion.scale),
+  };
 }
 
 function renderedChild(parent: HTMLElement, id: string) {
@@ -88,7 +89,7 @@ function parentLayout(
   node: DesignNode,
   element: HTMLElement,
   target: FrameLayout,
-): AtomicMutation {
+): StyleEdit {
   const style = getComputedStyle(element);
   if (style.direction !== "ltr" || style.writingMode !== "horizontal-tb")
     throw new Error("Use Code to change this source-controlled layout direction.");
@@ -148,7 +149,7 @@ function childLayout(
   node: DesignNode,
   element: HTMLElement | SVGElement,
   conversion: Conversion,
-): AtomicMutation | null {
+): StyleEdit | null {
   const { current, target, world, scale, reference } = conversion;
   const position = checkChildPosition(element);
   const explicit = isExplicitAbsolute(element.style);

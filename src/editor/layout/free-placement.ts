@@ -5,6 +5,7 @@ import { hasCoordinateTransform } from "./coordinates";
 import { absolutePosition, insetProperties, isExplicitAbsolute } from "./participation";
 
 type StyleEdit = Extract<AtomicMutation, { kind: "style" }>;
+const margins = ["margin-left", "margin-right", "margin-top", "margin-bottom"];
 
 export function frameReference(element: HTMLElement, surface: HTMLElement, scale: number) {
   const style = checkFrameCoordinates(element, surface);
@@ -69,10 +70,7 @@ function freezePlacement(element: HTMLElement | SVGElement, world: HTMLElement, 
     "position",
     "width",
     "height",
-    "margin-left",
-    "margin-right",
-    "margin-top",
-    "margin-bottom",
+    ...margins,
     "transform",
     "translate",
     "rotate",
@@ -82,6 +80,9 @@ function freezePlacement(element: HTMLElement | SVGElement, world: HTMLElement, 
   return {
     style,
     computed,
+    autoMargins: new Set(
+      margins.filter((property) => element.computedStyleMap().get(property)?.toString() === "auto"),
+    ),
     bounds: element.getBoundingClientRect(),
     world: world.getBoundingClientRect(),
     scale,
@@ -103,10 +104,10 @@ function freeAxis(
   const { style, computed, bounds, scale } = source;
   const size = axis === "x" ? bounds.width / scale : bounds.height / scale;
   const available = axis === "x" ? parent.width : parent.height;
-  const margin = Number.parseFloat(computed.getPropertyValue(marginStart));
+  const mode = constrained ? constraintMode(style, start, end, length) : "start";
+  const margin = placementMargin(source, marginStart, mode);
   const p = (bounds[axis] + delta * scale - parent[axis]) / scale - shift - margin;
   const r = available - p - margin - size - Number.parseFloat(computed.getPropertyValue(marginEnd));
-  const mode = constrained ? constraintMode(style, start, end, length) : "start";
   return {
     [start]: priority(
       style,
@@ -116,6 +117,16 @@ function freeAxis(
     [end]: priority(style, end, mode === "end" || mode === "both" ? `${r}px` : "auto"),
     [length]: priority(style, length, mode === "both" ? "auto" : computed.getPropertyValue(length)),
   };
+}
+
+function placementMargin(
+  source: ReturnType<typeof freezePlacement>,
+  property: string,
+  mode: string,
+) {
+  // Auto margins consume Flex space but resolve to zero with one absolute edge.
+  if (mode === "start" && source.autoMargins.has(property)) return 0;
+  return Number.parseFloat(source.computed.getPropertyValue(property));
 }
 
 function constraintMode(style: CSSStyleDeclaration, start: string, end: string, length: string) {

@@ -71,14 +71,40 @@ Transformed parents, unmeasurable children, source-controlled order/position, an
 General Fill conversion, Row wrapping controls and persistence across Column, source-bound React layouts, and the measured projection limits above remain V1 work.
 The [Code Apply identity record](code-apply-identity.md) records the equivalent-source correction found during layout round-trip verification and the remaining identity work.
 
-### Unfixed automatic-margin conversion
+### Automatic-margin correction
 
 Interactive verification reproduced a 30 px horizontal jump when changing a Row to Free with a child authored as `margin-left:auto`.
 The child's screen x coordinate changed from 649 to 619 because its used Flex margin was 30 px, while the absolute-positioned margin resolved to 0 px.
-The shared Free placement calculation currently subtracts the old used margin when saving Left.
+The shared Free placement calculation previously subtracted the old used margin when saving Left.
 The original observation remains in ignored `artifacts/editor/layout-auto-margin-baseline.json`.
-Correct the shared conversion while preserving authored margins, and retain E2E checks for automatic margins, including variable-resolved values, before declaring layout switching verified.
-This issue remains unfixed in the current checkpoint.
+The calculation now snapshots computed auto margins with native CSS Typed OM and treats them as zero for Start-edge absolute placement.
+It retains the authored declarations and the existing End, Both, and Center calculation paths.
+The [CSS Typed OM specification](https://www.w3.org/TR/css-typed-om-1/#computed-stylepropertymapreadonly-objects) and [Chrome API guide](https://developer.chrome.com/docs/css-ui/cssom) describe the computed-value API used to distinguish `auto` from its used Flex pixels.
+The retained E2E regression covers Row and Column, direct and variable-resolved auto margins, and exact history.
+The original interactive card keeps all six native boxes unchanged after the correction in ignored `artifacts/editor/layout-auto-margin-corrected.json`.
+
+### Candidate rendering validation
+
+The layout switch now renders its candidate through the existing temporary property-preview path before sending a command.
+It checks the actual parent layout and finite native boxes, and a Flex-to-Free switch verifies the whole frame subtree against its previous unzoomed boxes.
+The synchronous DOM flush is limited to this explicit conversion, so another browser input cannot interleave with the candidate check.
+[React's flushSync reference](https://react.dev/reference/react-dom/flushSync) describes this browser-measurement integration and its performance caveats.
+Temporary measurements and preview styles never become a second saved layout model.
+Failed validation removes the preview and sends no mutation, preserving native geometry, canonical data, revision, and both history stacks.
+
+The original negative control uses a right-anchored frame whose width resolves from a CSS variable to Fit.
+Its previous unvalidated switch shrank the frame and moved its child; the retained regression now requires rejection with unchanged source and geometry.
+This correction applies to the ordinary layout-control path.
+The backend has not gained whole-document rendering validation for arbitrary raw style batches.
+Shared server-side preparation for future agent layout operations remains required before exposing those operations through MCP.
+
+### Layout-control keyboard focus
+
+The real keyboard workflow and retained E2E regression reproduced layout activation dropping focus to the page body while the pending command disabled its button.
+The control now remembers its trigger and restores focus after rendering re-enables it.
+It restores only for the same selected owner, a connected enabled button, and body focus, so it does not take focus from another active control.
+Both completed switches and rejected native previews retain focus in the regression.
+The original observation remains in ignored `artifacts/editor/layout-focus-baseline.json`, with corrected native focus and its visible ring in `layout-focus-corrected.json` and `layout-interactive-keyboard-focus.png`.
 
 ## Current keyboard ownership boundaries
 

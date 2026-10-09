@@ -60,8 +60,7 @@ export async function applySource(
   const incoming = nodes[0];
   if (!incoming || !compatible(previous, incoming))
     throw new Error("Keep the selected root's element type when editing its source.");
-  const applied = await prepareHTML(nodeSource(document, id));
-  if (isDeepStrictEqual(sourceShape(nodes), sourceShape(applied))) return;
+  if (await equivalentSource(document, id, nodes)) return;
   const root = previous.kind === "frame" ? frameRoot(previous, incoming) : incoming;
   nodes[0] = root;
   const generatedId = root.id;
@@ -72,6 +71,12 @@ export async function applySource(
   root.visible = previous.visible;
   for (const target of affected) delete document.nodes[target];
   for (const node of nodes) document.nodes[node.id] = node;
+}
+
+async function equivalentSource(document: DesignDocument, id: string, nodes: DesignNode[]) {
+  // A valid edit must be able to repair existing source the importer rejects.
+  const applied = await prepareHTML(nodeSource(document, id)).catch(() => null);
+  return applied !== null && isDeepStrictEqual(sourceShape(nodes), sourceShape(applied));
 }
 
 function sourceShape(nodes: DesignNode[]) {

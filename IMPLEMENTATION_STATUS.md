@@ -1,7 +1,7 @@
 # ORC-web implementation status
 
-Last updated: 2026-10-09.
-Current stage: active V1 implementation after the pointer, sizing, and parent-controlled position corrections.
+Last updated: 2026-10-10.
+Current stage: paused at the user's request after the verified ordinary layout-switch corrections.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
 
 ## Current state
@@ -11,7 +11,7 @@ This overview describes this checkout and links to reviewed evidence from the PC
 | Application foundation and startup | Implemented combined Bun/Vite development launch and built-app serving; Linux startup failure cleanup, normal shutdown, and failed-save shutdown recovery pass focused process checks. | [Launcher](scripts/dev.ts), [backend](server/start.ts), [lifecycle check](scripts/runtime/check-lifecycle.ts). |
 | Development tooling | Selected anti-slop rules and Fallow CLI configured; TypeScript 6, lint controls, formatting, build, and Chromium frontend mounting pass on Fedora. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [remaining editor tooling](backlog/development-tooling.md). |
 | Editor workspace, Layers, Properties, and Code | In progress; Dashboard/tabs, selection, basic Properties previews, text editing, Code Apply/Discard, draft safeguards, panel resizing, in-place Layer naming, and atomic subtree deletion pass focused development/built checks. | [Editor workflow](scripts/e2e/editor/check-editor.ts), [panel check](scripts/e2e/editor/check-panels.ts), [naming check](scripts/e2e/editor/check-layers.ts), [deletion check](scripts/e2e/editor/check-deletion.ts). |
-| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, and read-only parent-controlled position inspection pass focused development/built checks. Layout/constraint controls, general sizing ownership, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
+| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, and Free/Row/Column switches pass focused development/built checks. General sizing and constraint controls, Row wrapping, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
 | Selected-frame Preview | In progress; ordinary frames retain their native sizing and saved defaults, isolate temporary form inputs and scrolling, restore Edit selection/pan/zoom, and preserve Code drafts and document/history in focused development/built Chromium checks. React components, portals, Motion, and supported-platform verification remain pending. | [Preview](src/editor/preview/Preview.tsx), [native workflow check](scripts/e2e/editor/check-preview.ts), [accepted Preview](doc_v1/interface/workspace-and-canvas.md#selected-frame-workflow). |
 | Shared commands, application Undo/Redo, and project saving | In progress; authoritative sessions, revision checks, command history, save/reopen, independent projects, existing-save recovery, failed first Save/Save as recovery, and exclusive locks pass focused checks on Linux. | [Services](server/projects/projects.ts), [pending-response history check](scripts/e2e/editor/check-history.ts), [saving regression check](scripts/e2e/projects/check-saving.ts), [saving contract](doc_v1/architecture/orc-workspace-bundle.md). |
 | Ordinary HTML/CSS/SVG authoring | In progress; reproduced SVG geometry/source disagreement, lost explicit line breaks and inline separators, and invalid SVG render acceptance are corrected and pass focused development/built checks; complete V1 source support remains pending. | [Source service](server/source/html.ts), [importer](src/editor/code/html-import.ts), [rendering regression check](scripts/e2e/rendering/check-rendering.ts), [Code workflow check](scripts/e2e/editor/editor-source.ts). |
@@ -316,16 +316,45 @@ This checkpoint completes the parent-controlled position corrections; full V1 im
 The supplied installed stable Chrome path remains absent, and Windows verification remains pending.
 The [gesture record](backlog/canvas-pointer-gestures.md#remaining-v1-work) retains broader layout ownership, source-binding, and gesture work.
 
-## Next checkpoint
+## Ordinary frame layout checkpoint
 
 The ordinary Free/Row/Column control is now implemented through one measured atomic batch.
 Development and built Chromium checks cover native Fixed Free placement, retained Absolute participation, nested/wrapped frames, locks/drafts, exact history, and save/reopen.
 Equivalent ordinary Code Apply retains canonical objects and history, with a real CSS declaration-order change retained as a negative control.
-The recorded development/built Chromium and managed Chrome for Testing layout runs each passed 60 checks with 74 recorded inputs.
+The earlier development/built layout runs each passed 60 checks with 74 recorded inputs before the review corrections below.
 The existing movement, editor, Preview, atomic, panel, and history regression gate also passed.
-The formatting gate failed, final visual verification remains pending, and the [automatic-margin conversion bug](backlog/native-layout-projection.md#unfixed-automatic-margin-conversion) is reproduced and unfixed.
-This is an unfinished checkpoint; these passing runs do not establish complete layout-switching verification.
+The previous formatting failure is corrected.
+The [automatic-margin conversion](backlog/native-layout-projection.md#automatic-margin-correction) and [Code Apply repair failure](backlog/code-apply-identity.md#reproduced-and-corrected) now have focused corrections and retained E2E regressions.
+The layout control also validates its native candidate before committing and restores its preview without sending a command when geometry cannot be preserved.
+Keyboard activation and rejected previews now retain the layout button's focus.
+The final [Chromium result](artifacts/editor/layout-verification-result.json) and [Chrome for Testing result](artifacts/editor/layout-chrome-testing-result.json) each passed 88 checks with 142 recorded inputs across development and built modes.
+These runs cover automatic margins, zoomed geometry, native candidate rejection, source repair, source equivalence, locks/drafts, exact history, saving, and retained button focus.
+The tested versions are Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57 on Linux.
+Both layout results and the movement, editor, Preview, atomic, and panel results match all 119 current source hashes in [the final source audit](artifacts/editor/layout-final-source-audit.json).
+Recorded before/after hashes match in each result that captures both snapshots.
+The final scoped runnable checks passed build, TypeScript, lint, formatting, health, both browser layout workflows, and the movement, editor, Preview, atomic, panel, and pending-history regressions.
+Interactive Row, Free, and minimum-width Properties screenshots were visually reviewed against the supplied design references.
+The final Tab/Space keyboard walk retained visible focus through Row and Column, with 44 px buttons and no clipped button content.
+The scoped layout-control accessibility scan reported nine passes, zero violations, and zero incomplete checks; it does not certify the full application or screen-reader behavior.
+[Health](artifacts/editor/layout-health.json) reports zero enforced errors and 138 static-estimated CRAP advisories, which do not measure E2E coverage.
+[Dead-code analysis](artifacts/editor/layout-codebase.json) retains seven planned unused dependencies, with no unused files/exports, unresolved imports, or cycles.
+Verification ran against base commit `3182ff8a70402f7bcafcaf2e57c79c7acfa86155` plus the recorded working-source hashes.
+The subsequent status update changes documentation only.
+All five scoped gates are met, with zero unmet or abandoned gates.
+The owned interactive browser and development app shut down successfully, and no subagent was started.
+Work stops at this checkpoint at the user's request; full V1 remains in progress.
+Repeat the focused workflow with `bun run check:layout` after building.
+The Chrome for Testing command is:
+
+```sh
+ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome ORC_LAYOUT_EVIDENCE=chrome-testing bun run check:layout chrome
+```
+
+This verifies the ordinary layout-control path; arbitrary backend style batches still lack whole-document native candidate validation.
+The supplied installed stable Chrome path remains absent, and Windows verification remains pending.
 General Fill and constraint controls, Row wrapping controls/persistence across Column, React source bindings, and [meaningful Code Apply identity reconciliation](backlog/code-apply-identity.md) remain required V1 work.
+
+## Next checkpoint
 
 1. Complete the ordinary editor's geometry, layout, constraints, and Tokens workflows.
 2. Integrate supported React source editing, component imports, portable assets/dependencies, complete exports, and Preview component behavior.

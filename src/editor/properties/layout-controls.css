@@ -4,6 +4,7 @@
   gap: 6px;
   font-size: 11px;
   color: var(--color-editor-muted);
+  margin-block-end: 12px;
 }
 .properties-panel .layout-controls fieldset {
   display: grid;
@@ -15,9 +16,18 @@
   background: var(--color-editor-inset);
 }
 .layout-controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   min-block-size: 44px;
-  padding-inline: 4px;
+  padding-inline: 2px;
   font-size: 12px;
+}
+.layout-controls button svg {
+  flex: none;
+  block-size: 1.2cap;
+  inline-size: auto;
 }
 .layout-controls button[aria-pressed="true"] {
   color: var(--color-editor-ink);
