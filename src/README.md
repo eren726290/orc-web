@@ -15,7 +15,7 @@ Editor styles use semantic CSS tokens; imported design styles remain separate.
 | [editor/rendering/](editor/rendering/README.md)   | Native design renderer and rich-text run helpers.                    |
 | [editor/layers/](editor/layers/README.md)         | Layers and inline renaming.                                          |
 | [editor/properties/](editor/properties/README.md) | Properties fields and temporary previews.                            |
-| [editor/layout/](editor/layout/README.md)         | Shared native layout ownership recognition and coordinate checks.    |
+| [editor/layout/](editor/layout/README.md)         | Native ownership, coordinate checks, and shared placement/layout conversions. |
 | [editor/code/](editor/code/README.md)             | Code window, HTML importer, and source draft guards.                 |
 | [editor/preview/](editor/preview/README.md)       | Selected-frame Preview.                                              |
 

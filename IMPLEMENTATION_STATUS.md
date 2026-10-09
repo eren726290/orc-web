@@ -318,6 +318,15 @@ The [gesture record](backlog/canvas-pointer-gestures.md#remaining-v1-work) retai
 
 ## Next checkpoint
 
+The ordinary Free/Row/Column control is now implemented through one measured atomic batch.
+Development and built Chromium checks cover native Fixed Free placement, retained Absolute participation, nested/wrapped frames, locks/drafts, exact history, and save/reopen.
+Equivalent ordinary Code Apply retains canonical objects and history, with a real CSS declaration-order change retained as a negative control.
+The recorded development/built Chromium and managed Chrome for Testing layout runs each passed 60 checks with 74 recorded inputs.
+The existing movement, editor, Preview, atomic, panel, and history regression gate also passed.
+The formatting gate failed, final visual verification remains pending, and the [automatic-margin conversion bug](backlog/native-layout-projection.md#unfixed-automatic-margin-conversion) is reproduced and unfixed.
+This is an unfinished checkpoint; these passing runs do not establish complete layout-switching verification.
+General Fill and constraint controls, Row wrapping controls/persistence across Column, React source bindings, and [meaningful Code Apply identity reconciliation](backlog/code-apply-identity.md) remain required V1 work.
+
 1. Complete the ordinary editor's geometry, layout, constraints, and Tokens workflows.
 2. Integrate supported React source editing, component imports, portable assets/dependencies, complete exports, and Preview component behavior.
 3. Verify accepted workflows on the supported browsers/platforms with repeatable evidence and explicit remaining limitations.

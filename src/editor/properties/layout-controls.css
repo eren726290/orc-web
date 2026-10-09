@@ -1,0 +1,29 @@
+.layout-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--color-editor-muted);
+}
+.properties-panel .layout-controls fieldset {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--color-editor-border);
+  border-radius: 6px;
+  background: var(--color-editor-inset);
+}
+.layout-controls button {
+  min-block-size: 44px;
+  padding-inline: 4px;
+  font-size: 12px;
+}
+.layout-controls button[aria-pressed="true"] {
+  color: var(--color-editor-ink);
+  background: var(--color-editor-surface);
+  box-shadow: 0 0 0 1px var(--color-editor-border);
+}
+.layout-controls button:active {
+  background: var(--color-editor-border);
+}

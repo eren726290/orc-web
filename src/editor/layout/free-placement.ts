@@ -1,10 +1,10 @@
 import type { AtomicMutation } from "../../../shared/commands/commands";
 import type { DesignNode } from "../../../shared/document/model";
-import { checkMovementCoordinates } from "./keyboard-movement";
-import { hasCoordinateTransform } from "../layout/coordinates";
+import { checkMovementCoordinates } from "../canvas/keyboard-movement";
+import { hasCoordinateTransform } from "./coordinates";
+import { absolutePosition, insetProperties, isExplicitAbsolute } from "./participation";
 
 type StyleEdit = Extract<AtomicMutation, { kind: "style" }>;
-const insets = ["inset", "inset-inline", "inset-block", "left", "right", "top", "bottom"];
 
 export function frameReference(element: HTMLElement, surface: HTMLElement, scale: number) {
   const style = checkFrameCoordinates(element, surface);
@@ -48,7 +48,11 @@ export function prepareFreePlacement(
     const parent = reference ?? { x: source.world.x, y: source.world.y, width: 0, height: 0 };
     const shift = translation(source);
     const values = {
-      position: priority(source.style, "position", "absolute"),
+      position: priority(
+        source.style,
+        "position",
+        isExplicitAbsolute(source.style) ? absolutePosition : "absolute",
+      ),
       ...freeAxis(source, parent, delta.x, shift.x, "x", constrained && reference !== null),
       ...freeAxis(source, parent, delta.y, shift.y, "y", constrained && reference !== null),
     };
@@ -156,7 +160,7 @@ function translationValue(value: string, size: number) {
 
 function removedInsets(node: DesignNode, values: Record<string, string>) {
   return Object.keys(node.style).filter(
-    (property) => insets.includes(property) && !Object.hasOwn(values, property),
+    (property) => insetProperties.includes(property) && !Object.hasOwn(values, property),
   );
 }
 

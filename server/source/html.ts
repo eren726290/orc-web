@@ -1,6 +1,8 @@
 import { parseNode } from "../../shared/document/document";
 import { withRenderPage } from "../rendering/rendering";
 import { isLocked, type DesignDocument, type DesignNode } from "../../shared/document/model";
+import { isDeepStrictEqual } from "node:util";
+import { nodeSource } from "../../shared/source/html-source";
 
 let importer: Promise<string> | null = null;
 
@@ -58,6 +60,8 @@ export async function applySource(
   const incoming = nodes[0];
   if (!incoming || !compatible(previous, incoming))
     throw new Error("Keep the selected root's element type when editing its source.");
+  const applied = await prepareHTML(nodeSource(document, id));
+  if (isDeepStrictEqual(sourceShape(nodes), sourceShape(applied))) return;
   const root = previous.kind === "frame" ? frameRoot(previous, incoming) : incoming;
   nodes[0] = root;
   const generatedId = root.id;
@@ -68,6 +72,25 @@ export async function applySource(
   root.visible = previous.visible;
   for (const target of affected) delete document.nodes[target];
   for (const node of nodes) document.nodes[node.id] = node;
+}
+
+function sourceShape(nodes: DesignNode[]) {
+  const indexes = new Map(nodes.map((node, index) => [node.id, index]));
+  return nodes.map((node) => {
+    const { id: _id, parentId, children, style, ...content } = node;
+    return {
+      ...content,
+      parentId: parentId === null ? null : indexes.get(parentId),
+      children: children.map((child) => indexes.get(child)),
+      // CSS declaration order can decide which physical or logical edge wins.
+      style: Object.entries(style),
+      ...(node.kind === "text"
+        ? {
+            runs: node.runs.map((run) => ({ text: run.text, style: Object.entries(run.style) })),
+          }
+        : {}),
+    };
+  });
 }
 
 function assertUnlocked(document: DesignDocument, ids: string[]) {

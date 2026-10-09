@@ -1,29 +1,36 @@
 import type { AtomicMutation } from "../../../shared/commands/commands";
 import type { DesignNode, Styles } from "../../../shared/document/model";
-import { readFlexSizing } from "../layout/sizing";
+import { readFlexSizing } from "./sizing";
+import { insetProperties } from "./participation";
 
 type Axis = "width" | "height";
 const axes: Axis[] = ["width", "height"];
 
 export function prepareFlowPlacement(node: DesignNode, element: HTMLElement | SVGElement) {
   const source = snapshotFlow(node, element);
-  return (parent: HTMLElement): Extract<AtomicMutation, { kind: "style" }> => {
-    checkFlowDestination(source, parent);
+  return (
+    parent: HTMLElement,
+    direction = getComputedStyle(parent).flexDirection,
+  ): Extract<AtomicMutation, { kind: "style" }> => {
+    checkFlowDestination(source, parent, direction);
     const values: Styles = {
       position: priority(source.style, "position", "relative"),
       ...flowDimensions(source),
       ...flowSizing(source),
     };
     if (source.crossFill) values["align-self"] = priority(source.style, "align-self", "stretch");
-    const unset = ["inset", "inset-inline", "inset-block", "left", "right", "top", "bottom"].filter(
-      (property) => Object.hasOwn(node.style, property),
+    const unset = [...insetProperties, "--orc-absolute-position"].filter((property) =>
+      Object.hasOwn(node.style, property),
     );
     return { kind: "style", id: node.id, values, unset };
   };
 }
 
-function checkFlowDestination(source: ReturnType<typeof snapshotFlow>, parent: HTMLElement) {
-  const direction = getComputedStyle(parent).flexDirection;
+function checkFlowDestination(
+  source: ReturnType<typeof snapshotFlow>,
+  parent: HTMLElement,
+  direction: string,
+) {
   if (
     source.direction &&
     source.direction !== direction &&

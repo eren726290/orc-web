@@ -7,5 +7,6 @@ Pointer movement freezes starting CSS, previews locally, and submits through sha
 Current-parent Flex drops preview sibling order without publishing document state.
 DropIndicator renders temporary receiving-frame outlines and Flex insertion lines outside the design tree.
 Pointer placement converts ordinary Free frame/root coordinates or joins Flex flow through the existing atomic commands.
+Its reusable Free/flow conversion helpers live in ../layout/ alongside frame layout switching.
 Native coordinate snapshots are temporary gesture state; authored CSS and canonical parent IDs remain saved authority.
 Remaining gesture and resize work is tracked in [the gesture record](../../../backlog/canvas-pointer-gestures.md).

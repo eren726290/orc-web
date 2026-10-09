@@ -52,6 +52,7 @@ bun run check:preview
 bun run check:atomic
 bun run check:movement
 bun run check:clipping
+bun run check:layout
 ```
 
 `check:browser` requires installed Google Chrome and verifies development and production-preview mounting.

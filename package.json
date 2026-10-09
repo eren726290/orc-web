@@ -24,6 +24,7 @@
     "check:atomic": "bun scripts/e2e/editor/check-atomic.ts",
     "check:movement": "bun scripts/e2e/editor/check-movement.ts",
     "check:clipping": "bun scripts/e2e/editor/check-clipping.ts",
+    "check:layout": "bun scripts/e2e/editor/check-layout.ts",
     "check:codebase": "fallow dead-code --format json --quiet --explain",
     "check:health": "fallow health --format json --quiet --explain",
     "check:format": "oxfmt --check src shared server scripts tools/anti-slop/index.ts index.html vite.config.ts oxlint.config.ts tsconfig.json tsconfig.server.json package.json .oxfmtrc.json .fallowrc.json",

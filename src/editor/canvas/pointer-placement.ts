@@ -1,7 +1,11 @@
 import { containsNode, isLocked, type DesignDocument } from "../../../shared/document/model";
 import { flowChildren, preparePointerMovement } from "./keyboard-movement";
-import { checkFrameCoordinates, frameReference, prepareFreePlacement } from "./pointer-coordinates";
-import { prepareFlowPlacement } from "./flow-placement";
+import {
+  checkFrameCoordinates,
+  frameReference,
+  prepareFreePlacement,
+} from "../layout/free-placement";
+import { prepareFlowPlacement } from "../layout/flow-placement";
 import { prepareFlexDrop, type PointerPreview } from "./pointer-layout";
 
 type Point = { x: number; y: number };

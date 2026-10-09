@@ -18,6 +18,7 @@ Backlog entries are not product requirements until they are accepted and recorde
 - Validate the recommended React, Vite, and browser-check foundation with the real ORC-web implementation before treating it as final.
 - Implement the real editor workflow using the Babel/Recast direction established by [PR1–5 source-editing validation](../doc_v1/architecture/react-source-editing-validation.md); completed Fedora fixture checks are not pending handoff work.
 - Define production binding identity and reconciliation after Code Apply, including harmless formatting and source movement, while preserving command-owned selection and refusing uncertain targets.
+  The [Code Apply identity record](code-apply-identity.md) separates the corrected equivalent-source churn from remaining meaningful-edit and ambiguous-replacement work.
 - Implement Properties/Layers, supported Only this boundaries, and hidden-content controls with the existing source-ownership contract rather than expanding recognition to every React pattern first.
 - Verify same-page imported styles, frame-local portals, and editing around live components in the actual workspace; the isolated dialog proof does not settle those boundaries.
 - Implement and verify [selected-frame Preview](../doc_v1/interface/workspace-and-canvas.md#selected-frame-workflow), including session reset, saved-default restoration, reachable Exit Preview with modal content, zoom-corrected Motion dragging, and the supported mapping of viewport-based responsive styles.

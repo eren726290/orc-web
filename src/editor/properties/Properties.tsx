@@ -9,6 +9,7 @@ import { replaceText } from "../rendering/text-runs";
 import { PropertyField } from "./property-field";
 import type { PropertyPreview } from "./property-preview";
 import { useLayoutOwnership } from "./use-layout-ownership";
+import { FrameLayoutControls } from "./frame-layout-controls";
 
 type Props = {
   document: DesignDocument;
@@ -19,7 +20,7 @@ type Props = {
   preview: (value: PropertyPreview) => void;
   select: (id: string) => Promise<boolean>;
 };
-type EditProps = Pick<Props, "mutate" | "prepare" | "preview"> & {
+type EditProps = Pick<Props, "document" | "mutate" | "prepare" | "preview"> & {
   node: DesignNode;
   ownership: ReturnType<typeof useLayoutOwnership>;
 };
@@ -29,6 +30,7 @@ export function Properties(props: Props) {
   const ownership = useLayoutOwnership(props.document, node?.id);
   if (!node) return <EmptyProperties count={props.selected.length} />;
   const editing = {
+    document: props.document,
     node,
     ownership,
     mutate: props.mutate,
@@ -60,6 +62,7 @@ function PropertySections(props: EditProps & Pick<Props, "disabled" | "select">)
       <section className="property-section">
         <h2>Layout</h2>
         <fieldset disabled={props.disabled}>
+          <FrameLayoutControls {...props} />
           <NodeLayout {...props} />
           <FrameClipping {...props} />
         </fieldset>

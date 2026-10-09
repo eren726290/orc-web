@@ -47,6 +47,39 @@ The parent rerun passed 7,544 assertions across 1,288 retained states in `artifa
 The reviewed [report](/home/eren/D/orc-web/.unlazy/v1-resume/reports/layout-correction.md) and [probe](/home/eren/D/orc-web/.unlazy/v1-resume/reports/layout-correction-probe.ts) retain successful candidates and original negative controls.
 This evidence uses Chromium on Linux and does not prove editor history, saving, exports, installed Chrome, or Windows.
 
+## Ordinary layout switching
+
+The ordinary Free/Row/Column control uses CSS as the single authored layout authority.
+Normal Free children, including imported literal `position:absolute` children of a Free frame, join Row/Column in canonical sibling order.
+Children already outside Flex flow retain their offsets, constraints, sizing, and native absolute positioning when the parent changes layout.
+When first leaving Flex, their position declaration becomes `position:var(--orc-absolute-position)` with their own `--orc-absolute-position:absolute` declaration.
+That active CSS value preserves explicit Absolute participation through later Free-to-Flex switches without a separate saved layout flag or inherited parent variable.
+The namespace belongs to ORC's position projection; arbitrary source-controlled position expressions remain unavailable for visual conversion.
+Ordinary Free placement remains literal `position:absolute`.
+Reparenting into Flex explicitly rejoins flow and removes the owned position variable; Free reparenting preserves an existing explicit Absolute position value.
+
+Flex-to-Free captures participating children's native parent-relative Left/Top placement and Fixed width/height in one batch.
+It preserves margins, borders, padding, box sizing, clipping, IDs, hierarchy, and unrelated styling.
+An intrinsically sized frame captures its current size on axes that will lose their in-flow content, preserving its box as its children leave flow.
+Axes owned by its own parent remain parent-controlled.
+This does not establish general Free Fit sizing or general Fixed/Fit/Fill controls.
+
+Both placement paths remove active logical and physical offsets when joining flow.
+The retained logical-offset counterexample placed a child at x=105 instead of x=15 because `inset-inline-start:90px !important` survived conversion.
+The shared removal now covers physical edges, inset shorthands, and individual logical edges.
+Transformed parents, unmeasurable children, source-controlled order/position, and unsupported Flex-axis sizing reject before any batch is sent.
+General Fill conversion, Row wrapping controls and persistence across Column, source-bound React layouts, and the measured projection limits above remain V1 work.
+The [Code Apply identity record](code-apply-identity.md) records the equivalent-source correction found during layout round-trip verification and the remaining identity work.
+
+### Unfixed automatic-margin conversion
+
+Interactive verification reproduced a 30 px horizontal jump when changing a Row to Free with a child authored as `margin-left:auto`.
+The child's screen x coordinate changed from 649 to 619 because its used Flex margin was 30 px, while the absolute-positioned margin resolved to 0 px.
+The shared Free placement calculation currently subtracts the old used margin when saving Left.
+The original observation remains in ignored `artifacts/editor/layout-auto-margin-baseline.json`.
+Correct the shared conversion while preserving authored margins, and retain E2E checks for automatic margins, including variable-resolved values, before declaring layout switching verified.
+This issue remains unfixed in the current checkpoint.
+
 ## Current keyboard ownership boundaries
 
 The ordinary keyboard workflow now preserves supported native offsets and own transforms, with real geometry, history, and save/reopen checks in `scripts/e2e/editor/check-movement.ts`.
