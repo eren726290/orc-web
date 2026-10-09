@@ -8,7 +8,7 @@ import type { Mutation } from "../../../shared/commands/commands";
 import { replaceText } from "../rendering/text-runs";
 import { PropertyField } from "./property-field";
 import type { PropertyPreview } from "./property-preview";
-import { useSizingOwners } from "./use-sizing-owners";
+import { useLayoutOwnership } from "./use-layout-ownership";
 
 type Props = {
   document: DesignDocument;
@@ -17,19 +17,20 @@ type Props = {
   disabled: boolean;
   prepare: () => boolean | Promise<boolean>;
   preview: (value: PropertyPreview) => void;
+  select: (id: string) => Promise<boolean>;
 };
 type EditProps = Pick<Props, "mutate" | "prepare" | "preview"> & {
   node: DesignNode;
-  sizing: ReturnType<typeof useSizingOwners>;
+  ownership: ReturnType<typeof useLayoutOwnership>;
 };
 
 export function Properties(props: Props) {
   const node = props.selected.length === 1 ? props.document.nodes[props.selected[0]] : null;
-  const sizing = useSizingOwners(props.document, node?.id);
+  const ownership = useLayoutOwnership(props.document, node?.id);
   if (!node) return <EmptyProperties count={props.selected.length} />;
   const editing = {
     node,
-    sizing,
+    ownership,
     mutate: props.mutate,
     prepare: props.prepare,
     preview: props.preview,
@@ -40,27 +41,62 @@ export function Properties(props: Props) {
         <strong>{node.name}</strong>
         <span>{node.kind}</span>
       </div>
-      <fieldset key={node.id} disabled={props.disabled || isLocked(props.document, node.id)}>
-        <section className="property-section">
-          <h2>Layout</h2>
-          <NodeLayout {...editing} />
-          <FrameClipping {...editing} />
-        </section>
-        {node.kind === "text" && (
-          <section className="property-section">
-            <h2>Text</h2>
-            <TextContent {...editing} />
-          </section>
-        )}
-        <section className="property-section">
-          <h2>Appearance</h2>
-          <NodeAppearance {...editing} />
-        </section>
-      </fieldset>
+      <PropertySections
+        key={node.id}
+        {...editing}
+        disabled={props.disabled || isLocked(props.document, node.id)}
+        select={props.select}
+      />
       {isLocked(props.document, node.id) && (
         <p className="panel-empty">Unlock this object or its parent to edit.</p>
       )}
     </aside>
+  );
+}
+
+function PropertySections(props: EditProps & Pick<Props, "disabled" | "select">) {
+  return (
+    <>
+      <section className="property-section">
+        <h2>Layout</h2>
+        <fieldset disabled={props.disabled}>
+          <NodeLayout {...props} />
+          <FrameClipping {...props} />
+        </fieldset>
+        {props.ownership.position && (
+          <PositionOwner position={props.ownership.position} select={props.select} />
+        )}
+      </section>
+      <fieldset disabled={props.disabled}>
+        {props.node.kind === "text" && (
+          <section className="property-section">
+            <h2>Text</h2>
+            <TextContent {...props} />
+          </section>
+        )}
+        <section className="property-section">
+          <h2>Appearance</h2>
+          <NodeAppearance {...props} />
+        </section>
+      </fieldset>
+    </>
+  );
+}
+
+function PositionOwner({
+  position,
+  select,
+}: {
+  position: NonNullable<EditProps["ownership"]["position"]>;
+  select: Props["select"];
+}) {
+  return (
+    <div className="position-owner">
+      <p>Position controlled by {position.name}</p>
+      <button type="button" onClick={() => void select(position.id)}>
+        Select parent
+      </button>
+    </div>
   );
 }
 
@@ -259,10 +295,14 @@ function StyleField(props: StyleProps) {
 }
 
 function styleFieldValue(props: StyleProps) {
+  if ((props.property === "left" || props.property === "top") && props.ownership.position)
+    return { value: props.ownership.position[props.property], readOnly: true };
   const authored = props.node.style[props.property] ?? props.fallback;
   const fixed = /^-?\d+(?:\.\d+)?px$/u.test(authored);
   const owner =
-    props.property === "width" || props.property === "height" ? props.sizing[props.property] : null;
+    props.property === "width" || props.property === "height"
+      ? props.ownership[props.property]
+      : null;
   const readOnly = Boolean(owner) || (props.numeric === "px" && !fixed);
   const value = owner ?? styleFieldDisplay(authored, props.numeric, readOnly);
   return { value, readOnly };

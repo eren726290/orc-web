@@ -26,12 +26,16 @@ The [reparenting checkpoint](../IMPLEMENTATION_STATUS.md#ordinary-pointer-repare
 The subsequent [sizing correction](../IMPLEMENTATION_STATUS.md#sizing-ownership-correction-and-stopping-checkpoint) fixes Fill/Constraints labels and explicit cross-axis stretch while preserving intrinsic automatic-margin sizing.
 Its [100-check result](../artifacts/editor/movement-sizing-ownership-result.json) verifies those corrections in development and built Chromium with unchanged executable source hashes.
 
+Ordinary participating Flex children now show read-only parent-relative X/Y values, a parent ownership explanation, and guarded Select parent inspection.
+This remains available under own or ancestor locks and does not change the applied document or history.
+The [position checkpoint](../IMPLEMENTATION_STATUS.md#parent-controlled-position-checkpoint) records responsive native coordinates, draft safeguards, transformed-source boundaries, and development/built verification in Chromium and managed Chrome for Testing.
+
 ## Remaining V1 work
 
 - Complete several-object reparenting and sizing conversion between Flex axes through the accepted per-axis ownership model.
 - Implement general Fixed/Fit/Fill controls; the corrected labels and preservation of existing same-axis Fill do not establish general Fill support.
 - Complete per-axis ownership for authored Flex basis, logical axes, source expressions, aspect ratios, and bindings before enabling corresponding manual resize handles.
-- Complete parent-controlled position fields, ownership explanations, and Select parent actions alongside layout and constraint controls.
+- Extend layout ownership and supported coordinate inspection to React source bindings and the remaining source-controlled layouts alongside the general layout and constraint controls.
 - Implement sizing-owned resize handles and SVG rotation/proportional resizing.
 - Resolve existing transformed-parent, reverse/RTL flow, and source-controlled layout limitations without replacing authored CSS with independent saved geometry.
 - Preserve or explicitly map source-controlled nonlinear constraints and transformed Free conversions; current unavailable conversions direct the person to Code.

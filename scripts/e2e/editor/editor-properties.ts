@@ -28,9 +28,9 @@ export async function pendingPropertyHistory(page: Page) {
         throw new Error("The pending Properties command was not received.");
       }),
     ]);
-    assert.notEqual(
-      await page.locator(".properties-panel fieldset").getAttribute("disabled"),
-      null,
+    assert.equal(
+      await page.getByRole("textbox", { name: "Content", exact: true }).isDisabled(),
+      true,
     );
     await page.getByRole("application", { name: "Canvas" }).press("Control+z");
     acknowledge();

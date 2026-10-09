@@ -34,6 +34,7 @@ const requirements = [
   "Flex pointer slots show the receiving outline and insertion line in Row, Column and wrapped Row.",
   "Draft Discard after pointer release completes selection without resuming movement or creating history.",
   "Frame drops convert Free placement and constraints or join the marked Flex slot atomically.",
+  "Flex position fields show native parent-relative coordinates read-only and offer guarded parent selection without edits or history, including locked objects.",
   "Exact Undo/Redo and save/reopen retain CSS, hierarchy and native geometry.",
 ];
 let failure: string | null = null;
@@ -66,6 +67,8 @@ async function verifyMode(mode: "development" | "built") {
   try {
     await prepareMovementFixture(page, app.url);
     await parentPositionFields(page);
+    await parentPositionDraft(page);
+    await parentPositionInspection(page, mode);
     await initialMovement(page);
     await freeMovement(page, mode);
     await constraintMovement(page, mode);
@@ -100,6 +103,7 @@ async function parentPositionFields(page: Page) {
     await select(page, [id]);
     await renderSettled(page);
     const before = await session(page);
+    await parentPositionValues(page, id);
     for (const label of ["X", "Y"]) {
       const field = page.getByLabel(label, { exact: true });
       assert.equal(await field.getAttribute("readonly"), "", "Flex position must be read-only");
@@ -120,9 +124,127 @@ async function parentPositionFields(page: Page) {
   assert.equal(await page.getByLabel("X", { exact: true }).getAttribute("readonly"), null);
   await select(page, ["absolute"]);
   assert.equal(await page.getByLabel("X", { exact: true }).getAttribute("readonly"), null);
+  await select(page, ["loose"]);
   checks.push(
     "Flex position fields are read-only, explain their parent and select it without editing; roots and Absolute children retain position controls",
   );
+}
+
+async function parentPositionValues(page: Page, id: string) {
+  const position = await page.locator(`.canvas-world [data-orc-id="${id}"]`).evaluate((element) => {
+    const parent = element.parentElement;
+    const world = element.closest(".canvas-world");
+    if (!parent || !world) throw new Error("Missing position reference");
+    const box = element.getBoundingClientRect();
+    const origin = parent.getBoundingClientRect();
+    const style = getComputedStyle(parent);
+    const scale = new DOMMatrix(getComputedStyle(world).transform).a;
+    return {
+      X: (box.x - origin.x) / scale - parseFloat(style.borderLeftWidth) + parent.scrollLeft,
+      Y: (box.y - origin.y) / scale - parseFloat(style.borderTopWidth) + parent.scrollTop,
+    };
+  });
+  for (const [label, expected] of Object.entries(position)) {
+    const actual = Number(await page.getByLabel(label, { exact: true }).inputValue());
+    near(actual, expected);
+  }
+  inputs.push({ trigger: "Inspect parent-controlled position", id, position });
+}
+
+async function parentPositionDraft(page: Page) {
+  await select(page, ["rb"]);
+  await codeFocus(page);
+  const source = page.getByRole("textbox", { name: "Object source", exact: true });
+  const draft = await source.innerText();
+  const before = await session(page);
+  const parent = page.getByRole("button", { name: "Select parent", exact: true });
+  const dialog = page.getByRole("dialog", { name: "Discard unapplied changes?", exact: true });
+  await parent.click();
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  assert.equal(await source.innerText(), draft);
+  assert.deepEqual(await selection(page), ["rb"]);
+  assert.deepEqual(await session(page), before);
+  await parent.click();
+  await dialog.getByRole("button", { name: "Discard", exact: true }).click();
+  assert.deepEqual(await selection(page), ["row"]);
+  assert.equal(await page.getByText("Unapplied changes", { exact: true }).count(), 0);
+  assert.deepEqual(await session(page), before);
+  await page.getByRole("button", { name: "Code", exact: true }).click();
+  checks.push(
+    "Select parent uses Code draft Cancel/Discard safeguards without document edits or history",
+  );
+}
+
+async function parentPositionInspection(page: Page, mode: string) {
+  for (const id of ["rb", "row"]) {
+    await accepted(page, { kind: "lock", id, locked: true });
+    await select(page, ["rb"]);
+    const before = await session(page);
+    assert.equal(await page.getByLabel("Name", { exact: true }).isDisabled(), true);
+    assert.equal(await page.getByLabel("X", { exact: true }).getAttribute("readonly"), "");
+    await parentPositionValues(page, "rb");
+    await page.getByRole("button", { name: "Select parent", exact: true }).click();
+    assert.deepEqual(await selection(page), ["row"]);
+    assert.deepEqual(await session(page), before);
+    await accepted(page, { kind: "lock", id, locked: false });
+  }
+  await parentPositionGeometry(page);
+  await parentPositionSource(page);
+  await select(page, ["loose"]);
+  checks.push(
+    `${mode}: parent-relative coordinates account for responsive layout, borders, padding and zoom; locked objects allow parent inspection; transformed positions preserve source`,
+  );
+}
+
+async function parentPositionGeometry(page: Page) {
+  const document = (await session(page)).projects[0].document;
+  await accepted(page, {
+    kind: "style",
+    id: "row",
+    values: {
+      padding: "12px",
+      border: "3px solid black",
+      width: "40vw",
+      "justify-content": "space-between",
+    },
+  });
+  await select(page, ["rb"]);
+  await renderSettled(page);
+  await parentPositionValues(page, "rb");
+  const before = await session(page);
+  const x = await page.getByLabel("X", { exact: true }).inputValue();
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await renderSettled(page);
+  await parentPositionValues(page, "rb");
+  assert.notEqual(await page.getByLabel("X", { exact: true }).inputValue(), x);
+  await page.getByRole("application", { name: "Canvas" }).hover();
+  await page.mouse.wheel(0, 240);
+  await renderSettled(page);
+  await parentPositionValues(page, "rb");
+  await page.mouse.wheel(0, -240);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  assert.deepEqual(await session(page), before);
+  await accepted(page, {
+    kind: "style",
+    id: "row",
+    values: document.nodes.row.style,
+    unset: ["padding", "border", "justify-content"],
+  });
+}
+
+async function parentPositionSource(page: Page) {
+  for (const id of ["rb", "row"]) {
+    await accepted(page, { kind: "style", id, values: { transform: "scale(1.1)" } });
+    await select(page, ["rb"]);
+    await renderSettled(page);
+    const before = await session(page);
+    assert.equal(await page.getByLabel("X", { exact: true }).inputValue(), "Edit source");
+    assert.equal(await page.getByLabel("Y", { exact: true }).inputValue(), "Edit source");
+    await page.getByRole("button", { name: "Select parent", exact: true }).click();
+    assert.deepEqual(await selection(page), ["row"]);
+    assert.deepEqual(await session(page), before);
+    await accepted(page, { kind: "style", id, values: {}, unset: ["transform"] });
+  }
 }
 
 function text(id: string, parentId: string | null, style: DesignNode["style"] = {}): DesignNode {
@@ -180,8 +302,16 @@ async function accepted(page: Page, mutation: Mutation) {
     mutation,
   };
   const response = await page.request.post("/api/commands", { data });
-  inputs.push({ request: data, status: response.status(), response: await response.json() });
   assert.equal(response.status(), 200);
+  const result = parseSession(await response.json());
+  inputs.push({ request: data, status: response.status(), response: result });
+  await page.waitForFunction(
+    (revision) =>
+      window.document.querySelector(".canvas")?.getAttribute("data-orc-revision") ===
+      String(revision),
+    result.projects[0].document.revision,
+  );
+  await renderSettled(page);
 }
 
 async function session(page: Page) {

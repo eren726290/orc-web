@@ -69,6 +69,7 @@ function WorkspaceProperties({ controller: c }: { controller: Controller }) {
         disabled={c.disabled}
         prepare={c.prepareProperties}
         preview={c.setPreview}
+        select={(id) => c.select(id, false)}
       />
     </>
   );

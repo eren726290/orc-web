@@ -1,7 +1,7 @@
 # ORC-web implementation status
 
 Last updated: 2026-10-09.
-Current stage: paused at the user's request after pointer and sizing corrections; full V1 remains in progress.
+Current stage: active V1 implementation after the pointer, sizing, and parent-controlled position corrections.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
 
 ## Current state
@@ -11,7 +11,7 @@ This overview describes this checkout and links to reviewed evidence from the PC
 | Application foundation and startup | Implemented combined Bun/Vite development launch and built-app serving; Linux startup failure cleanup, normal shutdown, and failed-save shutdown recovery pass focused process checks. | [Launcher](scripts/dev.ts), [backend](server/start.ts), [lifecycle check](scripts/runtime/check-lifecycle.ts). |
 | Development tooling | Selected anti-slop rules and Fallow CLI configured; TypeScript 6, lint controls, formatting, build, and Chromium frontend mounting pass on Fedora. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [remaining editor tooling](backlog/development-tooling.md). |
 | Editor workspace, Layers, Properties, and Code | In progress; Dashboard/tabs, selection, basic Properties previews, text editing, Code Apply/Discard, draft safeguards, panel resizing, in-place Layer naming, and atomic subtree deletion pass focused development/built checks. | [Editor workflow](scripts/e2e/editor/check-editor.ts), [panel check](scripts/e2e/editor/check-panels.ts), [naming check](scripts/e2e/editor/check-layers.ts), [deletion check](scripts/e2e/editor/check-deletion.ts). |
-| Tokens, layout, constraints, and canvas transforms | In progress; ordinary keyboard and pointer movement, single Flex reordering, and single-object/frame pointer reparenting between ordinary Free/Flex frames and workspace root pass focused development/built checks. Layout/constraint controls, general sizing ownership, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
+| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, and read-only parent-controlled position inspection pass focused development/built checks. Layout/constraint controls, general sizing ownership, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
 | Selected-frame Preview | In progress; ordinary frames retain their native sizing and saved defaults, isolate temporary form inputs and scrolling, restore Edit selection/pan/zoom, and preserve Code drafts and document/history in focused development/built Chromium checks. React components, portals, Motion, and supported-platform verification remain pending. | [Preview](src/editor/preview/Preview.tsx), [native workflow check](scripts/e2e/editor/check-preview.ts), [accepted Preview](doc_v1/interface/workspace-and-canvas.md#selected-frame-workflow). |
 | Shared commands, application Undo/Redo, and project saving | In progress; authoritative sessions, revision checks, command history, save/reopen, independent projects, existing-save recovery, failed first Save/Save as recovery, and exclusive locks pass focused checks on Linux. | [Services](server/projects/projects.ts), [pending-response history check](scripts/e2e/editor/check-history.ts), [saving regression check](scripts/e2e/projects/check-saving.ts), [saving contract](doc_v1/architecture/orc-workspace-bundle.md). |
 | Ordinary HTML/CSS/SVG authoring | In progress; reproduced SVG geometry/source disagreement, lost explicit line breaks and inline separators, and invalid SVG render acceptance are corrected and pass focused development/built checks; complete V1 source support remains pending. | [Source service](server/source/html.ts), [importer](src/editor/code/html-import.ts), [rendering regression check](scripts/e2e/rendering/check-rendering.ts), [Code workflow check](scripts/e2e/editor/editor-source.ts). |
@@ -273,9 +273,48 @@ Health reports zero enforced errors and 123 static-estimated CRAP advisories; de
 
 The user requested a good stopping point after fixing current issues, with no subagents started.
 No new subagents were started, and the agent inventory confirms no child agent is running.
-Implementation is paused here with changes uncommitted on master.
+Implementation was paused here with changes uncommitted on master.
+That checkpoint was subsequently committed and pushed as `9793376`, followed by the parent-position regression checkpoint `2f837c2`.
 Full V1, general layout/constraint controls, MCP, installed Chrome verification, and Windows verification remain unfinished.
 The [gesture record](backlog/canvas-pointer-gestures.md) retains the remaining ownership and gesture work.
+
+## Parent-controlled position checkpoint
+
+The real browser reproduced editable X/Y fields for participating Flex children at commit `2f837c2`.
+The retained baseline is [the failed development result](artifacts/editor/movement-parent-position-baseline-current-result.json).
+Properties now shows native parent-relative coordinates read-only for ordinary Row, Column, and wrapped Row children.
+It explains which parent controls position and offers Select parent through the existing Code draft safeguard.
+Own and ancestor locks preserve this inspection action while design-editing fields remain disabled.
+Native box observation updates the readout after responsive layout changes, with borders, padding, and canvas zoom accounted for.
+Unsupported transformed coordinates show Edit source without replacing authored CSS or creating history.
+Loose roots and Absolute children retain their existing position controls.
+Native sizing-owner recognition remains shared with pointer placement, and coordinate-transform detection is shared rather than duplicated.
+
+The test fixture now waits for its applied revision to reach the canvas before inspecting a backend mutation.
+The broader pending-history test also exposed its assumption that Properties contains one fieldset.
+It now checks the actual Content field's disabled state while the command acknowledgement is pending.
+The original failing trace and screenshot are retained as `artifacts/editor/parent-position-regression-before-fix-trace.zip` and `parent-position-regression-before-fix.png`.
+
+The [Chromium result](artifacts/editor/movement-parent-position-result.json) and [Chrome for Testing result](artifacts/editor/movement-parent-position-chrome-testing-result.json) each passed 106 checks with 680 recorded inputs across development and built modes.
+Their browser versions are Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57 on Linux.
+The checks cover read-only positions, native coordinates, parent selection, draft Cancel/Discard, locks, responsive layout, transformed-source boundaries, existing movement/reparenting, exact Undo/Redo, and save/reopen.
+Interactive screenshots were visually reviewed, and [the independent inspection](artifacts/editor/parent-position-independent-inspection.json) verifies the displayed coordinates against native `offsetLeft` and `offsetTop`.
+The Chrome for Testing run used this explicit command:
+
+```sh
+ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome ORC_MOVEMENT_EVIDENCE=parent-position-chrome-testing bun run check:movement chrome
+```
+
+All four scoped gates passed after re-execution, with zero unmet or abandoned gates.
+Build, TypeScript, lint, formatting, health, editor, Preview, atomic, panel, and pending-history checks passed.
+The two movement results and the editor, Preview, atomic, and panel results have executable source hashes matching the current checkout.
+Before/after movement and atomic source hashes also match.
+[Health](artifacts/editor/parent-position-health.json) reports zero enforced errors and 126 static-estimated CRAP advisories; these estimates do not measure the E2E coverage.
+[Dead-code analysis](artifacts/editor/parent-position-codebase.json) retains seven planned unused dependencies, with no unused files/exports, unresolved imports, or cycles.
+No subagent was started, and the owned interactive browser and development app shut down successfully.
+This checkpoint completes the parent-controlled position corrections; full V1 implementation continues.
+The supplied installed stable Chrome path remains absent, and Windows verification remains pending.
+The [gesture record](backlog/canvas-pointer-gestures.md#remaining-v1-work) retains broader layout ownership, source-binding, and gesture work.
 
 ## Next checkpoint
 

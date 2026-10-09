@@ -626,6 +626,27 @@ body {
   gap: 0 12px;
 }
 
+.position-owner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--color-editor-muted);
+  font-size: 11px;
+}
+.position-owner p {
+  overflow-wrap: anywhere;
+}
+.position-owner button {
+  align-self: start;
+  min-block-size: 44px;
+  color: var(--color-editor-ink);
+  font-size: 12px;
+  border: 1px solid var(--color-editor-border);
+}
+.position-owner button:active {
+  background: var(--color-editor-border);
+}
+
 .checkbox-field {
   display: flex;
   align-items: center;

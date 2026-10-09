@@ -1,4 +1,5 @@
 import { prepareFlexDrop } from "./pointer-layout";
+import { hasCoordinateTransform } from "../layout/coordinates";
 import type { AtomicMutation, Mutation } from "../../../shared/commands/commands";
 import {
   containsNode,
@@ -53,13 +54,7 @@ export function checkMovementCoordinates(element: Element, surface: HTMLElement)
     parent = parent.parentElement
   ) {
     if (parent.classList.contains("canvas-world")) continue;
-    const style = getComputedStyle(parent);
-    if (
-      ["transform", "translate", "rotate", "scale", "perspective"].some(
-        (property) => style.getPropertyValue(property) !== "none",
-      ) ||
-      !["1", "normal"].includes(style.zoom)
-    )
+    if (hasCoordinateTransform(getComputedStyle(parent)))
       throw new Error("Use Code to move objects inside a transformed parent.");
   }
 }

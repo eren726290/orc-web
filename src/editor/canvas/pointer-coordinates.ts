@@ -1,6 +1,7 @@
 import type { AtomicMutation } from "../../../shared/commands/commands";
 import type { DesignNode } from "../../../shared/document/model";
 import { checkMovementCoordinates } from "./keyboard-movement";
+import { hasCoordinateTransform } from "../layout/coordinates";
 
 type StyleEdit = Extract<AtomicMutation, { kind: "style" }>;
 const insets = ["inset", "inset-inline", "inset-block", "left", "right", "top", "bottom"];
@@ -27,12 +28,7 @@ export function frameReference(element: HTMLElement, surface: HTMLElement, scale
 export function checkFrameCoordinates(element: HTMLElement, surface: HTMLElement) {
   checkMovementCoordinates(element, surface);
   const style = getComputedStyle(element);
-  if (
-    ["transform", "translate", "rotate", "scale", "perspective"].some(
-      (property) => style.getPropertyValue(property) !== "none",
-    ) ||
-    !["1", "normal"].includes(style.zoom)
-  )
+  if (hasCoordinateTransform(style))
     throw new Error("Use Code to move objects into a transformed frame.");
   return style;
 }
