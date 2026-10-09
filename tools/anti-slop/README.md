@@ -7,6 +7,6 @@ The upstream files are unmodified; `index.ts` is the local registration of these
 `provenance.json` records upstream paths and SHA-256 hashes.
 Review updates before copying them, and keep `@oxlint/plugins` at the exact installed Oxlint version.
 
-The CLI controls in `scripts/check-tooling.ts` accept valid code and reject known violations through the real installed Oxlint binary.
+The CLI controls in `scripts/tooling/check-tooling.ts` accept valid code and reject known violations through the real installed Oxlint binary.
 These isolated checks are justified because browser workflows do not exercise linter configuration or plugin loading.
 The plugin is development tooling and is not imported by the application.

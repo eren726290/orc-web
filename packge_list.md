@@ -31,6 +31,7 @@ The registry release column reports what npm returned on the snapshot date; it d
 | [recast](https://registry.npmjs.org/recast/latest) | 0.24.0 | Structured source edits and preservation of unchanged source where possible. |
 | [ast-types](https://registry.npmjs.org/ast-types/latest) | 0.16.3 | AST checks/builders when directly imported by the editing service; declare it directly in that case. |
 | [playwright](https://registry.npmjs.org/playwright/latest) | 1.63.0 | Runtime Chrome candidate validation and screenshot/PDF capture; also usable in browser checks. |
+| `@lezer/html` | 1.3.13 installed and selected on 2026-10-08 | Shared SVG root parsing without eagerly loading CodeMirror editor support; the existing CodeMirror language uses the same installed grammar. |
 | [@modelcontextprotocol/server](https://registry.npmjs.org/@modelcontextprotocol%2Fserver/latest) | 2.3.1 | MCP adapter through the existing Bun backend; earlier SDK research examined 2.3.0. |
 | [tailwindcss](https://registry.npmjs.org/tailwindcss/latest) | 4.3.3 | Tailwind v4 styling and compiler inputs; required at runtime when Bun prepares imported Tailwind designs. |
 | [motion](https://registry.npmjs.org/motion/latest) | 14.0.0 selected | Source-authored React animation support. |
@@ -134,6 +135,9 @@ Research/browser utilities used by agents are separate from the application's de
 The initial scaffold provides exact direct pins, `bun.lock`, Vite React/Tailwind configuration, and `dev`, `build`, `check:types`, `lint`, and `format` scripts.
 It selected TypeScript 6.0.3 and `@babel/parser` 7.29.9 from the recorded compatible experiment direction.
 The first type check, lint, and production build passed with Bun 1.4.2.
+The SVG dependency checkpoint directly pins the already installed `@lezer/html` 1.3.13 and updates the lockfile workspace declaration without changing resolved packages.
+The current manifest has 18 runtime and 12 development dependencies.
+Parser equivalence, SVG rendering/source checks, Code workflows, a frozen install, and the updated production build pass; see [the dependency-boundary record](backlog/source-parser-bundle-size.md).
 The 2026-10-08 tooling checkpoint added `check:tooling`, `check:format`, `check:codebase`, and browser smoke-check scripts.
 Oxlint loads three selected vendored anti-slop rules plus native `oxc/no-accumulating-spread`, and their positive and negative CLI controls pass.
 Formatter scripts target scaffold source and configuration without rewriting documentation or unmodified upstream rule files.

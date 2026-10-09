@@ -9,7 +9,7 @@
     "maxCyclomatic": 10,
     "maxUnitSize": 40
   },
-  "dynamicallyLoaded": ["src/html-import.ts"],
+  "dynamicallyLoaded": ["src/editor/code/html-import.ts"],
   "rules": {
     "unused-dependencies": "warn",
     "complexity-crap": "warn"

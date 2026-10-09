@@ -19,7 +19,7 @@ Do not silence the collision with `skipLibCheck`.
 
 The backend now has its own `tsconfig.server.json` and passes complete library checking.
 Bun 1.4.2 also refers to `TextEncoderEncodeIntoResult` and unqualified TLS names absent from the pinned Node 22 declarations.
-`server/bun-compat.d.ts` supplies aliases to the equivalent Node types within the backend scope.
+`server/types/bun-compat.d.ts` supplies aliases to the equivalent Node types within the backend scope.
 Recheck and remove that compatibility file when an upstream Bun/Node type update resolves the declaration errors.
 
 ## Fallow function-size reporting

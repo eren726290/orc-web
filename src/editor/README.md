@@ -1,0 +1,4 @@
+# Editor workspace
+
+Workspace composes the toolbar, panels, and feature folders.
+Panel resizing and browser view state live here; document changes use the shared command path.

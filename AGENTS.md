@@ -14,6 +14,17 @@ Read-only by default. Ask before destructive actions.
 
 - When writing or substantially editing long Markdown files, put each full sentence on its own line. Preserve normal Markdown structure, but avoid wrapping multiple sentences onto one physical line.
 
+## Code organization
+
+- Before adding or moving files under `scripts/`, `server/`, `shared/`, or `src/`, consult the [folder map](README.md#code-organization) and choose the owning feature or domain.
+- Put files in their existing feature/domain folder.
+  Create a focused subfolder when introducing a distinct responsibility.
+  Keep feature-specific components, styles, and helpers together.
+- Keep these four directory roots limited to documented entry points, environment declarations, common foundation files, and READMEs.
+- Give each new code directory a `README.md` describing its responsibilities.
+  Update the parent folder map when adding or changing a group.
+- When moving files, update imports, package scripts, configuration, runtime file paths, and documentation together, then verify the affected commands and workflows.
+
 ## Scope
 
 - Stay strictly within the agreed release scope, defaulting to V1.
@@ -60,7 +71,7 @@ Read-only by default. Ask before destructive actions.
 
 
 ## CLIs
-- Facts (library APIs/versions → ctx7; current events,deep/ambiguous topics → firecrawl; GitHub → gh) come from tools, not memory.
+- Facts (library APIs/versions → ctx7/firecrawl; current events,deep/ambiguous topics → firecrawl; GitHub → gh) come from tools, not memory, use other CLIs tools as per need
 
 ## ponytail-full ##
 - ponytail always in full mode .

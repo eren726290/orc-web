@@ -3,7 +3,15 @@
 This directory tracks ideas and decisions that still need discussion.
 Backlog entries are not product requirements until they are accepted and recorded in [`../doc_v1/`](../doc_v1/README.md).
 
+## Correction records
+
+- The [Properties background shorthand correction](properties-background-shorthand.md) records its reproduction, native CSS projection, and completed development/built Chromium regression.
+
 ## Open topics
+
+- Review the [SVG source parser's initial bundle cost](source-parser-bundle-size.md) before release while preserving the verified source and rendering behavior.
+- Resolve [orphaned project-lock recovery](project-lock-recovery.md) after removing the reproduced automatic-reclamation race.
+- Resolve the measured [native layout projection limits](native-layout-projection.md) before claiming general Flex Fill and constraint support.
 
 - Validate the recommended React, Vite, and browser-check foundation with the real ORC-web implementation before treating it as final.
 - Implement the real editor workflow using the Babel/Recast direction established by [PR1–5 source-editing validation](../doc_v1/architecture/react-source-editing-validation.md); completed Fedora fixture checks are not pending handoff work.

@@ -1,0 +1,46 @@
+.layer-name-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.layer-name-edit input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  block-size: 32px;
+  padding-inline: 4px;
+  color: var(--color-editor-ink);
+  background: var(--color-editor-surface);
+  border: 1px solid var(--color-editor-selection);
+  border-radius: 4px;
+}
+
+.layer-row .layer-rename {
+  flex: 0 0 32px;
+  min-inline-size: 32px;
+  padding: 0;
+  opacity: 0;
+}
+
+.layer-rename svg {
+  inline-size: 1.2cap;
+  block-size: 1.2cap;
+}
+
+.layer-row.selected .layer-rename,
+.layer-row:focus-within .layer-rename {
+  opacity: 1;
+}
+
+.layer-row .layer-name:active,
+.layer-row .layer-rename:active {
+  background: var(--color-editor-inset);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .layer-row:hover .layer-rename {
+    opacity: 1;
+  }
+}

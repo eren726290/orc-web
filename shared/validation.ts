@@ -6,6 +6,18 @@ export function object(value: unknown): Record<string, unknown> {
   return value as Record<string, unknown>;
 }
 
+export function knownFields(
+  input: Record<string, unknown>,
+  allowed: readonly string[],
+  owner: string,
+): void {
+  const unsupported = Object.keys(input).find((key) => !allowed.includes(key));
+  if (unsupported !== undefined)
+    throw new Error(
+      `Unsupported ${owner} field "${unsupported}". This version cannot preserve that data.`,
+    );
+}
+
 export function string(value: unknown): string {
   if (typeof value !== "string") throw new Error("Expected text.");
   return value;

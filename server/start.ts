@@ -1,6 +1,6 @@
-import { Projects, message } from "./projects";
-import { readRoute, validateOrigin, writeRoute } from "./http";
-import { closeRenderingBrowser } from "./rendering";
+import { Projects, message } from "./projects/projects";
+import { readRoute, validateOrigin, writeRoute } from "./http/http";
+import { closeRenderingBrowser } from "./rendering/rendering";
 
 const projects = new Projects();
 let pending: Promise<unknown> = Promise.resolve();
