@@ -1,0 +1,20 @@
++ /home/eren/D/orc-web/node_modules/.bin/oxlint experiments/base-ui-only-this/baseline.ts experiments/base-ui-only-this/only-this.ts experiments/base-ui-only-this/proof.ts experiments/base-ui-only-this/styles.ts experiments/automatic-source-mapping/browser.ts experiments/automatic-source-mapping/resolver.ts experiments/automatic-source-mapping/continuity/session.ts
++ lint_result=0
++ printf 'oxlint exit code: %s\n' 0
+oxlint exit code: 0
++ /home/eren/D/orc-web/node_modules/.bin/oxfmt --check experiments/automatic-source-mapping/browser.ts experiments/automatic-source-mapping/resolver.ts experiments/automatic-source-mapping/continuity/session.ts experiments/base-ui-only-this/baseline.ts experiments/base-ui-only-this/styles.ts experiments/base-ui-only-this/only-this.ts experiments/base-ui-only-this/proof.ts experiments/base-ui-only-this/src/App.tsx experiments/base-ui-only-this/src/AccountDialog.tsx experiments/base-ui-only-this/src/Detail.tsx experiments/base-ui-only-this/src/UnsafeAccountDialog.tsx experiments/base-ui-only-this/src/UnsafeDetail.tsx
+Checking formatting...
+
+All matched files use the correct format.
+Finished in 3ms on 12 files using 20 threads.
+No config found, using defaults. Please add a config file or try `oxfmt --init` if needed.
++ format_result=0
++ printf 'oxfmt exit code: %s\n' 0
+oxfmt exit code: 0
++ git diff --check
++ diff_result=0
++ printf 'git diff --check exit code: %s\n' 0
+git diff --check exit code: 0
++ test 0 = 0
++ test 0 = 0
++ test 0 = 0

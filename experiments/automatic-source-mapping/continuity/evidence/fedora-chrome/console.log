@@ -1,0 +1,16 @@
+RUN /tmp/orc-web-pr3-selection/experiments/automatic-source-mapping/runs/continuity-final-2026-09-29T21-59-45-435Z
+PASS basic literal: one click, retained logical handle
+PASS basic instance: one click, retained logical handle
+PASS basic collection: one click, retained logical handle
+PASS basic delete: one click, retained logical handle
+PASS basic ambiguous: one click, retained logical handle
+PASS basic collision: one click, retained logical handle
+PASS basic rejected-candidate: one click, retained logical handle
+PASS variation literal: one click, retained logical handle
+PASS variation instance: one click, retained logical handle
+PASS variation collection: one click, retained logical handle
+PASS variation delete: one click, retained logical handle
+PASS variation ambiguous: one click, retained logical handle
+PASS variation collision: one click, retained logical handle
+PASS variation rejected-candidate: one click, retained logical handle
+CONTINUITY 14 passed, 0 failed

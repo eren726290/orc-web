@@ -1,0 +1,65 @@
+[
+  {
+    "tag": "H1",
+    "text": "Literal \"quotes\" & <teams> {safe} 🌱",
+    "size": "48px",
+    "weight": "700",
+    "classes": "text-5xl font-bold"
+  },
+  {
+    "tag": "H2",
+    "text": "Instance after formatting",
+    "size": "48px",
+    "weight": "700",
+    "classes": "text-5xl font-bold hover:underline md:tracking-wide"
+  },
+  {
+    "tag": "H2",
+    "text": "Second instance",
+    "size": "48px",
+    "weight": "700",
+    "classes": "text-5xl font-bold hover:underline md:tracking-wide"
+  },
+  {
+    "tag": "H2",
+    "text": "Edited cross-file usage",
+    "size": "48px",
+    "weight": "700",
+    "classes": "text-5xl font-bold"
+  },
+  {
+    "tag": "H2",
+    "text": "Another cross-file instance",
+    "size": "48px",
+    "weight": "700",
+    "classes": "text-5xl font-bold"
+  },
+  {
+    "tag": "H3",
+    "text": "Record edited after reorder",
+    "size": "20px",
+    "weight": "700",
+    "classes": "text-xl font-bold"
+  },
+  {
+    "tag": "H3",
+    "text": "Desk lamp",
+    "size": "20px",
+    "weight": "700",
+    "classes": "text-xl font-bold"
+  },
+  {
+    "tag": "H4",
+    "text": "Price: 21",
+    "size": "36px",
+    "weight": "700",
+    "classes": "text-4xl"
+  },
+  {
+    "tag": "H4",
+    "text": "From external-shaped input",
+    "size": "20px",
+    "weight": "700",
+    "classes": "text-xl"
+  }
+]

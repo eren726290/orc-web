@@ -1,0 +1,94 @@
+RUN /home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/runs/continuity-baseline-2026-09-29T21-36-57-064Z
+FAIL basic literal
+AssertionError: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'literal'
+
+AssertionError [ERR_ASSERTION]: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'literal'
+
+    at /home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/continuity/baseline.ts:73:16
+    at processTicksAndRejections (native:7:39)
+FAIL basic instance
+AssertionError: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'prop'
+
+AssertionError [ERR_ASSERTION]: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'prop'
+
+    at /home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/continuity/baseline.ts:73:16
+    at processTicksAndRejections (native:7:39)
+PASS basic collection
+FAIL basic style-only
+AssertionError: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'literal'
+
+AssertionError [ERR_ASSERTION]: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'literal'
+
+    at /home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/continuity/baseline.ts:73:16
+    at processTicksAndRejections (native:7:39)
+FAIL variation literal
+AssertionError: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'literal'
+
+AssertionError [ERR_ASSERTION]: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'literal'
+
+    at /home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/continuity/baseline.ts:73:16
+    at processTicksAndRejections (native:7:39)
+FAIL variation instance
+AssertionError: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'prop'
+
+AssertionError [ERR_ASSERTION]: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'prop'
+
+    at /home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/continuity/baseline.ts:73:16
+    at processTicksAndRejections (native:7:39)
+PASS variation collection
+FAIL variation style-only
+AssertionError: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'literal'
+
+AssertionError [ERR_ASSERTION]: Retained selection must still resolve its text owner after first edit
++ actual - expected
+
++ 'unsupported'
+- 'literal'
+
+    at /home/eren/D/orc-web-pr3/experiments/automatic-source-mapping/continuity/baseline.ts:73:16
+    at processTicksAndRejections (native:7:39)
+BASELINE 2 passed, 6 failed

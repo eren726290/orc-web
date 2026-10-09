@@ -1,0 +1,78 @@
+{
+  "project": {
+    "framework": "Manual",
+    "frameworkName": "manual",
+    "frameworkVersion": null,
+    "srcDirectory": true,
+    "rsc": false,
+    "typescript": true,
+    "tailwindVersion": "v4",
+    "tailwindConfig": null,
+    "tailwindCss": "src/styles.css",
+    "importAlias": "@"
+  },
+  "config": {
+    "style": "base-nova",
+    "base": "base",
+    "rsc": false,
+    "typescript": true,
+    "iconLibrary": "lucide",
+    "rtl": false,
+    "menuColor": null,
+    "menuAccent": null,
+    "aliases": {
+      "components": "@/components",
+      "utils": "@/lib/utils",
+      "ui": "@/components/ui",
+      "lib": "@/lib",
+      "hooks": "@/hooks"
+    },
+    "resolvedPaths": {
+      "cwd": "/tmp/orc-web-pr4-active/experiments/base-ui-only-this",
+      "tailwindConfig": null,
+      "tailwindCss": "/tmp/orc-web-pr4-active/experiments/base-ui-only-this/src/styles.css",
+      "utils": "/tmp/orc-web-pr4-active/experiments/base-ui-only-this/src/lib/utils",
+      "components": "/tmp/orc-web-pr4-active/experiments/base-ui-only-this/src/components",
+      "lib": "/tmp/orc-web-pr4-active/experiments/base-ui-only-this/src/lib",
+      "hooks": "/tmp/orc-web-pr4-active/experiments/base-ui-only-this/src/hooks",
+      "ui": "/tmp/orc-web-pr4-active/experiments/base-ui-only-this/src/components/ui"
+    },
+    "registries": {
+      "@shadcn": "https://ui.shadcn.com/r/styles/{style}/{name}.json"
+    }
+  },
+  "preset": {
+    "code": "b2fA",
+    "fallbacks": [
+      "chartColor",
+      "font",
+      "fontHeading",
+      "radius",
+      "menuAccent",
+      "menuColor"
+    ],
+    "values": {
+      "style": "nova",
+      "baseColor": "neutral",
+      "theme": "neutral",
+      "chartColor": "neutral",
+      "iconLibrary": "lucide",
+      "font": "geist",
+      "fontHeading": "inherit",
+      "radius": "default",
+      "menuAccent": "subtle",
+      "menuColor": "default"
+    }
+  },
+  "components": [
+    "button",
+    "dialog"
+  ],
+  "links": {
+    "docs": "https://ui.shadcn.com/docs",
+    "components": "https://ui.shadcn.com/docs/components/base/[component].md",
+    "ui": "https://ui.shadcn.com/code/apps/v4/registry/bases/base/ui/[component].tsx",
+    "examples": "https://ui.shadcn.com/code/apps/v4/registry/bases/base/examples/[component]-example.tsx",
+    "schema": "https://ui.shadcn.com/schema.json"
+  }
+}

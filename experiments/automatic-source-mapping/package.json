@@ -1,0 +1,17 @@
+{
+  "name": "orc-automatic-source-mapping-proof",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "proof": "bun proof.ts"
+  },
+  "dependencies": {
+    "@babel/parser": "7.29.9",
+    "ast-types": "0.16.3",
+    "recast": "0.24.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwindcss": "4.3.3",
+    "playwright": "1.63.0"
+  }
+}
