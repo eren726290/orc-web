@@ -1,0 +1,54 @@
+.gap-handle {
+  position: absolute;
+  inline-size: 44px;
+  block-size: 44px;
+  margin: -22px;
+}
+.gap-handle .field {
+  margin: 0;
+  font-size: 0;
+  gap: 0;
+  line-height: 0;
+}
+.gap-handle .field input {
+  inline-size: 44px;
+  block-size: 44px;
+  padding: 0;
+  position: relative;
+  border: 0;
+  border-radius: 4px;
+  color: var(--color-editor-ink);
+  background: transparent;
+  font-size: 12px;
+  text-align: center;
+  appearance: textfield;
+  touch-action: none;
+  cursor: ew-resize;
+}
+.gap-handle input::-webkit-inner-spin-button {
+  appearance: none;
+}
+.gap-handle[data-axis="y"] input {
+  cursor: ns-resize;
+}
+.gap-handle .field input:focus-visible {
+  outline: 2px solid var(--color-editor-selection);
+  outline-offset: 2px;
+}
+.gap-handle::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid var(--color-editor-selection);
+  border-radius: 4px;
+  background: var(--color-editor-surface);
+  pointer-events: none;
+}
+.gap-handle:has(input:active)::before {
+  background: var(--color-editor-border);
+}
+@media (hover: hover) and (pointer: fine) {
+  .gap-handle:has(input:hover)::before {
+    background: var(--color-editor-inset);
+  }
+}

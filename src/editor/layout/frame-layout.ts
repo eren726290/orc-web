@@ -8,16 +8,69 @@ import { frameLayoutValidation } from "./frame-layout-validation";
 
 export type FrameLayout = "Free" | "Row" | "Column";
 type StyleEdit = Extract<AtomicMutation, { kind: "style" }>;
+const rowWrap = "--orc-row-wrap";
+const rowWrapReference = "var(--orc-row-wrap)";
 
-export function readFrameLayout(node: DesignNode): FrameLayout | null {
+function authoredFrameStyle(node: DesignNode) {
   const style = window.document.createElement("div").style;
   style.cssText = Object.entries(node.style)
     .map(([key, value]) => `${key}:${value};`)
     .join("");
+  return style;
+}
+
+export function readFrameLayout(node: DesignNode): FrameLayout | null {
+  const style = authoredFrameStyle(node);
   if (["", "block", "flow-root"].includes(style.display)) return "Free";
   if (!["flex", "inline-flex"].includes(style.display)) return null;
+  if (Object.hasOwn(node.style, "flex-flow") && (!style.flexDirection || !style.flexWrap))
+    return null;
   if (["", "row"].includes(style.flexDirection)) return "Row";
   return style.flexDirection === "column" ? "Column" : null;
+}
+
+export function readRowWrapping(node: DesignNode): boolean | null {
+  const style = authoredFrameStyle(node);
+  const value =
+    style.flexWrap === rowWrapReference
+      ? style.getPropertyValue(rowWrap).trim()
+      : style.flexWrap || "nowrap";
+  if (value === "wrap") return true;
+  return value === "nowrap" ? false : null;
+}
+
+export function prepareRowWrapping(document: DesignDocument, id: string, wrapped: boolean) {
+  const node = document.nodes[id];
+  if (!node || node.kind !== "frame" || readFrameLayout(node) !== "Row")
+    throw new Error("Select a Row frame to change wrapping.");
+  if (isLocked(document, id)) throw new Error("Unlock the frame before changing wrapping.");
+  const current = readRowWrapping(node);
+  if (current === null) throw new Error("Wrapping controlled by source. Edit in Code.");
+  if (current === wrapped) return null;
+  const element = renderedFrame(document, id);
+  const value = wrapped ? "wrap" : "nowrap";
+  const validate = frameLayoutValidation(element, "Row", 1);
+  return {
+    mutation: {
+      kind: "batch",
+      mutations: [
+        {
+          kind: "style",
+          id,
+          values: {
+            [rowWrap]: priority(element.style, rowWrap, value),
+            "flex-wrap": priority(element.style, "flex-wrap", rowWrapReference),
+          },
+          unset: Object.hasOwn(node.style, "flex-flow") ? ["flex-flow"] : [],
+        },
+      ],
+    } satisfies Mutation,
+    validate: () => {
+      validate();
+      if (getComputedStyle(element).flexWrap !== value)
+        throw new Error("Wrapping controlled by source. Edit in Code.");
+    },
+  };
 }
 
 export function prepareFrameLayout(document: DesignDocument, id: string, target: FrameLayout) {
@@ -98,11 +151,7 @@ function parentLayout(
   };
   if (target !== "Free") {
     values["flex-direction"] = priority(element.style, "flex-direction", target.toLowerCase());
-    values["flex-wrap"] = priority(
-      element.style,
-      "flex-wrap",
-      target === "Column" ? "nowrap" : style.flexWrap,
-    );
+    Object.assign(values, wrappingStyles(element, target));
   } else {
     Object.assign(values, freeFrameDimensions(document, node, element));
   }
@@ -111,6 +160,23 @@ function parentLayout(
     id: node.id,
     values,
     unset: target !== "Free" && Object.hasOwn(node.style, "flex-flow") ? ["flex-flow"] : [],
+  };
+}
+
+function wrappingStyles(element: HTMLElement, target: "Row" | "Column") {
+  const style = element.style;
+  const column = getComputedStyle(element).flexDirection === "column";
+  const managed = style.flexWrap === rowWrapReference;
+  const choice =
+    column || managed
+      ? style.getPropertyValue(rowWrap).trim() || "nowrap"
+      : style.flexWrap || "nowrap";
+  // CSS-wide keywords change meaning when moved into a custom property.
+  if (!["wrap", "nowrap"].includes(choice) && !choice.startsWith("var("))
+    throw new Error("Use Code to change this source-controlled wrapping.");
+  return {
+    [rowWrap]: priority(style, rowWrap, choice),
+    "flex-wrap": priority(style, "flex-wrap", target === "Column" ? "nowrap" : rowWrapReference),
   };
 }
 

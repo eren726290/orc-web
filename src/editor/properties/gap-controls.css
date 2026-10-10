@@ -1,0 +1,16 @@
+.gap-controls {
+  margin-block: 12px;
+}
+.gap-controls input[type="number"] {
+  cursor: ew-resize;
+  touch-action: none;
+  appearance: textfield;
+}
+.gap-controls p {
+  font-size: 11px;
+  color: var(--color-editor-muted);
+  overflow-wrap: anywhere;
+}
+.gap-controls input::-webkit-inner-spin-button {
+  appearance: none;
+}

@@ -68,7 +68,8 @@ Both placement paths remove active logical and physical offsets when joining flo
 The retained logical-offset counterexample placed a child at x=105 instead of x=15 because `inset-inline-start:90px !important` survived conversion.
 The shared removal now covers physical edges, inset shorthands, and individual logical edges.
 Transformed parents, unmeasurable children, source-controlled order/position, and unsupported Flex-axis sizing reject before any batch is sent.
-General Fill conversion, Row wrapping controls and persistence across Column, source-bound React layouts, and the measured projection limits above remain V1 work.
+General Fill conversion, source-bound React layouts, and the measured projection limits above remain V1 work.
+Ordinary Row wrapping and its persistence are verified in the [wrapping record](#row-wrapping-implementation).
 The [Code Apply identity record](code-apply-identity.md) records the equivalent-source correction found during layout round-trip verification and the remaining identity work.
 
 ### Automatic-margin correction
@@ -105,6 +106,102 @@ The control now remembers its trigger and restores focus after rendering re-enab
 It restores only for the same selected owner, a connected enabled button, and body focus, so it does not take focus from another active control.
 Both completed switches and rejected native previews retain focus in the regression.
 The original observation remains in ignored `artifacts/editor/layout-focus-baseline.json`, with corrected native focus and its visible ring in `layout-focus-corrected.json` and `layout-interactive-keyboard-focus.png`.
+
+### Row wrapping implementation
+
+The ordinary Row control now includes Wrap to next line and passes recorded development and built verification.
+The original Row-to-Column-to-Row regression lost wrapping and moved the third child from x=15 back to x=175.
+Its retained failure is `artifacts/editor/layout-wrapping-column-baseline-result.json`.
+Each frame now owns an active `--orc-row-wrap` CSS declaration, and Row uses `flex-wrap:var(--orc-row-wrap)`.
+Column uses `nowrap` while retaining the frame's own Row choice, and Free retains that choice for a later return to flow.
+No line memberships, copied child orders, or measured geometry are saved.
+The [Flexbox line specification](https://www.w3.org/TR/css-flexbox-1/#flex-lines) defines independent line layout, and the [CSS variable specification](https://www.w3.org/TR/css-variables-1/#using-variables) defines the active authored projection.
+
+The wrapping mutation changes the parent only and retains child styles, ordering, locks, constraints, and the clipping setting.
+The existing property-preview path verifies the native candidate before one atomic command.
+The control preserves keyboard focus and protects Code drafts through the same path as layout switches.
+External wrapping expressions remain available in Code and retain their references across supported mode switches.
+
+Review reproduced a whole variable `flex-flow` being misread as an ordinary Row because native CSSOM exposes empty pending-substitution longhands.
+A follow-up reproduction also covered uppercase `VAR(...)`, `env(...)`, and a shorthand with one explicitly overridden longhand.
+The corrected ownership read requires Code whenever an authored `flex-flow` leaves its native direction or wrapping field unresolved.
+Review also reproduced a visual mode change accepting CSS-wide wrapping keywords, whose meaning would change if moved into a custom property.
+These keywords and reverse wrapping now reject conversions that would move their wrapping declaration into ORC's owned custom property, without sending a command.
+The retained negative controls are `layout-wrapping-source-flow-baseline-result.json`, `layout-wrapping-functions-baseline-result.json`, and `layout-wrapping-keyword-baseline-result.json` under ignored `artifacts/editor/`.
+These are implementation corrections; no incorrect V1 architectural contract has been established.
+
+The E2E checks exercise native 90 px Fill bases, 3/2 line formation, per-line sharing, min/max limits, and mixed Fixed/Fill children.
+This does not yet establish the general editor's Fixed/Fit/Fill controls or a complete source-bound React projection.
+Those accepted V1 requirements remain open alongside complete exports and server-side layout preparation.
+The final [Chromium result](../artifacts/editor/layout-wrapping-result.json) and [Chrome for Testing result](../artifacts/editor/layout-wrapping-chrome-result.json) each passed 168 checks with 280 inputs.
+The [source audit](../artifacts/editor/wrapping-final-source-audit.json) matches all 119 captured source files across eight workflow results.
+The [implementation checkpoint](../IMPLEMENTATION_STATUS.md#ordinary-row-wrapping-checkpoint) records commands, platform, visual review, and remaining limits.
+
+## Ordinary frame padding
+
+Frame Padding starts with Horizontal and Vertical fields and a native Individual sides disclosure.
+Opposite sides with different fixed values display Mixed until an explicit assignment.
+Expanding reveals Top, Right, Bottom, and Left without changing the document or history.
+Paired and individual edits reuse the existing Properties draft safeguard, temporary preview, and atomic command path.
+Each completed edit changes only the parent style and creates one Undo step.
+Undo restores the original asymmetry and CSS declarations.
+
+The ownership reader uses authored CSSOM declarations rather than copying computed pixel values into the document.
+Absent padding starts at zero.
+Physical fixed pixel values remain editable, including native exponent notation.
+Logical padding, all resets, CSS-wide keywords, percentages, calculations, and unresolved source expressions require Code instead of guessed physical ownership.
+An explicit physical longhand that independently overrides an unresolved shorthand remains editable on its own.
+Untouched shorthand, expression references, side values, and declaration priorities remain authored.
+Edited longhands are removed and appended in the same atomic batch so a later important shorthand cannot continue overriding them.
+
+The minimum-width screenshot exposed misaligned paired inputs when Horizontal padding wrapped onto two lines.
+The retained failing check is artifacts/editor/padding-alignment-baseline-result.json.
+Aligning the shared field grid at its end corrects the inputs without a new layout wrapper.
+Native CSSOM also serializes small pixel values as exponent notation, which initially turned an accepted numeric edit into a read-only Edit source field.
+The real-editor observation and failing regression remain in artifacts/editor/padding-number-browser-baseline.json and padding-number-baseline-result.json.
+The reader now recognizes that notation, and the focused corrected workflow also checks exact Undo/Redo.
+Neither correction establishes a faulty doc_v1 architectural contract.
+
+Padding reflows native children and grows an applicable Fit height without changing child styles or the clipping setting.
+A Fixed height retains its authored value while the native decoration floor still applies.
+For example, an authored 62 px border-box height with 40 px top/bottom padding and 3 px borders renders at 86 px.
+The [Padding checkpoint](../IMPLEMENTATION_STATUS.md#ordinary-frame-padding-checkpoint) records the final browser, source, and regression evidence.
+At the Padding checkpoint, Gap gestures, alignment/distribution, sizing and constraints, Tokens, React source bindings, exports, and backend layout preparation remained required V1 work.
+
+## Ordinary frame Gap
+
+Properties and canvas handles edit one authored fixed-pixel Gap value for ordinary Row and Column frames.
+Typing, local arrows, input dragging, and canvas dragging share the same numeric field and command path.
+Every completed adjustment is one parent-only atomic batch and one Undo step.
+Temporary native measurements locate participating-item gaps and wrapped-row gaps without saving row membership or geometry.
+Absolute and hidden children create no handles; fewer than two participating children keep the numeric control available.
+Handle coordinates are unavailable for unsupported transforms, direction, writing mode, reverse layout, or custom child order.
+
+The ownership reader recognizes equal authored row and column gap values with compatible declaration priorities.
+Absent or normal Flex gaps begin at zero, and native exponent notation remains editable.
+Unequal axes, source expressions, CSS-wide values, incompatible priorities, and all resets retain their source rather than receiving guessed numeric ownership.
+A deliberate numeric edit normalizes supported equal axes to one gap declaration while preserving its priority.
+Locks, Code drafts, source references, canonical child order, child styles, and clipping remain intact.
+
+The original drag cleanup restored a stale field number after command acknowledgement.
+Blur then submitted that number as a second command, so one Undo did not restore the pre-drag value.
+The retained failure is [gap-development-first-result.json](../artifacts/editor/gap-development-first-result.json), with its trace and screenshot beside it.
+The field now resets from the latest applied value, and the regression asserts one command during pending acknowledgement and immediate Undo.
+
+Native row review reproduced missing handles between wrapped lines with multiple unequal-height children.
+The retained geometry failure is [gap-wrapped-rows-baseline-result.json](../artifacts/editor/gap-wrapped-rows-baseline-result.json).
+A retained two-animation-frame drag also reproduced its active input disappearing during reflow.
+The [reflow failure](../artifacts/editor/gap-wrapping-gesture-frame-baseline-result.json) and [diagnosis](../artifacts/editor/gap-reflow-diagnosis-result.json) preserve that investigation.
+Temporary row unions now locate real line gaps, and an active input remains mounted through completion of its pointerup handler.
+These corrections do not introduce saved rows or a second layout authority.
+
+Manual review and its [browser regression](../artifacts/editor/gap-contrast-baseline-result.json) reproduced number contrast of 4.19:1.
+Using the existing editor ink token raises normal contrast to 17.28:1 and retains at least 12.28:1 in reviewed pressed and hover states.
+Axe cannot determine the handle pseudo-element backgrounds, so the source audit also records real browser colors and manual contrast calculations.
+The [Gap checkpoint](../IMPLEMENTATION_STATUS.md#ordinary-frame-gap-checkpoint) records the final browser, regression, visual, cleanup, and source evidence.
+Alignment/distribution, general sizing and constraints, Tokens, React source bindings, exports, and backend layout preparation remain required V1 work.
+Installed stable Chrome and Windows remain unverified.
+These are implementation corrections; no incorrect doc_v1 architectural contract was established.
 
 ## Current keyboard ownership boundaries
 

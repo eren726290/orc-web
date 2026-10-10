@@ -5,17 +5,21 @@ import { createTextNode, RenderNode } from "../rendering/renderer";
 import { replaceText } from "../rendering/text-runs";
 import { usePointerMovement } from "./pointer-movement";
 import { DropIndicator } from "./DropIndicator";
+import { GapHandles } from "./GapHandles";
+import type { PropertyPreview } from "../properties/property-preview";
 import { pointerDocument, type PointerPreview } from "./pointer-layout";
 import type { ViewState } from "../view-state";
 
 type Props = {
   document: DesignDocument;
+  appliedDocument: DesignDocument;
   view: ViewState;
   setView: (patch: Partial<ViewState>) => void;
   select: (id: string | null, extend: boolean) => Promise<boolean>;
   beforeEdit: () => Promise<boolean>;
   mutate: (mutation: Mutation) => Promise<boolean>;
   notice: (message: string | null) => void;
+  preview: (value: PropertyPreview) => void;
   disabled: boolean;
   keyDown: (event: React.KeyboardEvent) => void;
 };
@@ -398,6 +402,7 @@ function CanvasOverlays({
         document={props.document}
         pan={props.view.pan}
       />
+      <GapHandles {...props} canvas={canvas} />
     </>
   );
 }

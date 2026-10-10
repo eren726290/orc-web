@@ -1,7 +1,7 @@
 # ORC-web implementation status
 
 Last updated: 2026-10-10.
-Current stage: paused at the user's request after the verified ordinary layout-switch corrections.
+Current stage: V1 implementation continues; ordinary Row wrapping, frame Padding, and Gap controls pass recorded development and built checks.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
 
 ## Current state
@@ -11,7 +11,7 @@ This overview describes this checkout and links to reviewed evidence from the PC
 | Application foundation and startup | Implemented combined Bun/Vite development launch and built-app serving; Linux startup failure cleanup, normal shutdown, and failed-save shutdown recovery pass focused process checks. | [Launcher](scripts/dev.ts), [backend](server/start.ts), [lifecycle check](scripts/runtime/check-lifecycle.ts). |
 | Development tooling | Selected anti-slop rules and Fallow CLI configured; TypeScript 6, lint controls, formatting, build, and Chromium frontend mounting pass on Fedora. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [remaining editor tooling](backlog/development-tooling.md). |
 | Editor workspace, Layers, Properties, and Code | In progress; Dashboard/tabs, selection, basic Properties previews, text editing, Code Apply/Discard, draft safeguards, panel resizing, in-place Layer naming, and atomic subtree deletion pass focused development/built checks. | [Editor workflow](scripts/e2e/editor/check-editor.ts), [panel check](scripts/e2e/editor/check-panels.ts), [naming check](scripts/e2e/editor/check-layers.ts), [deletion check](scripts/e2e/editor/check-deletion.ts). |
-| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, and Free/Row/Column switches pass focused development/built checks. General sizing and constraint controls, Row wrapping, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
+| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, Free/Row/Column switches, Row wrapping, frame Padding, and Gap gestures pass focused development/built checks; alignment/distribution, general sizing and constraint controls, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [wrapping checkpoint](#ordinary-row-wrapping-checkpoint), [Padding checkpoint](#ordinary-frame-padding-checkpoint), [Gap checkpoint](#ordinary-frame-gap-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
 | Selected-frame Preview | In progress; ordinary frames retain their native sizing and saved defaults, isolate temporary form inputs and scrolling, restore Edit selection/pan/zoom, and preserve Code drafts and document/history in focused development/built Chromium checks. React components, portals, Motion, and supported-platform verification remain pending. | [Preview](src/editor/preview/Preview.tsx), [native workflow check](scripts/e2e/editor/check-preview.ts), [accepted Preview](doc_v1/interface/workspace-and-canvas.md#selected-frame-workflow). |
 | Shared commands, application Undo/Redo, and project saving | In progress; authoritative sessions, revision checks, command history, save/reopen, independent projects, existing-save recovery, failed first Save/Save as recovery, and exclusive locks pass focused checks on Linux. | [Services](server/projects/projects.ts), [pending-response history check](scripts/e2e/editor/check-history.ts), [saving regression check](scripts/e2e/projects/check-saving.ts), [saving contract](doc_v1/architecture/orc-workspace-bundle.md). |
 | Ordinary HTML/CSS/SVG authoring | In progress; reproduced SVG geometry/source disagreement, lost explicit line breaks and inline separators, and invalid SVG render acceptance are corrected and pass focused development/built checks; complete V1 source support remains pending. | [Source service](server/source/html.ts), [importer](src/editor/code/html-import.ts), [rendering regression check](scripts/e2e/rendering/check-rendering.ts), [Code workflow check](scripts/e2e/editor/editor-source.ts). |
@@ -34,7 +34,8 @@ The scaffold records exact direct dependency pins and startup configuration unde
 The current `dev` command starts Bun and Vite together.
 Shadcn/lint awaits editor tokens and component contracts.
 The Chrome paths supplied from the previous session are absent in this environment, and the Fedora RPM inventory reports no installed `google-chrome-stable` package.
-The supported Chrome scaffold check is blocked until Chrome is available; Chromium and Codex @Browser smoke checks passed.
+Managed Chrome for Testing is now available for explicit executable-path checks, including the [Gap workflow](#ordinary-frame-gap-checkpoint).
+The default installed-stable-Chrome scaffold check and Windows verification remain pending; Chromium and earlier Codex @Browser smoke checks passed.
 Detailed tool value grammars, resource-transfer fields, and SDK integration are tracked in the [MCP implementation backlog](backlog/mcp/command-contracts.md).
 Resolve those details when implementing the corresponding services.
 Record a blocker here when an actual failure prevents the next checkpoint, with a link to its diagnosis.
@@ -44,7 +45,8 @@ Record a blocker here when an actual failure prevents the next checkpoint, with 
 The foundation, panel, bundle-preservation, and lifecycle checks run real application processes rather than restating implementation functions.
 Ignored `artifacts/editor/foundation.json` and `panels.json` record the tested commit, working-source hashes, command, platform, browser version, and outcomes.
 Screenshots and Playwright traces are saved beside those records.
-The current editor runs use Playwright Chromium and in-app Browser inspection on Fedora; they do not certify installed Google Chrome or Windows behavior.
+Editor checks use Playwright Chromium, with managed Chrome for Testing also verified for the latest layout, wrapping, Padding, and Gap workflows.
+Earlier in-app Browser inspection remains scoped to its recorded checks; these results do not certify an installed stable Chrome package or Windows behavior.
 Earlier foundation evidence records `e0f5b46`; later evidence uses source hashes to identify the tested editor and folder-organization changes included in this checkpoint.
 The strict saved-data check rejects unsupported fields without changing original bundle bytes or the active document.
 Full asset, token, component, layout, and binding schema integration is still required; that rejection guard is not full resource support.
@@ -352,7 +354,146 @@ ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/ch
 
 This verifies the ordinary layout-control path; arbitrary backend style batches still lack whole-document native candidate validation.
 The supplied installed stable Chrome path remains absent, and Windows verification remains pending.
-General Fill and constraint controls, Row wrapping controls/persistence across Column, React source bindings, and [meaningful Code Apply identity reconciliation](backlog/code-apply-identity.md) remain required V1 work.
+At that stopping checkpoint, general Fill and constraint controls, Row wrapping controls/persistence across Column, React source bindings, and [meaningful Code Apply identity reconciliation](backlog/code-apply-identity.md) remained required V1 work.
+
+## Ordinary Row wrapping checkpoint
+
+Properties now exposes Wrap to next line for an ordinary Row frame.
+One parent-only atomic command changes wrapping while preserving canonical child order, child styles and locks, Absolute participation, and clipping.
+The frame's authored CSS retains its Row choice through Column, Free, and save/reopen without saved row membership or copied geometry.
+The control uses the existing draft safeguard and native candidate preview, with keyboard focus retained after completion.
+The [projection record](backlog/native-layout-projection.md#row-wrapping-implementation) documents the mapping and reproduced failures.
+
+The original Row-to-Column-to-Row path lost wrapping.
+Review also reproduced incorrect ownership for unresolved flex-flow shorthands and unsafe conversion of CSS-wide wrapping keywords.
+Their failing E2E records remain under ignored artifacts/editor/ beside the corrected runs.
+Unresolved shorthand direction or wrapping now requires Code, including uppercase VAR(...), env(...), and single-longhand overrides.
+These are implementation corrections within the accepted contract; no faulty doc_v1 architecture was established.
+
+The final [Chromium result](artifacts/editor/layout-wrapping-result.json) and [Chrome for Testing result](artifacts/editor/layout-wrapping-chrome-result.json) each passed 168 checks with 280 recorded inputs across development and built modes.
+Coverage includes native line formation, width edits, item/row gap, Fixed card widths, existing 90 px Fill bases and per-line min/max sharing, Fit height, Fixed-height clipping, locks, drafts, history, source ownership, empty Rows, and reopening a Column with its retained Row choice.
+The tested versions are Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57 on Linux.
+The final build, TypeScript, lint, formatting, health, movement, editor, Preview, atomic, clipping, panel, and pending-history commands passed.
+All eight audited workflow results match the 119 source files captured at this wrapping checkpoint in [the final source audit](artifacts/editor/wrapping-final-source-audit.json).
+Before/after source hashes match wherever the workflow records both snapshots.
+Verification uses base commit 4a6e71aec282186b9d4a923bec6e49e995aa6328 plus those working-source hashes; this checkpoint remains uncommitted.
+The subsequent status and backlog edits change documentation only.
+
+The [minimum-width screenshot](artifacts/editor/wrapping-interactive-minimum.png) and [one-row screenshot](artifacts/editor/wrapping-interactive-off.png) were visually reviewed.
+At a 240 px Properties width, the checkbox has a 44 px clickable label, no horizontal panel overflow, and visible focus after Space activation.
+The scoped control accessibility scan reports 12 passes, zero violations, and zero incomplete checks; full-application and screen-reader verification remain pending.
+[Health](artifacts/editor/wrapping-health.json) reports zero enforced errors and 141 static-estimated CRAP advisories, which do not measure E2E coverage.
+[Dead-code analysis](artifacts/editor/wrapping-codebase.json) retains seven planned unused dependencies and reports no unused files/exports, unresolved imports, or cycles.
+The owned review browser and development app shut down successfully, and no subagent was started.
+
+Repeat the focused workflow after building:
+
+```sh
+ORC_LAYOUT_EVIDENCE=wrapping bun run check:layout
+ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome ORC_LAYOUT_EVIDENCE=wrapping-chrome bun run check:layout chrome
+```
+
+General Fixed/Fit/Fill controls and wrapped Fill projection, constraints, Tokens, React source bindings, complete exports, and backend preparation for future agent layout commands remain required V1 work.
+Installed stable Chrome and Windows remain unverified.
+
+## Ordinary frame Padding checkpoint
+
+Properties now exposes paired Horizontal and Vertical padding for ordinary frames, with an Individual sides disclosure for Top, Right, Bottom, and Left.
+Mixed opposite values remain unchanged until a deliberate assignment, and expanding the controls changes no document state or history.
+Numeric typing previews native reflow; Escape cancels, invalid input retains the last valid preview, and Enter or blur commits one parent-only batch and one Undo step.
+Undo restores asymmetry, source declarations, and priorities exactly.
+The control reuses the existing Properties field, draft safeguard, preview, and mutation paths without a new dependency or saved layout model.
+The [projection record](backlog/native-layout-projection.md#ordinary-frame-padding) describes ownership, priority ordering, native decoration floors, and the reproduced issues.
+
+Review reproduced paired-input misalignment at minimum panel width and valid small pixel edits becoming read-only after native exponent serialization.
+Both failures were retained before their corrections and are covered by the final workflow.
+A test fixture also retained a logical padding declaration between source-ownership cases; its reset now removes the previous fixture's padding declarations.
+One broader verification run was interrupted by a development page reload immediately after a live Markdown edit.
+Its [diagnosis](artifacts/editor/padding-document-reload-diagnosis.json), movement failure, screenshot, and trace remain preserved.
+The complete affected command group passed again with all repository files frozen.
+These are implementation and verification corrections; no faulty doc_v1 architecture was established.
+
+The final [Chromium result](artifacts/editor/padding-verification-result.json) and [Chrome for Testing result](artifacts/editor/padding-chrome-result.json) each passed 48 checks with 116 inputs across development and built modes.
+They cover asymmetric and decimal values, exponent notation, disclosure, live preview, Escape, invalid input, unchanged edits retaining Redo, shorthand priorities, source ownership, own/ancestor locks, child-lock preservation, Code drafts, Fit growth, Fixed-height clipping, exact history, and UI save/reopen.
+The tested versions are Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57 on Linux.
+Both browser layout regressions also passed 168 checks with 280 inputs each.
+Movement passed 106 checks with 680 inputs; clipping passed 18 checks with 120 inputs.
+The editor, panel, and pending-history commands passed alongside build, TypeScript, lint, formatting, tooling, and health checks.
+All eight audited workflow results and the interactive review match the 123 captured source files in [the final source audit](artifacts/editor/padding-final-source-audit.json).
+Before/after hashes match wherever the workflow records both snapshots.
+Verification uses base commit 4a6e71aec282186b9d4a923bec6e49e995aa6328 plus those working-source hashes; these changes remain uncommitted on master.
+The subsequent status and backlog updates change documentation only.
+
+The [paired controls](artifacts/editor/padding-final-manual-paired.png) and [expanded controls](artifacts/editor/padding-final-manual-expanded.png) were visually reviewed at a 240 px Properties width.
+Paired inputs align, fields fit without horizontal overflow, and the native disclosure has a 44 px target and visible keyboard focus.
+Direct Chrome typing also retained an editable numeric field after the small-value correction, and Undo restored the original asymmetric shorthand.
+Each scoped accessibility scan reports 13 passes, zero violations, and zero incomplete checks; full-application and screen-reader verification remain pending.
+[Health](artifacts/editor/padding-health.json) reports zero enforced errors and 145 static-estimated CRAP advisories, which do not measure E2E coverage.
+[Dead-code analysis](artifacts/editor/padding-dead-code.json) retains seven planned unused dependencies and reports no unused files/exports, unresolved imports, or cycles.
+All five scoped Padding gates are met, with no unmet or abandoned gates.
+The owned interactive browser and app shut down successfully, and no subagent was started.
+
+Repeat the focused workflow after building:
+
+```sh
+bun run check:padding
+ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome ORC_PADDING_EVIDENCE=chrome bun run check:padding chrome
+```
+
+At the Padding checkpoint, Gap gestures, alignment/distribution, Fixed/Fit/Fill controls, constraints, Tokens, React source bindings, complete exports, and backend preparation remained required V1 work.
+Source-controlled padding remains available through Code until its supported visual owner exists.
+Installed stable Chrome and Windows remain unverified.
+
+## Ordinary frame Gap checkpoint
+
+Ordinary Row and Column frames now expose one Gap value through typing, input arrows, input dragging, and canvas handles.
+Properties and canvas handles share the same native numeric field, draft safeguard, temporary preview, and atomic command path.
+Arrow keys adjust by 1, or 8 with Shift, with visible help beside the field.
+A completed edit changes only the parent and creates one Undo step.
+Escape, pointer cancellation, window blur, zoom changes, and a newer applied revision cancel an active drag.
+Releasing the pointer while a Code draft dialog is open prevents that drag from resuming after Discard.
+
+Review reproduced a stale field value being submitted after drag acknowledgement, which made Undo require two steps.
+The numeric field now synchronizes from the latest applied value, including drag cleanup.
+Native wrapped-row review also reproduced missing between-row handles and a drag being interrupted when reflow removed its original gap.
+Temporary row bounds locate between-row handles, and the active input stays mounted until its pointer release finishes.
+Zero-gap boundaries remain directly draggable.
+The [projection record](backlog/native-layout-projection.md#ordinary-frame-gap) links the retained failures and describes ownership limits.
+These fixes correct implementation behavior; no faulty doc_v1 architectural contract was established.
+
+The final [Chromium result](artifacts/editor/gap-verification-result.json) and [Chrome for Testing result](artifacts/editor/gap-chrome-result.json) each passed 68 checks with 182 recorded inputs across development and built modes.
+They cover all four editing paths, live preview, decimals and exponent notation, unchanged values, minimum zero, exact history, pending Undo, locks, Code drafts, source ownership, zoom, wrapped reflow, Fixed clipping, and UI save/reopen.
+The tested versions are Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57 on Linux.
+Padding passed 48 checks with 116 inputs, layout passed 168 with 280, clipping passed 18 with 120, and movement passed 106 with 680.
+Editor, panels, pending history, build, TypeScript, lint, formatting, tooling, health, and dead-code commands also passed.
+All eight workflow results and the manual review match the 131 captured source files in [the final source audit](artifacts/editor/gap-final-source-audit.json).
+Before/after hashes match wherever the workflow records both snapshots.
+Verification identifies base commit 4a6e71aec282186b9d4a923bec6e49e995aa6328 plus those working-source hashes.
+The changes remain uncommitted on master; the subsequent status and backlog updates change documentation only.
+
+The [minimum panel](artifacts/editor/gap-final-manual-panel.png) and [focused handles](artifacts/editor/gap-final-manual-handles.png) were visually reviewed in managed Chrome for Testing.
+The 240 px Properties panel has no horizontal overflow, and native handle inputs have 44 px targets and visible keyboard focus.
+Manual typing and arrow previews created no revision, Enter committed once, and Undo restored the previous shared gap.
+A browser regression reproduced insufficient number contrast at 4.19:1 before the text changed to the existing editor ink token.
+The corrected number measures 17.28:1 on its normal background and at least 12.28:1 across the reviewed default, hover, and pressed states.
+The scoped axe scan reports ten passes, zero violations, and one incomplete contrast rule covering three pseudo-element backgrounds.
+The computed-color review resolves those three contrast checks; it does not establish full-application or screen-reader accessibility.
+[Health](artifacts/editor/gap-health.json) reports zero enforced errors and 164 static-estimated CRAP advisories, which do not measure E2E coverage.
+Cyclomatic complexity remains limited to 10, cognitive complexity to 15, and functions to 40 lines.
+[Dead-code analysis](artifacts/editor/gap-dead-code.json) retains seven planned unused dependencies and reports no unused files/exports, unresolved imports, or cycles.
+All five scoped Gap gates are met, with no unmet or abandoned gates.
+The owned browser and application stopped, their port closed, and no subagent was started.
+
+Repeat the focused workflow after building:
+
+```sh
+bun run check:gap
+ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome ORC_GAP_EVIDENCE=chrome bun run check:gap chrome
+```
+
+Alignment/distribution, general Fixed/Fit/Fill controls, constraints, Tokens, React source bindings, complete exports, and backend preparation remain required V1 work.
+Source-owned Gap expressions and unequal axes retain their authored CSS and remain available through Code.
+Installed stable Chrome, Windows, and screen readers remain unverified.
 
 ## Next checkpoint
 

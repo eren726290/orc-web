@@ -38,6 +38,10 @@ Its metadata and permission fault controls require POSIX and do not certify equi
 `e2e/editor/check-atomic.ts` verifies ordinary batches, explicit CSS removal, sibling order and reparenting, destination capabilities, whole-command rejection, exact Undo/Redo, and save/reopen in development and built modes.
 `e2e/editor/check-movement.ts` verifies native 1/8 px Free movement, responsive offsets, atomic selections, single Flex reordering, focus and draft protection, queued acknowledgement/history, and save/reopen in development and built modes.
 `e2e/editor/check-clipping.ts` verifies the ordinary frame Clip content control, native clipping, retained child geometry and Layer access, locks and drafts, atomic command rejection, history, and save/reopen.
-`e2e/editor/check-layout.ts` verifies ordinary Free/Row/Column switches, measured Fixed Free placement, explicit Absolute participation, native geometry, locks/drafts, exact history, and save/reopen.
+`e2e/editor/check-layout.ts` verifies ordinary Free/Row/Column switches, Row wrapping, measured Fixed Free placement, explicit Absolute participation, native geometry, locks/drafts, exact history, and save/reopen.
+Wrapping checks cover bounded native line formation, item/row gap, Fixed and existing CSS Fill sizing, Fit height, Fixed-height clipping, source ownership, and remembered Row choices across Column/Free and reopening.
+`e2e/editor/check-padding.ts` verifies paired and single-side frame padding, Mixed values, disclosure without edits, native reflow, live preview and cancellation, native exponent notation, CSS ownership and priority, locks/drafts, history, and save/reopen.
 `e2e/editor/editor-properties.ts` also checks background shorthand precedence, image and priority preservation during color preview/commit/history, and unresolved shorthand ownership through the real editor.
 Editor evidence lives in ignored `artifacts/editor/` and identifies the tested source and browser where applicable.
+
+`e2e/editor/check-gap.ts` verifies typing, 1/Shift-8 input arrows, value scrubbing, native canvas handles, live cancellation, applied-revision/zoom cancellation, wrapping through row changes, CSS ownership, locks/drafts, pending Undo, and save/reopen.

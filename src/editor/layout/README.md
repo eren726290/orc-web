@@ -6,4 +6,11 @@ frame-layout-validation.ts verifies the native candidate before publishing a lay
 These helpers derive ownership from the rendered CSS and canonical parent relationship.
 Ownership readouts do not save a second layout model or change authored sizing modes.
 Layout switches explicitly capture participating children's Fixed Free sizes and Left/Top placement when leaving Flex.
+frame-layout.ts also owns Row wrapping and its active CSS projection.
+The frame's own --orc-row-wrap declaration preserves the Row choice while Column disables wrapping.
+Native line membership remains derived from CSS rather than saved rows or measurements.
+padding.ts reads authored physical padding ownership and prepares atomic paired or single-side CSS changes without flattening source expressions.
 The [projection record](../../../backlog/native-layout-projection.md#ordinary-layout-switching) defines the CSS-owned distinction between normal Free placement and explicit Absolute Position.
+
+gap.ts recognizes equal authored fixed-pixel gap axes and prepares one atomic shared-gap edit.
+Unequal axes, incompatible priorities, resets, and source expressions stay available through Code.

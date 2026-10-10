@@ -296,6 +296,7 @@ function WorkspaceCanvas({ controller: c }: { controller: Controller }) {
     <section className="canvas-area">
       <Canvas
         document={previewDocument(c.project.document, c.preview)}
+        appliedDocument={c.project.document}
         view={c.view}
         setView={c.setView}
         select={c.select}
@@ -303,6 +304,7 @@ function WorkspaceCanvas({ controller: c }: { controller: Controller }) {
         disabled={c.disabled}
         beforeEdit={() => c.guard.request(c.project.document.id)}
         notice={c.setNotice}
+        preview={c.setPreview}
         keyDown={(event) => workspaceKey(event, c)}
       />
       {c.view.codeOpen && <WorkspaceCode controller={c} />}

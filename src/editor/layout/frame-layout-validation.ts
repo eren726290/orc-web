@@ -23,7 +23,9 @@ function validateFrame(
   )
     throw new Error("The layout changed. Try the switch again.");
   const style = getComputedStyle(element);
-  const layout = style.display === "flex" ? style.flexDirection : style.display;
+  const layout = ["flex", "inline-flex"].includes(style.display)
+    ? style.flexDirection
+    : style.display;
   if (layout !== (target === "Free" ? "block" : target.toLowerCase()))
     throw new Error("Use Code to change this source-controlled layout.");
 }

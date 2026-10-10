@@ -3,7 +3,13 @@ import { flushSync } from "react-dom";
 import { ArrowRightLeft, ArrowUpDown, Move } from "lucide-react";
 import type { DesignDocument, DesignNode } from "../../../shared/document/model";
 import type { Mutation } from "../../../shared/commands/commands";
-import { prepareFrameLayout, readFrameLayout, type FrameLayout } from "../layout/frame-layout";
+import {
+  prepareFrameLayout,
+  prepareRowWrapping,
+  readFrameLayout,
+  readRowWrapping,
+  type FrameLayout,
+} from "../layout/frame-layout";
 import "./layout-controls.css";
 import type { PropertyPreview } from "./property-preview";
 
@@ -21,7 +27,7 @@ const layouts = [
 ] as const;
 
 export function FrameLayoutControls(props: Props) {
-  const { current, error, pending, change } = useFrameLayoutChange(props);
+  const { current, error, pending, change, wrapping } = useFrameLayoutChange(props);
   if (props.node.kind !== "frame") return null;
   return (
     <div className="layout-controls">
@@ -47,24 +53,52 @@ export function FrameLayoutControls(props: Props) {
               ? "Place children freely."
               : "Layout controlled by source."}
       </p>
+      {current === "Row" && <RowWrapping value={wrapping} pending={pending} change={change} />}
       {error && <p role="alert">{error}</p>}
     </div>
   );
 }
 
+function RowWrapping(props: {
+  value: boolean | null;
+  pending: boolean;
+  change: (value: boolean) => Promise<void>;
+}) {
+  if (props.value === null) return <p>Wrapping controlled by source. Edit in Code.</p>;
+  return (
+    <>
+      <label className="checkbox-field">
+        <input
+          type="checkbox"
+          checked={props.value}
+          disabled={props.pending}
+          onChange={(event) => void props.change(event.currentTarget.checked)}
+        />
+        Wrap to next line
+      </label>
+      <p>Fixed cards keep their widths. Fill shares space within each row.</p>
+    </>
+  );
+}
+
 function useFrameLayoutChange(props: Props) {
   const [error, setError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
-  const rememberFocus = useLayoutButtonFocus(pending, props.node.id);
+  const [action, setAction] = useState<FrameLayout | boolean | null>(null);
+  const pending = action !== null;
+  const rememberFocus = useLayoutFocus(pending, props.node.id);
   const current = readFrameLayout(props.node);
-  const change = async (mode: FrameLayout) => {
+  const wrapping = typeof action === "boolean" ? action : readRowWrapping(props.node);
+  const change = async (mode: FrameLayout | boolean) => {
     if (mode === current || pending) return;
     rememberFocus();
     setError(null);
-    setPending(true);
+    setAction(mode);
     try {
       if (!(await props.prepare())) return;
-      const candidate = prepareFrameLayout(props.document, props.node.id, mode);
+      const candidate =
+        typeof mode === "boolean"
+          ? prepareRowWrapping(props.document, props.node.id, mode)
+          : prepareFrameLayout(props.document, props.node.id, mode);
       if (!candidate) return;
       flushSync(() => props.preview(candidate.mutation));
       candidate.validate();
@@ -73,14 +107,14 @@ function useFrameLayoutChange(props: Props) {
       setError(cause instanceof Error ? cause.message : "The layout change failed.");
     } finally {
       props.preview(null);
-      setPending(false);
+      setAction(null);
     }
   };
-  return { current, error, pending, change };
+  return { current, error, pending, change, wrapping };
 }
 
-function useLayoutButtonFocus(pending: boolean, id: string) {
-  const focused = useRef<{ id: string; button: HTMLButtonElement } | null>(null);
+function useLayoutFocus(pending: boolean, id: string) {
+  const focused = useRef<{ id: string; button: HTMLButtonElement | HTMLInputElement } | null>(null);
   useLayoutEffect(() => {
     const saved = focused.current;
     if (pending || !saved || saved.id !== id) return;
@@ -93,6 +127,9 @@ function useLayoutButtonFocus(pending: boolean, id: string) {
   }, [pending, id]);
   return () => {
     const button = document.activeElement;
-    focused.current = button instanceof HTMLButtonElement ? { id, button } : null;
+    focused.current =
+      button instanceof HTMLButtonElement || button instanceof HTMLInputElement
+        ? { id, button }
+        : null;
   };
 }

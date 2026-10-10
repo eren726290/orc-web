@@ -103,10 +103,12 @@ async function layoutWorkflow(page: Page, mode: string) {
   await absoluteRoundTrip(page);
   await complexFrames(page);
   await nestedAndWrapped(page);
+  await wrappingWorkflow(page);
   await select(page, "row");
   await unavailableSwitches(page);
   await draftSwitch(page);
   await saveReopen(page, mode);
+  await wrappingReopen(page);
   await repairSource(page);
 }
 
@@ -431,6 +433,9 @@ async function nestedAndWrapped(page: Page) {
   await select(page, "wrapped");
   const wrapped = await nativeBoxes(page, "wrapped");
   assert.ok(wrapped.w3.y > wrapped.w1.y, "Positive control has multiple native rows");
+  await switchMode(page, "Column");
+  await switchMode(page, "Row");
+  assertBoxes(await nativeBoxes(page, "wrapped"), wrapped);
   await switchMode(page, "Free");
   assertBoxes(await nativeBoxes(page, "wrapped"), wrapped);
   await switchMode(page, "Row");
@@ -470,6 +475,388 @@ function flowFixtures(): DesignNode[] {
       text(id, "wrapped", { position: "relative", "flex-shrink": "0" }),
     ),
   ];
+}
+
+async function wrappingWorkflow(page: Page) {
+  await select(page, "wrapped");
+  await accepted(page, { kind: "style", id: "wrapped", values: { height: "auto" } });
+  await accepted(page, {
+    kind: "insert",
+    nodes: [
+      text("wrap-absolute", "wrapped", {
+        position: "absolute",
+        left: "0",
+        top: "0",
+        width: "300px",
+        height: "200px",
+      }),
+    ],
+  });
+  await wrappingGeometry(page);
+  await wrappingClipping(page);
+  await wrappingChoices(page);
+  await wrappingFill(page);
+  await wrappingShorthand(page);
+  await wrappingLocks(page);
+  await wrappingSource(page);
+  await wrappingSourceKeywords(page);
+  await wrappingDraft(page);
+  await toggleWrap(page, true);
+  await switchMode(page, "Column");
+  assert.equal(await wrapControl(page).count(), 0, "Column exposes no wrapping control");
+  await select(page, "empty");
+  await switchMode(page, "Row");
+  await toggleWrap(page, true);
+  await toggleWrap(page, false);
+  await page.getByRole("button", { name: "Expand wrapped", exact: true }).click();
+  await select(page, "w1");
+  assert.equal(await wrapControl(page).count(), 0, "Only Row frames expose wrapping");
+  checks.push("Wrapping supports empty Rows and stays hidden for Column and non-frame selections");
+}
+
+function wrapControl(page: Page) {
+  return page.getByRole("checkbox", { name: "Wrap to next line", exact: true });
+}
+
+async function toggleWrap(page: Page, wrapped: boolean) {
+  const before = (await session(page)).projects[0].document;
+  const id = await page.getByLabel("Name", { exact: true }).inputValue();
+  const control = wrapControl(page);
+  assert.notEqual(await control.isChecked(), wrapped, "Exercise a real wrapping change");
+  const pending = page.waitForResponse(isCommand);
+  await control.press("Space");
+  const response = await pending;
+  assert.equal(response.status(), 200, await response.text());
+  const request = response.request().postDataJSON();
+  assert.equal(request.mutation.kind, "batch");
+  assert.equal(request.mutation.mutations.length, 1);
+  assert.equal(request.mutation.mutations[0].id, id);
+  await settled(page);
+  const after = (await session(page)).projects[0].document;
+  assertWrappingContent(after, before, id);
+  assert.equal(await control.isChecked(), wrapped);
+  assert.equal(await control.evaluate((input) => input === document.activeElement), true);
+  const boxes = await nativeBoxes(page, id);
+  await history(page, "undo");
+  assertContent((await session(page)).projects[0].document, before);
+  await history(page, "redo");
+  assertContent((await session(page)).projects[0].document, after);
+  assertBoxes(await nativeBoxes(page, id), boxes);
+  inputs.push({ trigger: "Wrap to next line", wrapped, request, before, after, boxes });
+  checks.push(
+    `Wrapping ${wrapped}: keyboard focus, one command, unchanged children/clipping, exact Undo/Redo`,
+  );
+}
+
+function assertWrappingContent(after: DesignDocument, before: DesignDocument, id: string) {
+  assert.equal(after.revision, before.revision + 1);
+  assertHierarchy(after, before);
+  const previous = before.nodes[id];
+  const next = after.nodes[id];
+  assert.ok(previous.kind === "frame" && next.kind === "frame");
+  assert.equal(next.clipContent, previous.clipContent);
+  for (const child of previous.children)
+    assert.deepEqual(
+      after.nodes[child],
+      before.nodes[child],
+      "Wrapping never edits child sizing or settings",
+    );
+}
+
+async function wrappingGeometry(page: Page) {
+  const before = await nativeBoxes(page, "wrapped");
+  const height = await renderedHeight(page, "wrapped");
+  await toggleWrap(page, false);
+  const single = await nativeBoxes(page, "wrapped");
+  assert.ok(Math.abs(single.w1.y - single.w3.y) < 0.1);
+  assert.ok((await renderedHeight(page, "wrapped")) < height, "Fit height shrinks with one row");
+  await toggleWrap(page, true);
+  const boxes = await nativeBoxes(page, "wrapped");
+  assertBoxes(boxes, before);
+  assert.ok(Math.abs(boxes.w2.x - boxes.w1.x - boxes.w1.width - 10) < 0.1);
+  assert.ok(Math.abs(boxes.w3.y - boxes.w1.y - boxes.w1.height - 10) < 0.1);
+  for (const id of ["w1", "w2", "w3"]) assert.ok(Math.abs(boxes[id].width - 70) < 0.1);
+  assert.ok(Math.abs((await renderedHeight(page, "wrapped")) - 104) < 0.1);
+  await wrappingWidth(page, "270");
+  const wider = await nativeBoxes(page, "wrapped");
+  assert.ok(Math.abs(wider.w1.y - wider.w3.y) < 0.1);
+  await wrappingWidth(page, "190");
+  assertBoxes(await nativeBoxes(page, "wrapped"), boxes);
+  checks.push(
+    "Bounded Row reflows on real Width edits, uses item/row gap, retains Fixed widths and excludes Absolute children from Fit height",
+  );
+}
+
+async function wrappingWidth(page: Page, value: string) {
+  const input = page.getByRole("spinbutton", { name: "Width", exact: true });
+  await input.fill(value);
+  const pending = page.waitForResponse(isCommand);
+  await input.press("Enter");
+  assert.equal((await pending).status(), 200);
+  await settled(page);
+}
+
+function renderedHeight(page: Page, id: string) {
+  return page.locator(`.canvas-world [data-orc-id="${id}"]`).evaluate((element) => {
+    const scale = new DOMMatrix(getComputedStyle(element.closest(".canvas-world")!).transform).a;
+    return element.getBoundingClientRect().height / scale;
+  });
+}
+
+async function wrappingClipping(page: Page) {
+  await accepted(page, { kind: "style", id: "wrapped", values: { height: "62px" } });
+  for (const clipContent of [false, true]) {
+    await accepted(page, { kind: "clip", id: "wrapped", clipContent });
+    await toggleWrap(page, false);
+    await toggleWrap(page, true);
+    assert.ok(Math.abs((await renderedHeight(page, "wrapped")) - 62) < 0.1);
+    const boxes = await nativeBoxes(page, "wrapped");
+    assert.ok(boxes.w3.y + boxes.w3.height > 62);
+    const overflow = await page
+      .locator('.canvas-world [data-orc-id="wrapped"]')
+      .evaluate((element) => getComputedStyle(element).overflow);
+    assert.equal(overflow, clipContent ? "hidden" : "visible");
+  }
+  await accepted(page, { kind: "clip", id: "wrapped", clipContent: false });
+  await accepted(page, { kind: "style", id: "wrapped", values: { height: "auto" } });
+  checks.push(
+    "Fixed height retains clipping choice and overflow while wrapping only changes line formation",
+  );
+}
+
+async function wrappingFill(page: Page) {
+  const ids = ["fill1", "fill2", "fill3", "fill4", "fill5"];
+  await accepted(page, {
+    kind: "insert",
+    nodes: [
+      frame("fill-row", ids, 700, {
+        display: "flex",
+        width: "330px",
+        height: "auto",
+        "flex-wrap": "nowrap",
+      }),
+      ...ids.map((id) =>
+        text(id, "fill-row", {
+          position: "relative",
+          width: "auto",
+          flex: "1 0 90px",
+          "min-width": "80px",
+          "max-width": "200px",
+        }),
+      ),
+    ],
+  });
+  await select(page, "fill-row");
+  await toggleWrap(page, true);
+  const boxes = await nativeBoxes(page, "fill-row");
+  assert.ok(Math.abs(boxes.fill1.y - boxes.fill3.y) < 0.1);
+  assert.ok(boxes.fill4.y > boxes.fill1.y);
+  assert.ok(Math.abs(boxes.fill1.width - 280 / 3) < 0.1);
+  assert.ok(Math.abs(boxes.fill4.width - 145) < 0.1);
+  assert.ok(Math.abs(boxes.fill4.width - boxes.fill5.width) < 0.1);
+  await accepted(page, { kind: "style", id: "fill4", values: { "max-width": "100px" } });
+  const limited = await nativeBoxes(page, "fill-row");
+  assert.ok(Math.abs(limited.fill4.width - 100) < 0.1);
+  assert.ok(Math.abs(limited.fill5.width - 190) < 0.1);
+  checks.push(
+    "Existing native 90 px Flex bases form 3/2 rows and share Fill space independently, preserving min/max limits",
+  );
+  await wrappingMixedFill(page);
+  await select(page, "wrapped");
+}
+
+async function wrappingChoices(page: Page) {
+  await toggleWrap(page, false);
+  await switchMode(page, "Column");
+  await switchMode(page, "Free");
+  await switchMode(page, "Row");
+  assert.equal(await wrapControl(page).isChecked(), false);
+  await toggleWrap(page, true);
+  await accepted(page, { kind: "style", id: "wrapped", values: { height: "auto" } });
+  const before = await session(page);
+  await wrapControl(page).check();
+  assert.deepEqual(await session(page), before, "Keeping the current wrapping choice is a no-op");
+  checks.push("Explicit Off survives Column/Free/Row; retaining On makes no history entry");
+}
+
+async function wrappingMixedFill(page: Page) {
+  await accepted(page, {
+    kind: "insert",
+    nodes: [
+      text("fixed-card", "fill-row", {
+        position: "relative",
+        width: "70px",
+        flex: "0 0 auto",
+      }),
+    ],
+  });
+  await toggleWrap(page, false);
+  await toggleWrap(page, true);
+  const boxes = await nativeBoxes(page, "fill-row");
+  assert.ok(Math.abs(boxes["fixed-card"].width - 70) < 0.1);
+  assert.ok(Math.abs(boxes["fixed-card"].y - boxes.fill4.y) < 0.1);
+  assert.ok(Math.abs(boxes.fill4.width - 100) < 0.1);
+  assert.ok(Math.abs(boxes.fill5.width - 110) < 0.1);
+  checks.push(
+    "Mixed native Fixed/Fill rows preserve Fixed width and share remaining space subject to max limits",
+  );
+}
+
+async function wrappingShorthand(page: Page) {
+  const ids = ["inline1", "inline2", "inline3"];
+  await accepted(page, {
+    kind: "insert",
+    nodes: [
+      frame("inline-row", ids, 700, {
+        display: "inline-flex",
+        "flex-flow": "row wrap !important",
+        width: "190px",
+        height: "auto",
+      }),
+      ...ids.map((id) => text(id, "inline-row", { position: "relative", "flex-shrink": "0" })),
+    ],
+  });
+  await select(page, "inline-row");
+  assert.equal(await wrapControl(page).isChecked(), true);
+  await toggleWrap(page, false);
+  await toggleWrap(page, true);
+  const style = (await session(page)).projects[0].document.nodes["inline-row"].style;
+  assert.ok(style["flex-wrap"].includes("!important"));
+  assert.equal(style["flex-flow"], undefined);
+  await wrappingSourceFlow(page);
+  checks.push(
+    "Inline Flex and important shorthand wrap correctly; unresolved flex-flow stays source-controlled",
+  );
+  await select(page, "wrapped");
+}
+
+async function wrappingSourceFlow(page: Page) {
+  const flows: DesignNode["style"][] = [
+    { "flex-flow": "VAR(--flow)", "--flow": "row wrap" },
+    { "flex-flow": "var(--flow)", "--flow": "row wrap" },
+    { "flex-flow": "env(orc-flow, row wrap)" },
+    { "flex-flow": "VAR(--flow)", "--flow": "row wrap", "flex-direction": "row" },
+    { "flex-flow": "env(orc-flow, row wrap)", "flex-wrap": "wrap" },
+  ];
+  for (const values of flows) {
+    await accepted(page, {
+      kind: "style",
+      id: "inline-row",
+      values,
+      unset: ["flex-direction", "flex-wrap"].filter((key) => !Object.hasOwn(values, key)),
+    });
+    assert.equal(await wrapControl(page).count(), 0, "Unresolved flex-flow requires Code");
+    await page.getByText("Layout controlled by source.", { exact: true }).waitFor();
+    await unavailable(page, "Column", /source|Code/u);
+  }
+}
+
+async function wrappingLocks(page: Page) {
+  await accepted(page, { kind: "lock", id: "w1", locked: true });
+  await toggleWrap(page, false);
+  await toggleWrap(page, true);
+  await accepted(page, { kind: "lock", id: "w1", locked: false });
+  await accepted(page, { kind: "lock", id: "wrapped", locked: true });
+  assert.equal(await wrapControl(page).isDisabled(), true);
+  const before = await session(page);
+  const document = before.projects[0].document;
+  const response = await page.request.post("/api/commands", {
+    data: {
+      projectId: document.id,
+      commandId: crypto.randomUUID(),
+      expectedRevision: document.revision,
+      mutation: { kind: "style", id: "wrapped", values: { "flex-wrap": "nowrap" } },
+    },
+  });
+  assert.equal(response.status(), 400);
+  assert.deepEqual(await session(page), before);
+  await accepted(page, { kind: "lock", id: "wrapped", locked: false });
+  checks.push(
+    "Locked frame rejects wrapping edits; locked children retain their authored state during parent reflow",
+  );
+}
+
+async function wrappingSource(page: Page) {
+  await accepted(page, {
+    kind: "style",
+    id: "wrapped",
+    values: {
+      "flex-wrap": "var(--source-wrap)",
+      "--source-wrap": "wrap",
+    },
+  });
+  assert.equal(await wrapControl(page).count(), 0);
+  await page.getByText("Wrapping controlled by source. Edit in Code.", { exact: true }).waitFor();
+  const boxes = await nativeBoxes(page, "wrapped");
+  await switchMode(page, "Column");
+  await switchMode(page, "Row");
+  assertBoxes(await nativeBoxes(page, "wrapped"), boxes);
+  assert.ok(
+    nodeSource((await session(page)).projects[0].document, "wrapped").includes(
+      "var(--source-wrap)",
+    ),
+  );
+  await accepted(page, {
+    kind: "style",
+    id: "wrapped",
+    values: { "flex-wrap": "wrap" },
+    unset: ["--source-wrap"],
+  });
+  checks.push(
+    "Source-owned wrapping expressions remain unavailable and retain their live reference through Column and back",
+  );
+}
+
+async function wrappingSourceKeywords(page: Page) {
+  for (const value of ["inherit", "initial", "unset", "revert", "revert-layer", "wrap-reverse"]) {
+    await accepted(page, { kind: "style", id: "wrapped", values: { "flex-wrap": value } });
+    assert.equal(await wrapControl(page).count(), 0);
+    await unavailable(page, "Column", /source|Code/u);
+  }
+  await accepted(page, { kind: "style", id: "wrapped", values: { "flex-wrap": "wrap" } });
+  checks.push(
+    "CSS-wide wrapping keywords and reverse wrapping remain source-controlled during visual mode changes",
+  );
+}
+
+async function wrappingDraft(page: Page) {
+  await page.getByRole("button", { name: "Code", exact: true }).click();
+  const source = page.getByRole("textbox", { name: "Object source", exact: true });
+  await source.waitFor();
+  const draft = `${await source.innerText()}\n<!-- wrapping draft -->`;
+  await source.press("Control+a");
+  await page.keyboard.insertText(draft);
+  await page.getByText("Unapplied changes", { exact: true }).waitFor();
+  const before = await session(page);
+  await wrapControl(page).click();
+  const dialog = page.getByRole("dialog", { name: "Discard unapplied changes?", exact: true });
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  assert.deepEqual(await session(page), before);
+  assert.equal(await source.innerText(), draft);
+  await wrapControl(page).click();
+  const pending = page.waitForResponse(isCommand);
+  await dialog.getByRole("button", { name: "Discard", exact: true }).click();
+  assert.equal((await pending).status(), 200);
+  await settled(page);
+  assert.equal(await wrapControl(page).isChecked(), false);
+  await page.getByText("Unapplied changes", { exact: true }).waitFor({ state: "hidden" });
+  await page.getByRole("button", { name: "Code", exact: true }).click();
+  checks.push(
+    "Wrapping draft Cancel preserves exact applied state and draft; Discard commits the requested change once",
+  );
+}
+
+async function wrappingReopen(page: Page) {
+  await select(page, "wrapped");
+  assert.equal(await modeButton(page, "Column").getAttribute("aria-pressed"), "true");
+  assert.equal(await wrapControl(page).count(), 0);
+  await switchMode(page, "Row");
+  assert.equal(await wrapControl(page).isChecked(), true);
+  const boxes = await nativeBoxes(page, "wrapped");
+  assert.ok(boxes.w3.y > boxes.w1.y);
+  checks.push(
+    "Save/reopen while Column retains its inactive Row wrapping choice and restores native rows",
+  );
 }
 
 async function unavailable(page: Page, mode: "Free" | "Row" | "Column", message: RegExp) {

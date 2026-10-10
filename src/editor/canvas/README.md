@@ -10,3 +10,8 @@ Pointer placement converts ordinary Free frame/root coordinates or joins Flex fl
 Its reusable Free/flow conversion helpers live in ../layout/ alongside frame layout switching.
 Native coordinate snapshots are temporary gesture state; authored CSS and canonical parent IDs remain saved authority.
 Remaining gesture and resize work is tracked in [the gesture record](../../../backlog/canvas-pointer-gestures.md).
+
+GapHandles shares the numeric Gap field with Properties.
+gap-geometry.ts measures participating native child boxes and temporary wrapped-row bounds without saving geometry.
+The active handle remains mounted across row reflow until its input finishes the pointer release.
+Gap handle visuals and their 44px input targets live in gap-handles.css.

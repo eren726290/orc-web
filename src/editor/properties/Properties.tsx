@@ -10,6 +10,8 @@ import { PropertyField } from "./property-field";
 import type { PropertyPreview } from "./property-preview";
 import { useLayoutOwnership } from "./use-layout-ownership";
 import { FrameLayoutControls } from "./frame-layout-controls";
+import { FramePaddingControls } from "./frame-padding-controls";
+import { FrameGapControls } from "./frame-gap-controls";
 
 type Props = {
   document: DesignDocument;
@@ -63,7 +65,9 @@ function PropertySections(props: EditProps & Pick<Props, "disabled" | "select">)
         <h2>Layout</h2>
         <fieldset disabled={props.disabled}>
           <FrameLayoutControls {...props} />
+          <FrameGapControls {...props} />
           <NodeLayout {...props} />
+          <FramePaddingControls {...props} />
           <FrameClipping {...props} />
         </fieldset>
         {props.ownership.position && (
