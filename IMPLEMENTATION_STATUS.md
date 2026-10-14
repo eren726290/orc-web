@@ -1,7 +1,9 @@
 # ORC-web implementation status
 
-Last updated: 2026-10-10.
-Current stage: V1 implementation continues; ordinary Row wrapping, frame Padding, and Gap controls pass recorded development and built checks.
+Last updated: 2026-10-14.
+Current stage: paused after verified ordinary wrapped Row main-axis Fill sharing.
+Ordinary Absolute Position participation, per-axis Fixed/Fit, bounded cross-axis Fill and the earlier single-grow main-axis Fill remain verified checkpoints.
+General Fill, complete sizing and Constraints, and the remaining V1 application are still unfinished.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
 
 ## Current state
@@ -11,7 +13,7 @@ This overview describes this checkout and links to reviewed evidence from the PC
 | Application foundation and startup | Implemented combined Bun/Vite development launch and built-app serving; Linux startup failure cleanup, normal shutdown, and failed-save shutdown recovery pass focused process checks. | [Launcher](scripts/dev.ts), [backend](server/start.ts), [lifecycle check](scripts/runtime/check-lifecycle.ts). |
 | Development tooling | Selected anti-slop rules and Fallow CLI configured; TypeScript 6, lint controls, formatting, build, and Chromium frontend mounting pass on Fedora. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [remaining editor tooling](backlog/development-tooling.md). |
 | Editor workspace, Layers, Properties, and Code | In progress; Dashboard/tabs, selection, basic Properties previews, text editing, Code Apply/Discard, draft safeguards, panel resizing, in-place Layer naming, and atomic subtree deletion pass focused development/built checks. | [Editor workflow](scripts/e2e/editor/check-editor.ts), [panel check](scripts/e2e/editor/check-panels.ts), [naming check](scripts/e2e/editor/check-layers.ts), [deletion check](scripts/e2e/editor/check-deletion.ts). |
-| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, Free/Row/Column switches, Row wrapping, frame Padding, and Gap gestures pass focused development/built checks; alignment/distribution, general sizing and constraint controls, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [wrapping checkpoint](#ordinary-row-wrapping-checkpoint), [Padding checkpoint](#ordinary-frame-padding-checkpoint), [Gap checkpoint](#ordinary-frame-gap-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
+| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, Free/Row/Column switches, Row wrapping, frame Padding, Gap gestures, alignment/distribution, Absolute Position participation, Fixed/Fit sizing, bounded cross-axis Fill, and bounded nowrap multiple-child main-axis Fill sharing and ordinary per-row wrapped Fill pass focused development/built checks; general Fill and constraint controls, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [wrapping checkpoint](#ordinary-row-wrapping-checkpoint), [Padding checkpoint](#ordinary-frame-padding-checkpoint), [Gap checkpoint](#ordinary-frame-gap-checkpoint), [alignment checkpoint](#ordinary-frame-alignment-and-distribution-checkpoint), [participation checkpoint](#ordinary-absolute-position-checkpoint), [sizing checkpoint](#ordinary-fixedfit-sizing-checkpoint), [cross-axis Fill checkpoint](#bounded-cross-axis-fill), [single-grow main-axis Fill checkpoint](#bounded-single-grow-main-axis-fill), [shared Fill checkpoint](#ordinary-nowrap-fill-sharing-checkpoint--2026-10-14), [wrapped Fill checkpoint](#ordinary-wrapped-row-fill-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
 | Selected-frame Preview | In progress; ordinary frames retain their native sizing and saved defaults, isolate temporary form inputs and scrolling, restore Edit selection/pan/zoom, and preserve Code drafts and document/history in focused development/built Chromium checks. React components, portals, Motion, and supported-platform verification remain pending. | [Preview](src/editor/preview/Preview.tsx), [native workflow check](scripts/e2e/editor/check-preview.ts), [accepted Preview](doc_v1/interface/workspace-and-canvas.md#selected-frame-workflow). |
 | Shared commands, application Undo/Redo, and project saving | In progress; authoritative sessions, revision checks, command history, save/reopen, independent projects, existing-save recovery, failed first Save/Save as recovery, and exclusive locks pass focused checks on Linux. | [Services](server/projects/projects.ts), [pending-response history check](scripts/e2e/editor/check-history.ts), [saving regression check](scripts/e2e/projects/check-saving.ts), [saving contract](doc_v1/architecture/orc-workspace-bundle.md). |
 | Ordinary HTML/CSS/SVG authoring | In progress; reproduced SVG geometry/source disagreement, lost explicit line breaks and inline separators, and invalid SVG render acceptance are corrected and pass focused development/built checks; complete V1 source support remains pending. | [Source service](server/source/html.ts), [importer](src/editor/code/html-import.ts), [rendering regression check](scripts/e2e/rendering/check-rendering.ts), [Code workflow check](scripts/e2e/editor/editor-source.ts). |
@@ -34,7 +36,7 @@ The scaffold records exact direct dependency pins and startup configuration unde
 The current `dev` command starts Bun and Vite together.
 Shadcn/lint awaits editor tokens and component contracts.
 The Chrome paths supplied from the previous session are absent in this environment, and the Fedora RPM inventory reports no installed `google-chrome-stable` package.
-Managed Chrome for Testing is now available for explicit executable-path checks, including the [Gap workflow](#ordinary-frame-gap-checkpoint).
+Managed Chrome for Testing is now available for explicit executable-path checks, including the [alignment workflow](#ordinary-frame-alignment-and-distribution-checkpoint).
 The default installed-stable-Chrome scaffold check and Windows verification remain pending; Chromium and earlier Codex @Browser smoke checks passed.
 Detailed tool value grammars, resource-transfer fields, and SDK integration are tracked in the [MCP implementation backlog](backlog/mcp/command-contracts.md).
 Resolve those details when implementing the corresponding services.
@@ -45,7 +47,7 @@ Record a blocker here when an actual failure prevents the next checkpoint, with 
 The foundation, panel, bundle-preservation, and lifecycle checks run real application processes rather than restating implementation functions.
 Ignored `artifacts/editor/foundation.json` and `panels.json` record the tested commit, working-source hashes, command, platform, browser version, and outcomes.
 Screenshots and Playwright traces are saved beside those records.
-Editor checks use Playwright Chromium, with managed Chrome for Testing also verified for the latest layout, wrapping, Padding, and Gap workflows.
+Editor checks use Playwright Chromium, with managed Chrome for Testing also verified for the latest layout, wrapping, Padding, Gap, and alignment workflows.
 Earlier in-app Browser inspection remains scoped to its recorded checks; these results do not certify an installed stable Chrome package or Windows behavior.
 Earlier foundation evidence records `e0f5b46`; later evidence uses source hashes to identify the tested editor and folder-organization changes included in this checkpoint.
 The strict saved-data check rejects unsupported fields without changing original bundle bytes or the active document.
@@ -469,7 +471,7 @@ Editor, panels, pending history, build, TypeScript, lint, formatting, tooling, h
 All eight workflow results and the manual review match the 131 captured source files in [the final source audit](artifacts/editor/gap-final-source-audit.json).
 Before/after hashes match wherever the workflow records both snapshots.
 Verification identifies base commit 4a6e71aec282186b9d4a923bec6e49e995aa6328 plus those working-source hashes.
-The changes remain uncommitted on master; the subsequent status and backlog updates change documentation only.
+The Gap changes were subsequently committed on master as ad39ddbf3e49ef8536d2a3b31e5d0e1454f75a2c.
 
 The [minimum panel](artifacts/editor/gap-final-manual-panel.png) and [focused handles](artifacts/editor/gap-final-manual-handles.png) were visually reviewed in managed Chrome for Testing.
 The 240 px Properties panel has no horizontal overflow, and native handle inputs have 44 px targets and visible keyboard focus.
@@ -491,9 +493,386 @@ bun run check:gap
 ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome ORC_GAP_EVIDENCE=chrome bun run check:gap chrome
 ```
 
-Alignment/distribution, general Fixed/Fit/Fill controls, constraints, Tokens, React source bindings, complete exports, and backend preparation remain required V1 work.
+At the Gap checkpoint, alignment/distribution, general Fixed/Fit/Fill controls, constraints, Tokens, React source bindings, complete exports, and backend preparation remained required V1 work.
 Source-owned Gap expressions and unequal axes retain their authored CSS and remain available through Code.
 Installed stable Chrome, Windows, and screen readers remain unverified.
+
+## Ordinary frame alignment and distribution checkpoint
+
+Properties now provides nine physical packed positions and visible Packed and Space between choices for ordinary Row and Column frames.
+The axes exchange with direction, while canonical sibling order and every child remain unchanged by an alignment edit.
+One parent-only atomic batch updates the authored alignment declarations and preserves Gap, padding, unrelated CSS, shorthand precedence, and property priority.
+Wrapped Rows pack their line group and align children within each line through native Flex CSS.
+Space between retains Gap as the minimum and uses native start fallback for zero or one participant or insufficient free space.
+The controls reuse the existing Code draft safeguard, temporary preview, applied-revision check, shared command/history path, and focus restoration.
+Unresolved expressions, CSS-wide values, RTL, vertical writing modes, and reverse layouts retain source ownership and require Code.
+Distribution remains independently editable when only cross-axis alignment belongs to source.
+
+Review reproduced misleading source-ownership feedback when an external edit arrived while the draft-discard dialog was open.
+The [failing regression](artifacts/editor/alignment-stale-message-baseline-result.json) retains that failure before the fix.
+Preparation now rejects the older revision with "The layout changed. Try again." without sending a command or changing the current document, geometry, or history.
+These changes correct implementation behavior; no faulty doc_v1 architectural contract was established.
+
+The final [Chromium result](artifacts/editor/alignment-final-2-result.json) and [Chrome for Testing result](artifacts/editor/alignment-chrome-2-result.json) each passed 36 check groups with 228 recorded inputs across development and built modes.
+The tested versions are Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57 on Linux.
+The checks cover all nine positions in both directions, named distribution, wrapped unequal-height children, overflow, hidden/Absolute exclusion, source ownership and priority, locks, drafts, stale preparation, rejected commands, pending Undo, focus, no-op Redo preservation, and UI save/reopen.
+Gap passed 68 checks with 182 inputs, Padding passed 48 with 116, layout passed 168 with 280, movement passed 106 with 680, and clipping passed 18 with 120.
+Editor, panels, pending history, build, TypeScript, lint, formatting, and tooling also passed.
+[The source audit](artifacts/editor/alignment-final-source-audit.json) matches all 135 tested source files across nine workflow results and the independent browser review.
+It independently checks 120 recorded parent-only alignment edits and confirms 15 owned application ports are closed.
+The [archived foundation](artifacts/editor/alignment-final-archive/foundation.json), [panel](artifacts/editor/alignment-final-archive/panels.json), and [pending-history trace](artifacts/editor/alignment-final-archive/history-trace.zip) retain this checkpoint when later runs replace the default evidence files.
+Verification identifies base commit ad39ddbf3e49ef8536d2a3b31e5d0e1454f75a2c plus the recorded working-source hashes.
+Alignment changes and the separate requested AGENTS.md cleanup remain uncommitted on master.
+
+The [minimum-width screenshot](artifacts/editor/alignment-manual-packed.png) and [distribution screenshot](artifacts/editor/alignment-manual-between.png) were visually reviewed against the supplied design references.
+The 240 px Properties panel has no horizontal overflow, all eleven controls have targets of at least 44 px, and keyboard activation retains visible focus.
+The scoped axe 4.12.1 scan reports nine passes, zero violations, and zero incomplete checks; it does not certify full-application or screen-reader accessibility.
+[Health](artifacts/editor/alignment-health.json) reports zero enforced errors and 174 static-estimated CRAP advisories, which do not measure E2E coverage.
+Cyclomatic complexity remains limited to 10, cognitive complexity to 15, and functions to 40 lines.
+[Dead-code analysis](artifacts/editor/alignment-dead-code.json) retains seven planned unused dependencies, with no unused files/exports, unresolved imports, or cycles.
+All five scoped alignment gates are met, with no unmet or abandoned gates.
+The owned browser and application processes shut down, and no subagent was started.
+
+Repeat the focused workflow after building:
+
+```sh
+bun run check:alignment
+ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome ORC_ALIGNMENT_EVIDENCE=chrome-2 bun run check:alignment chrome
+```
+
+General Fixed/Fit/Fill controls, constraints, Tokens, React source bindings, assets, complete exports, and backend layout preparation remain required V1 work.
+The accepted account-menu and sidebar examples remain integration checks for the upcoming sizing work.
+Installed stable Chrome, Windows, and screen readers remain unverified.
+
+## Stopped after alignment and sizing preflight
+
+Development is paused at the user's request on 2026-10-11.
+No subagents, commit, or push were started during this checkpoint.
+The alignment implementation and the separate requested AGENTS.md cleanup remain uncommitted on master.
+
+The running sizing verifier failed because it retained a Width input that React replaced when native ownership measurement changed the readout from a number to Fill.
+The [failed result](artifacts/editor/sizing-preflight-final-result.json), built-mode screenshot and trace, and [exact failed verifier](artifacts/editor/sizing-preflight-stale-handle.ts) retain that failure.
+The verifier now resolves the current input on every poll.
+An earlier verifier correction also waits for the acknowledged revision rather than assuming that a no-op command increments it.
+These corrections changed the ignored research verifier, not application behavior.
+
+The corrected [preflight result](artifacts/editor/sizing-preflight-verified-result.json) passes 19 rendering cases in each of development and built modes on Chromium 153.0.8010.12.
+Both modes report zero browser errors and clean application shutdown.
+The [preflight audit](artifacts/editor/sizing-preflight-final-audit.json) matches all 135 source files before and after the run, confirms both owned ports closed, and checks retention of the missing-control and stale-input failures.
+The alignment source audit also still matches its nine workflow results and independent browser review; no application source changed after that checkpoint.
+
+The preflight retains unequal-decoration and stale-factor counterexamples and verifies bounded native CSS candidates through the current renderer.
+It does not implement Fixed/Fit/Fill controls or establish general Fill support.
+The [sizing research record](backlog/native-layout-projection.md#ordinary-sizing-preflight-and-stopping-point) contains measured results, ownership limits, and the next implementation checks.
+General sizing and constraints, Tokens, React integration, complete exports, and the other open V1 requirements remain unfinished.
+Installed stable Chrome, Windows, and screen readers remain unverified.
+
+## Ordinary Absolute Position checkpoint
+
+Development resumed under the active V1 goal on 2026-10-11, and the user subsequently authorized subagents for review and verification.
+The ordinary Flex child control uses the existing Free/flow conversions, explicit position CSS projection, draft safeguards, preview, and atomic history.
+Turning it on captures the selected child's parent-relative box and removes its flow slot, Gap, and Fit contribution.
+Turning it off clears active absolute offsets and returns the same child to its canonical sibling position.
+Only the selected child's placement CSS changes; native parent and sibling reflow remains derived.
+Source-owned expressions and unsupported coordinate relationships remain explicit Code boundaries.
+The Constraints editor remains unfinished; this checkpoint verifies participation and existing position/size readouts.
+
+The [missing-control baseline](artifacts/editor/participation-missing-control-baseline-result.json) records the absent workflow before implementation.
+An initial browser run reproduced the control becoming unavailable after enabling Absolute Position.
+The [failed workflow](artifacts/editor/participation-development-first-result.json) and [CSSOM diagnosis](artifacts/editor/participation-ownership-diagnosis.json) show that the reader rejected an inset shorthand synthesized from its own four longhands.
+The reader now checks actual declarations and retains unresolved source expressions.
+
+The [rejection baseline](artifacts/editor/participation-rejection-baseline-result.json) reproduced a checked checkbox and incorrect help text after a rejected command had already restored native flow.
+A delayed ownership read captured temporary preview DOM during the backend's canonical refresh.
+The control now cancels ownership reads while an action is pending and remeasures after completion or rollback.
+The identical [focused probe](artifacts/editor/participation-rejection-probe.ts) passes [after the fix](artifacts/editor/participation-rejection-corrected-result.json), and the permanent workflow also retries on/off successfully after rejection.
+An independent Chrome trace review separately corrected the verifier's synchronous checkbox assumption; it now clicks, waits for acknowledgement and rendering, and checks the resulting state.
+The first combined regression run exceeded its 120-second runner budget; the complete sequential rerun passed with a 1200-second budget.
+The failing verifier, traces, and interrupted investigation remain retained under artifacts/editor/.
+These were implementation and verification corrections; no faulty doc_v1 architectural contract was established or changed.
+
+The final [Chromium result](artifacts/editor/participation-verification-result.json) and [Chrome for Testing result](artifacts/editor/participation-chrome-result.json) each pass 36 check groups with 154 recorded inputs across development and built modes.
+The tested versions are Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57 on Linux.
+Coverage includes Row/Column and wrapped reflow, parent padding/borders/scrolling, canvas zoom, ordinary element/Text/Image/SVG children, imported physical constraints, parent layout switches, locks, drafts, stale revisions, rollback/retry, pending Undo, and UI save/reopen.
+Layout passes 168 checks with 280 inputs, movement 106 with 680, Gap 68 with 182, Padding 48 with 116, and alignment 36 with 228.
+Pending property history, build, TypeScript, lint, formatting, tooling, health, and dead-code commands also pass.
+The [final audit](artifacts/editor/participation-final-audit.json) matches all 138 current source files across seven workflow results, the corrected focused probe, and the independent manual review.
+It independently checks 124 selected-child-only participation commands, hashes 15 final traces, and confirms 17 owned application ports are closed with no scoped application/browser processes remaining.
+The [archived pending-history trace](artifacts/editor/participation-history-trace.zip) preserves this run when later checks replace the default file.
+Verification identifies base commit ad39ddbf3e49ef8536d2a3b31e5d0e1454f75a2c plus the recorded working-source hashes.
+The implementation and separate requested AGENTS.md cleanup remain uncommitted on master.
+
+The [independent manual review](artifacts/editor/participation-manual-review.json) verifies keyboard off/on, retained visible focus, native reflow, and the 240 px Properties panel against those same source files.
+The [flow](artifacts/editor/participation-manual-flow.png) and [absolute](artifacts/editor/participation-manual-absolute.png) screenshots were visually reviewed.
+The checkbox label measures 207 by 44 px, and the panel has no horizontal overflow.
+Both scoped axe 4.12.1 scans report 17 passes, zero violations, and zero incomplete checks.
+This does not certify full-application or screen-reader accessibility.
+Health reports zero enforced errors and 181 static-estimated CRAP advisories, which do not measure E2E coverage.
+Cyclomatic complexity remains limited to 10, cognitive complexity to 15, and functions to 40 lines.
+Dead-code analysis retains seven planned unused dependencies, with no unused files/exports, unresolved imports, or cycles.
+All five scoped participation gates are met, with no unmet or abandoned gates.
+
+Repeat the focused workflow after building:
+
+```sh
+bun run check:participation
+ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome ORC_PARTICIPATION_EVIDENCE=chrome bun run check:participation chrome
+```
+
+General Fixed/Fit/Fill controls, Constraints, Tokens, React integration, supported exports, backend layout preparation, and complete V1 verification remain open.
+Installed stable Chrome, Windows, and screen readers remain unverified.
+
+## Ordinary Fixed/Fit sizing checkpoint
+
+The ordinary Width and Height controls now offer Fixed and supported Fit conversions through the existing preview and atomic command path.
+This checkpoint covers ordinary Flex frames and Text, plus owned literal Fixed dimensions on other ordinary nodes.
+Fixed main-axis conversion normalizes understood grow/shrink/basis values to `0`, `0`, and `auto`.
+Capturing Fixed uses the native used CSS dimension with its existing box sizing, preserving fractional sizes under canvas zoom.
+Fit follows supported participating content, wrapping, Gap, Padding, and size limits while excluding Absolute and hidden children.
+Clipping remains unchanged, and an object extending beyond its parent receives visible feedback.
+Existing Fill and Constraints remain read-only ownership states; arbitrary sizing expressions, logical/reset ownership, unsupported content, and unbounded dependencies remain explicit boundaries.
+Free frames containing absolute children do not gain a content-enclosing Fit algorithm.
+
+The [numeric failure control](artifacts/editor/sizing-factor-numeric-diagnosis.json) reproduced an explicit edit back to the displayed number cancelling a required Source-to-Fixed conversion.
+The shared field compared numeric equality without considering sizing intent.
+Sizing now requests completion for that semantic change, while unchanged focus/blur and ordinary Fixed edits retain their no-op behavior.
+The identical real 9-to-90 interaction fails before and passes after the correction, and the permanent workflow retains it.
+The [target-size failure control](artifacts/editor/sizing-target-diagnosis.json) reproduced 36 px numeric inputs beneath 44 px selectors because a later global input rule won the cascade.
+The sizing input selector now has the necessary panel scope, and both the focused before/after control and permanent workflow verify all four targets at 44 px.
+
+The retained verifier corrections cover subpixel tolerance, native disabled-option attributes, a fixture that incorrectly combined assignment/removal of the same property, and an intentionally unmeasurable hidden child during layout conversion.
+These corrections preserve the expected product behavior and the existing unavailable-state checks.
+The [reload failure archive](artifacts/editor/sizing-reload-baseline/manifest.json) separately records three interrupted development checks caused by concurrent research writes to an ignored HTML file watched by Vite.
+All source hashes remained unchanged; the complete rerun passed with repository source, HTML, CSS, and Markdown writes frozen.
+No faulty accepted architecture was established, and doc_v1 was not changed.
+
+The final [Chromium result](artifacts/editor/sizing-verification-result.json) and [Chrome for Testing result](artifacts/editor/sizing-chrome-result.json) each pass 38 check groups with 272 inputs across development and built modes.
+The tested versions are Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57 on Linux.
+Coverage includes fixed overflow, fractional capture, text wrapping, wrapped Fit content, nested account/sidebar layouts, source priority and ownership, valid and invalid dependencies, numeric preview/cancellation, locks/drafts, stale revisions, rejection/retry, pending Undo, placement conversions, and UI save/reopen.
+Layout passes 168 checks with 280 inputs, participation 36 with 154, movement 106 with 680, Padding 48 with 116, Gap 68 with 182, and alignment 36 with 228.
+Pending history, ordinary editor/source workflows, panel resizing, build, TypeScript, lint, formatting, and tooling also pass.
+
+The [final audit](artifacts/editor/sizing-final-audit.json) matches all 141 source files, eight before/after workflow results, and two results that record source evidence at completion only.
+It independently binds 172 sizing commands to successful browser-trace requests and response documents, checks 21 final traces, and confirms 35 discovered application ports closed with no scoped processes remaining.
+History is supported by its gate result and archived trace; its verifier does not emit a separate source/result JSON.
+Verification identifies base commit `ad39ddbf3e49ef8536d2a3b31e5d0e1454f75a2c` plus the recorded working-source hashes.
+The [independent manual review](artifacts/editor/sizing-manual-review.json) verifies a 240 px panel, four 44 px sizing controls, retained mode-selector focus, stable numeric input identity, shared preview locking, Escape rollback, one-command Enter, and clipped overflow feedback.
+The Fit and overflow screenshots were visually reviewed.
+Both scoped axe 4.12.1 scans report 18 passes, zero violations, and zero incomplete checks; this is not full-application or screen-reader certification.
+The final manual app exits cleanly with its browser and port closed; earlier interrupted and stdin-limited attempts remain accurately archived.
+Health has zero enforced errors and 202 static-estimated CRAP advisories, which do not measure E2E coverage.
+The complexity limits remain 10 cyclomatic, 15 cognitive, and 40 lines per function.
+Dead-code analysis retains seven planned unused dependencies, with no unused files/exports, unresolved imports, or cycles.
+
+Repeat after building with `bun run check:sizing`.
+For managed Chrome, use `ORC_CHROME_EXECUTABLE=/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome ORC_SIZING_EVIDENCE=chrome bun run check:sizing chrome`.
+General Fill, full Constraints, Tokens, React integration, assets, complete exports, and complete V1 verification remain required work.
+Installed stable Chrome, Windows, and screen readers remain unverified.
+Changes remain uncommitted on master, and the full V1 goal remains active.
+
+### Effective automatic margins
+
+The [failing baseline](artifacts/editor/cross-margin-baseline/result.json) reproduced variable-resolved cross-axis `auto` margins being mislabeled Fill and wrongly blocking Row/Column conversion, while literal `auto` behaved correctly.
+The shared sizing reader now uses native computed margin ownership through the existing CSS Typed OM pattern, with all four callers updated and authored margin expressions retained.
+The identical focused probe passes 46 observations per browser across development and built modes on [Chrome for Testing](artifacts/editor/cross-margin-final-chrome/result.json) and [Chromium](artifacts/editor/cross-margin-final-chromium/result.json).
+It covers numeric, literal-auto, and variable-auto margins in both directions, command-free inspection, pointer reparenting, exact history, and valid direction conversion.
+
+The permanent sizing regression was observed failing before the product fix.
+The final [Chromium sizing result](artifacts/editor/sizing-cross-margin-result.json) and [Chrome sizing result](artifacts/editor/sizing-cross-margin-chrome-result.json) each pass 40 check groups with 344 inputs; [movement](artifacts/editor/movement-cross-margin-result.json) passes 106 with 680, and [layout](artifacts/editor/layout-cross-margin-result.json) passes 168 with 280.
+A separate [Movement verifier timing failure](artifacts/editor/cross-margin-movement-timing-baseline/manifest.json) read a position field before its scheduled ownership measurement; waiting for the visible parent-ownership message retains every original assertion without changing application behavior.
+Build, TypeScript, lint, formatting, tooling, health, and dead-code checks pass with the existing complexity limits and reviewed advisories unchanged.
+
+The independently reviewed and rerun [audit](artifacts/editor/cross-margin-final-audit.json) verifies all 141 source files, 16 traces, 172 accepted sizing commands, 40 accepted focused placement/direction commands, and 16 closed application ports with no scoped processes left running.
+It separately classifies formatter-only verifier changes, the semantic test wait, and the one README sentence, retaining each original failure rather than treating it as a runtime success.
+The exact verified source inventory is retained in [the source archive](artifacts/editor/cross-margin-verified-source.json).
+No accepted architecture changed; at that checkpoint, new Fill conversion was the next bounded V1 sizing step.
+
+### Bounded cross-axis Fill
+
+Ordinary nowrap Rows now offer Height Fill, and ordinary nowrap Columns offer Width Fill, when the immediate parent has an independently owned active physical Fixed bound or equal physical min/max bounds.
+The selected axis becomes `auto` with explicit `align-self: stretch` in one atomic command, preserving each declaration's priority.
+The other axis, Flex factors, margins, decoration, size limits, clipping, node identity and hierarchy remain authored.
+Fill's numeric field remains read-only, while supported explicit Fixed/Fit exits use a separate conversion permission.
+Existing valid intrinsic stretch relationships remain readable and can retain supported exits without being treated as proof that a new Fill conversion is available.
+Wrapped/main-axis conversions, source-owned or logical sizing, effective automatic cross margins, transformations, aspect-ratio dependencies and unbounded parents remain explicit boundaries.
+
+The [missing-control baseline](artifacts/editor/sizing-cross-fill-baseline-result.json) fails before implementation.
+The [overflow baseline](artifacts/editor/sizing-cross-fill-overflow-baseline-result.json) reproduces the missing limit warning; the sizing message now retains overflow feedback for Fill owners.
+The [resume archive](artifacts/editor/cross-fill-resume-baseline/manifest.json) preserves the three complexity findings, asynchronous clipping-checkbox verifier failure, and obsolete textual cross-Fill movement assertion.
+The checkbox verifier now waits for command acknowledgement and applied rendering before checking its state.
+Movement now checks the Fill mode, used numeric dimension and read-only permission independently, retaining the textual main-axis ownership check.
+These verifier corrections change no application checkbox or movement behavior.
+
+The final [Chromium](artifacts/editor/sizing-cross-fill-result.json) and [Chrome for Testing](artifacts/editor/sizing-cross-fill-chrome-result.json) results each pass 50 check groups, 1,072 inputs and 134 accepted sizing commands across development and built modes.
+They cover both axes, parent resizing, content-box/border-box decoration floors, min/max conflicts, overflow/clipping, source ownership and priority, read-only gestures, explicit exits, drafts, rejection, pending history, and source/save/reopen behavior.
+Layout passes 168 checks with 280 inputs, participation 36 with 154, and movement 106 with 680; pending property history also passes.
+Build, TypeScript, lint, formatting, tooling and Fallow enforcement pass with the 10 cyclomatic, 15 cognitive and 40-line limits unchanged.
+Health retains 207 static-estimated CRAP advisories, and dead-code analysis retains seven planned unused dependencies; neither report contains enforced errors.
+
+The [final audit](artifacts/editor/cross-fill-final-audit.json) verifies all 141 source files, five complete before/after workflow results, 268 accepted sizing commands bound to actual trace requests/replies, ten workflow traces, and final history/native evidence.
+All eleven application ports discovered by that audit are closed, with no scoped application or browser processes remaining.
+The [source archive](artifacts/editor/cross-fill-verified-source.json) retains the exact verified source and tracked patch before these status/backlog-only updates.
+The [manual review](artifacts/editor/cross-fill-final-manual-review.json) separately verifies a 240 px Properties panel, four targets of at least 44 px, visible keyboard focus, command-free read-only arrows/Enter, Fixed capture, Fit content sizing, retained priority, and visible overflow feedback.
+Its sizing-only axe scan has 11 passes, zero violations and zero incomplete checks; the two screenshots were visually reviewed, and its application and browser closed cleanly.
+The independent native cross-axis probe records 100 states and 296 child comparisons with no failures.
+Native and history traces have narrower source evidence than the workflow traces, as stated in the audit; no full-application accessibility or screen-reader certification is claimed.
+
+The next bounded main-axis candidate has independent [native evidence](artifacts/editor/main-fill-native/report.md) and a [plan](artifacts/editor/main-fill-native/plan.md).
+The parent rerun confirms 1,020 positive observations while retaining automatic-minimum overflow, source-ownership exclusions and the unequal-decoration multiple-grow counterexample.
+That experiment establishes no ORC main-axis control, application transition, general equal sharing or wrapped Fill support.
+No accepted architecture changed, and doc_v1 required no correction.
+Main-axis and wrapped Fill, full Constraints, Tokens, React integration, assets, exports and complete V1 verification remain required work.
+Installed stable Chrome, Windows and screen readers remain unverified.
+Development continues on master without a commit or push for this checkpoint.
+
+### Bounded single-grow main-axis Fill
+
+Ordinary nowrap Rows now offer Width Fill, and ordinary nowrap Columns offer Height Fill, with an independently owned active parent bound, one growing child, and supported nonshrinking Fixed/Fit siblings.
+The bound can be a literal physical Fixed size or active equal physical min/max sizes.
+One selected-node-only CSS batch writes the axis as `auto`, `flex-grow: 1`, `flex-shrink: 0`, and `flex-basis: 0px`, preserving each declaration's priority.
+The other axis, alignment, margins, decoration, limits, clipping, identity and hierarchy remain authored.
+Automatic content minima remain intact even when they cause overflow; entering Fill does not silently insert a zero minimum.
+Numeric Fill remains read-only, and supported explicit Fixed/Fit exits remain available.
+Shared flow-placement guards validate parent sizing, direction, wrapping, participation and reparenting against the supported cohort before a command is submitted.
+
+The [missing-feature baseline](artifacts/editor/sizing-main-fill-baseline-result.json) fails before main-axis Fill is implemented.
+The [pointer ratio baseline](artifacts/editor/movement-main-fill-ratio-baseline-result.json) separately reproduces refusal of an independently Fixed participant merely because it has an aspect ratio.
+The shared sizing participant reader now retains independent pixel-owned dimensions with aspect ratios while refusing ratio-dependent Fit/Fill ownership.
+It also reads active native Flex factors when validating a cohort.
+The retained movement regression exercises Fixed ratio siblings and incoming participants, exact Fill allocation, cancellation, cached preview retargeting, rejected destinations, and exact history.
+The [interrupted runner archive](artifacts/editor/main-fill-runner-timeout/manifest.json) preserves a separate 1,800-second combined-browser timeout after Chromium completed and Chrome reached built mode.
+The unchanged browser check was rerun with a 3,600-second runner limit; the original passed static and regression gates remain source-bound to their original transcript.
+The ratio failure's [source snapshot](artifacts/editor/main-fill-ratio-baseline-source/) preserves the exact failing implementation.
+
+The final [Chromium](artifacts/editor/sizing-main-fill-result.json) and [Chrome for Testing](artifacts/editor/sizing-main-fill-chrome-result.json) sizing results each pass 62 check groups, 1,994 inputs and 206 accepted sizing commands across development and built modes.
+They retain both-axis allocation, real Fixed/Fit siblings, equal bounds, explicit limits, decoration floors, automatic-minimum overflow, clipping, source ownership, read-only gestures, safeguards, history and nested save/reopen resizing.
+Layout passes 168 checks with 280 inputs, participation 36 with 154, and movement 130 with 832; pending property history also passes.
+Build, TypeScript, lint, formatting, tooling and Fallow enforcement pass with the 10 cyclomatic, 15 cognitive and 40-line limits unchanged.
+Health retains 217 static-estimated CRAP advisories, and dead-code analysis retains seven planned unused dependencies; neither report contains enforced errors.
+
+The independently rerun [final audit](artifacts/editor/main-fill-final-audit.json) binds 412 accepted sizing commands to actual trace requests and successful response documents, verifies both modes of all five affected workflows and the exact 141-file source checkpoint, and checks final history and native evidence.
+It also independently verifies the retained negative pointer sessions and binds valid cached retarget commands to their responses.
+Accepted participation conversions and positive ratio pointer cases rely on the current verifier's assertions and source-bound traces; those cases do not emit separate full command/document records.
+The final history check is bound by the frozen source inventory, exact successful G4 command, clean runtime trace and timestamp; its trace does not embed the history verifier source.
+The [native audit](artifacts/editor/main-fill-final-audit.json) preserves the original research and independent parent rerun, with 1,020 positive observations, four expected automatic-minimum counterexamples, six ownership exclusions and one multiple-grow unequal-decoration counterexample in each.
+All 14 application ports discovered by the automated audit are closed with no scoped application or browser processes remaining.
+
+The separate [manual review](artifacts/editor/main-fill-manual-review.json) verifies Row Width Fill, command-free read-only arrows/Enter, explicit Fixed/Fit exits, preserved siblings, a 240 px panel, four targets of at least 44 px and visible overflow feedback in managed Chrome for Testing 154.0.8037.57.
+It binds six successful commands to HAR responses and confirms clean application/browser shutdown.
+Its sizing-only axe scan has 11 passes, zero violations and zero incomplete checks, and both screenshots were visually reviewed.
+Manual Column review, full-application accessibility and screen-reader behavior remain unverified.
+
+The [source archive](artifacts/editor/main-fill-verified-source.json) retains the exact verified source and tracked patch before checkpoint documentation updates.
+The [documentation proof](artifacts/editor/main-fill-post-documentation.json) records six Markdown-only updates afterward, including four module READMEs in the verified inventory; all application code, verification code, configuration, AGENTS.md and doc_v1 remain unchanged.
+No accepted architecture changed and no doc_v1 correction was required.
+General multiple-child equal outer sharing with unequal decoration, wrapped Fill, full Constraints, Tokens, React integration, assets, complete exports and complete V1 verification remain required work.
+Installed stable Chrome and Windows remain unverified.
+No commit or push was made for this checkpoint.
+
+## Layers reselection regression — 2026-10-13
+
+The [failing baseline](artifacts/editor/layers-reveal-baseline-20261013-result.json) reproduces a selected object's row remaining hidden after collapsing its ancestor, scrolling Layers away, and clicking that object on the canvas.
+The pointer movement handler skipped the existing selection/reveal path for an already selected object; [the fix](src/editor/canvas/pointer-movement.ts) restores that path for a single selected target while retaining the movement guard and group selection.
+The expanded [Layers regression](scripts/e2e/editor/check-layers.ts) passes collapsed, expanded-but-offscreen, and repeated reselection in development and built applications under Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57, with unchanged canonical session state.
+The full movement workflow and focused group-drag/draft-cancellation checks pass in development and built Chromium; TypeScript, lint, formatting, build, and Fallow's error gates pass, with the existing Fallow advisory findings retained.
+The [verification report](artifacts/editor/layers-reveal-fix-20261013-report.json) records commands, source hashes, before/after evidence, and limitations for this uncommitted checkout.
+The accepted Layers contract required no architectural change or doc_v1 correction.
+The complete browser suite was not rerun after this fix; installed stable Chrome and Windows remain unverified.
+
+## Fill sharing implementation checkpoint — 2026-10-13
+
+Development resumed from the verified single-grow main-axis Fill and Layers reselection checkpoints.
+The current task is ordinary multiple-child main-axis Fill sharing, including unequal decoration, native size limits, responsive parent changes and subsequent editing actions.
+Research must establish the live CSS ownership before application controls are expanded; a static shrink ratio or a passing single-grow case does not satisfy this task.
+Completion requires both-axis editor workflows, atomic history/save-reopen, source and priority preservation, cohort membership safeguards, affected regressions, and recorded source-bound evidence.
+The accepted wrapped Fill requirement remains unfinished V1 work after the nowrap ownership proof.
+The current execution plan and acceptance ledger are under ignored `.unlazy/v1-fill-sharing/`.
+No compiler migration or MCP implementation is part of this checkpoint.
+
+The resumed ownership review is complete, and an independent native rerun passed 2,126 measured states with zero unexpected results.
+The [native report](artifacts/editor/fill-sharing-native/README.md) scopes that proof to CSS arithmetic and source serialization, rather than application completion.
+Initial application integration now prepares coupled child-local CSS inputs for sizing, padding, placement, participation, layout switching and deletion.
+The first expanded Row workflow passed locked-peer rejection, deletion rebasing and source round-trip, but the complete affected browser regressions and persistence checks are still pending.
+The initial broad rerun exposed an explicit Fit-exit regression, which was corrected before the next verification run.
+Do not treat this intermediate checkpoint as verified multiple-child Fill or completed V1.
+
+## Immediate pause — 2026-10-13
+
+The user requested an immediate stop while final focused Fill verification was running.
+Both research agents finished, and the parent independently verified the native 2,126-state matrix.
+The expanded broad Chromium development run passed Row/Column sharing, limits, padding, locking, deletion, source, history and prior sizing regressions before reaching the persistence failure.
+The current implementation fixes the default border-box ownership assumption and checks equivalent source before root-type compatibility so unchanged Text source remains a no-op.
+Build, TypeScript, lint, formatting and Fallow complexity checks passed after those fixes.
+The final focused Chromium 153.0.8010.12 and managed Chrome 154.0.8037.57 development/built checks finished successfully while stopping, with unchanged checked source hashes.
+Resume by reviewing the retained focused-check results, then run affected movement, padding, participation and layout regressions before marking this Fill checkpoint fully verified.
+The full browser suite, wrapped Fill, installed stable Chrome and Windows remain unverified.
+Changes remain uncommitted; no push was performed.
+
+## Ordinary nowrap Fill sharing checkpoint — 2026-10-14
+
+The bounded multiple-child main-axis Fill checkpoint is verified in development and built applications on Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57.
+This checkpoint supersedes the intermediate implementation and pause records dated 2026-10-13 above.
+Ordinary nowrap Rows and Columns share equal outer border-box space across supported Fill children with unequal owned pixel padding/borders, both box models, native minima/maxima, Fixed/Fit siblings and preserved overflow.
+The shared layout helper maintains child-local CSS inputs and exact native expressions during sizing, padding, pointer reparenting, participation, layout conversion and deletion.
+It writes only necessary dependent changes through one atomic command; native layout remains authoritative without saved measured sizing or a separate dependency model.
+Source-controlled expressions and uncertain relationships remain available through Code.
+
+The resumed regression reproduced an equivalent `2e2px` basis being rewritten as `200px` on a locked sibling, unnecessarily blocking another child's padding edit.
+The fix compares owned numeric inputs by value while preserving their existing source text.
+The retained failing baseline and passing regression are linked in the [final audit](artifacts/editor/fill-sharing-finish-audit.json).
+The expanded sizing workflow checks stale source ownership, the locked equivalent input, three Fill children, Absolute Position, Free conversion, padding preview/cancellation, rebasing after deletion, exact history and source/save-reopen persistence on both axes.
+Movement checks retain shared-Fill destination adoption, native allocation, cached retargeting, cancellation and history.
+
+The [final audit](artifacts/editor/fill-sharing-finish-audit.json) records both browsers and application modes for sizing, movement, layout, padding and participation, their exact commands, traces and unchanged source hashes.
+The [documentation-only follow-up](artifacts/editor/fill-sharing-finish-documentation.json) records five Markdown updates afterward; application code, verification code, configuration, AGENTS.md and doc_v1 remain unchanged.
+TypeScript, lint, formatting, build, tooling and Fallow dead-code/health commands pass at that source checkpoint with the configured 10 cyclomatic and 40-line limits unchanged.
+Fallow retains 237 static-estimated CRAP advisories and seven planned unused dependencies; these advisory findings are not runtime coverage measurements.
+The [independent native matrix](artifacts/editor/fill-sharing-native/README.md) remains separate historical CSS research evidence: 2,126 measured states and zero unexpected results.
+It does not establish application or export completion by itself.
+
+Wrapped Fill, broader intrinsic dependencies, full Constraints, Tokens, React integration, assets, complete exports and full V1 verification remain unfinished.
+Fractional borders, arbitrary imported/logical ownership and dimensions near native engine limits remain outside this bounded proof.
+Installed stable Chrome, Windows, full-application accessibility and screen readers remain unverified.
+No accepted architecture changed, no doc_v1 correction was required, and no compiler migration occurred.
+Both research agents finished; development is paused at this checkpoint with changes uncommitted and no push performed.
+
+## Ordinary wrapped Row Fill checkpoint
+
+Ordinary owned Rows now support entering main-axis Fill before or after enabling Wrap to next line.
+The shared child-local CSS projection supplies one canonical outer basis across the frame's Fill children, including a sole Fill child when wrapping is enabled.
+The browser forms rows from native hypothetical outer sizes and allocates Fill independently on each row while preserving Fixed/Fit siblings, decoration, margins, automatic minima and declared limits.
+The source-derived basis remains `B = max(200, max(current owned decoration) + 100)` CSS px.
+It determines native line formation without a saved card count, per-row child order, measured sizing or Grid model.
+The [Flexbox algorithm](https://www.w3.org/TR/css-flexbox-1/#algo-line-break) supplied the independently checked line-collection rule.
+
+Wrapping prepares parent and required dependent child CSS together before native preview and one atomic command.
+Later Padding, Gap, resize, Fill exits, deletion, participation and supported reparenting use the same ownership and cohort preparation.
+Existing nowrap single-grow behavior remains supported.
+Unchanged parent display, direction and wrapping declarations use the captured native layout, so source variables do not bypass cohort preparation.
+Explicit proposed layout changes still take precedence and authored parent expressions remain intact.
+The control stays unavailable for unsupported parent bounds or source relationships and preserves native overflow instead of removing minima or clipping.
+
+The [source-layout regression baseline](artifacts/editor/wrapped-source-layout-baseline.json) records accepted Fill widths of 187px and 153px under variable-based display.
+The retained editor regression fails before the fix for variable-based display.
+After the fix it passes for variable-based display, direction, wrapping and nested wrapping, including exact history and source round-trips.
+The [missing-feature baseline](artifacts/editor/sizing-wrapped-feature-baseline-result.json) records the original refusal of Fill in a wrapped Row.
+The [final audit](artifacts/editor/wrapped-fill-final-audit.json) binds the focused and full sizing checks plus movement, layout, padding and participation regressions to the final source archive.
+It checks both application modes on Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57, recorded command/response documents, traces and clean shutdown.
+The native 224-state matrix independently predicts row membership, per-line shares and Fit height across unequal decoration, both box models, native limits, mixed siblings, automatic minima, margins and CSSOM serialization.
+Native research remains separate from editor and complete export certification.
+
+The expanded editor workflow covers incomplete final rows, responsive resize, mixed Fixed/Fit siblings, Padding preview/Escape, locks, native limits, Fixed-height clipping, participation, dominant-member deletion and rebasing, source drafts, single-grow wrapping, real pointer preview/cancellation/adoption, exact history and UI save/reopen.
+Ordinary standalone serialized HTML reflows at another parent width without a coefficient rewrite.
+An initial test initialization error, a pointer fixture path across an unrelated Column, an obsolete no-wrapping assertion and an immediate session read before Open project completed remain retained as verifier corrections.
+The accepted unsupported-destination guard was preserved.
+TypeScript, lint, formatting, build, tooling and Fallow commands pass with the 10 cyclomatic and 40-line limits unchanged.
+Fallow retains 238 static-estimated CRAP advisories and seven planned unused dependencies.
+The [documentation-only proof](artifacts/editor/wrapped-fill-final-documentation.json) records the checkpoint updates without changing application or verification code.
+
+Wrapped cross-axis Fill, broader source/intrinsic ownership, full Constraints, Tokens, React integration, assets, complete exports and full V1 verification remain unfinished.
+Installed stable Chrome, Windows, full-application accessibility and screen readers remain unverified.
+No accepted architectural contract changed, no doc_v1 correction was required, and TypeScript remains at 6.0.3.
+No subagent was started, no commit or push was made, and development is paused at this checkpoint as requested.
 
 ## Next checkpoint
 

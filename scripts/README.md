@@ -45,3 +45,7 @@ Wrapping checks cover bounded native line formation, item/row gap, Fixed and exi
 Editor evidence lives in ignored `artifacts/editor/` and identifies the tested source and browser where applicable.
 
 `e2e/editor/check-gap.ts` verifies typing, 1/Shift-8 input arrows, value scrubbing, native canvas handles, live cancellation, applied-revision/zoom cancellation, wrapping through row changes, CSS ownership, locks/drafts, pending Undo, and save/reopen.
+`e2e/editor/check-alignment.ts` verifies the nine physical packed positions in Row/Column, named distribution, wrapped rows, zero/one participants and overflow, source priority and ownership, locks/drafts, exact history, focus, and save/reopen.
+`e2e/editor/check-participation.ts` verifies ordinary Flex participation changes through the visible Absolute Position control.
+`e2e/editor/check-sizing.ts` checks ordinary Fixed/Fit, bounded nowrap cross-axis Fill, and single-grow, multiple-child and per-row wrapped main-axis Fill sharing, including source ownership, native reflow, command history, and saving.
+Fill checks cover separate numeric/conversion permissions, parent bounds, effective automatic margins, decoration floors and size limits, overflow feedback, draft/rejection/history safeguards, and native response after save/reopen.

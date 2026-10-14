@@ -58,9 +58,9 @@ export async function applySource(
   assertUnlocked(document, affected);
   const nodes = await prepareHTML(source);
   const incoming = nodes[0];
+  if (await equivalentSource(document, id, nodes)) return;
   if (!incoming || !compatible(previous, incoming))
     throw new Error("Keep the selected root's element type when editing its source.");
-  if (await equivalentSource(document, id, nodes)) return;
   const root = previous.kind === "frame" ? frameRoot(previous, incoming) : incoming;
   nodes[0] = root;
   const generatedId = root.id;

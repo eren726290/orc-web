@@ -253,22 +253,31 @@ async function renameOtherKinds(page: Page) {
 async function sameSelectedReveal(page: Page) {
   await layer(page, "Second title").click();
   const before = await session(page);
-  await page.getByRole("button", { name: "Collapse Content group", exact: true }).click();
-  await layer(page, "Second title").waitFor({ state: "hidden" });
-  assert.equal(await page.locator(".property-title strong").innerText(), "Second title");
-  await page.locator(".left-panel").hover();
-  await page.mouse.wheel(0, 2000);
-  await page.waitForFunction(() => (document.querySelector(".left-panel")?.scrollTop ?? 0) > 500);
-  await page.locator('.canvas-world [data-orc-id="second"]').click();
-  await layer(page, "Second title").waitFor({ timeout: 3000 });
-  await page.waitForFunction(() => {
-    const panel = document.querySelector(".left-panel")?.getBoundingClientRect();
-    const row = [...document.querySelectorAll("button.layer-name")]
-      .find((element) => element.textContent?.endsWith("Second title"))
-      ?.getBoundingClientRect();
-    return panel && row && row.top >= panel.top && row.bottom <= panel.bottom;
-  });
-  assert.deepEqual(await session(page), before, "Canvas reveal is view state");
+  for (const collapse of [true, false, true]) {
+    if (collapse) {
+      await page.getByRole("button", { name: "Collapse Content group", exact: true }).click();
+      await layer(page, "Second title").waitFor({ state: "hidden" });
+    }
+    assert.equal(await page.locator(".property-title strong").innerText(), "Second title");
+    await page.locator(".left-panel").hover();
+    await page.mouse.wheel(0, 2000);
+    await page.waitForFunction(() => (document.querySelector(".left-panel")?.scrollTop ?? 0) > 500);
+    await page.locator('.canvas-world [data-orc-id="second"]').click();
+    await layer(page, "Second title").waitFor({ timeout: 3000 });
+    await page.waitForFunction(() => {
+      const panel = document.querySelector(".left-panel")?.getBoundingClientRect();
+      const row = document.querySelector(".layer-row.selected")?.getBoundingClientRect();
+      return panel && row && row.top >= panel.top && row.bottom <= panel.bottom;
+    });
+    assert.equal(await page.locator(".layer-row.selected").count(), 1);
+    assert.equal(
+      await page.locator(".layer-row.selected .layer-name > span:last-child").innerText(),
+      "Second title",
+    );
+    assert.deepEqual(await session(page), before, "Canvas reveal is view state");
+    inputs.push(`Reselect second: ${collapse ? "collapsed" : "expanded"} ancestor, scrolled away`);
+  }
+  checks.push("Repeated canvas selection reveals collapsed or offscreen Layers rows without edits");
 }
 
 async function cancellationWorkflow(page: Page) {

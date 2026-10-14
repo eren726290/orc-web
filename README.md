@@ -55,6 +55,9 @@ bun run check:clipping
 bun run check:layout
 bun run check:padding
 bun run check:gap
+bun run check:alignment
+bun run check:participation
+bun run check:sizing
 ```
 
 `check:browser` requires installed Google Chrome and verifies development and production-preview mounting.

@@ -113,8 +113,11 @@ function useFrameLayoutChange(props: Props) {
   return { current, error, pending, change, wrapping };
 }
 
-function useLayoutFocus(pending: boolean, id: string) {
-  const focused = useRef<{ id: string; button: HTMLButtonElement | HTMLInputElement } | null>(null);
+export function useLayoutFocus(pending: boolean, id: string) {
+  const focused = useRef<{
+    id: string;
+    button: HTMLButtonElement | HTMLInputElement | HTMLSelectElement;
+  } | null>(null);
   useLayoutEffect(() => {
     const saved = focused.current;
     if (pending || !saved || saved.id !== id) return;
@@ -128,7 +131,9 @@ function useLayoutFocus(pending: boolean, id: string) {
   return () => {
     const button = document.activeElement;
     focused.current =
-      button instanceof HTMLButtonElement || button instanceof HTMLInputElement
+      button instanceof HTMLButtonElement ||
+      button instanceof HTMLInputElement ||
+      button instanceof HTMLSelectElement
         ? { id, button }
         : null;
   };

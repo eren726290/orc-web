@@ -11,6 +11,7 @@ type Props = {
   max?: number;
   step?: number | "any";
   readOnly?: boolean;
+  commitUnchanged?: boolean;
   adjustment?: { owner: string; axis: "x" | "y"; scale: number };
   decode: (value: string) => string | null;
   prepare: () => boolean | Promise<boolean>;
@@ -173,7 +174,7 @@ async function finishChange(element: Field, props: Props): Promise<string | null
   if (value === null) {
     return `Enter a valid ${props.label.toLowerCase()}.`;
   }
-  if (value === props.decode(props.value)) {
+  if (!props.commitUnchanged && value === props.decode(props.value)) {
     element.value = props.value;
     props.cancel();
     return null;

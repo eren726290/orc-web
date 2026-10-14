@@ -35,6 +35,8 @@ const requirements = [
   "Draft Discard after pointer release completes selection without resuming movement or creating history.",
   "Frame drops convert Free placement and constraints or join the marked Flex slot atomically.",
   "Flex position fields show native parent-relative coordinates read-only and offer guarded parent selection without edits or history, including locked objects.",
+  "Owned main-axis Fill pointer drops share equal outer sizes in bounded nowrap destinations with supported Fixed/Fit siblings; retargeting preserves frozen ownership.",
+  "Explicit pixel Fixed aspect-ratio participants remain supported beside main-axis Fill.",
   "Exact Undo/Redo and save/reopen retain CSS, hierarchy and native geometry.",
 ];
 let failure: string | null = null;
@@ -179,6 +181,7 @@ async function parentPositionInspection(page: Page, mode: string) {
   for (const id of ["rb", "row"]) {
     await accepted(page, { kind: "lock", id, locked: true });
     await select(page, ["rb"]);
+    await page.getByText("Position controlled by row", { exact: true }).waitFor();
     const before = await session(page);
     assert.equal(await page.getByLabel("Name", { exact: true }).isDisabled(), true);
     assert.equal(await page.getByLabel("X", { exact: true }).getAttribute("readonly"), "");
@@ -1388,6 +1391,7 @@ async function pointerReparenting(page: Page) {
   await pointerReparent(page, "cross-fill", "row");
   await pointerReparent(page, "cross-auto-margin", "row");
   await pointerReparent(page, "fill-a", "row");
+  await mainFillReparenting(page);
   await zoomReparent(page);
   await rejectedPointerDrop(page, "loose", "drop-locked");
   await rejectedPointerDrop(page, "transformed", "drop-free");
@@ -1396,6 +1400,299 @@ async function pointerReparenting(page: Page) {
   await pointerReparent(page, "loose", "drop-free");
   await history(page, "redo");
   checks.push("A completed pointer reparent remains applied for Save/Close/Open verification");
+}
+
+async function mainFillReparenting(page: Page) {
+  const before = (await session(page)).projects[0].document;
+  const ids = ["fill-a", "fill-b", "fill-row", "row", "wrap", "ra"];
+  try {
+    await accepted(page, {
+      kind: "batch",
+      mutations: [
+        { kind: "style", id: "fill-a", values: { flex: "1 0 0px", "min-width": "0px" } },
+        { kind: "style", id: "fill-b", values: { width: "60px", flex: "0 0 auto" } },
+        { kind: "style", id: "wrap", values: { width: "300px", "flex-wrap": "nowrap" } },
+      ],
+    });
+    await mainFillPointerDrop(page, "fill-a", "row", 96);
+    await mainFillBoundedDrop(page);
+    await mainFillSharedDrop(page);
+    await mainFillRejectedDestinations(page);
+    await mainFillRetarget(page, false);
+    await mainFillRetarget(page, true);
+    await mainFillRatioDrops(page);
+  } finally {
+    await restoreMainFillStyles(page, before, ids);
+  }
+  assertContent((await session(page)).projects[0].document, before);
+  assert.equal(before.nodes["fill-a"].style.flex, "1 1 0px");
+  checks.push(
+    "Main-axis Fill pointer fixtures restore all six original styles exactly, including legacy flex 1 1 0px",
+  );
+}
+
+async function restoreMainFillStyles(page: Page, before: DesignDocument, ids: string[]) {
+  const current = (await session(page)).projects[0].document;
+  await accepted(page, {
+    kind: "batch",
+    mutations: ids.map((id) => ({
+      kind: "style",
+      id,
+      values: before.nodes[id].style,
+      unset: Object.keys(current.nodes[id].style).filter(
+        (property) => !Object.hasOwn(before.nodes[id].style, property),
+      ),
+    })),
+  });
+}
+
+async function mainFillPointerDrop(page: Page, id: string, parentId: string, expected: number) {
+  await select(page, [id]);
+  const before = await session(page);
+  const document = before.projects[0].document;
+  const bounds = await geometry(page, id);
+  const point = await reparentPoint(page, parentId);
+  await reparentPreview(page, id, parentId, point, document);
+  await mainFillNativeGeometry(page, id, parentId, expected);
+  await cancelFlexPointer(page, document, id);
+  assert.deepEqual(await session(page), before);
+  assert.deepEqual(await geometry(page, id), bounds);
+  await reparentPreview(page, id, parentId, point, document);
+  const response = page.waitForResponse(isCommand, { timeout: 2000 });
+  await page.mouse.up();
+  assert.equal((await response).status(), 200);
+  await renderSettled(page);
+  const after = (await session(page)).projects[0].document;
+  assert.equal(after.revision, document.revision + 1);
+  assert.equal(after.nodes[id].parentId, parentId);
+  assert.equal(after.nodes[id].style["aspect-ratio"], document.nodes[id].style["aspect-ratio"]);
+  for (const sibling of document.nodes[parentId].children)
+    assert.deepEqual(after.nodes[sibling], document.nodes[sibling]);
+  assert.deepEqual(await selection(page), [id]);
+  await mainFillNativeGeometry(page, id, parentId, expected);
+  await undoRedo(page, document, after);
+  await history(page, "undo");
+  assertContent((await session(page)).projects[0].document, document);
+  checks.push(
+    `${id} into ${parentId}: main-axis Fill allocation ${expected}px, Escape, one command and exact Undo/Redo`,
+  );
+}
+
+async function mainFillNativeGeometry(page: Page, id: string, parentId: string, expected: number) {
+  const bounds = await geometry(page, "fill-a");
+  near(bounds.width, expected);
+  const native = await page.locator('.canvas-world [data-orc-id="fill-a"]').evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { grow: style.flexGrow, shrink: style.flexShrink, basis: style.flexBasis };
+  });
+  assert.deepEqual(native, { grow: "1", shrink: "0", basis: "0px" });
+  const siblings = parentId === "row" ? ["ra", "rb", "rc"] : ["wa", "wb", "wc"];
+  for (const sibling of siblings) near((await geometry(page, sibling)).width, 60);
+  if (id === "fill-b") near((await geometry(page, id)).width, 60);
+  inputs.push({
+    trigger: "Native main-axis Fill pointer allocation",
+    id,
+    parentId,
+    expected,
+    bounds,
+    native,
+  });
+}
+
+async function mainFillBoundedDrop(page: Page) {
+  await accepted(page, {
+    kind: "style",
+    id: "row",
+    values: { width: "auto", "min-width": "300px", "max-width": "300px" },
+  });
+  await mainFillPointerDrop(page, "fill-a", "row", 96);
+  await history(page, "undo");
+  checks.push("Owned equal pixel min/max limits bound a valid main-axis Fill pointer destination");
+}
+
+async function mainFillRejectedDestinations(page: Page) {
+  for (const [id, values] of [
+    ["row", { width: "auto" }],
+    ["row", { width: "var(--pointer-width)", "--pointer-width": "300px" }],
+  ] satisfies [string, DesignNode["style"]][]) {
+    await accepted(page, { kind: "style", id, values });
+    const bounds = await geometry(page, "fill-a");
+    const before = await session(page);
+    const commands = observeMainFillCommands(page);
+    try {
+      await rejectedPointerDrop(page, "fill-a", "row");
+    } finally {
+      commands.stop();
+    }
+    assert.deepEqual(commands.requests, []);
+    assert.deepEqual(await geometry(page, "fill-a"), bounds);
+    assert.equal(await page.locator(".flex-drop-marker").count(), 0);
+    assert.ok((await page.locator(".workspace-notice").innerText()).trim());
+    inputs.push({
+      trigger: "Unavailable main-axis Fill pointer destination",
+      id,
+      values,
+      before,
+      after: await session(page),
+      requests: commands.requests,
+    });
+    await history(page, "undo");
+  }
+}
+
+async function mainFillSharedDrop(page: Page) {
+  await accepted(page, {
+    kind: "batch",
+    mutations: [
+      { kind: "style", id: "ra", values: { width: "auto", flex: "1 0 0px", "min-width": "0px" } },
+      {
+        kind: "style",
+        id: "fill-a",
+        values: { padding: "10px", border: "2px solid black", "box-sizing": "border-box" },
+      },
+    ],
+  });
+  await select(page, ["fill-a"]);
+  const before = (await session(page)).projects[0].document;
+  const point = await reparentPoint(page, "row");
+  await reparentPreview(page, "fill-a", "row", point, before);
+  for (const id of ["fill-a", "ra"]) near((await geometry(page, id)).width, 78);
+  await cancelFlexPointer(page, before, "fill-a");
+  await reparentPreview(page, "fill-a", "row", point, before);
+  const pending = page.waitForResponse(isCommand, { timeout: 2000 });
+  await page.mouse.up();
+  const response = await pending;
+  assert.equal(response.status(), 200);
+  await renderSettled(page);
+  const after = (await session(page)).projects[0].document;
+  assert.equal(after.revision, before.revision + 1);
+  assert.equal(after.nodes["fill-a"].parentId, "row");
+  for (const id of ["fill-a", "ra"]) near((await geometry(page, id)).width, 78);
+  inputs.push({
+    trigger: "Second Fill joins a destination cohort with unequal decoration",
+    before,
+    after,
+    command: parseCommand(response.request().postDataJSON()),
+  });
+  await undoRedo(page, before, after);
+  await history(page, "undo");
+  await history(page, "undo");
+}
+
+async function mainFillRetarget(page: Page, invalid: boolean) {
+  if (invalid) await accepted(page, { kind: "style", id: "wrap", values: { width: "auto" } });
+  await select(page, ["fill-a"]);
+  const before = await session(page);
+  const bounds = await geometry(page, "fill-a");
+  const first = await reparentPoint(page, "row");
+  const second = await reparentPoint(page, "wrap");
+  const commands = observeMainFillCommands(page);
+  let after = before;
+  try {
+    await reparentPreview(page, "fill-a", "row", first, before.projects[0].document);
+    await mainFillNativeGeometry(page, "fill-a", "row", 96);
+    if (invalid) {
+      after = await mainFillInvalidRetarget(page, before, bounds, second);
+      assert.deepEqual(commands.requests, []);
+      await history(page, "undo");
+    } else {
+      after = await mainFillValidRetarget(page, before, first, second);
+    }
+  } finally {
+    commands.stop();
+  }
+  inputs.push({
+    trigger: "Main-axis Fill preview retarget",
+    invalid,
+    destinations: invalid
+      ? ["row", "unbounded wrap"]
+      : ["row", "wrap", "cached row", "cached wrap"],
+    before,
+    after,
+    acceptedDrop: invalid ? null : after.projects[0].document,
+    requests: commands.requests,
+  });
+  checks.push(
+    `Main-axis Fill preview retargets from a valid Row to ${invalid ? "an unbounded rejected Row without changes" : "a second bounded Row and cached first destination"}`,
+  );
+}
+
+async function mainFillInvalidRetarget(
+  page: Page,
+  before: Awaited<ReturnType<typeof session>>,
+  bounds: Awaited<ReturnType<typeof geometry>>,
+  point: Awaited<ReturnType<typeof reparentPoint>>,
+) {
+  await page.mouse.move(point.x, point.y, { steps: 10 });
+  await page.mouse.up();
+  await renderSettled(page);
+  assert.deepEqual(await session(page), before);
+  assert.deepEqual(await geometry(page, "fill-a"), bounds);
+  assert.equal(await page.locator(".flex-drop-marker").count(), 0);
+  assert.ok((await page.locator(".workspace-notice").innerText()).trim());
+  await captureReparentPreview(page, before.projects[0].document, "fill-a", "invalid-retarget");
+  return await session(page);
+}
+
+async function mainFillValidRetarget(
+  page: Page,
+  before: Awaited<ReturnType<typeof session>>,
+  first: Awaited<ReturnType<typeof reparentPoint>>,
+  second: Awaited<ReturnType<typeof reparentPoint>>,
+) {
+  for (const [parentId, point] of [
+    ["wrap", second],
+    ["row", first],
+    ["wrap", second],
+  ] satisfies [string, Awaited<ReturnType<typeof reparentPoint>>][]) {
+    await page.mouse.move(point.x, point.y, { steps: 10 });
+    await renderSettled(page);
+    assert.equal(
+      await page
+        .locator('.canvas-world [data-orc-id="fill-a"]')
+        .evaluate((element) => element.parentElement?.getAttribute("data-orc-id")),
+      parentId,
+    );
+    assert.deepEqual(await session(page), before);
+    await verifyFlexMarker(page, parentId, "fill-a");
+    await mainFillNativeGeometry(page, "fill-a", parentId, 96);
+  }
+  const response = page.waitForResponse(isCommand, { timeout: 2000 });
+  await page.mouse.up();
+  assert.equal((await response).status(), 200);
+  await renderSettled(page);
+  const applied = await session(page);
+  const after = applied.projects[0].document;
+  assert.equal(after.revision, before.projects[0].document.revision + 1);
+  assert.equal(after.nodes["fill-a"].parentId, "wrap");
+  await mainFillNativeGeometry(page, "fill-a", "wrap", 96);
+  await undoRedo(page, before.projects[0].document, after);
+  await history(page, "undo");
+  return applied;
+}
+
+function observeMainFillCommands(page: Page) {
+  const requests: unknown[] = [];
+  const capture = (request: import("playwright").Request) => {
+    if (new URL(request.url()).pathname === "/api/commands" && request.method() === "POST")
+      requests.push(request.postDataJSON());
+  };
+  page.on("request", capture);
+  return { requests, stop: () => page.off("request", capture) };
+}
+
+async function mainFillRatioDrops(page: Page) {
+  await accepted(page, { kind: "style", id: "ra", values: { "aspect-ratio": "2" } });
+  await mainFillPointerDrop(page, "fill-a", "row", 96);
+  await history(page, "undo");
+  await accepted(page, { kind: "reorder", id: "fill-a", parentId: "row", index: 6 });
+  await accepted(page, { kind: "style", id: "fill-b", values: { "aspect-ratio": "2" } });
+  await mainFillPointerDrop(page, "fill-b", "row", 28);
+  await history(page, "undo");
+  await history(page, "undo");
+  checks.push(
+    "Explicit 60px Fixed ratio sibling and incoming participant remain supported beside one exact main-axis Fill",
+  );
 }
 
 async function zoomReparent(page: Page) {
@@ -1633,15 +1930,31 @@ async function reparentCrossFillGeometry(page: Page, after: DesignDocument) {
   assert.equal(after.nodes["cross-fill"].style.height, "auto");
   assert.equal(after.nodes["cross-fill"].style["align-self"], "stretch");
   near((await geometry(page, "cross-fill")).height, 60);
-  await assertSizeOwner(page, "Height", "Fill");
+  await assertSizeOwner(page, "Height", "Fill", "60");
   checks.push(
     "Explicit cross-axis stretch overrides parent alignment and retains Fill after reparenting",
   );
 }
 
-async function assertSizeOwner(page: Page, label: string, owner: string) {
+async function assertSizeOwner(page: Page, label: string, owner: string, value = owner) {
+  if (owner === "Fit") {
+    await page.waitForFunction((name) => {
+      const choice = document.querySelector(`select[aria-label="${name} sizing"]`);
+      return choice instanceof HTMLSelectElement && choice.value === "Fit";
+    }, label);
+    const choice = page.getByRole("combobox", { name: `${label} sizing`, exact: true });
+    assert.equal(await choice.inputValue(), "Fit");
+    const value = page.getByRole("spinbutton", { name: label, exact: true });
+    assert.equal(await value.isEditable(), true);
+    assert.ok(Number.isFinite(Number(await value.inputValue())));
+    return;
+  }
   const field = page.getByRole("textbox", { name: label, exact: true });
-  assert.equal(await field.inputValue(), owner);
+  assert.equal(await field.inputValue(), value);
+  assert.equal(
+    await page.getByRole("combobox", { name: `${label} sizing`, exact: true }).inputValue(),
+    owner,
+  );
   assert.equal(await field.getAttribute("readonly"), "");
 }
 

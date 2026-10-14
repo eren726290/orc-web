@@ -33,7 +33,8 @@ Read-only by default. Ask before destructive actions.
 
 ## Autonomy
 
-- Track deferred work: if a significant feature, future update , edge case, or idea is pushed out of the current scope, immediately document it in a backlog folder a didected backlog file. Never let important tasks get lost in the chat history.
+- Record significant deferred features, updates, edge cases, and ideas in a dedicated file under backlog/.
+  Include enough context for the work to resume without relying on chat history.
 - You may run codebase analysis on your own judgment before edits, after generating code, or when something looks off — report what you found. This is the only autonomous-action exception; everything else needs explicit instruction.
 - When blocked, investigate the cause before expanding the implementation.
   Read the relevant project documentation and existing code, and consult current official documentation or research when needed.
@@ -45,11 +46,18 @@ Read-only by default. Ask before destructive actions.
 - Keep orc-web feature designs, interfaces, and workflows dead simple. Strive for such clarity that even a 12-year-old can navigate and understand each feature without confusion.
 - When building or reviewing ORC-web's UI, read [design/README.md](design/README.md) and consult the relevant references under `/home/eren/D/orc-web/design/`.
   Use them for visual inspiration while following `doc_v1` for accepted features, layout, and behavior.
+- Do not animate everything.
+  Small, purposeful micro-interactions are great, but default to instant state transitions unless motion genuinely clarifies the UI.
 
 ## Complexity
 
-- I like ambitious ideas, simple systems, and software that feels obvious. Do not preserve complexity just because it already exists. Do not introduce machinery because it looks architecturally impressive. Understand the real constraint, then fight for the smallest model that makes the correct behavior unsurprising.
-- Channel both "measure twice, cut once" and YAGNI. Fight scope creep. Try to honor the developer's intent in both a minimal and realistic fashion.
+- I like ambitious ideas, simple systems, and software that feels obvious.
+  Do not preserve complexity just because it already exists.
+  Do not introduce machinery because it looks architecturally impressive.
+  Understand the real constraint, then fight for the smallest model that makes the correct behavior unsurprising.
+- Channel both "measure twice, cut once" and YAGNI.
+  Fight scope creep.
+  Try to honor the developer's intent in both a minimal and realistic fashion.
 
 ## Security overengineering
 
@@ -60,14 +68,14 @@ Read-only by default. Ask before destructive actions.
 
 ## Quality & Engineering Standards
 
-- Verify with real commands/tests, not memory. Run build/test as needed.
-- Smallest working diff — but 100% of requirements and edge cases verified. Never declare complete at 80%; prove it with real files, exact citations, runnable checks.
+- Make the smallest working diff that satisfies the agreed requirements.
+  Verify applicable requirements and identified failure cases with real commands and relevant checks, including specified interface details and error states.
+  Report what was checked and what remains unverified.
+  Do not declare completion while known requirements remain unmet.
 - Before any big change, evaluate it first: map the files it will touch and assess the blast radius. If the diff starts growing beyond what was asked, stop and report instead of proceeding. Use the `blast-radius` skill when checking what a change could break outside the diff or when reviewing a change you do not trust.
 - When making technical decisions, do not give much weight to development cost. Instead, prefer quality, simplicity, robustness, scalability, and long-term maintainability.
-- When doing bug fixes, always start with reproducing the bug in an E2E setting as closely aligned with how an end user experiences it. This makes sure you find the real problem so your fix will actually solve it.
 - When end-to-end testing a product, be picky about the UI you see and be obsessed with pixel perfection. If something clearly looks off, even if it is not directly related to what you are doing, try to get it fixed along the way.
 - Apply that same high standard to engineering excellence: lint, test failures, and test flakiness. If you see one, even if it is not caused by what you are working on right now, still get it fixed.
-- Check small details: never hand-wave minor requirements, subtle edge cases, error states, or interface details (e.g., empty states, hover feedback, exact pixel alignment). If it is in the specification, it matters. Execute it with persistence.
 
 
 ## CLIs
@@ -83,7 +91,10 @@ Read-only by default. Ask before destructive actions.
   Derive test assertions from requirements, not from the implementation.
 - Add isolated tests only when they catch a concrete failure that E2E tests cannot reliably or practically cover.
   State that reason before writing the test.
-- For bug fixes, reproduce the failure first and retain a regression check.
+- For bug fixes, reproduce the failure in an E2E setting that reflects the affected user workflow.
+  Diagnose the root cause, then add or update a regression test that fails before the fix.
+  Apply the smallest correct fix, then verify that the test passes.
+  If the environment prevents reproduction or testing, state that limitation and do not claim runtime verification.
 - Keep tests focused on observable behavior.
   Avoid assertions tied to internal call sequences or component structure.
 - For E2E verification, record the tested commit, command, inputs, and results.

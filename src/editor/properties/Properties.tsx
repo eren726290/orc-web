@@ -12,6 +12,9 @@ import { useLayoutOwnership } from "./use-layout-ownership";
 import { FrameLayoutControls } from "./frame-layout-controls";
 import { FramePaddingControls } from "./frame-padding-controls";
 import { FrameGapControls } from "./frame-gap-controls";
+import { FrameAlignmentControls } from "./frame-alignment-controls";
+import { AbsolutePositionControl } from "./absolute-position-control";
+import { SizingControls } from "./sizing-control";
 
 type Props = {
   document: DesignDocument;
@@ -66,6 +69,8 @@ function PropertySections(props: EditProps & Pick<Props, "disabled" | "select">)
         <fieldset disabled={props.disabled}>
           <FrameLayoutControls {...props} />
           <FrameGapControls {...props} />
+          <FrameAlignmentControls {...props} />
+          <AbsolutePositionControl {...props} />
           <NodeLayout {...props} />
           <FramePaddingControls {...props} />
           <FrameClipping {...props} />
@@ -160,22 +165,7 @@ function NodeLayout(props: EditProps) {
       <div className="field-grid">
         <StyleField {...props} property="left" label="X" fallback="0px" numeric="px" />
         <StyleField {...props} property="top" label="Y" fallback="0px" numeric="px" />
-        <StyleField
-          {...props}
-          property="width"
-          label="Width"
-          fallback="auto"
-          numeric="px"
-          min={0}
-        />
-        <StyleField
-          {...props}
-          property="height"
-          label="Height"
-          fallback="auto"
-          numeric="px"
-          min={0}
-        />
+        <SizingControls {...props} />
       </div>
     </>
   );
@@ -306,12 +296,8 @@ function styleFieldValue(props: StyleProps) {
     return { value: props.ownership.position[props.property], readOnly: true };
   const authored = props.node.style[props.property] ?? props.fallback;
   const fixed = /^-?\d+(?:\.\d+)?px$/u.test(authored);
-  const owner =
-    props.property === "width" || props.property === "height"
-      ? props.ownership[props.property]
-      : null;
-  const readOnly = Boolean(owner) || (props.numeric === "px" && !fixed);
-  const value = owner ?? styleFieldDisplay(authored, props.numeric, readOnly);
+  const readOnly = props.numeric === "px" && !fixed;
+  const value = styleFieldDisplay(authored, props.numeric, readOnly);
   return { value, readOnly };
 }
 

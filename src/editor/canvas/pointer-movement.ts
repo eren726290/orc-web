@@ -90,6 +90,7 @@ async function beginMovement(
   };
   gesture.current = current;
   props.notice(null);
+  if (props.selected.length === 1 && props.selected[0] === id) void props.select(id, false);
   const allowed = props.selected.includes(id)
     ? await props.beforeEdit()
     : await props.select(id, false);

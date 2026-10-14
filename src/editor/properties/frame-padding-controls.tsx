@@ -1,11 +1,15 @@
-import type { DesignNode } from "../../../shared/document/model";
+import { useState } from "react";
+import { flushSync } from "react-dom";
+import type { DesignDocument, DesignNode } from "../../../shared/document/model";
 import type { Mutation } from "../../../shared/commands/commands";
 import { paddingChange, readPadding } from "../layout/padding";
 import { PropertyField } from "./property-field";
 import type { PropertyPreview } from "./property-preview";
+import { prepareFillSharing } from "../layout/fill-sharing";
 import "./padding-controls.css";
 
 type Props = {
+  document: DesignDocument;
   node: DesignNode;
   prepare: () => boolean | Promise<boolean>;
   mutate: (mutation: Mutation) => Promise<boolean>;
@@ -43,23 +47,60 @@ function PaddingField(props: Props & { label: string; sides: [Side, ...Side[]] }
   const source = props.sides.some((side) => !side.fixed);
   const mixed = !source && props.sides.some((side) => side.value !== props.sides[0].value);
   const value = source ? "Edit source" : mixed ? "" : String(parseFloat(props.sides[0].value));
-  const change = (value: string) => paddingChange(props.node.id, props.sides, value);
+  const actions = usePaddingActions(props);
   return (
-    <PropertyField
-      label={props.label}
-      value={value}
-      placeholder={mixed ? "Mixed" : undefined}
-      type={source || mixed ? "text" : "number"}
-      min={0}
-      step="any"
-      readOnly={source}
-      decode={(value) => decodePadding(value, mixed)}
-      prepare={props.prepare}
-      preview={(value) => props.preview(value ? change(value) : null)}
-      cancel={() => props.preview(null)}
-      commit={(value) => props.mutate(change(value))}
-    />
+    <>
+      <PropertyField
+        label={props.label}
+        value={value}
+        placeholder={mixed ? "Mixed" : undefined}
+        type={source || mixed ? "text" : "number"}
+        min={0}
+        step="any"
+        readOnly={source}
+        decode={(value) => decodePadding(value, mixed)}
+        prepare={props.prepare}
+        preview={actions.preview}
+        cancel={() => props.preview(null)}
+        commit={actions.commit}
+      />
+      {actions.error && <p role="alert">{actions.error}</p>}
+    </>
   );
+}
+
+function usePaddingActions(props: Props & { sides: [Side, ...Side[]] }) {
+  const [error, setError] = useState<string | null>(null);
+  const change = (value: string) => {
+    flushSync(() => props.preview(null));
+    const mutation = paddingChange(props.node.id, props.sides, value);
+    mutation.mutations.push(...prepareFillSharing(props.document)(mutation.mutations));
+    return mutation;
+  };
+  const fail = (cause: unknown) => {
+    props.preview(null);
+    setError(cause instanceof Error ? cause.message : "The padding change failed.");
+  };
+  return {
+    error,
+    preview: (value: string) => {
+      setError(null);
+      try {
+        props.preview(value ? change(value) : null);
+      } catch (cause) {
+        fail(cause);
+      }
+    },
+    commit: async (value: string) => {
+      setError(null);
+      try {
+        return await props.mutate(change(value));
+      } catch (cause) {
+        fail(cause);
+        return false;
+      }
+    },
+  };
 }
 
 function decodePadding(value: string, mixed: boolean) {

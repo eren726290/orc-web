@@ -1,0 +1,82 @@
+.alignment-controls {
+  display: grid;
+  gap: 8px;
+  margin-block: 12px;
+  font-size: 12px;
+}
+.alignment-controls legend {
+  margin-block-end: 6px;
+  color: var(--color-editor-muted);
+}
+.alignment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  gap: 2px;
+  inline-size: fit-content;
+  padding: 3px;
+  border: 1px solid var(--color-editor-border);
+  border-radius: 6px;
+  background: var(--color-editor-inset);
+}
+.alignment-controls button {
+  min-block-size: 44px;
+  min-inline-size: 44px;
+  padding: 8px;
+  color: var(--color-editor-ink);
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+.alignment-grid button {
+  display: grid;
+  place-items: center;
+}
+.alignment-grid span {
+  display: block;
+  inline-size: 10px;
+  block-size: 10px;
+  border: 2px solid currentColor;
+  border-radius: 2px;
+}
+.alignment-grid button:nth-child(3n + 1) span {
+  justify-self: start;
+}
+.alignment-grid button:nth-child(3n) span {
+  justify-self: end;
+}
+.alignment-grid button:nth-child(-n + 3) span {
+  align-self: start;
+}
+.alignment-grid button:nth-child(n + 7) span {
+  align-self: end;
+}
+.alignment-distribution {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--color-editor-border);
+  border-radius: 6px;
+  background: var(--color-editor-inset);
+}
+.alignment-controls button[aria-pressed="true"] {
+  background: var(--color-editor-surface);
+  border-color: var(--color-editor-border);
+}
+.alignment-controls button:active {
+  background: var(--color-editor-border);
+}
+.alignment-controls button:focus-visible {
+  outline: 2px solid var(--color-editor-selection);
+  outline-offset: 1px;
+}
+.alignment-controls p {
+  margin: 0;
+  color: var(--color-editor-muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+@media (hover: hover) and (pointer: fine) {
+  .alignment-controls button:enabled:hover {
+    background: var(--color-editor-surface);
+  }
+}

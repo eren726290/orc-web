@@ -6,6 +6,7 @@ import {
   prepareFreePlacement,
 } from "../layout/free-placement";
 import { prepareFlowPlacement } from "../layout/flow-placement";
+import { prepareFillSharing } from "../layout/fill-sharing";
 import { prepareFlexDrop, type PointerPreview } from "./pointer-layout";
 
 type Point = { x: number; y: number };
@@ -31,8 +32,9 @@ export function preparePointerPlacement(
   )
     throw new Error("This object's rendered placement is unavailable.");
   const free = prepareFreePlacement(node, element, world, scale);
-  const flow = prepareFlowPlacement(node, element);
+  const flow = prepareFlowPlacement(document, node, element);
   const plans = new Map<string | null, (delta: Point) => PointerPreview>();
+  const sharing = prepareFillSharing(document);
   return (delta) => {
     const point = { x: origin.x + delta.x * scale, y: origin.y + delta.y * scale };
     const parentId = receivingFrame(document, node.id, surface, point);
@@ -42,7 +44,9 @@ export function preparePointerPlacement(
       plan = prepareDestination(document, node.id, parentId, surface, scale, origin, free, flow);
       plans.set(parentId, plan);
     }
-    return plan(delta);
+    const preview = plan(delta);
+    if (preview?.kind === "batch") preview.mutations.push(...sharing(preview.mutations));
+    return preview;
   };
 }
 

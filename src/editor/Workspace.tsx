@@ -20,6 +20,7 @@ import { nodeSource } from "../../shared/source/html-source";
 import { PanelResize } from "./PanelResize";
 import { Preview, previewView, type PreviewView } from "./preview/Preview";
 import { keyboardMovement } from "./canvas/keyboard-movement";
+import { prepareFillSharing } from "./layout/fill-sharing";
 
 type Props = {
   project: ProjectSnapshot;
@@ -140,6 +141,15 @@ async function applyWorkspaceMutation(
   mutation: Mutation,
 ) {
   const projectId = props.project.document.id;
+  if (mutation.kind === "delete") {
+    try {
+      const changes = prepareFillSharing(props.project.document)([mutation]);
+      if (changes.length) mutation = { kind: "batch", mutations: [mutation, ...changes] };
+    } catch (cause) {
+      sessionClient.setError(cause instanceof Error ? cause.message : "The deletion failed.");
+      return false;
+    }
+  }
   const draft = projectView(projectId).draft;
   if (
     draft &&

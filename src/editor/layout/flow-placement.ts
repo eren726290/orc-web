@@ -1,23 +1,29 @@
 import type { AtomicMutation } from "../../../shared/commands/commands";
-import type { DesignNode, Styles } from "../../../shared/document/model";
-import { readFlexSizing } from "./sizing";
+import type { DesignDocument, DesignNode, Styles } from "../../../shared/document/model";
+import { prepareFlowSizing, readFlexSizing } from "./sizing";
 import { insetProperties } from "./participation";
 
 type Axis = "width" | "height";
 const axes: Axis[] = ["width", "height"];
 
-export function prepareFlowPlacement(node: DesignNode, element: HTMLElement | SVGElement) {
+export function prepareFlowPlacement(
+  document: DesignDocument,
+  node: DesignNode,
+  element: HTMLElement | SVGElement,
+) {
   const source = snapshotFlow(node, element);
+  const checkSizing = prepareFlowSizing(document, node, element);
   return (
     parent: HTMLElement,
     direction = getComputedStyle(parent).flexDirection,
   ): Extract<AtomicMutation, { kind: "style" }> => {
-    checkFlowDestination(source, parent, direction);
     const values: Styles = {
       position: priority(source.style, "position", "relative"),
       ...flowDimensions(source),
       ...flowSizing(source),
     };
+    const ownedFill = checkSizing(parent, direction, values);
+    checkFlowDestination(source, parent, direction, ownedFill);
     if (source.crossFill) values["align-self"] = priority(source.style, "align-self", "stretch");
     const unset = [...insetProperties, "--orc-absolute-position"].filter((property) =>
       Object.hasOwn(node.style, property),
@@ -30,16 +36,17 @@ function checkFlowDestination(
   source: ReturnType<typeof snapshotFlow>,
   parent: HTMLElement,
   direction: string,
+  ownedFill: boolean,
 ) {
+  if (!source.direction) return;
   if (
-    source.direction &&
     source.direction !== direction &&
     (source.grow !== "0" || source.crossFill || source.basis !== "auto")
   )
     throw new Error("Use Code to convert this source-controlled sizing between Flex axes.");
   const main: Axis = direction === "row" ? "width" : "height";
   if (
-    source.direction &&
+    !ownedFill &&
     source.grow !== "0" &&
     ["", "auto", "max-content", "min-content", "fit-content"].includes(
       parent.style.getPropertyValue(main),
@@ -73,7 +80,7 @@ function snapshotFlow(node: DesignNode, element: HTMLElement | SVGElement) {
     position: computed.position,
     width: computed.width,
     height: computed.height,
-    ...readFlexSizing(style, computed, parent),
+    ...readFlexSizing(element, computed, parent),
   };
 }
 

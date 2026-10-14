@@ -5,6 +5,7 @@ import { prepareFlowPlacement } from "./flow-placement";
 import { readSizingOwners } from "./sizing";
 import { absolutePosition, isExplicitAbsolute } from "./participation";
 import { frameLayoutValidation } from "./frame-layout-validation";
+import { prepareFillSharing } from "./fill-sharing";
 
 export type FrameLayout = "Free" | "Row" | "Column";
 type StyleEdit = Extract<AtomicMutation, { kind: "style" }>;
@@ -41,7 +42,7 @@ export function readRowWrapping(node: DesignNode): boolean | null {
 
 export function prepareRowWrapping(document: DesignDocument, id: string, wrapped: boolean) {
   const node = document.nodes[id];
-  if (!node || node.kind !== "frame" || readFrameLayout(node) !== "Row")
+  if (node?.kind !== "frame" || readFrameLayout(node) !== "Row")
     throw new Error("Select a Row frame to change wrapping.");
   if (isLocked(document, id)) throw new Error("Unlock the frame before changing wrapping.");
   const current = readRowWrapping(node);
@@ -49,27 +50,30 @@ export function prepareRowWrapping(document: DesignDocument, id: string, wrapped
   if (current === wrapped) return null;
   const element = renderedFrame(document, id);
   const value = wrapped ? "wrap" : "nowrap";
-  const validate = frameLayoutValidation(element, "Row", 1);
-  return {
-    mutation: {
-      kind: "batch",
-      mutations: [
-        {
-          kind: "style",
-          id,
-          values: {
-            [rowWrap]: priority(element.style, rowWrap, value),
-            "flex-wrap": priority(element.style, "flex-wrap", rowWrapReference),
-          },
-          unset: Object.hasOwn(node.style, "flex-flow") ? ["flex-flow"] : [],
-        },
-      ],
-    } satisfies Mutation,
-    validate: () => {
-      validate();
-      if (getComputedStyle(element).flexWrap !== value)
-        throw new Error("Wrapping controlled by source. Edit in Code.");
+  const mutations: StyleEdit[] = [
+    {
+      kind: "style",
+      id,
+      values: {
+        [rowWrap]: priority(element.style, rowWrap, value),
+        "flex-wrap": priority(element.style, "flex-wrap", rowWrapReference),
+      },
+      unset: ["flex-flow"].filter((property) => Object.hasOwn(node.style, property)),
     },
+  ];
+  mutations.push(...prepareFillSharing(document)(mutations));
+  return {
+    mutation: { kind: "batch", mutations } satisfies Mutation,
+    validate: rowWrappingValidation(element, value),
+  };
+}
+
+function rowWrappingValidation(element: HTMLElement, value: string) {
+  const validate = frameLayoutValidation(element, "Row", 1);
+  return () => {
+    validate();
+    if (getComputedStyle(element).flexWrap !== value)
+      throw new Error("Wrapping controlled by source. Edit in Code.");
   };
 }
 
@@ -89,6 +93,7 @@ export function prepareFrameLayout(document: DesignDocument, id: string, target:
     const change = childLayout(child, childElement, conversion);
     if (change) mutations.push(change);
   }
+  mutations.push(...prepareFillSharing(document)(mutations));
   return {
     mutation: { kind: "batch", mutations } satisfies Mutation,
     validate: frameLayoutValidation(conversion.element, target, conversion.scale),
@@ -124,7 +129,7 @@ function frameConversion(
     throw new Error("Use Code to change this source-controlled layout.");
   const scale = new DOMMatrix(getComputedStyle(world).transform).a;
   const reference = frameReference(element, surface, scale);
-  return { current, target, element, world, scale, reference };
+  return { document, current, target, element, world, scale, reference };
 }
 
 function renderedFrame(document: DesignDocument, id: string) {
@@ -203,6 +208,7 @@ function freeFrameDimensions(document: DesignDocument, node: DesignNode, element
 }
 
 type Conversion = {
+  document: DesignDocument;
   current: FrameLayout;
   target: FrameLayout;
   element: HTMLElement;
@@ -235,7 +241,11 @@ function childLayout(
   }
   if (target === "Free")
     return prepareFreePlacement(node, element, world, scale)(reference, { x: 0, y: 0 });
-  return prepareFlowPlacement(node, element)(conversion.element, target.toLowerCase());
+  return prepareFlowPlacement(
+    conversion.document,
+    node,
+    element,
+  )(conversion.element, target.toLowerCase());
 }
 
 function checkChildPosition(element: HTMLElement | SVGElement) {

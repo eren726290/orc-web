@@ -1,0 +1,35 @@
+.sizing-control {
+  min-inline-size: 0;
+}
+
+.sizing-control select {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-editor-border);
+  border-radius: 5px;
+  color: var(--color-editor-ink);
+  background: var(--color-editor-inset);
+  font: inherit;
+}
+
+.properties-panel .sizing-control input {
+  min-block-size: 44px;
+}
+
+.properties-panel .sizing-control :is(select, input):focus-visible {
+  outline: 2px solid var(--color-editor-selection);
+  outline-offset: 2px;
+}
+
+.sizing-control :is(select, input):active {
+  border-color: var(--color-editor-selection);
+}
+
+.sizing-control p {
+  color: var(--color-editor-muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+  margin-block: 0 12px;
+}

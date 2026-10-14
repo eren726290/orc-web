@@ -8,11 +8,7 @@ export function readPositionOwner(
 ) {
   const parentElement = element.parentElement;
   if (!parent || !parentElement || parentElement.dataset.orcId !== parent.id) return null;
-  const flow = readFlexSizing(
-    element.style,
-    getComputedStyle(element),
-    getComputedStyle(parentElement),
-  );
+  const flow = readFlexSizing(element, getComputedStyle(element), getComputedStyle(parentElement));
   if (!flow.direction) return null;
   const position = parentRelativePosition(element);
   return {
