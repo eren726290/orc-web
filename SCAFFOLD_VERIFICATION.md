@@ -80,3 +80,35 @@ No system browser was installed or substituted for this check.
 Chromium and Codex @Browser checks establish this frontend scaffold only.
 Windows, the Bun backend, one-command combined startup, editor workflows, saving, exports, and MCP behavior remain unverified implementation work.
 Shadcn/lint configuration awaits the editor tokens and component contracts in the dedicated [tooling checkpoint](backlog/development-tooling.md#shadcn-lint).
+
+## Reusable TS7 checkpoint, 2026-10-15
+
+This tooling checkpoint checks the expanded application at commit `032e4dfbace4c6cfa6511fddf8fc4db2ce380c73` on `master`, with the tooling/documentation changes recorded as uncommitted inputs in its report.
+The original 2026-10-08 TS7 row above is historical scaffold evidence and does not verify later editor code.
+That older row did not retain sufficient package identity metadata for an independent compiler-identity audit.
+The reusable command now verifies the actual installed package and native binary.
+
+Run `bun install --frozen-lockfile` followed by `bun run check:ts7` as described in the [tooling guide](scripts/tooling/README.md#typescript-compatibility-checkpoint).
+The checkpoint automatically installs exact-pinned `typescript@7.0.2` in its separate ignored directory while the root required compiler remains `typescript@6.0.3`.
+Both CLI launchers and the TS7 native platform executable independently report the expected versions.
+The verified native package is `@typescript/typescript-linux-x64@7.0.2`, with an ELF executable and recorded package/launcher/binary hashes.
+The [official package metadata](https://registry.npmjs.org/typescript/7.0.2) identifies the exact distribution being checked.
+The installed launcher delegates to the verified native platform executable; both version commands and executable hashes are retained.
+
+The current comparison passed on Fedora Linux 44 KDE x64 with Bun 1.4.2 and Node.js 22.23.2.
+TS6 and TS7 each exited zero for both `tsconfig.json` and `tsconfig.server.json`, with empty diagnostic stdout/stderr.
+Expanded options and configured root files match, including strict checking and `skipLibCheck: false`.
+The frontend/tooling scope contains 90 root files and 397 checked project/dependency inputs; the backend scope contains 15 root files and 265 checked project/dependency inputs.
+Each scope additionally checks 59 standard-library declaration files from its respective compiler installation.
+The normal TS6 `check:types`, build, lint, formatting, tooling and Fallow checks pass separately.
+The project dependency pins, lockfile and both TypeScript configurations remain unchanged.
+
+The [checkpoint audit](artifacts/scaffold/ts7/verification.json) links the exact positive report, required-tooling results and [declaration failure control](artifacts/scaffold/ts7/declaration-control.json).
+The reports retain commit/dirty state, OS, compiler/package identities, exact commands, exits, full diagnostics, file hashes and dependency versions.
+The deliberate declaration controls fail in both configured scopes under both compilers, proving that declaration errors are surfaced.
+TS6 returns 2, TS7 returns 1 and the optional checkpoint returns 1 for those controlled errors; fixture cleanup restores the original source.
+
+No compile incompatibility was found in the current Fedora application comparison.
+Migration still requires Windows verification, development-tool and affected editor checks with TS7 as the proposed required compiler, and review of dependencies that use TypeScript's programmatic API.
+This compatibility checkpoint does not authorize or perform that migration.
+Resume V1 application work at the wrapped Row cross-axis Height Fill boundary, first verifying its native line-sizing and parent-bound behavior against the accepted Flex contract before implementing the control.

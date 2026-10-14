@@ -8,6 +8,7 @@
     "start": "bun server/start.ts",
     "build": "bun run check:types && vite build",
     "check:types": "tsc --noEmit && tsc --noEmit -p tsconfig.server.json",
+    "check:ts7": "bun scripts/tooling/check-ts7.ts",
     "check:tooling": "bun scripts/tooling/check-tooling.ts",
     "check:browser": "bun scripts/runtime/check-browser.ts",
     "check:browser:chromium": "bun scripts/runtime/check-browser.ts chromium",

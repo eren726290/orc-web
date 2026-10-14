@@ -1,6 +1,6 @@
 # ORC-web implementation status
 
-Last updated: 2026-10-14.
+Last updated: 2026-10-15.
 Current stage: paused after verified ordinary wrapped Row main-axis Fill sharing.
 Ordinary Absolute Position participation, per-axis Fixed/Fit, bounded cross-axis Fill and the earlier single-grow main-axis Fill remain verified checkpoints.
 General Fill, complete sizing and Constraints, and the remaining V1 application are still unfinished.
@@ -11,7 +11,7 @@ This overview describes this checkout and links to reviewed evidence from the PC
 | Area | Implementation status | Evidence or contract |
 | --- | --- | --- |
 | Application foundation and startup | Implemented combined Bun/Vite development launch and built-app serving; Linux startup failure cleanup, normal shutdown, and failed-save shutdown recovery pass focused process checks. | [Launcher](scripts/dev.ts), [backend](server/start.ts), [lifecycle check](scripts/runtime/check-lifecycle.ts). |
-| Development tooling | Selected anti-slop rules and Fallow CLI configured; TypeScript 6, lint controls, formatting, build, and Chromium frontend mounting pass on Fedora. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [remaining editor tooling](backlog/development-tooling.md). |
+| Development tooling | Selected anti-slop rules and Fallow CLI configured; required TypeScript 6, lint controls, formatting and build pass on Fedora; reusable isolated TS7 comparison passes both configured application scopes. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [TS7 checkpoint](SCAFFOLD_VERIFICATION.md#reusable-ts7-checkpoint-2026-10-15), [remaining editor tooling](backlog/development-tooling.md). |
 | Editor workspace, Layers, Properties, and Code | In progress; Dashboard/tabs, selection, basic Properties previews, text editing, Code Apply/Discard, draft safeguards, panel resizing, in-place Layer naming, and atomic subtree deletion pass focused development/built checks. | [Editor workflow](scripts/e2e/editor/check-editor.ts), [panel check](scripts/e2e/editor/check-panels.ts), [naming check](scripts/e2e/editor/check-layers.ts), [deletion check](scripts/e2e/editor/check-deletion.ts). |
 | Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, Free/Row/Column switches, Row wrapping, frame Padding, Gap gestures, alignment/distribution, Absolute Position participation, Fixed/Fit sizing, bounded cross-axis Fill, and bounded nowrap multiple-child main-axis Fill sharing and ordinary per-row wrapped Fill pass focused development/built checks; general Fill and constraint controls, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [wrapping checkpoint](#ordinary-row-wrapping-checkpoint), [Padding checkpoint](#ordinary-frame-padding-checkpoint), [Gap checkpoint](#ordinary-frame-gap-checkpoint), [alignment checkpoint](#ordinary-frame-alignment-and-distribution-checkpoint), [participation checkpoint](#ordinary-absolute-position-checkpoint), [sizing checkpoint](#ordinary-fixedfit-sizing-checkpoint), [cross-axis Fill checkpoint](#bounded-cross-axis-fill), [single-grow main-axis Fill checkpoint](#bounded-single-grow-main-axis-fill), [shared Fill checkpoint](#ordinary-nowrap-fill-sharing-checkpoint--2026-10-14), [wrapped Fill checkpoint](#ordinary-wrapped-row-fill-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
 | Selected-frame Preview | In progress; ordinary frames retain their native sizing and saved defaults, isolate temporary form inputs and scrolling, restore Edit selection/pan/zoom, and preserve Code drafts and document/history in focused development/built Chromium checks. React components, portals, Motion, and supported-platform verification remain pending. | [Preview](src/editor/preview/Preview.tsx), [native workflow check](scripts/e2e/editor/check-preview.ts), [accepted Preview](doc_v1/interface/workspace-and-canvas.md#selected-frame-workflow). |
@@ -875,6 +875,11 @@ No accepted architectural contract changed, no doc_v1 correction was required, a
 No subagent was started, no commit or push was made, and development is paused at this checkpoint as requested.
 
 ## Next checkpoint
+
+The focused [TS7 compatibility checkpoint](SCAFFOLD_VERIFICATION.md#reusable-ts7-checkpoint-2026-10-15) is implemented and verified against the expanded application on Fedora.
+Required checking and the normal build remain on TS6; migration and Windows certification remain separate unfinished work.
+Resume the paused V1 sizing work at ordinary wrapped Row cross-axis Height Fill: verify native line sizing and independently available parent height, then implement the supported preview/command behavior with history, locks, source preservation and save/reopen checks.
+This is the next application task, not part of the compiler checkpoint.
 
 1. Complete the ordinary editor's geometry, layout, constraints, and Tokens workflows.
 2. Integrate supported React source editing, component imports, portable assets/dependencies, complete exports, and Preview component behavior.

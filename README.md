@@ -61,6 +61,8 @@ bun run check:sizing
 ```
 
 `check:browser` requires installed Google Chrome and verifies development and production-preview mounting.
+Run `bun run check:ts7` for the optional isolated TS7 compatibility checkpoint, which compares both configured scopes with the required TS6 compiler and records reproducible evidence.
+See [tooling instructions](scripts/tooling/README.md#typescript-compatibility-checkpoint) for installation, results and migration limits.
 Set `ORC_CHROME_EXECUTABLE` to the full Chrome executable path if it is installed outside Playwright's standard Chrome location.
 `check:browser:chromium` is an explicit fallback smoke check with Playwright Chromium and does not certify Chrome support.
 Browser and tooling results go to ignored `artifacts/scaffold/`.
