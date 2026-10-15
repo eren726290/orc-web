@@ -49,6 +49,7 @@ bun run check:rendering
 bun run check:layers
 bun run check:deletion
 bun run check:preview
+bun run check:boundaries
 bun run check:atomic
 bun run check:movement
 bun run check:clipping

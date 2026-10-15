@@ -15,3 +15,8 @@ GapHandles shares the numeric Gap field with Properties.
 gap-geometry.ts measures participating native child boxes and temporary wrapped-row bounds without saving geometry.
 The active handle remains mounted across row reflow until its input finishes the pointer release.
 Gap handle visuals and their 44px input targets live in gap-handles.css.
+
+`overlay-geometry.ts` shares invalidation for selection outlines, Gap handles and drop indicators.
+It observes active layout relationships, design mutations, native scroll/load events and CSS animation/transition events.
+Frame refresh continues only while native animations are running or pending; inactive overlays disconnect their observers and scheduled work.
+It measures temporary display geometry without writing canonical CSS or changing transformed-layout eligibility.

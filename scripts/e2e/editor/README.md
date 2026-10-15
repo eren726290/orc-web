@@ -17,3 +17,9 @@ It covers per-line allocation, incomplete rows, later spacing/size/participation
 Source-variable parent display/direction/wrapping and nested wrapping retain equal outer sharing, exact history and source round-trips.
 The default sizing workflow also retains these ordinary wrapped editor regressions.
 Project reopening waits for the completed dialog transition before reading the new session.
+
+`check-boundaries.ts` covers ordinary Edit focus/editing isolation, temporary Preview content editing, SVG stylesheet containment, and selection geometry during transitions, transforms, sibling layout and scrolling.
+It also checks history, source preservation, save/reopen, and measurement cleanup after deselection and Preview.
+Run `bun run check:boundaries` for development and built Chromium, or pass `chrome` with `ORC_CHROME_EXECUTABLE` for a specific Chrome installation.
+`ORC_BOUNDARY_SCENARIO=input|svg|geometry` selects a focused workflow and `ORC_BOUNDARY_MODES=development` limits it to the development app.
+`ORC_BOUNDARY_EVIDENCE` names the retained screenshots, traces and source-bound result under `artifacts/editor/`.

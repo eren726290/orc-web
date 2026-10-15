@@ -7,6 +7,7 @@ import { GapField } from "../properties/frame-gap-controls";
 import "./gap-handles.css";
 import type { PropertyPreview } from "../properties/property-preview";
 import { measureGaps } from "./gap-geometry";
+import { observeOverlayGeometry } from "./overlay-geometry";
 
 type Props = {
   canvas: React.RefObject<HTMLDivElement | null>;
@@ -110,25 +111,15 @@ function useHeldGap(geometry: GapPoint[], owner: string) {
 }
 
 function useGapGeometry(props: Props, node: DesignNode | undefined) {
-  const [geometry, setGeometry] = useState<ReturnType<typeof measureGaps>>([]);
+  const [geometry, setGeometry] = useState<{ id: string; points: ReturnType<typeof measureGaps> }>({
+    id: "",
+    points: [],
+  });
   useEffect(() => {
-    const measure = () => setGeometry(measureGaps(props.canvas.current, props.document, node));
-    const frame = requestAnimationFrame(measure);
-    const observer = new ResizeObserver(measure);
-    const canvas = props.canvas.current;
-    if (canvas) {
-      observer.observe(canvas);
-      for (const id of node ? [node.id, ...node.children] : []) {
-        const element = canvas.querySelector(`[data-orc-id="${CSS.escape(id)}"]`);
-        if (element) observer.observe(element);
-      }
-      canvas.addEventListener("scroll", measure, true);
-    }
-    return () => {
-      cancelAnimationFrame(frame);
-      observer.disconnect();
-      canvas?.removeEventListener("scroll", measure, true);
-    };
+    if (!node) return;
+    const measure = () =>
+      setGeometry({ id: node.id, points: measureGaps(props.canvas.current, props.document, node) });
+    return observeOverlayGeometry(props.canvas.current, [node.id, ...node.children], measure);
   }, [props.canvas, props.document, props.view.pan, node]);
-  return geometry;
+  return geometry.id === node?.id ? geometry.points : [];
 }

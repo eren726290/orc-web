@@ -6,6 +6,7 @@ Backlog entries are not product requirements until they are accepted and recorde
 ## Correction records
 
 - The [Properties background shorthand correction](properties-background-shorthand.md) records its reproduction, native CSS projection, and completed development/built Chromium regression.
+- The [renderer boundary record](renderer-boundaries.md) tracks ordinary input, SVG styles and overlay corrections, the explicit SVG stylesheet limits, and detailed React event, portal/modal, Tailwind, export and animation-performance handoffs with reproduction recipes, acceptance checks and unresolved decisions.
 
 ## Open topics
 

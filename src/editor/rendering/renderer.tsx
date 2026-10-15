@@ -1,4 +1,4 @@
-import { createElement, type CSSProperties } from "react";
+import { createElement, type CSSProperties, type HTMLAttributes } from "react";
 import {
   containsNode,
   textContent,
@@ -6,7 +6,7 @@ import {
   type DesignNode,
   type Styles,
 } from "../../../shared/document/model";
-import { svgContent } from "../../../shared/source/svg-source";
+import { scopedSVGContent } from "./svg-styles";
 
 function cssStyle(style: Styles): CSSProperties {
   return Object.fromEntries(
@@ -38,7 +38,14 @@ export function RenderNode({
     case "image":
       return createElement("img", { ...attributes, alt: node.attributes.alt ?? "" });
     case "svg":
-      return <svg {...attributes} dangerouslySetInnerHTML={{ __html: svgContent(node.source) }} />;
+      return (
+        <svg
+          {...attributes}
+          dangerouslySetInnerHTML={{
+            __html: scopedSVGContent(node.source, node.id, scopeId !== undefined),
+          }}
+        />
+      );
     case "text":
       return renderText(node, attributes, scopeId !== undefined);
     case "frame":
@@ -75,12 +82,14 @@ function renderText(
 
 function svgAttributes(attributes: Record<string, string>) {
   return Object.fromEntries(
-    Object.entries(attributes).map(([key, value]) => [
-      key.startsWith("data-") || key.startsWith("aria-")
-        ? key
-        : key.replace(/[:-]([a-z])/gu, (_, letter: string) => letter.toUpperCase()),
-      value,
-    ]),
+    Object.entries(attributes)
+      .filter(([key]) => !["tabindex", "autofocus", "contenteditable"].includes(key))
+      .map(([key, value]) => [
+        key.startsWith("data-") || key.startsWith("aria-")
+          ? key
+          : key.replace(/[:-]([a-z])/gu, (_, letter: string) => letter.toUpperCase()),
+        value,
+      ]),
   );
 }
 
@@ -93,6 +102,7 @@ function nodeAttributes(node: DesignNode, document: DesignDocument, scopeId?: st
       ? svgAttributes(node.attributes)
       : nativeAttributes(node, within, document)),
     "data-orc-id": node.id,
+    ...focusAttributes(node.attributes, within),
     inert:
       scopeId !== undefined && !within && !ancestor ? true : node.attributes.inert !== undefined,
     style: undefined,
@@ -118,12 +128,6 @@ function nodeStyle(node: DesignNode, scopeId: string | undefined, within: boolea
 
 function nativeAttributes(node: DesignNode, interactive: boolean, document: DesignDocument) {
   const attributes = htmlAttributes(node.attributes);
-  if (
-    "tag" in node &&
-    ["input", "select", "textarea", "button", "summary", "a"].includes(node.tag) &&
-    !interactive
-  )
-    attributes.tabIndex = "-1";
   if ("tag" in node && node.tag === "option") delete attributes.selected;
   if (node.kind !== "element" || !["input", "select"].includes(node.tag)) return attributes;
   delete attributes.value;
@@ -136,6 +140,32 @@ function nativeAttributes(node: DesignNode, interactive: boolean, document: Desi
     defaultChecked: node.attributes.checked !== undefined,
     readOnly: !interactive || node.attributes.readonly !== undefined,
   };
+}
+
+function focusAttributes(attributes: DesignNode["attributes"], interactive: boolean) {
+  return {
+    tabIndex: interactive ? authoredTabIndex(attributes.tabindex) : -1,
+    autoFocus: interactive && attributes.autofocus !== undefined,
+    contentEditable:
+      attributes.contenteditable === undefined
+        ? undefined
+        : interactive
+          ? authoredEditing(attributes.contenteditable)
+          : false,
+    suppressContentEditableWarning: interactive && attributes.contenteditable !== undefined,
+  };
+}
+
+function authoredTabIndex(value: string | undefined) {
+  const index = Number.parseInt(value ?? "", 10);
+  return Number.isFinite(index) ? index : undefined;
+}
+
+function authoredEditing(value: string): HTMLAttributes<HTMLElement>["contentEditable"] {
+  const normalized = value.toLowerCase();
+  if (normalized === "" || normalized === "true") return true;
+  if (normalized === "false") return false;
+  return normalized === "plaintext-only" ? "plaintext-only" : "inherit";
 }
 
 function defaultSelection(document: DesignDocument, node: DesignNode) {
@@ -152,6 +182,7 @@ function htmlAttributes(attributes: DesignNode["attributes"]): Record<string, st
     readonly: "readOnly",
     autofocus: "autoFocus",
     tabindex: "tabIndex",
+    contenteditable: "contentEditable",
   };
   const flags = [
     "disabled",

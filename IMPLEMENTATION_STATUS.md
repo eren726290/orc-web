@@ -874,6 +874,42 @@ Installed stable Chrome, Windows, full-application accessibility and screen read
 No accepted architectural contract changed, no doc_v1 correction was required, and TypeScript remains at 6.0.3.
 No subagent was started, no commit or push was made, and development is paused at this checkpoint as requested.
 
+## Native renderer boundary corrections, 2026-10-15
+
+Verified the three ordinary-renderer defects from the [boundary investigation](artifacts/editor/review-react-boundaries/REPORT.md) against `e18b86d50b560de31665789f50a024a880fe1180` plus the recorded uncommitted correction files.
+The [correction report](artifacts/editor/renderer-bugs/REPORT.md), [current-source audit](artifacts/editor/renderer-bugs/audit.json), and [remaining boundary work](backlog/renderer-boundaries.md) distinguish these fixes from future React integration.
+
+Edit now removes design-owned Tab stops and autofocus and disables authored native content editing.
+Preview restores the authored focus/editing behavior and resets temporary text on exit and re-entry.
+Canvas text editing, Properties and Code input remain usable through their existing command and draft paths.
+Native design textareas can be selected on the canvas without entering their temporary native input mode.
+
+SVG selector rules are projected inside a native CSS scope for the owning vector, including local media, supports, container and scope groups.
+Code and saved source retain authored selectors rather than storing runtime scope markup.
+Global stylesheet definitions and external stylesheet imports are unsupported by this preparation path and reject before source commit.
+Legacy or directly inserted SVG source cannot publish global definitions into the editor through projection, although effects depending on those definitions are unavailable until supported preparation is implemented.
+The regression verifies artwork fill/stroke, unrelated design/editor appearance, rejection without history changes, Undo/Redo, source preservation and saving/reopening.
+Complete exports remain unfinished and are not certified by these source checks.
+
+Selection outlines, Gap handles and drop indicators share active geometry invalidation for native scrolling, design mutations, required layout relationships, load events and CSS transition/animation lifecycle events.
+Frame refresh continues only while native animations are running or pending.
+Deselection and Preview remove active geometry measurement without writing measured values into canonical CSS or history.
+Existing transformed-layout safeguards remain intact.
+The new native regression checks position and transform transitions with session polling held, sibling-driven layout, scrolling, zoom and cleanup.
+The broader Gap check exposed stale geometry ownership after switching to an empty frame; the final fix keys measured Gap points to their owning node, and the retained regression now passes.
+
+`bun run check:boundaries` passes in development and built mode on Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57 on Fedora 44.
+The existing Preview, rendering, Gap and movement workflows pass in both application modes on Chromium.
+The audit binds all retained passing results to the same current 150-file source inventory and preserves an archive and patch.
+TypeScript, lint, formatting, build, tooling and Fallow checks pass with the 10 cyclomatic and 40-line limits unchanged.
+Fallow reports seven planned unused dependencies and 247 static-estimated CRAP advisories, with no error-severity health findings.
+The reusable compatibility checkpoint also passes both configurations with the actual `typescript` 6.0.3 and isolated native `typescript` 7.0.2 packages, preserving strict checking and dependency declaration checks.
+TS6 remains required by the normal build.
+
+No accepted architecture was replaced, no doc_v1 correction was required, and no React integration, compiler migration, new feature, subagent, commit or push was started by this task.
+Windows, installed stable Chrome, the full browser suite, screen readers, complete exports, arbitrary SVG stylesheet definitions and animation performance remain unverified or unsupported as described in the boundary record.
+Development is paused at this verified correction checkpoint.
+
 ## Next checkpoint
 
 The focused [TS7 compatibility checkpoint](SCAFFOLD_VERIFICATION.md#reusable-ts7-checkpoint-2026-10-15) is implemented and verified against the expanded application on Fedora.

@@ -1,6 +1,7 @@
 import { htmlLanguage } from "@codemirror/lang-html";
 import { cssLanguage } from "@codemirror/lang-css";
 import type { DesignNode, NodeBase, Styles, TextRun } from "../../../shared/document/model";
+import { validateSVGStyles } from "../rendering/svg-styles";
 
 const inlineTags = new Set([
   "span",
@@ -309,6 +310,15 @@ function readStyle(source: string): Styles {
 }
 
 function validateSVG(element: Element) {
+  for (const style of element.querySelectorAll("style"))
+    cssLanguage.parser.parse(style.textContent ?? "").iterate({
+      enter(node) {
+        if (node.type.isError) throw new Error("The SVG stylesheet is incomplete or invalid.");
+        if (node.name === "ImportStatement")
+          throw new Error("SVG styles cannot import external stylesheets.");
+      },
+    });
+  validateSVGStyles(element);
   for (const child of [element, ...element.querySelectorAll("*")]) {
     if (["script", "foreignObject", "iframe"].includes(child.localName))
       throw new Error(`Unsupported SVG content: ${child.localName}.`);

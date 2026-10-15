@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { DesignDocument } from "../../../shared/document/model";
 import type { ViewState } from "../view-state";
 import { pointerDrop, type PointerPreview } from "./pointer-layout";
+import { observeOverlayGeometry } from "./overlay-geometry";
 
 type Props = {
   canvas: React.RefObject<HTMLDivElement | null>;
@@ -40,13 +41,9 @@ function useDropGeometry(props: Props) {
   const [geometry, setGeometry] = useState<ReturnType<typeof measureDrop>>(null);
   useEffect(() => {
     const measure = () => setGeometry(measureDrop(props.canvas.current, props.preview));
-    const frame = requestAnimationFrame(measure);
-    const observer = new ResizeObserver(measure);
-    if (props.canvas.current) observer.observe(props.canvas.current);
-    return () => {
-      cancelAnimationFrame(frame);
-      observer.disconnect();
-    };
+    const drop = pointerDrop(props.preview);
+    if (!drop || !drop.parentId) return;
+    return observeOverlayGeometry(props.canvas.current, [drop.parentId, drop.id], measure);
   }, [props.canvas, props.document, props.preview, props.pan]);
   return geometry;
 }

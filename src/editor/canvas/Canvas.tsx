@@ -9,6 +9,7 @@ import { GapHandles } from "./GapHandles";
 import type { PropertyPreview } from "../properties/property-preview";
 import { pointerDocument, type PointerPreview } from "./pointer-layout";
 import type { ViewState } from "../view-state";
+import { observeOverlayGeometry } from "./overlay-geometry";
 
 type Props = {
   document: DesignDocument;
@@ -170,7 +171,7 @@ function canvasPointer(
   if (
     event.button !== 0 ||
     props.disabled ||
-    (event.target instanceof HTMLElement && event.target.closest("textarea"))
+    (event.target instanceof HTMLElement && event.target.closest(".canvas-text-editor"))
   )
     return;
   event.currentTarget.focus();
@@ -298,25 +299,16 @@ function SelectionOutline(props: {
       if (!surface) return;
       setBoxes(measureSelection(surface, props.selected));
     };
-    const frame = requestAnimationFrame(measure);
-    const observer = new ResizeObserver(measure);
-    if (props.canvas.current) {
-      observer.observe(props.canvas.current);
-      for (const id of props.selected) {
-        const element = props.canvas.current.querySelector(`[data-orc-id="${CSS.escape(id)}"]`);
-        if (element) observer.observe(element);
-      }
-    }
-    return () => {
-      cancelAnimationFrame(frame);
-      observer.disconnect();
-    };
+    if (!props.selected.length) return;
+    return observeOverlayGeometry(props.canvas.current, props.selected, measure);
   }, [props.canvas, props.selected, props.document, props.pan]);
   return (
     <div className="selection-overlays">
-      {boxes.map((box) => (
-        <div key={box.id} className="selection-outline" style={box} />
-      ))}
+      {boxes
+        .filter((box) => props.selected.includes(box.id))
+        .map((box) => (
+          <div key={box.id} className="selection-outline" style={box} />
+        ))}
     </div>
   );
 }

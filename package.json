@@ -22,6 +22,7 @@
     "check:layers": "bun scripts/e2e/editor/check-layers.ts",
     "check:deletion": "bun scripts/e2e/editor/check-deletion.ts",
     "check:preview": "bun scripts/e2e/editor/check-preview.ts",
+    "check:boundaries": "bun scripts/e2e/editor/check-boundaries.ts",
     "check:atomic": "bun scripts/e2e/editor/check-atomic.ts",
     "check:movement": "bun scripts/e2e/editor/check-movement.ts",
     "check:clipping": "bun scripts/e2e/editor/check-clipping.ts",
