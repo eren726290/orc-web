@@ -1,7 +1,8 @@
 # ORC-web implementation status
 
-Last updated: 2026-10-15.
-Current stage: paused after verified ordinary wrapped Row main-axis Fill sharing.
+Last updated: 2026-10-20.
+Current stage: ordinary intrinsic Fit/Fill, including shared intrinsic Columns through the approved native wrapper, is verified on Fedora in both pinned browser versions and application modes.
+The [current checkpoint](#ordinary-intrinsic-column-wrapper-checkpoint) records evidence and remaining integration limits.
 Ordinary Absolute Position participation, per-axis Fixed/Fit, bounded cross-axis Fill and the earlier single-grow main-axis Fill remain verified checkpoints.
 General Fill, complete sizing and Constraints, and the remaining V1 application are still unfinished.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
@@ -13,7 +14,7 @@ This overview describes this checkout and links to reviewed evidence from the PC
 | Application foundation and startup | Implemented combined Bun/Vite development launch and built-app serving; Linux startup failure cleanup, normal shutdown, and failed-save shutdown recovery pass focused process checks. | [Launcher](scripts/dev.ts), [backend](server/start.ts), [lifecycle check](scripts/runtime/check-lifecycle.ts). |
 | Development tooling | Selected anti-slop rules and Fallow CLI configured; required TypeScript 6, lint controls, formatting and build pass on Fedora; reusable isolated TS7 comparison passes both configured application scopes. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [TS7 checkpoint](SCAFFOLD_VERIFICATION.md#reusable-ts7-checkpoint-2026-10-15), [remaining editor tooling](backlog/development-tooling.md). |
 | Editor workspace, Layers, Properties, and Code | In progress; Dashboard/tabs, selection, basic Properties previews, text editing, Code Apply/Discard, draft safeguards, panel resizing, in-place Layer naming, and atomic subtree deletion pass focused development/built checks. | [Editor workflow](scripts/e2e/editor/check-editor.ts), [panel check](scripts/e2e/editor/check-panels.ts), [naming check](scripts/e2e/editor/check-layers.ts), [deletion check](scripts/e2e/editor/check-deletion.ts). |
-| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, Free/Row/Column switches, Row wrapping, frame Padding, Gap gestures, alignment/distribution, Absolute Position participation, Fixed/Fit sizing, bounded cross-axis Fill, and bounded nowrap multiple-child main-axis Fill sharing and ordinary per-row wrapped Fill pass focused development/built checks; general Fill and constraint controls, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [wrapping checkpoint](#ordinary-row-wrapping-checkpoint), [Padding checkpoint](#ordinary-frame-padding-checkpoint), [Gap checkpoint](#ordinary-frame-gap-checkpoint), [alignment checkpoint](#ordinary-frame-alignment-and-distribution-checkpoint), [participation checkpoint](#ordinary-absolute-position-checkpoint), [sizing checkpoint](#ordinary-fixedfit-sizing-checkpoint), [cross-axis Fill checkpoint](#bounded-cross-axis-fill), [single-grow main-axis Fill checkpoint](#bounded-single-grow-main-axis-fill), [shared Fill checkpoint](#ordinary-nowrap-fill-sharing-checkpoint--2026-10-14), [wrapped Fill checkpoint](#ordinary-wrapped-row-fill-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
+| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, Free/Row/Column switches, Row wrapping, frame Padding, Gap gestures, alignment/distribution, Absolute Position participation, Fixed/Fit sizing, bounded cross-axis Fill, and bounded nowrap multiple-child main-axis Fill sharing, ordinary per-row wrapped Fill and intrinsic Fill including shared Columns pass focused development/built checks; general Fill and constraint controls, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [wrapping checkpoint](#ordinary-row-wrapping-checkpoint), [Padding checkpoint](#ordinary-frame-padding-checkpoint), [Gap checkpoint](#ordinary-frame-gap-checkpoint), [alignment checkpoint](#ordinary-frame-alignment-and-distribution-checkpoint), [participation checkpoint](#ordinary-absolute-position-checkpoint), [sizing checkpoint](#ordinary-fixedfit-sizing-checkpoint), [cross-axis Fill checkpoint](#bounded-cross-axis-fill), [single-grow main-axis Fill checkpoint](#bounded-single-grow-main-axis-fill), [shared Fill checkpoint](#ordinary-nowrap-fill-sharing-checkpoint--2026-10-14), [wrapped Fill checkpoint](#ordinary-wrapped-row-fill-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
 | Selected-frame Preview | In progress; ordinary frames retain their native sizing and saved defaults, isolate temporary form inputs and scrolling, restore Edit selection/pan/zoom, and preserve Code drafts and document/history in focused development/built Chromium checks. React components, portals, Motion, and supported-platform verification remain pending. | [Preview](src/editor/preview/Preview.tsx), [native workflow check](scripts/e2e/editor/check-preview.ts), [accepted Preview](doc_v1/interface/workspace-and-canvas.md#selected-frame-workflow). |
 | Shared commands, application Undo/Redo, and project saving | In progress; authoritative sessions, revision checks, command history, save/reopen, independent projects, existing-save recovery, failed first Save/Save as recovery, and exclusive locks pass focused checks on Linux. | [Services](server/projects/projects.ts), [pending-response history check](scripts/e2e/editor/check-history.ts), [saving regression check](scripts/e2e/projects/check-saving.ts), [saving contract](doc_v1/architecture/orc-workspace-bundle.md). |
 | Ordinary HTML/CSS/SVG authoring | In progress; reproduced SVG geometry/source disagreement, lost explicit line breaks and inline separators, and invalid SVG render acceptance are corrected and pass focused development/built checks; complete V1 source support remains pending. | [Source service](server/source/html.ts), [importer](src/editor/code/html-import.ts), [rendering regression check](scripts/e2e/rendering/check-rendering.ts), [Code workflow check](scripts/e2e/editor/editor-source.ts). |
@@ -910,12 +911,273 @@ No accepted architecture was replaced, no doc_v1 correction was required, and no
 Windows, installed stable Chrome, the full browser suite, screen readers, complete exports, arbitrary SVG stylesheet definitions and animation performance remain unverified or unsupported as described in the boundary record.
 Development is paused at this verified correction checkpoint.
 
+## Wrapped Row Height Fill checkpoint, 2026-10-16
+
+The interrupted checkpoint resumed and its required verification is complete.
+Ordinary owned Height Fill is verified for wrapped Rows with independently authored parent height bounds.
+The existing native auto-height and explicit stretch projection fills the child's current row while preserving parent alignment, size limits, margins, priorities and the other axis.
+No measured row sizes or new layout model are saved.
+The native oracle passed 432 distinct states across alignment, decoration, both box models, limits, reflow and HTML serialization.
+
+The focused editor workflow passed in development and built modes on Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57.
+It covers per-line stretch, content/box-model changes, width and padding reflow, wrapping toggles, participation, source ownership, limits, locks, drafts, stale preparation, rejection, pending Undo, exact history and save/reopen.
+The [final current-source audit](artifacts/editor/wrapped-cross-audit.json) matches all seven passing browser reports and their before/after inventories to the same 150 current source files.
+It retains the exact source archive, uncommitted patch, native probe hash, compiler record and reproduced build asset hashes against commit `950e8a28d785d7783b471e689e3538bc75a7be31` plus the uncommitted changes.
+TypeScript, lint, tooling, formatting, build, Fallow and the unchanged TS6/isolated TS7 comparison passed before the browser matrix.
+Fallow retains seven planned unused dependencies and 250 static-estimated CRAP advisories, with no error-severity health findings or unused source files/exports.
+
+The full sizing, movement, layout, padding and participation regressions pass in development and built modes on Chromium 153.0.8010.12.
+Full sizing records 98 summary checks and 2,878 inputs; these counts are recorded observations, not independent test-case counts.
+The actual browser commands, timestamps, versions, inputs, clean process shutdowns, screenshots and traces are linked from the audit.
+Focused Chrome verification uses managed Chrome for Testing 154.0.8037.57 at `/home/eren/.agent-browser/browsers/chrome-154.0.8037.57/chrome`.
+
+The earlier verification failures were caused by review HTML writes and a backlog Markdown update triggering development-page reloads.
+The [Markdown watcher reproduction](artifacts/editor/wrapped-cross-reload-diagnosis.json) confirms the same Tailwind full-reload message after rewriting identical file contents.
+The [retained failed regression](artifacts/editor/wrapped-cross-regression-reload-failure/diagnosis.json) records the matching timestamps and correction.
+Repository source, documentation and research files were kept unchanged during the clean browser rerun.
+No application workaround, longer timeout or relaxed assertion was needed for these reload failures.
+
+All four review/research agents finished and their reports were reviewed; no additional agent or feature was started while closing this checkpoint.
+The independent alignment and clipping assertion gaps and native evidence provenance gap were corrected before the final passing runs.
+The nested Fill research passed 170 native cases and was independently replayed, but remains research rather than completed editor support.
+Development is paused at the user's requested stopping point with no owned application checks or subagents running.
+Changes remain uncommitted on master.
+
+The standalone source check also reproduced a hidden-child serialization boundary, now detailed with paired evidence in the [export record](backlog/renderer-boundaries.md#4-complete-exports-and-animation-performance).
+The sizing fixture uses explicit CSS hiding and does not certify saved visibility serialization or complete exports.
+Broader intrinsic bounds, arbitrary source/logical ownership, installed stable Chrome, Windows and complete V1 verification remain unfinished.
+
+## Nested Fill implementation, 2026-10-16
+
+Ordinary same-axis Fill now traces through owned participating ancestors to an active Fixed size or equal minimum/maximum limits.
+The shared candidate check preserves supported relationships through sizing, layout, wrapping, alignment, participation, pointer placement and deletion.
+It rejects unresolved dependencies and silent inherited-Fill loss while retaining explicit Fixed/Fit exits and proven real-content intrinsic layouts.
+No saved dependency graph, measured-size fallback, compiler migration or architectural contract change was introduced.
+
+The expanded focused development workflow passes all 16 axis/direction combinations, resizing, equal limits, both box models, native limits, Fixed zero, empty packed/stretched rows, source ownership, ancestor locks, drafts, stale preparation, rejection, pending Undo, source round-trip and UI save/reopen.
+The pre-guard editor reproduction retains eight unauthorized-change failures across both axes for sole-contributor deletion, Absolute participation, reparenting and inherited-alignment loss.
+TypeScript, lint, formatting and the required complexity limits pass after integration.
+The first complete matrix passed focused development/built Chromium and managed Chrome, full sizing and affected Chromium regressions, static checks and the TS6/isolated TS7 comparison on one 152-path source inventory.
+Independent review then found an unguarded text contributor path.
+The retained development regression reproduced all four width/height Properties/canvas failures while eighteen independently supported controls passed.
+Workspace now checks text before Properties preview and through the shared Properties/canvas commit path.
+The corrected placement/dependency/text workflow and focused nested sizing passed in development and built modes on Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57.
+The text workflow verifies refusal feedback, unchanged source/history/native boxes, Escape cancellation, successful retry, independently supplied positive controls and exact Undo/Redo.
+TypeScript, lint, tooling, formatting, build, Fallow and the TS6 6.0.3/isolated native TS7 7.0.2 comparison passed on the same 152-path source inventory.
+Movement and layout regressions also passed in development and built Chromium.
+The user requested an immediate stop during the full sizing and padding reruns.
+Those two results record externally interrupted browser closure, not a passing result or a diagnosed product regression.
+The requested verification resumed on unchanged application and test code and completed on 2026-10-17.
+Full sizing, padding, alignment, deletion, participation and the foundation workflow passed in development and built Chromium 153.0.8010.12.
+The full sizing run recorded 122 workflow summaries and 3,660 inputs with no failure.
+The [final current-source audit](artifacts/editor/nested-text-audit.json) passed, binding eleven browser reports, the separate foundation record, four built assets, both compiler scopes and the unchanged 152-path source inventory.
+Focused nested sizing and placement also retain passing development/built Chrome for Testing 154.0.8037.57 results on that same source.
+Deletion and foundation capture final source only; the frozen build inventory supplies external context, not a missing start snapshot.
+All eight scoped gates are met; the earlier interrupted runs remain historical interruption evidence.
+Both subagents finished and their reports were reviewed; all owned checks and application processes are stopped.
+The [verification log](artifacts/editor/nested-text-gates.log) and scoped runtime checkpoint retain commands and results.
+Installed stable Chrome and Windows remain unverified; broader intrinsic-parent Fill entry and main-axis parent Fit conversion remain separate unfinished V1 work.
+Changes remain uncommitted on master.
+
+## Intrinsic Fit/Fill interrupted checkpoint, 2026-10-17
+
+Development is paused at the user's explicit stop request during implementation.
+Native research and the pre-change editor reproduction are complete; their evidence is historical and does not verify the newly edited application.
+Changes to `src/editor/layout/sizing.ts` and `src/editor/layout/fill-sharing.ts` and the new `scripts/e2e/editor/check-intrinsic-sizing.ts` workflow remain in progress.
+The projection implementation agent returned isolated module results, but parent review and integrated verification remain unfinished.
+Intrinsic fill ownership review stopped with a usage-limit error while preparing focused E2E files; its latest work is incomplete and unverified.
+The current agent registry contains no active subagents, and no matching owned application or verification process was found at the stop checkpoint.
+An intermediate TS6 check passed before the last sizing edits; focused sizing lint and formatting passed after those edits.
+No current-source browser verification, complete static matrix, build, TS7 comparison or affected regression run has been completed for this implementation.
+The previous nested Fill results remain valid only for their recorded earlier source inventory.
+General shared intrinsic Column sizing and the intrinsic empty wrapped-row policy remain unresolved.
+Resume by reviewing the unfinished focused test files and projection implementation, completing integration, then checking the exact current source before making completion claims.
+The ignored working checkpoint is `.unlazy/intrinsic-fill/runtime.json`; its root implementation and final verification gates remain unmet.
+Changes remain uncommitted on master; nothing was pushed.
+
+## Intrinsic Fit/Fill resumed work, 2026-10-17
+
+The user resumed development and Intrinsic fill ownership review completed its focused E2E files.
+The shared sizing proof, sole Column projection and focused workflow are implemented but the complete intrinsic checkpoint remains in progress.
+Development core sizing, projection and persistence groups passed before the latest wrapped-row extension.
+The safeguards group reproduced an Escape cancellation bug: a Fit numeric preview restored its old number but committed Fixed sizing through the blur handler.
+PropertyField now skips the cancellation-induced blur commit while retaining explicit equal-value capture.
+That regression passed before a separate test-coordinate error was corrected; the remaining safeguards run is still pending.
+The native wrapped-row probe passed both pinned browsers, including empty-row zero height, independent contents, source changes and supplier removal.
+The corresponding editor assertion reproduced the incorrectly disabled Fill option before the supply proof was extended.
+Integrated wrapped-row verification, the final static/compiler/build matrix, affected regressions and the final source audit remain pending.
+General shared intrinsic Column sizing still has no verified equal-sharing, content-responsive CSS projection and remains required unresolved work.
+The prior pause record and passing checks remain historical evidence for their recorded source inventories.
+Changes remain uncommitted on master; nothing was pushed.
+
+## Intrinsic Fit/Fill stop checkpoint, 2026-10-17
+
+Development is paused at the user's explicit stop request.
+Intrinsic fill ownership review completed both its focused E2E work and its independent read-only integration review.
+No subagent remains active.
+The complete intrinsic workflow passed all five scenario groups in development and built Chromium 153.0.8010.12 on the same 161-path source inventory.
+Its [record](artifacts/editor/intrinsic-matrix-v1-chromium-all-result.json) contains ten group summaries, 804 input records, both application shutdowns, screenshots and traces.
+Gap and padding regressions also passed in both Chromium application modes.
+Eight static/tooling checks passed before the latest existing sizing-test expectation edits; lint and Fallow health passed again after those edits.
+The final same-source static/compiler comparison, managed Chrome application matrix, remaining affected regressions and final audit are pending.
+The second full sizing development run was externally interrupted for this stop and is not a passing result or a diagnosed product failure.
+Its first run exposed outdated assertions that refused independently supplied intrinsic Fill; those assertions now separate valid availability from genuinely contributor-free circular refusal.
+
+The final reviewer identified an additional placement path and the parent reproduced its refusal through a real canvas drag.
+Moving a shared Height Fill child with an independent Fixed descendant into an otherwise empty Fit-height Column reports Set the parent's height first and preserves source/history without submitting a command.
+The destination needs the supported sole-child projection, but the current proof inspects the old source cohort.
+The [detailed resume record](backlog/native-layout-projection.md#intrinsic-fitfill-integration-and-placement-resume) identifies the exact fixture, evidence and proposed correction.
+This placement issue remains unfixed; no production change was made for it before stopping.
+General shared intrinsic Column sizing also remains unresolved.
+Resume with that placement correction and its direct/cached-preview/history regressions, then complete the current intrinsic verification and evidence audit.
+The ignored runtime checkpoint is `.unlazy/intrinsic-fill/runtime.json`.
+All owned application/browser checks have stopped.
+Changes remain uncommitted on master; nothing was pushed.
+
+## Intrinsic Fit/Fill resumed, 2026-10-18
+
+The user resumed the interrupted intrinsic task.
+The permanent placement regression reproduced the shared-child refusal before the production fix.
+The sizing proof now captures incoming independent supply and declaration priorities before temporary previews and evaluates the selected placement object without its old source cohort.
+It retains exact authored ownership, destination cohort validation and multiple-grower intrinsic Column refusal.
+The focused placement workflow passes development Chromium, including empty and Fixed-sibling destinations, cached previews, Escape cancellation, one atomic command, exact Undo/Redo, responsive standalone source and save/reopen.
+TypeScript and lint pass this version.
+A focused assertion now covers shared-peer deletion followed by parent Fit; its integrated run is pending.
+Both-browser/mode verification, remaining affected regressions and the final same-source compiler/build audit are running next.
+These passing checks do not complete general shared intrinsic Column sizing, which remains required unresolved work.
+No accepted contract, doc_v1 file, dependency or compiler selection was changed.
+Changes remain uncommitted on master; nothing was pushed.
+
+## Intrinsic Fit/Fill verification checkpoint, 2026-10-18
+
+The implemented intrinsic cases and the shared-source placement correction now pass the completed verification matrix.
+The six-group intrinsic workflow passed development and built modes in Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57, with 12 group summaries and 888 input records per browser.
+This includes shared-survivor deletion followed by parent Fit, cancellation, source ownership, locks, drafts, atomic history, responsive source and save/reopen.
+The full sizing workflow passed separately in development and built Chromium, with 61 summaries and 1,857 inputs per mode.
+Gap, padding, alignment, participation, deletion, layout, nested placement, movement, atomic commands, renderer boundaries, the foundation workflow and history also passed their recorded affected regressions.
+All eight static/tooling checks passed, including the required TS6 6.0.3 and isolated native TS7 7.0.2 checks against both configurations with no compiler diagnostics.
+TS6 remains the required compiler and the normal build compiler.
+Fallow reports seven reviewed unused-dependency warnings and 287 estimated-coverage health warnings; there are no cyclomatic-complexity or function-size violations against the 10/40 limits.
+
+The [final evidence audit](artifacts/editor/intrinsic-current-audit.json) passed against commit `950e8a28d785d7783b471e689e3538bc75a7be31` plus the recorded uncommitted work on Linux.
+It binds 15 workflow reports, command records, compiler identities, the current 162-path source inventory, root configuration hashes and four built files.
+The only historical source-inventory difference is the corrected movement test, which the other recorded workflows do not import.
+Those workflows retain identical application code, their own runners and runtime helpers, dependency/compiler configuration and built files.
+The permanent movement rerun and final static checks use the current movement test.
+The earlier interrupted sizing run remains interruption evidence, not a diagnosed product failure.
+
+Astra completed its focused Flex review, and the parent independently replayed its native matrix and exact horizontal-text counterexample in both pinned browsers.
+The vertical-writing candidate shares space for independent Fixed descendants but can retain stale parent and child heights after a valid horizontal text edit.
+It is not an accepted application mapping, and the complete general shared intrinsic Column requirement remains unmet.
+The [detailed open-case record](backlog/native-layout-projection.md#shared-intrinsic-column-decision-after-astra) preserves the reproduction, evidence and three possible next steps.
+After explanations of those choices and the capability a V1 limitation would omit, the user authorized the isolated Grid experiment.
+The two bounded native research agents completed their independent source-response and allocation-limit reviews, as recorded below.
+This authorizes research only; no V1 support reduction, application adoption or architecture change has been approved.
+Three of the four intrinsic task gates are met; the implementation gate remains unmet for this required combination.
+All subagents from the completed intrinsic verification finished and all owned application checks stopped before the new isolated research began.
+Installed stable Chrome, Windows and complete V1 coverage remain unverified.
+Changes remain uncommitted on master; nothing was pushed.
+
+## Isolated Grid research checkpoint, 2026-10-18
+
+Both Grid research agents finished, including the same limits reviewer resumed after quota recovery.
+The parent independently replayed both deliveries and accepted all eight research and integration gates, with no abandonment.
+The native review captured 173 paired live/fresh states per browser.
+The limits review captured 460 fixtures and 4,500 states per browser; all 9,000 observations matched the agent's final delivery during the full parent replay.
+The paired binaries remain 153.0.8010.12 and 154.0.8037.57.
+
+Ordinary horizontal Grid handles the measured uncapped equal sharing and live text edits.
+Its item maxima can leave unused row space instead of redistributing it.
+The explicit capped-track repair fails before its maximum should bind: content 20px/30px with maximum 70px produces a 108px parent and 70px/30px children, while the remaining 100px requires 50px/50px.
+The parent also investigated percentage-based tracks motivated by the official sizing specification.
+That lead passes narrow two-child cap cases and a minimum-size control but fails with an ordinary Fit sibling: a 96px parent minus a 30px sibling and 16px of gaps leaves 50px, yet its children receive 40px/10px rather than 25px/25px.
+No complete tested native mapping is established, and a finite failed search is not an impossibility proof.
+
+The [integrated research report](.unlazy/intrinsic-fill/grid-research/RESULT.md) preserves both reports, exact commands, independent replays, the percentage lead and the recommendation.
+The targeted [Onlook review](.unlazy/intrinsic-fill/grid-research/onlook-review.md) is pinned to `423e2e924366419e418ee049093872d535eea41a`.
+Its reviewed sizing helper maps Fill to `100%`, so that code path does not establish ORC's constrained equal-sharing behavior.
+Its authored/computed style distinction and source-target actions remain useful later integration references.
+The Onlook application was not installed or run.
+
+Application source, tests, dependencies, accepted contracts and doc_v1 were not changed during this isolated research.
+The current-source audit still passes for 162 paths and four built files, preserving the verified application checkpoint.
+Both child leases are released, all research waves are terminal, and no owned browser checks or subagents remain running.
+The general shared intrinsic Column implementation gate remains unmet; Grid adoption and V1 support reduction are not approved.
+Changes remain uncommitted on master; nothing was pushed.
+
+## Percentage follow-up and native wrapper proposal, 2026-10-18
+
+The user authorized reviewing changing Fit siblings and simultaneous min/max limits, then producing a complete native prototype or a concrete smallest-change proposal before adoption.
+The [native wrapper proposal](backlog/intrinsic-column-wrapper-proposal.md) records the result, mechanism, exact source/history/export consequences, affected paths, and remaining verification.
+The extended same-hierarchy percentage formula measures 333 states per browser and still fails 183 mixed-Fit states in each.
+Its separate two-child limit controls pass, so this is a remaining-budget failure rather than evidence that simultaneous bounds alone cannot work.
+
+A new structural candidate uses one outer Grid cell with an inner Flex Column and percentage-aware shared basis.
+It passes 745 positive native cases and two correctly rejected negative controls per browser, including changing Fit content, two/three Fill children, simultaneous child and parent limits, decoration, both child box models, live text edits and source parsing.
+The two pinned binaries are Chrome for Testing 153.0.8010.12 and 154.0.8037.57 on Fedora 44.
+The actual current serializer/importer check also confirms that a renderer-only adoption would add a real wrapper Layer during Code Apply and change direct-child selectors.
+This is a concrete architecture proposal with bounded native evidence, not completed application support.
+
+The proposal preserves canonical object identity and order through a versioned generated wrapper, keeps native Flex allocation and responsive CSS exports, and requires exact source recognition plus updated physical/canonical-parent resolution.
+History, draft safeguards, nesting, placement, source round trips and complete exports still require integrated verification after agreement.
+No application code, repository test, dependency or doc_v1 content changed during this follow-up; the exact inventory and hashes of all 219 protected files match its starting checkpoint.
+The research scripts, command exits, source hashes, raw geometry and specification excerpts are in `.unlazy/intrinsic-fill/percentage-followup/`.
+No commit or push was requested or performed.
+
+## Ordinary intrinsic Column wrapper checkpoint
+
+Verified on 2026-10-20 against `950e8a28d785d7783b471e689e3538bc75a7be31` plus the uncommitted intrinsic-sizing implementation.
+The [approved proposal](backlog/intrinsic-column-wrapper-proposal.md#adoption-authorization-2026-10-19) is now implemented for ordinary frames and supported ordinary divs.
+Canonical frames remain Flex Columns with unchanged IDs, parent IDs and child order.
+The shared serializer and renderer emit the same versioned single-cell Grid outer box and generated inner Flex flow.
+An exact source inverse restores the canonical hierarchy; unknown or altered marked structures refuse, and explicit source opt-out retains the real authored wrapper.
+No measured layout dimensions, hidden mirror, dependency graph or new package is saved.
+
+The real editor checks cover two/three Fill children, multiple changing Fit siblings, independently supplied nested content, simultaneous parent/child limits, overflowing minima, capped unused space, unequal decoration/margins and both box models.
+They cover activation and parent Fit conversion, stable opted-in Fit/Fixed changes, preview/cancellation, locks, Code drafts, no-op source Apply, exact one-command Undo/Redo, parsed responsive HTML and UI save/reopen.
+Opted-in interaction checks cover keyboard/pointer order, pointer cancellation and reparenting, Gap fields/handles, parent/child padding, alignment/distribution, Absolute participation, deletion and Free/Row exits.
+Circular supply, unowned source and last-supplier refusals remain negative controls.
+
+Integration review found and corrected false boundedness from non-stretching ancestors or automatic cross margins, overly permissive generated-box recognition, stale projection inputs during atomic exit/reentry, and refusal of an owned main Fill to cross Fill conversion.
+The final generic direction regression removes its unrelated hidden fixture child so it reaches the intended conversion and source-owned refusal checks.
+No application code changed during the final verification run.
+
+| Verification | Completed result |
+| --- | --- |
+| Full intrinsic workflow | All seven scenarios passed in development and built modes in both pinned browser versions. |
+| Full sizing workflow | Development and built Chromium passed, each with 61 check summaries and 1,867 recorded inputs. |
+| Affected regressions | Gap, padding, alignment, participation, layout, deletion, movement, nested placement, editor, history, Preview, atomic commands, renderer boundaries and Layers passed. |
+| Static checks | Types, lint, format, tooling controls, Fallow dead code, Fallow health and isolated compiler comparison passed. |
+| Compiler identity | Required `typescript@6.0.3` and isolated `typescript@7.0.2` with `@typescript/typescript-linux-x64@7.0.2` passed both unchanged configurations with strict checking and dependency declarations checked. |
+| Final build | The normal TS6 build passed and all four output hashes match the runtime-tested build. |
+
+The source-bound [aggregate audit](artifacts/editor/intrinsic-column-current-audit.json) records exact commands, exits, commit, working-tree state, 174 runtime source paths, compiler evidence and four built hashes.
+The permanent entry point is `bun run check:intrinsic-sizing`; select `ORC_INTRINSIC_SCENARIO=shared-column` for the new workflow.
+Full runtime checks used one frozen source snapshot.
+Afterward only the obsolete description in `scripts/README.md` changed within that inventory; the audit records its exact before/after replacement and verifies every code, test, dependency and configuration hash is unchanged.
+Root status and backlog notes were then updated, and the final build was compared with the tested output.
+One nested-placement process ended with SIGTERM before producing a result; its independent rerun passed both modes, and the interrupted attempt is retained separately without being counted as a product failure.
+Raw tool timestamps reflect the host clock; this checkpoint date follows the client date.
+
+The environment is Fedora 44, Linux `7.2.5-200.fc44.x86_64`, Bun 1.4.2 and the pinned project dependencies.
+The tested executables identify themselves as Chrome for Testing 153.0.8010.12 and 154.0.8037.57; the audit checks their actual binary hashes.
+Installed stable Chrome, Windows, arbitrary imported React source rewriting, complete product exporters and broad animation performance are not certified.
+First wrapper insertion is an explicit structural Edit conversion and can remount descendants; later opted-in sizing changes retain ancestry, and Preview starts from the applied structure.
+Generated copied HTML includes the real extra layout div, so arbitrary direct-child selectors require the separately tracked source integration work.
+These results close this ordinary intrinsic task, not all sizing, Constraints, React integration, exports or V1.
+No commit or push was requested or performed.
+
 ## Next checkpoint
 
 The focused [TS7 compatibility checkpoint](SCAFFOLD_VERIFICATION.md#reusable-ts7-checkpoint-2026-10-15) is implemented and verified against the expanded application on Fedora.
 Required checking and the normal build remain on TS6; migration and Windows certification remain separate unfinished work.
-Resume the paused V1 sizing work at ordinary wrapped Row cross-axis Height Fill: verify native line sizing and independently available parent height, then implement the supported preview/command behavior with history, locks, source preservation and save/reopen checks.
-This is the next application task, not part of the compiler checkpoint.
+The wrapped Row cross-axis Height Fill checkpoint is verified and closed at the requested pause.
+The ordinary nested Fill checkpoint, including the [destination and dependency regressions](backlog/native-layout-projection.md#nested-fill-and-destination-dependency-review), is verified and closed at the requested pause.
+The approved native intrinsic Column wrapper is implemented and verified at the [current checkpoint](#ordinary-intrinsic-column-wrapper-checkpoint).
+The original content-responsive shared Height Fill blocker is resolved for the accepted ordinary workflow, including mixed Fixed/Fit siblings and individual limits.
+The internal generated box adds no canonical object or Layer and introduces no measured-size runtime.
+Complete this task at this checkpoint; select the next ordinary geometry/layout/Constraints/Tokens requirement from doc_v1 before starting another implementation.
+Imported React source rewriting, component events/portals, full exporters and supported-platform certification remain separate work.
 
 1. Complete the ordinary editor's geometry, layout, constraints, and Tokens workflows.
 2. Integrate supported React source editing, component imports, portable assets/dependencies, complete exports, and Preview component behavior.

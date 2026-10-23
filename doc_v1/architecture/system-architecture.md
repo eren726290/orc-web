@@ -174,3 +174,13 @@ The [editor tooling checkpoint](../../backlog/development-tooling.md) tracks sha
 V1 runs on the local machine through localhost.
 It does not require a cloud account, remote database, or hosted project service.
 Remote collaboration and public network hosting are outside the V1 specification.
+
+<!-- codex-pc 2026-10-19: Approved ordinary intrinsic Column rendering addition.
+The shared native source projector emits a versioned outer Grid and inner Flex box for an explicitly opted-in ordinary Column while keeping one canonical parent and child sequence.
+The editor and standalone HTML use the same CSS mapping and no JavaScript sizing solver or saved browser geometry.
+The importer must recognize the exact generated shape before restoring canonical Column CSS.
+The first structural conversion belongs to Edit mode and may remount descendants; stable opted-in sizing changes preserve their mounted ancestry and Preview starts from the applied structure.
+Imported React source ownership, portals, hydration and complete code/image/PDF exports retain their existing acceptance and verification requirements.
+This ordinary layout implementation does not certify those unfinished integrations.
+See ../../backlog/intrinsic-column-wrapper-proposal.md and ../../backlog/intrinsic-column-react-review.md.
+-->

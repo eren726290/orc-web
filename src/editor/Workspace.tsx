@@ -21,6 +21,8 @@ import { PanelResize } from "./PanelResize";
 import { Preview, previewView, type PreviewView } from "./preview/Preview";
 import { keyboardMovement } from "./canvas/keyboard-movement";
 import { prepareFillSharing } from "./layout/fill-sharing";
+import { prepareFillDependencies } from "./layout/sizing";
+import { deletionCandidate } from "./layout/fill-dependencies";
 
 type Props = {
   project: ProjectSnapshot;
@@ -69,7 +71,7 @@ function WorkspaceProperties({ controller: c }: { controller: Controller }) {
         mutate={c.mutate}
         disabled={c.disabled}
         prepare={c.prepareProperties}
-        preview={c.setPreview}
+        preview={(value) => previewProperties(c.project.document, value, c.setPreview)}
         select={(id) => c.select(id, false)}
       />
     </>
@@ -134,6 +136,29 @@ function useFramePreview(
   return { previewFrame, startPreview, exitPreview: () => setPreviewFrame(null) };
 }
 
+function previewProperties(
+  document: DesignDocument,
+  value: PropertyPreview,
+  preview: (value: PropertyPreview) => void,
+) {
+  try {
+    if (value?.kind === "text") prepareFillDependencies(document)(previewDocument(document, value));
+    preview(value);
+  } catch (cause) {
+    preview(null);
+    sessionClient.setError(cause instanceof Error ? cause.message : "The text change failed.");
+  }
+}
+
+function prepareWorkspaceMutation(document: DesignDocument, mutation: Mutation): Mutation {
+  if (mutation.kind === "text")
+    prepareFillDependencies(document)(previewDocument(document, mutation));
+  if (mutation.kind !== "delete") return mutation;
+  prepareFillDependencies(document)(deletionCandidate(document, mutation.ids));
+  const changes = prepareFillSharing(document)([mutation]);
+  return changes.length ? { kind: "batch", mutations: [mutation, ...changes] } : mutation;
+}
+
 async function applyWorkspaceMutation(
   props: Props,
   guard: ReturnType<typeof useDraftGuard>,
@@ -141,14 +166,11 @@ async function applyWorkspaceMutation(
   mutation: Mutation,
 ) {
   const projectId = props.project.document.id;
-  if (mutation.kind === "delete") {
-    try {
-      const changes = prepareFillSharing(props.project.document)([mutation]);
-      if (changes.length) mutation = { kind: "batch", mutations: [mutation, ...changes] };
-    } catch (cause) {
-      sessionClient.setError(cause instanceof Error ? cause.message : "The deletion failed.");
-      return false;
-    }
+  try {
+    mutation = prepareWorkspaceMutation(props.project.document, mutation);
+  } catch (cause) {
+    sessionClient.setError(cause instanceof Error ? cause.message : "The change failed.");
+    return false;
   }
   const draft = projectView(projectId).draft;
   if (

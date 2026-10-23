@@ -1,4 +1,4 @@
-import { createElement, type CSSProperties, type HTMLAttributes } from "react";
+import { createElement, type CSSProperties, type HTMLAttributes, type ReactNode } from "react";
 import {
   containsNode,
   textContent,
@@ -7,6 +7,14 @@ import {
   type Styles,
 } from "../../../shared/document/model";
 import { scopedSVGContent } from "./svg-styles";
+import {
+  columnFlowAttribute,
+  columnFlowStyle,
+  columnLayout,
+  columnLayoutAttribute,
+  hasColumnProjection,
+  projectColumnStyle,
+} from "../../../shared/source/intrinsic-column";
 
 function cssStyle(style: Styles): CSSProperties {
   return Object.fromEntries(
@@ -34,6 +42,7 @@ export function RenderNode({
   const children = node.children.map((child) => (
     <RenderNode key={child} document={document} id={child} scopeId={scopeId} />
   ));
+  const content = columnChildren(node.style, children);
   switch (node.kind) {
     case "image":
       return createElement("img", { ...attributes, alt: node.attributes.alt ?? "" });
@@ -49,12 +58,25 @@ export function RenderNode({
     case "text":
       return renderText(node, attributes, scopeId !== undefined);
     case "frame":
-      return <div {...attributes}>{children}</div>;
+      return <div {...attributes}>{content}</div>;
     case "element":
-      return children.length
-        ? createElement(node.tag, attributes, children)
-        : createElement(node.tag, attributes);
+      return createElement(node.tag, attributes, content);
   }
+}
+
+function columnChildren(style: Styles, children: ReactNode[]) {
+  return hasColumnProjection(style)
+    ? createElement(
+        "div",
+        {
+          [columnFlowAttribute]: columnLayout,
+          style: cssStyle(columnFlowStyle),
+        },
+        children,
+      )
+    : children.length
+      ? children
+      : undefined;
 }
 
 function renderText(
@@ -102,6 +124,7 @@ function nodeAttributes(node: DesignNode, document: DesignDocument, scopeId?: st
       ? svgAttributes(node.attributes)
       : nativeAttributes(node, within, document)),
     "data-orc-id": node.id,
+    ...(hasColumnProjection(node.style) ? { [columnLayoutAttribute]: columnLayout } : {}),
     ...focusAttributes(node.attributes, within),
     inert:
       scopeId !== undefined && !within && !ancestor ? true : node.attributes.inert !== undefined,
@@ -123,7 +146,7 @@ function nodeStyle(node: DesignNode, scopeId: string | undefined, within: boolea
       "pointer-events": "none",
     };
   if (scopeId === node.id) style = { visibility: "visible", "pointer-events": "auto", ...style };
-  return style;
+  return projectColumnStyle(style);
 }
 
 function nativeAttributes(node: DesignNode, interactive: boolean, document: DesignDocument) {

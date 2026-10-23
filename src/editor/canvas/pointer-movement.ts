@@ -3,6 +3,9 @@ import type { DesignDocument } from "../../../shared/document/model";
 import type { Mutation } from "../../../shared/commands/commands";
 import { preparePointerPlacement } from "./pointer-placement";
 import { pointerCommit, type PointerPreview } from "./pointer-layout";
+import { pointerDocument } from "./pointer-layout";
+import { prepareFillDependencies } from "../layout/sizing";
+import { flushSync } from "react-dom";
 
 type Props = {
   document: DesignDocument;
@@ -24,6 +27,7 @@ type Gesture = {
   selected: string[];
   scale: number;
   movement: ReturnType<typeof preparePointerPlacement> | null;
+  checkDependencies: ReturnType<typeof prepareFillDependencies> | null;
   ready: boolean;
   preview: PointerPreview;
 };
@@ -51,8 +55,7 @@ export function usePointerMovement(props: Props) {
     if (!current.preview && Math.hypot(x, y) < 3) return;
     try {
       current.canvas.setPointerCapture(current.pointer);
-      current.preview = pointerPreview(current, props.document, x, y);
-      setPreview(current.preview);
+      current.preview = pointerPreview(current, props.document, x, y, setPreview);
     } catch (error) {
       props.notice(error instanceof Error ? error.message : String(error));
       cancel();
@@ -85,6 +88,7 @@ async function beginMovement(
     selected: props.selected.includes(id) ? props.selected : [id],
     scale: props.scale,
     movement: null,
+    checkDependencies: null,
     ready: false,
     preview: null,
   };
@@ -117,8 +121,18 @@ function useMovementCancellation(
   }, [cancel, props.document.id, props.document.revision, props.tool, props.scale, props.disabled]);
 }
 
-function pointerPreview(current: Gesture, document: DesignDocument, x: number, y: number) {
-  if (!x && !y) return null;
+function pointerPreview(
+  current: Gesture,
+  document: DesignDocument,
+  x: number,
+  y: number,
+  setPreview: (value: PointerPreview) => void,
+) {
+  if (!x && !y) {
+    flushSync(() => setPreview(null));
+    return null;
+  }
+  current.checkDependencies ??= prepareFillDependencies(document);
   current.movement ??= preparePointerPlacement(
     document,
     current.selected,
@@ -126,7 +140,10 @@ function pointerPreview(current: Gesture, document: DesignDocument, x: number, y
     current.scale,
     { x: current.x, y: current.y },
   );
-  return current.movement({ x: x / current.scale, y: y / current.scale });
+  const preview = current.movement({ x: x / current.scale, y: y / current.scale });
+  flushSync(() => setPreview(preview));
+  if (preview) current.checkDependencies?.(pointerDocument(document, preview));
+  return preview;
 }
 
 function usePointerCancellation(cancel: () => void) {

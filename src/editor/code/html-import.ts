@@ -2,6 +2,15 @@ import { htmlLanguage } from "@codemirror/lang-html";
 import { cssLanguage } from "@codemirror/lang-css";
 import type { DesignNode, NodeBase, Styles, TextRun } from "../../../shared/document/model";
 import { validateSVGStyles } from "../rendering/svg-styles";
+import {
+  columnFlowAttribute,
+  columnFlowStyle,
+  columnLayout,
+  columnLayoutAttribute,
+  columnMarker,
+  columnProjectionEligible,
+  hasColumnProjection,
+} from "../../../shared/source/intrinsic-column";
 
 const inlineTags = new Set([
   "span",
@@ -152,6 +161,7 @@ function readElement(element: Element, parentId: string | null, nodes: DesignNod
   const tag = element.localName;
   const attributes = readAttributes(element);
   const style = readStyle(element.getAttribute("style") ?? "");
+  const content = columnContent(element, style, attributes);
   const children: string[] = [];
   const base = {
     id: randomId(),
@@ -172,9 +182,70 @@ function readElement(element: Element, parentId: string | null, nodes: DesignNod
   if (!allowedTags.has(tag)) throw new Error(`Unsupported ordinary HTML element: ${tag}.`);
   const node = ordinaryNode(base, element);
   nodes.push(node);
-  if (node.kind === "element")
-    for (const child of element.childNodes) readChild(child, node, nodes);
+  if (node.kind === "element") for (const child of content) readChild(child, node, nodes);
   return node;
+}
+
+function columnContent(element: Element, style: Styles, attributes: Record<string, string>) {
+  const version = element.getAttribute(columnLayoutAttribute);
+  if (version === null) {
+    if (Object.hasOwn(style, columnMarker)) {
+      if (!hasColumnProjection(style)) invalidColumn();
+      delete style[columnMarker];
+    }
+    return element.childNodes;
+  }
+  const flow = element.firstElementChild;
+  if (version !== columnLayout || element.localName !== "div" || !flow) invalidColumn();
+  if (!hasColumnProjection(style) || !exactColumnFlow(element, flow)) invalidColumn();
+  restoreColumnStyle(style);
+  delete attributes[columnLayoutAttribute];
+  return flow.childNodes;
+}
+
+function restoreColumnStyle(style: Styles) {
+  const display = style.display;
+  if (display?.replace(/\s*!important\s*$/iu, "").trim() !== "grid") invalidColumn();
+  for (const key of ["grid-template-rows", "grid-template-columns"]) {
+    if (style[key] !== "minmax(0px, 1fr)") invalidColumn();
+    delete style[key];
+  }
+  if (!columnProjectionEligible(style)) invalidColumn();
+  style.display = /!important\s*$/iu.test(display) ? "flex !important" : "flex";
+}
+
+function exactColumnFlow(element: Element, flow: Element): boolean {
+  if (flow.localName !== "div" || flow.getAttribute(columnFlowAttribute) !== columnLayout)
+    return false;
+  if (flow.attributes.length !== 2 || !flow.hasAttribute("style")) return false;
+  if (
+    [...element.childNodes].some(
+      (child) =>
+        child !== flow && !(child.nodeType === Node.TEXT_NODE && !child.textContent?.trim()),
+    )
+  )
+    return false;
+  let style: Styles;
+  try {
+    style = readStyle(flow.getAttribute("style") ?? "");
+  } catch {
+    invalidColumn();
+  }
+  const expected = readStyle(
+    Object.entries(columnFlowStyle)
+      .map(([key, value]) => `${key}: ${value};`)
+      .join(" "),
+  );
+  return (
+    Object.keys(style).length === Object.keys(expected).length &&
+    Object.entries(expected).every(([key, value]) => style[key] === value)
+  );
+}
+
+function invalidColumn(): never {
+  throw new Error(
+    "The intrinsic Column source does not match its generated layout. Restore its supported version, wrapper and CSS, or remove data-orc-layout and any unknown --orc-intrinsic-column version to use ordinary HTML.",
+  );
 }
 
 function ordinaryNode(base: NodeBase, element: Element): DesignNode {

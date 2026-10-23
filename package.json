@@ -32,6 +32,8 @@
     "check:alignment": "bun scripts/e2e/editor/check-alignment.ts",
     "check:participation": "bun scripts/e2e/editor/check-participation.ts",
     "check:sizing": "bun scripts/e2e/editor/check-sizing.ts",
+    "check:nested-placement": "bun scripts/e2e/editor/check-nested-placement.ts",
+    "check:intrinsic-sizing": "bun scripts/e2e/editor/check-intrinsic-sizing.ts",
     "check:codebase": "fallow dead-code --format json --quiet --explain",
     "check:health": "fallow health --format json --quiet --explain",
     "check:format": "oxfmt --check src shared server scripts tools/anti-slop/index.ts index.html vite.config.ts oxlint.config.ts tsconfig.json tsconfig.server.json package.json .oxfmtrc.json .fallowrc.json",

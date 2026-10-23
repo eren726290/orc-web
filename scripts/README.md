@@ -47,5 +47,10 @@ Editor evidence lives in ignored `artifacts/editor/` and identifies the tested s
 `e2e/editor/check-gap.ts` verifies typing, 1/Shift-8 input arrows, value scrubbing, native canvas handles, live cancellation, applied-revision/zoom cancellation, wrapping through row changes, CSS ownership, locks/drafts, pending Undo, and save/reopen.
 `e2e/editor/check-alignment.ts` verifies the nine physical packed positions in Row/Column, named distribution, wrapped rows, zero/one participants and overflow, source priority and ownership, locks/drafts, exact history, focus, and save/reopen.
 `e2e/editor/check-participation.ts` verifies ordinary Flex participation changes through the visible Absolute Position control.
-`e2e/editor/check-sizing.ts` checks ordinary Fixed/Fit, bounded nowrap cross-axis Fill, and single-grow, multiple-child and per-row wrapped main-axis Fill sharing, including source ownership, native reflow, command history, and saving.
+`e2e/editor/check-sizing.ts` checks ordinary Fixed/Fit, bounded nowrap cross-axis Fill and wrapped Row Height Fill, and single-grow, multiple-child and per-row wrapped main-axis Fill sharing, including source ownership, native reflow, command history, and saving.
 Fill checks cover separate numeric/conversion permissions, parent bounds, effective automatic margins, decoration floors and size limits, overflow feedback, draft/rejection/history safeguards, and native response after save/reopen.
+The nested sizing checkpoint traces owned Fill through bounded ancestors on the same physical axis.
+`e2e/editor/check-nested-placement.ts` checks native cross-axis drops and later contributor/alignment/text changes, retaining intrinsic-content and explicit-zero positive controls and exact command/history assertions.
+`e2e/editor/check-intrinsic-sizing.ts` checks intrinsic Fill entry and parent Fit conversion, source-responsive sole and shared Column sizing, dependent conversions, safeguards, history and persistence.
+The shared-column scenario covers the approved native projection and its source inverse.
+See the [current checkpoint](../IMPLEMENTATION_STATUS.md#ordinary-intrinsic-column-wrapper-checkpoint) for verified results and remaining platform and integration limits.

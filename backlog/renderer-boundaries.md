@@ -156,6 +156,15 @@ Acceptance checks during actual Tailwind integration:
 Status: unfinished implementation and verification work; the investigation did not demonstrate a specific completed-export failure or establish a performance target.
 Source serialization, copied snippets, native CSS transition tests and isolated library experiments are not complete export or Motion performance certification.
 
+The wrapped Height Fill work on 2026-10-15 reproduced a concrete ordinary source-serialization boundary before complete exports exist.
+`nodeSource` includes a saved `visible: false` child without projecting its hidden state into CSS.
+In the retained 600px-wide Row, that child occupies 1000px and changes the visible Fill child's height from the editor's 76px to 66px.
+An explicit `display: none` positive control restores the expected 76px and excludes the hidden child from native line formation.
+The [failing source check](../artifacts/editor/sizing-wrapped-cross-expanded-result.json), [paired visibility observations and exact source](../artifacts/editor/wrapped-cross-native/visibility.json), and their screenshots retain the reproduction against `950e8a2` with the recorded uncommitted sizing changes.
+During source/export integration, define how saved hidden state reaches copied HTML, complete static output and capture without losing authored display declarations or changing canonical source ownership.
+Verify a hidden child in the middle of Flex siblings, hidden descendants, source round-trips, history and reopening, with an otherwise visible control.
+The focused sizing fixture uses explicit CSS hiding and does not close this serialization boundary.
+
 The [export contract](../doc_v1/import-export/export.md), [Motion capture contract](../doc_v1/interface/motion.md#image-and-pdf-capture) and [local rendering service](../doc_v1/architecture/system-architecture.md#local-rendering-service) define the accepted behavior.
 Build this on the existing command/project authority and shared renderer after the required component, style, asset and dependency preparation is available.
 The current [native overlay watcher](../src/editor/canvas/overlay-geometry.ts) is a starting point for display measurements; it does not prove ordering against future Motion writes or arbitrary custom animation loops.

@@ -1,3 +1,5 @@
+import { objectParent } from "./layout-box";
+
 export function hasCoordinateTransform(style: CSSStyleDeclaration) {
   return (
     ["transform", "translate", "rotate", "scale", "perspective"].some(
@@ -7,7 +9,7 @@ export function hasCoordinateTransform(style: CSSStyleDeclaration) {
 }
 
 export function parentRelativePosition(element: HTMLElement | SVGElement) {
-  const parent = element.parentElement;
+  const parent = objectParent(element);
   const world = element.closest(".canvas-world");
   if (!parent || !world || !element.getClientRects().length) return null;
   for (

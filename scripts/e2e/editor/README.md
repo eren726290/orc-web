@@ -3,7 +3,7 @@
 Editor, Properties, Code, history, panels, Layers, deletion, Preview, atomic commands, movement, clipping, layout switching, frame Padding, and Gap checks belong here.
 check-alignment.ts verifies physical packed alignment and named distribution through native layout, history, source ownership, safeguards, and saving.
 check-participation.ts verifies the ordinary Absolute Position control, parent-relative boxes, native reflow, history and saving.
-check-sizing.ts covers ordinary per-axis Fixed/Fit, bounded nowrap cross-axis Fill, and single-grow, multiple-child and per-row wrapped main-axis Fill sharing with native sizing, ownership, safeguards, history, and saving.
+check-sizing.ts covers ordinary per-axis Fixed/Fit, bounded nowrap cross-axis Fill and wrapped Row Height Fill, and single-grow, multiple-child and per-row wrapped main-axis Fill sharing with native sizing, ownership, safeguards, history, and saving.
 Fill remains numerically read-only and uses operation-specific axis/alignment or axis/Flex-factor assertions.
 Valid intrinsic stretch, independent Fixed aspect-ratio participants, and explicit Fixed/Fit exits remain positive controls.
 check-movement.ts also verifies exact main-axis Fill drops, equal-limit bounds, rejected destinations, cached preview retargeting, native allocation, cancellation, and history.
@@ -16,7 +16,28 @@ Run `ORC_SIZING_SCENARIO=wrapped bun run check:sizing` for the focused wrapped w
 It covers per-line allocation, incomplete rows, later spacing/size/participation/deletion edits, locks and drafts, pointer preview/cancellation/adoption, source responsiveness and save/reopen.
 Source-variable parent display/direction/wrapping and nested wrapping retain equal outer sharing, exact history and source round-trips.
 The default sizing workflow also retains these ordinary wrapped editor regressions.
+Run `ORC_SIZING_SCENARIO=nested bun run check:sizing` for independently bounded nested Fill chains on both physical axes.
+The nested workflow covers all Row/Column ancestor combinations, equal limits, native minima/maxima, both box models, Fixed zero, empty packed rows, source ownership, locks at every ancestor, drafts, stale preparation, rejection and pending Undo.
+The focused checkpoint also checks standalone responsive source and UI save/reopen; the default sizing command retains its common workflow.
+`ORC_SIZING_SCENARIO=nested-dependency` isolates the unresolved root-Fit regression.
+`bun run check:nested-placement` checks real cross-axis pointer previews, cancellation, intrinsic-content and Fixed-zero positive controls, unresolved refusal, atomic commands and history.
+It also checks sole-contributor deletion, Absolute participation, reparenting and inherited Fill alignment, with second-contributor and explicit sizing-exit positive controls on both axes.
+It also checks sole-text contribution through Properties preview and canvas completion, refusal recovery, exact history, second contributors, independent bounds, explicit sizing exits and Fixed zero.
+Use `ORC_NESTED_PLACEMENT_SCENARIO=placement|guards|text` to select a group, and `ORC_NESTED_PLACEMENT_MODES=development|built` to select one application mode.
+Pass `chrome` and `ORC_CHROME_EXECUTABLE` to use a specific Chrome executable.
 Project reopening waits for the completed dialog transition before reading the new session.
+
+Run `bun run check:intrinsic-sizing` for the focused intrinsic Fill workflow in development and built modes.
+Its fixtures and assertions live in [intrinsic-sizing/](intrinsic-sizing/README.md).
+`ORC_INTRINSIC_SCENARIO=core|projection|guards|wrapped|placement|persistence|shared-column` selects a group, and `ORC_INTRINSIC_MODES=development|built` selects one application mode.
+Use `ORC_INTRINSIC_EVIDENCE` to name the retained evidence and pass `chrome` with `ORC_CHROME_EXECUTABLE` for a specific browser executable.
+Wrapped Row Height Fill includes native empty-row reflow, last-supplier guards, responsive source and save/reopen.
+The shared-column scenario checks the approved native projection, its source inverse, structural exits, content response, limits, ancestor supply and atomic interaction/persistence safeguards.
+Recorded results determine which checkpoint has completed verification.
+
+Run `ORC_SIZING_SCENARIO=wrapped-cross bun run check:sizing` for wrapped Row Height Fill in both application modes.
+It checks native per-line stretch, packed/stretched parent alignment, content and box-model changes, width and padding reflow, wrapping toggles, limits, participation, source ownership, locks, drafts, stale preparation, rejected commands, pending Undo and save/reopen.
+Its standalone source check verifies responsive authored CSS with an explicit CSS-hidden fixture child; saved visibility serialization remains a separate [export boundary](../../../backlog/renderer-boundaries.md#4-complete-exports-and-animation-performance).
 
 `check-boundaries.ts` covers ordinary Edit focus/editing isolation, temporary Preview content editing, SVG stylesheet containment, and selection geometry during transitions, transforms, sibling layout and scrolling.
 It also checks history, source preservation, save/reopen, and measurement cleanup after deselection and Preview.

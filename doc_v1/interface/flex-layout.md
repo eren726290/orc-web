@@ -324,3 +324,21 @@ All actions remain available through visible controls regardless of shortcut sup
 - Verify exported React or HTML/CSS reflows at different parent sizes.
 
 These are proposed acceptance scenarios, not checks performed during this documentation work.
+
+<!-- codex-pc 2026-10-19: Approved intrinsic Column projection.
+The multiple-Fill contract above includes independently supplied content-sized Columns, not only explicit Fixed parent heights.
+A supported ordinary Column may use the own --orc-intrinsic-column:1 CSS declaration to request the versioned intrinsic-column-v1 source projection.
+Its canonical layout remains Flex Column and its canonical ordered children remain unchanged.
+Generated HTML uses an outer single-cell Grid and an inner inherited Flex box so native intrinsic contribution and constrained equal sharing both work with changing Fit siblings and simultaneous limits.
+The inner box is generated layout structure, not a new Layer, canonical parent or user-facing Grid mode.
+Frame geometry, coordinates, paint, padding, borders and clipping stay on the outer object; flow membership, spacing and distribution use the inner box.
+Renderer and copied HTML share one source projector and the importer recognizes only its exact inverse.
+Unknown or modified marked structures are refused; explicitly removing data-orc-layout opts out and retains the real wrapper markup as ordinary editable HTML.
+The marker and dependent child CSS enter through one atomic command with exact Undo/Redo.
+An opted-in Column retains its wrapper through Fit/Fixed edits and shrinking membership; an explicit layout exit removes the marker and normalizes supported sizing in the same command.
+The first wrapper insertion is a structural Edit conversion that can remount children; subsequent stable updates must preserve runtime identity.
+Preview mounts the applied structure before interaction begins.
+Source-backed React rewriting, portal behavior and complete export workflows remain separately tracked integration work.
+Native source output must reflow without an editor runtime or saved measured dimensions.
+See ../../backlog/intrinsic-column-wrapper-proposal.md and ../../backlog/intrinsic-column-react-review.md for the measured reason, tradeoffs and integration boundaries.
+-->

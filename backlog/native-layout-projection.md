@@ -401,6 +401,62 @@ Wrapped cross-axis Fill, broader intrinsic dependencies, arbitrary imported/logi
 Full Constraints, Tokens, React source integration, assets, complete exports, installed stable Chrome and Windows verification remain V1 work.
 No accepted architecture or doc_v1 contract changed.
 
+### Ordinary wrapped Row Height Fill
+
+The [Height Fill checkpoint](../IMPLEMENTATION_STATUS.md#wrapped-row-height-fill-checkpoint-2026-10-16) is verified for ordinary owned wrapped Rows with independently authored parent height bounds.
+Native automatic height and explicit stretch fill the child's current row while preserving parent alignment, margins, priorities, limits and the other axis.
+No row heights or second layout model are saved.
+The [final audit](../artifacts/editor/wrapped-cross-audit.json) binds the 432-state native oracle, focused development/built Chromium and managed Chrome checks, full sizing and affected Chromium regressions, required static checks and isolated TS7 comparison to the current source.
+Source checks use explicit CSS hiding and do not certify saved visibility serialization or complete exports.
+Broader intrinsic dependencies, arbitrary source/logical ownership, Column/reverse wrapping, installed stable Chrome and Windows remain outside this bounded checkpoint.
+
+### Nested Fill and destination dependency review
+
+The 2026-10-16 source review identified the next connected V1 task: ordinary nested Fill through an independently bounded ancestor.
+At the pre-extension checkpoint, `boundedSizing` accepted only an active Fixed dimension or equal active min/max limits on the immediate parent.
+It therefore refuses a child whose ordinary parent already receives the relevant extent through an owned Fill relationship from a bounded ancestor.
+Extend that proof and its dependent-change guards using authored ownership, not a captured computed pixel size or a second saved dependency model.
+Valid intrinsic Fit/Fill remains accepted V1 work beyond that initial ancestor-bound extension.
+
+The independent [behavior review](../artifacts/editor/wrapped-cross-review-behavior/REPORT.md) also found a related unresolved destination case in the actual browser modules.
+An empty Height Fill child measures 80px in its bounded source Row, but `prepareFlowPlacement` accepts an empty intrinsic-height Row destination and retains automatic height/stretch, collapsing both destination and child to 0px.
+The readout still says Height controlled by Fill and omits the missing-parent-height reason.
+The companion child with 20px intrinsic content resolves correctly under the intrinsic parent, so blanket rejection of all Fit-height destinations would break a valid control.
+The [paired module observations](../artifacts/editor/wrapped-cross-review-behavior/empty-dependency-results.json) and report retain the prepared mutation, measurements, reviewed source hashes and reproduction commands.
+This finding is module-proven, not yet reproduced through the complete canvas drop, command or saving workflow.
+Reproduce both cases through that workflow before correcting the shared destination proof and feedback, then retain regression checks for unresolved refusal and valid intrinsic placement.
+The source and guard ordering predate the wrapped Height Fill change; no incorrect accepted doc_v1 contract was established.
+
+The [native nested Fill research](../artifacts/editor/nested-fill-native/REPORT.md) subsequently passed 170 cases and was independently replayed by the parent with zero assertion failures or browser errors.
+Its two-intermediary matrix covers both axes, main/cross ownership combinations, Fixed/equal-limit ancestors, both box models, resize, limits, automatic minima and wrapped-row endpoints.
+It also observes root Fit preparation accepting an empty cross-Fill chain on either axis before a direct native CSS change collapses the chain from 300px to zero, while an independently Fixed 60px descendant remains a valid intrinsic positive control.
+These preparation/module observations still require complete UI reproduction and retained failing-before-fix regressions.
+A further counterexample keeps an ancestor's height Fixed at 240px but gives an empty packed wrapped row zero cross extent; changing row-group alignment to stretch gives it 240px.
+Do not use positive computed pixels, any Fill label, or the ancestor's whole height as a substitute for proving the relevant owned relationship and native line semantics.
+The leaf and parent runs, exact probes, source/bundle hashes, commands, platform and diagnostics are retained in that research directory.
+No nested Fill implementation or UI verification was completed before the requested stopping point.
+
+The resumed implementation now traces owned same-axis Fill through participating ancestors to active Fixed sizing or equal limits.
+Its shared transient candidate guard covers sizing, layout, wrapping, alignment, participation, pointer placement and deletion without saving a dependency graph or measured size.
+The actual editor reproduced unresolved drops, root Fit conversion, sole-contributor removal and inherited-alignment loss before their corrections.
+The expanded nested development workflow passes ancestor direction combinations, resizing, limits, box models, empty packed rows, explicit zero, source ownership, locks, drafts, stale preparation, rejection, pending history, source round-trip and saving.
+The first complete browser/static matrix and independent evidence audit passed on the pre-text-fix source.
+Independent caller review then found text edits bypassing this guard.
+Clearing the sole nonempty text supplier collapsed the parent and Fill child on both axes through Properties and canvas editing; the retained regression records four failures and eighteen supported controls.
+The shared Workspace text preview/commit correction passes focused development/built Chromium and managed Chrome checks, including feedback, cancellation, retry and exact history.
+Static/build/tooling checks and the unchanged TS6/isolated TS7 comparison pass on the same 152-path source inventory; movement and layout also pass on Chromium.
+At the user's immediate stop, full sizing and padding were interrupted by process shutdown.
+The requested verification resumed on unchanged application and test code and completed on 2026-10-17.
+Full sizing, padding, alignment, deletion, participation and the foundation workflow passed in development and built Chromium; all eight scoped gates are met.
+The [final `nested-text` audit](../artifacts/editor/nested-text-audit.json) binds eleven browser reports, the separate foundation record, both compiler scopes, four built assets and the same 152-path source inventory.
+Deletion and foundation retain final-only source evidence; their missing start snapshots are not inferred from the frozen build inventory.
+Focused nested sizing and placement also pass in development/built Chrome for Testing; installed stable Chrome and Windows remain unverified.
+The ordinary nested Fill checkpoint is closed and development is paused; no next feature was started.
+Preserve the interrupted results and `nested-text-gates.log` as interruption evidence; they do not establish a product defect.
+The retained real-content positive controls preserve existing intrinsic relationships; new intrinsic-parent Fill entry and main-axis parent Fit conversion remain unfinished accepted V1 work.
+Begin that next sizing task with native cases that separate independently supplied intrinsic content from circular same-axis growth, including Fixed siblings, nested contributions, text and size limits.
+Do not broaden ownership by accepting a measured positive size or a generic Fill label.
+
 ## Current keyboard ownership boundaries
 
 The ordinary keyboard workflow now preserves supported native offsets and own transforms, with real geometry, history, and save/reopen checks in `scripts/e2e/editor/check-movement.ts`.
@@ -415,3 +471,205 @@ The parent rerun passed 346 measured assertions across 76 retained fixture state
 The suite asserts both bounded successful mappings and the counterexamples above.
 It uses Playwright Chromium 153.0.8010.12 on Linux and does not certify editor workflows, installed Google Chrome, or Windows.
 Retain these negative controls when replacing a proposed mapping, then verify the accepted behavior through the application before marking this work resolved.
+
+## Intrinsic Fit/Fill integration and placement resume
+
+The 2026-10-17 intrinsic implementation remains in progress at the user's stop request.
+The complete five-group intrinsic workflow passed development and built Chromium on one 161-path source inventory; Gap and padding also passed both application modes.
+The new controls preserve independently supplied intrinsic sizing, sole Column auto-basis ownership, atomic dependent conversions and native wrapped-row Height Fill, including valid empty rows.
+The E2E work also reproduced and corrected Escape publishing a Fixed command after cancelling a Fit numeric preview.
+The shared PropertyField cancellation ref skips that blur commit while preserving explicit equal-value capture.
+The final browser/compiler/regression audit remains pending, and the interrupted second full sizing run must be rerun.
+No acceptance contract or doc_v1 file was changed.
+
+### Shared child to sole intrinsic destination: reproduced refusal
+
+Use an ordinary bounded Column of height 400px with two shared Height Fill children and 8px gap.
+The selected child contains an independently Fixed 60px descendant.
+Use an otherwise empty ordinary Column destination with Fit height, 10px padding and 2px borders so it has a visible pointer target without a Fixed height supplier.
+After the pointer gesture is ready, drag directly into that Column.
+The current application refuses with Set the parent's height first, leaves the child in the original parent, and submits no command or history change.
+The destination would contain only one grower; this case does not require the unresolved shared intrinsic Column projection.
+
+The parent reproduction is `.unlazy/intrinsic-fill/reproduce-shared-placement.ts`.
+Run `ORC_PLACEMENT_PROBE_PHASE=before-column bun .unlazy/intrinsic-fill/reproduce-shared-placement.ts` from the repository root.
+The retained failing-before evidence is `.unlazy/intrinsic-fill/shared-placement-before-column-result.json`, its screenshot/trace, and `shared-placement-before-column.log`.
+That valid Column fixture records unchanged before/after sessions, zero requests, the missing-height notice, no page errors and clean application shutdown.
+Earlier attempts used a Row destination or moved before gesture preparation; they do not establish this particular defect.
+The independent read-only review is `.unlazy/intrinsic-fill/reviews/final-ownership/REPORT.md` with 27 recorded input hashes.
+
+`prepareFlowSizing` and `intrinsicFlowSupply` in `src/editor/layout/sizing.ts` build the prospective destination cohort but inspect the incoming child's original native context.
+`intrinsicProjectionOwner` sees another grower in the old parent and rejects before the sole-child auto-basis conversion.
+A drag through intermediate previews may additionally require the source contribution and ownership to be captured from the applied state before the rendered DOM changes.
+The proposed correction is to freeze the incoming supply/priority facts, evaluate sole membership against the proposed destination, and retain exact applied ownership plus the multiple-grower intrinsic refusal.
+Preserve genuinely retained Fixed incoming supply; do not exclude it as if placement always replaced that dimension.
+No implementation change for this correction has been made yet.
+
+Add explicit editor regressions for direct drag, intermediate/cached destination retargeting, Escape cancellation, one atomic commit, exact Undo/Redo, retained Fixed descendants, source-peer rebasing and source/save persistence.
+Also cover an intrinsic destination with an independent Fixed sibling and deletion of a shared peer followed by parent Fit conversion.
+The latter cleanup appears correct by source review but has no focused regression yet.
+General shared intrinsic Column allocation remains separate required work: the tested native mappings collapse, retain unequal sizes or inflate the content-sized parent.
+An extra 110 deferred-basis/parent-style combinations per browser found no qualifying candidate; this finite search does not prove all possible CSS mappings impossible.
+The optional Astra fallback was offered while other verification continued; no model change or architectural replacement was performed.
+
+### Placement correction resumed, 2026-10-18
+
+The user resumed the current task.
+The permanent `placement` scenario in `scripts/e2e/editor/check-intrinsic-sizing.ts` failed before the correction with the incoming child still under its old parent.
+Its retained evidence is `artifacts/editor/intrinsic-placement-before-chromium-placement-result.json` and the associated development trace/screenshot.
+The correction captures incoming source supply and CSS priorities before temporary previews and permits the selected placement object's exact owned contribution without consulting its old growing peers.
+The destination still requires owned supported participants and rejects multiple intrinsic Height growers.
+The focused scenario passes development Chromium, covering direct/cached drag, cancellation, atomic history, descendant preservation, old-peer rebasing, source response and saving/reopening.
+A direct shared-survivor deletion followed by parent Fit regression was also added.
+Full same-source browser/compiler/regression verification remains pending.
+The 2026-10-17 reproduction and review above remain historical failing-before evidence.
+General shared intrinsic Column allocation remains unresolved; a separate isolated native follow-up is investigating additional platform mechanisms without changing the accepted architecture.
+
+### Intrinsic verification completed, 2026-10-18
+
+The earlier pending verification above is now complete for the implemented cases.
+The final [audit](../artifacts/editor/intrinsic-current-audit.json) passed on commit `950e8a28d785d7783b471e689e3538bc75a7be31` plus the recorded uncommitted work, with 162 current source paths and four unchanged built files.
+The six-group intrinsic workflow passed development and built Chromium 153.0.8010.12 and managed Chrome for Testing 154.0.8037.57.
+Each browser records 12 summaries and 888 inputs, including the direct shared-survivor deletion and parent Fit conversion.
+Full sizing passed both Chromium modes with 61 summaries and 1,857 inputs per mode.
+Affected movement, layout, nested placement, Gap, padding, alignment, participation, deletion, atomic-command, renderer-boundary, foundation and history checks passed.
+All eight static/tooling checks passed, including both configurations with required TS6 6.0.3 and isolated native TS7 7.0.2.
+The sole historical inventory difference is the corrected movement test; the other executed runners, application code, runtime helpers, dependencies, root configuration and four built files still match.
+The permanent movement rerun and final static checks use the current test bytes.
+The prior externally interrupted sizing run remains historical and does not establish a product defect.
+This checkpoint does not complete the general shared intrinsic Column requirement.
+
+### Shared intrinsic Column decision after Astra
+
+The user authorized retaining Flex and a focused Astra second review, then resumed that same reviewer after quota recovery.
+Astra finished, and the parent independently replayed its 96 native variants per browser and the reduced text counterexample in both pinned binaries.
+The native-only review changed no application code, saved schema, dependency, accepted contract or doc_v1 file.
+Its report is `.unlazy/intrinsic-fill/reviews/astra-shared-column/REPORT.md`.
+The replay commands are `bun .unlazy/intrinsic-fill/reviews/astra-shared-column/probe.mjs`, `bun .unlazy/intrinsic-fill/reviews/astra-shared-column/check.mjs` and `bun .unlazy/intrinsic-fill/reviews/astra-shared-column/zero-text.mjs`.
+Their exit-zero records are `parent-replay.json` and `parent-zero-replay.json` in that review directory; these confirm the experiment and its negative finding, not a passing application mapping.
+
+The new partial candidate uses vertical writing with a row Flex direction to produce a physical Column, literal zero bases and independently supplied descendants.
+The existing hierarchy can share heights equally and respond to Fixed descendant edits, mixed siblings, unequal decoration, limits and Fit/Fixed transitions in the retained finite matrix.
+Ordinary horizontal text requires a writing-mode reset within that hierarchy.
+In the reduced two-child text case, the initial text heights are 20px and 60px, the gap is 8px, and the parent and Fill children measure 88px and 40px/40px.
+After editing the first text to 260px, the live parent and children remain at those stale sizes.
+Creating the same final source in a fresh DOM gives a 328px parent and 160px/160px children in both browsers.
+The exact measurements are in `zero-text-results.json`, with original agent data preserved separately and the parent replay retained.
+Leaving text vertical changes the artwork and is not an acceptable correction.
+Forced geometry changes and rebuilding the DOM were diagnostic controls, not proposed product workarounds.
+The observation suggests a native intrinsic-layout invalidation problem, but the browser's internal root cause and an upstream fix are unverified.
+This finite search is not proof that every possible Flex solution is impossible.
+Even if invalidation were corrected, adopting this candidate would require a separate review of physical/logical axes, source ownership, text, layout controls and exports.
+
+The three concrete next steps are recorded in `.unlazy/intrinsic-fill/architecture-options.md`.
+
+1. Run an isolated native Grid comparison with the same element hierarchy and independent fixtures.
+   Check horizontal text edits, independently Fixed content, empty versus supplied content, unequal decoration, limits, mixed siblings and Fit/Fixed transitions in both browsers.
+   Keep application code and doc_v1 unchanged during research.
+   A passing experiment would still require agreement before adopting a different application projection.
+2. Explicitly accept a V1 limitation requiring independently defined parent height for multiple main-axis Height Fill children.
+   Preserve supported sole Column, Row, wrapped Row and bounded sharing behavior.
+   This would leave automatic content-sized Column height with multiple equal-sharing children outside supported V1 combinations.
+   Record the limitation with additive codex-pc comments in the accepted documentation and retain the broader capability as future work only after user agreement.
+3. Keep the complete Flex requirement open and investigate the reduced browser case or a genuinely new native mechanism.
+   Retain the current guard and report the feature as unfinished.
+   Do not promise a delivery date or depend on an unverified upstream correction.
+   Do not send an upstream issue or other external message without authorization.
+
+The parent recommends the bounded Grid comparison as the next research step before accepting reduced support.
+Grid has not been verified for this complete contract, particularly capped-share redistribution.
+After requesting simple explanations and asking how much option 2 would omit, the user explicitly selected option 1, the isolated Grid experiment.
+That research is now complete, with separate native-feasibility and allocation-limit reviews and independent parent replays.
+Application adoption, an architecture change and a V1 support reduction remain unauthorized.
+Resume from the isolated evidence and its parent replay, not by repeating the completed application regression matrix or treating the original requirement as satisfied.
+
+### Isolated Grid findings and resume boundary, 2026-10-18
+
+Both bounded research agents finished, and the parent accepted all eight research and integration gates with no abandonment.
+The native projection study captured 173 paired live/fresh states per browser.
+The independent allocation study captured 460 fixtures and 4,500 states per browser, including the added low-content cap cases.
+The user resumed the same limits reviewer after quota recovery; its final saved results and report were audited before delivery.
+The parent reran the full paired probe and checker with a 300-second verifier allowance and reran the replay comparison.
+All 9,000 measured states match the original final agent delivery.
+The earlier parent 120-second timeout interrupted the second browser and is retained as a check-runner limitation, not a product failure or completed replay.
+
+The reports are `.unlazy/intrinsic-fill/reviews/grid-native/REPORT.md` and `.unlazy/intrinsic-fill/reviews/grid-limits/REPORT.md`.
+Run each folder's `probe.mjs` and `check.mjs` with Bun from the repository root.
+Also run `bun .unlazy/intrinsic-fill/reviews/grid-limits/compare-replay.mjs` for the retained original-versus-expanded fixture comparison.
+Both exact browser paths and executable hashes are in those records.
+The parent integration report and replay manifest are `.unlazy/intrinsic-fill/grid-research/RESULT.md` and `limits-parent-replay.json`.
+All command success markers certify collection and correct classification, not that a candidate passed the complete product contract.
+
+Ordinary fractional Grid rows correctly follow the measured horizontal text edits and share unconstrained intrinsic space.
+An item-level maximum does not necessarily shrink its native row, leaving an enlarged visible gap and an incorrect share for its peer.
+With a 400px parent and 8px gap, a first maximum of 70px yields children 70px/196px instead of 70px/322px.
+The issue also occurs in intrinsic parents, so retaining Flex only for definite parents does not repair these tested mappings.
+
+Moving the cap into a nonflexible Grid track fixes above-cap cases but can allocate its maximum before the shared level reaches that cap.
+For independent source heights 20px and 30px and a first maximum of 70px, that mapping gives a 108px parent, 70px/30px rows and children, and an available budget of 100px.
+Both children could accept 50px without reaching the cap, so equal sharing requires 50px/50px.
+The fit-content capped-track variant instead produces a 58px parent and 20px/30px children, where the remaining 50px requires 25px/25px.
+Both pinned browsers independently reproduce these counterexamples.
+The full matrix preserves separate row, border-box, margin, position and visible-gap observations so a capped item cannot be mistaken for redistributed track space.
+
+The parent additionally tested a percentage-based capped track motivated by Grid's intrinsic percentage resolution rule.
+The narrow expression is `minmax(0,min(70px,calc((100% - 8px)/2))) minmax(0,1fr)`.
+Its paired native controls pass 48 source/height states per browser, including low content, active caps, auto/max-content and 40px/160px/400px parents.
+Nine additional states per browser cover an ordinary Fit sibling and a peer minimum.
+The minimum-80px control passes and must not be described as a failed case.
+The ordinary Fit sibling still fails: parent 96px, sibling 30px and gaps 16px leave 50px, but the percentage mapping gives 40px/10px rather than 25px/25px.
+The percentage refers to the whole parent budget and does not supply an arbitrary Fit sibling's changing contribution to the expression.
+The source and observations are `percentage-control.js`, `percentage-limits.js` and their paired JSON files in the parent research directory.
+This is a useful narrow lead, not a verified complete mapping or permission to restrict mixed siblings.
+
+The user also supplied Onlook as reference during this investigation.
+The targeted GitHub source review is pinned to `423e2e924366419e418ee049093872d535eea41a`, with cached sources and line-linked findings in `.unlazy/intrinsic-fill/grid-research/onlook-review.md`.
+Its reviewed `getAutolayoutStyles` path maps Fill to `100%` and Fit to `fit-content`, while its Grid helper generates ordinary fractional tracks.
+Those reviewed paths do not establish ORC's equal remaining-space sharing with limit redistribution.
+The authored-versus-computed style separation and original/updated source-target actions are useful references for the already accepted later React integration.
+This was not a whole-repository audit, and Onlook was not installed or runtime-verified.
+
+No application code, repository test, dependency, configuration or doc_v1 content changed during the isolated research.
+The current application checkpoint still matches its 162-path source inventory and four built files and retains the passing browser/static/compiler evidence above.
+Both child leases are released and all workers and owned browser checks are terminal.
+The parent recommends retaining the verified Flex implementation and current unresolved-combination guard.
+No complete native replacement is established, and the finite search is not proof that every possible CSS mapping is impossible.
+Before further implementation, any candidate must handle changing non-Fill contributions, simultaneous minima/maxima, decoration and live source response without freezing measured dimensions or adding a hidden layout system.
+Do not silently adopt a partial Grid projection, remove the accepted combination, or treat this native research as editor/history/export verification.
+Any change to the accepted projection or V1 support requires a concrete proposal and separate user agreement.
+
+### Percentage follow-up and generated native wrapper proposal, 2026-10-18
+
+The user authorized focused review of changing Fit siblings and simultaneous min/max limits, followed by a complete native prototype or concrete smallest architectural proposal.
+The [dedicated wrapper proposal](intrinsic-column-wrapper-proposal.md) now records the decision in full.
+The extended two-child percentage formula passes standalone and independently Fixed-sibling limit controls but fails 183 of 273 mixed-Fit states per browser.
+One case with Fill bounds 0–70 and 80–120 and Fit 20 leaves 100px for Fill but produces 40/80 instead of 20/80.
+Changing Fit to 90 still leaves 100px but produces 70/120.
+The current same-hierarchy formula does not supply the changing Fit contribution to the remaining-budget expression.
+
+The smallest demonstrated structural candidate uses an outer single-cell Grid box and one generated inner Flex Column.
+The browser determines intrinsic content supply and then lays out a definite stretched Flex box, allowing the percentage-aware common basis to retain native equal sharing and min/max redistribution.
+The final paired native matrix passes 745 positive cases per browser, with two intentional negative controls correctly detected.
+It covers live Fit siblings, two/three Fill children, simultaneous child and parent limits, overflowing minima, capped unused space, unequal decoration and margins, both child box models, text changes, Fit/Fixed transitions, source parsing and empty content.
+This mapping changes rendered/exported hierarchy and is a proposal, not an adopted fix or a completed general feature.
+
+Source preservation requires an exact versioned generated-wrapper recognizer, a shared deterministic projector and explicit distinction between the canonical parent and its physical layout box.
+The current real importer instead creates a canonical wrapper node, as confirmed by the focused source check.
+Native HTML/CSS output can retain responsiveness without a JavaScript layout runtime, but it necessarily includes the extra wrapper and changes direct-child selectors.
+The proposal keeps canonical IDs/order and one-command history, while leaving their actual integrated verification pending.
+Application code, repository tests, dependencies, AGENTS.md and doc_v1 match all 219 protected starting hashes.
+Exact commands, exit codes, inputs, browser identity/hashes and raw observations are retained in `.unlazy/intrinsic-fill/percentage-followup/`.
+No adoption, feature reduction, commit or push was authorized.
+
+## Ordinary wrapper integration verified, 2026-10-20
+
+The user approved adoption, and the ordinary intrinsic Column implementation is now verified.
+The [current implementation checkpoint](../IMPLEMENTATION_STATUS.md#ordinary-intrinsic-column-wrapper-checkpoint) supersedes the earlier unresolved/proposal status for this exact shared Column case.
+It records the shared projector and exact inverse, canonical versus physical parent resolution, corrected ownership/dependency defects, lifecycle, source-preservation and export boundaries.
+Both pinned browser versions passed all seven intrinsic scenarios in development and built modes.
+Full sizing in both Chromium modes, the affected workflow regressions, required TS6, isolated TS7, lint/format/tooling, Fallow and matching final build output passed.
+The [aggregate audit](../artifacts/editor/intrinsic-column-current-audit.json) binds runtime inputs and output hashes and separately records the later README-only correction.
+Circular/unowned relationships still refuse; no measured layout solver or new public Grid mode was added.
+Earlier native counterexamples above remain historical evidence for the mappings they tested, not current failures of the approved wrapper.
+Imported React rewriting, arbitrary external selectors, full exporters, Windows and installed stable Chrome remain open at their existing boundaries.
+No commit or push was performed.

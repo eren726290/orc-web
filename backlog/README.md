@@ -15,6 +15,7 @@ Backlog entries are not product requirements until they are accepted and recorde
 - Review the [SVG source parser's initial bundle cost](source-parser-bundle-size.md) before release while preserving the verified source and rendering behavior.
 - Resolve [orphaned project-lock recovery](project-lock-recovery.md) after removing the reproduced automatic-reclamation race.
 - Resolve the measured [native layout projection limits](native-layout-projection.md) before claiming general Flex Fill and constraint support.
+  The [intrinsic Column wrapper proposal](intrinsic-column-wrapper-proposal.md) records the approved native projection, its source/history/export consequences and the verified ordinary intrinsic checkpoint.
 
 - Validate the recommended React, Vite, and browser-check foundation with the real ORC-web implementation before treating it as final.
 - Implement the real editor workflow using the Babel/Recast direction established by [PR1–5 source-editing validation](../doc_v1/architecture/react-source-editing-validation.md); completed Fedora fixture checks are not pending handoff work.

@@ -1,8 +1,11 @@
+import { flowBox, flowStyle } from "./layout-box";
+import { columnMarker } from "../../../shared/source/intrinsic-column";
 import type { AtomicMutation, Mutation } from "../../../shared/commands/commands";
 import { isLocked, type DesignDocument, type DesignNode } from "../../../shared/document/model";
 import { frameReference, prepareFreePlacement } from "./free-placement";
 import { prepareFlowPlacement } from "./flow-placement";
-import { readSizingOwners } from "./sizing";
+import { readSizingOwners, withFillDependencies } from "./sizing";
+import { previewDocument } from "../properties/property-preview";
 import { absolutePosition, isExplicitAbsolute } from "./participation";
 import { frameLayoutValidation } from "./frame-layout-validation";
 import { prepareFillSharing } from "./fill-sharing";
@@ -62,9 +65,14 @@ export function prepareRowWrapping(document: DesignDocument, id: string, wrapped
     },
   ];
   mutations.push(...prepareFillSharing(document)(mutations));
+  const mutation = { kind: "batch", mutations } satisfies Mutation;
   return {
-    mutation: { kind: "batch", mutations } satisfies Mutation,
-    validate: rowWrappingValidation(element, value),
+    mutation,
+    validate: withFillDependencies(
+      document,
+      previewDocument(document, mutation),
+      rowWrappingValidation(element, value),
+    ),
   };
 }
 
@@ -94,14 +102,19 @@ export function prepareFrameLayout(document: DesignDocument, id: string, target:
     if (change) mutations.push(change);
   }
   mutations.push(...prepareFillSharing(document)(mutations));
+  const mutation = { kind: "batch", mutations } satisfies Mutation;
   return {
-    mutation: { kind: "batch", mutations } satisfies Mutation,
-    validate: frameLayoutValidation(conversion.element, target, conversion.scale),
+    mutation,
+    validate: withFillDependencies(
+      document,
+      previewDocument(document, mutation),
+      frameLayoutValidation(conversion.element, target, conversion.scale),
+    ),
   };
 }
 
 function renderedChild(parent: HTMLElement, id: string) {
-  const element = parent.querySelector(`:scope > [data-orc-id="${CSS.escape(id)}"]`);
+  const element = flowBox(parent).querySelector(`:scope > [data-orc-id="${CSS.escape(id)}"]`);
   if (
     !(element instanceof HTMLElement || element instanceof SVGElement) ||
     !element.getClientRects().length
@@ -121,7 +134,7 @@ function frameConversion(
   const world = element.closest(".canvas-world");
   if (!(surface instanceof HTMLElement) || !(world instanceof HTMLElement))
     throw new Error("The frame's rendered layout is unavailable.");
-  const style = getComputedStyle(element);
+  const style = flowStyle(element);
   if (current === "Free" && !["block", "flow-root"].includes(style.display))
     throw new Error("Use Code to change this source-controlled layout.");
   const native = ["flex", "inline-flex"].includes(style.display) ? style.flexDirection : "Free";
@@ -164,7 +177,10 @@ function parentLayout(
     kind: "style",
     id: node.id,
     values,
-    unset: target !== "Free" && Object.hasOwn(node.style, "flex-flow") ? ["flex-flow"] : [],
+    unset: [
+      ...(target !== "Free" && Object.hasOwn(node.style, "flex-flow") ? ["flex-flow"] : []),
+      ...(target !== "Column" && Object.hasOwn(node.style, columnMarker) ? [columnMarker] : []),
+    ],
   };
 }
 

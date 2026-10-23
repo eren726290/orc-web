@@ -1,3 +1,4 @@
+import { flowStyle } from "../layout/layout-box";
 import { useEffect, useState } from "react";
 import type { DesignDocument } from "../../../shared/document/model";
 import type { ViewState } from "../view-state";
@@ -57,9 +58,9 @@ function measureDrop(canvas: HTMLDivElement | null, preview: PointerPreview) {
   const origin = canvas.getBoundingClientRect();
   const frame = parent.getBoundingClientRect();
   const object = child.getBoundingClientRect();
-  const row = getComputedStyle(parent).flexDirection === "row";
+  const row = flowStyle(parent).flexDirection === "row";
   const flow =
-    ["flex", "inline-flex"].includes(getComputedStyle(parent).display) &&
+    ["flex", "inline-flex"].includes(flowStyle(parent).display) &&
     !["absolute", "fixed"].includes(getComputedStyle(child).position);
   const x = object.x - origin.x;
   const y = object.y - origin.y;

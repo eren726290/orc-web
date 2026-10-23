@@ -1,3 +1,4 @@
+import { flowBox, flowStyle } from "../layout/layout-box";
 import type { DesignDocument, DesignNode } from "../../../shared/document/model";
 import { hasCoordinateTransform } from "../layout/coordinates";
 import { checkMovementCoordinates, flowChildren } from "./keyboard-movement";
@@ -10,7 +11,7 @@ export function measureGaps(
   if (!canvas || !node) return [];
   const parent = canvas.querySelector(`[data-orc-id="${CSS.escape(node.id)}"]`);
   if (!(parent instanceof HTMLElement)) return [];
-  const style = getComputedStyle(parent);
+  const style = flowStyle(parent);
   if (!ordinaryGapLayout(style)) return [];
   try {
     checkMovementCoordinates(parent, canvas);
@@ -129,5 +130,9 @@ function visibleGap(parent: HTMLElement, point: { x: number; y: number; touching
   const target = document
     .elementsFromPoint(point.x, point.y)
     .find((element) => !element.closest(".gap-handle"));
-  return target === parent || (point.touching && target !== undefined && parent.contains(target));
+  return (
+    target === parent ||
+    target === flowBox(parent) ||
+    (point.touching && target !== undefined && parent.contains(target))
+  );
 }

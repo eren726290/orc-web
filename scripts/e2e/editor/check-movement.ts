@@ -1417,6 +1417,7 @@ async function mainFillReparenting(page: Page) {
     await mainFillPointerDrop(page, "fill-a", "row", 96);
     await mainFillBoundedDrop(page);
     await mainFillSharedDrop(page);
+    await mainFillIntrinsicDrop(page);
     await mainFillRejectedDestinations(page);
     await mainFillRetarget(page, false);
     await mainFillRetarget(page, true);
@@ -1510,9 +1511,26 @@ async function mainFillBoundedDrop(page: Page) {
   checks.push("Owned equal pixel min/max limits bound a valid main-axis Fill pointer destination");
 }
 
+async function mainFillIntrinsicDrop(page: Page) {
+  await accepted(page, { kind: "style", id: "row", values: { width: "auto" } });
+  const content = await page.locator('.canvas-world [data-orc-id="fill-a"]').evaluate((element) => {
+    const world = element.closest(".canvas-world");
+    if (!world) throw new Error("Missing canvas world");
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    return range.getBoundingClientRect().width / new DOMMatrix(getComputedStyle(world).transform).a;
+  });
+  assert.ok(content > 0, "The incoming text supplies independent intrinsic width");
+  await mainFillPointerDrop(page, "fill-a", "row", content);
+  await history(page, "undo");
+  checks.push(
+    "An intrinsic Row with independent Fixed siblings accepts source-responsive main-axis Fill placement",
+  );
+}
+
 async function mainFillRejectedDestinations(page: Page) {
   for (const [id, values] of [
-    ["row", { width: "auto" }],
+    ["row", { width: "auto", "min-width": "var(--pointer-minimum)", "--pointer-minimum": "0px" }],
     ["row", { width: "var(--pointer-width)", "--pointer-width": "300px" }],
   ] satisfies [string, DesignNode["style"]][]) {
     await accepted(page, { kind: "style", id, values });
@@ -1580,7 +1598,8 @@ async function mainFillSharedDrop(page: Page) {
 }
 
 async function mainFillRetarget(page: Page, invalid: boolean) {
-  if (invalid) await accepted(page, { kind: "style", id: "wrap", values: { width: "auto" } });
+  const width = "var(--pointer-width, 300px)";
+  if (invalid) await accepted(page, { kind: "style", id: "wrap", values: { width } });
   await select(page, ["fill-a"]);
   const before = await session(page);
   const bounds = await geometry(page, "fill-a");
@@ -1605,7 +1624,7 @@ async function mainFillRetarget(page: Page, invalid: boolean) {
     trigger: "Main-axis Fill preview retarget",
     invalid,
     destinations: invalid
-      ? ["row", "unbounded wrap"]
+      ? ["row", "source-controlled wrap"]
       : ["row", "wrap", "cached row", "cached wrap"],
     before,
     after,
@@ -1613,7 +1632,7 @@ async function mainFillRetarget(page: Page, invalid: boolean) {
     requests: commands.requests,
   });
   checks.push(
-    `Main-axis Fill preview retargets from a valid Row to ${invalid ? "an unbounded rejected Row without changes" : "a second bounded Row and cached first destination"}`,
+    `Main-axis Fill preview retargets from a valid Row to ${invalid ? "a source-controlled rejected Row without changes" : "a second bounded Row and cached first destination"}`,
   );
 }
 

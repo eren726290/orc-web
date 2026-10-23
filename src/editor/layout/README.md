@@ -17,11 +17,25 @@ gap.ts recognizes equal authored fixed-pixel gap axes and prepares one atomic sh
 Unequal axes, incompatible priorities, resets, and source expressions stay available through Code.
 alignment.ts reads authored alignment and prepares parent-only physical packed positions or native Space between, preserving source expressions and per-property priority.
 absolute-placement.ts prepares measured participation changes through the existing Free/flow conversions, preserving the selected child's parent and sibling slot.
-sizing.ts recognizes native per-axis ownership and prepares explicit ordinary Fixed/Fit, bounded cross-axis Fill, and bounded main-axis Fill in nowrap Rows/Columns and wrapped Rows.
-New cross-axis Fill requires an ordinary nowrap Row or Column, an independently authored parent bound, owned physical sizing/alignment, and no effective automatic cross margin.
+sizing.ts recognizes native per-axis ownership and prepares explicit ordinary Fixed/Fit, bounded Fill in nowrap Rows/Columns and wrapped Rows, and supported intrinsic Fill in ordinary nowrap frames.
+New cross-axis Fill requires an ordinary nowrap Row or Column, or a wrapped Row, an owned parent extent traced to an independently authored bound, owned physical sizing/alignment, and no effective automatic cross margin.
 It writes only the cross dimension and explicit stretch, preserving priorities, margins, limits and main-axis factors.
+Wrapped Height Fill stretches within its native row and preserves the parent's align-content value.
+Later width, content, decoration and wrapping changes reflow through CSS without saved row heights.
+Owned nested Fill can trace the same physical axis through participating Fill ancestors to an active Fixed size or equal limits.
+fill-dependencies.ts captures temporary supported Fill axes and checks candidate document membership after native previews.
+Sizing, layout, wrapping, alignment, participation, pointer placement, deletion and text edits preserve those relationships or reject before commit.
+Existing intrinsic relationships retain active Fixed/equal-limit contributions through participating canonical content.
+Removing their sole contributor or erasing inherited Fill alignment rejects with an explanation; explicit supported Fixed/Fit exits remain available.
+Workspace checks text candidates before Properties preview and through the shared Properties/canvas commit path.
+The native sizing authority remains in sizing.ts; candidate membership never becomes a saved dependency graph.
 Numeric Fill values remain read-only; supported explicit Fixed/Fit exits remain available under valid intrinsic parents.
-A single nowrap main-axis Fill retains the auto dimension, grow 1, shrink 0, and literal zero-pixel basis projection.
+A single bounded nowrap main-axis Fill retains the auto dimension, grow 1, shrink 0, and literal zero-pixel basis projection.
+An owned sole intrinsic Column Fill uses auto height and basis with grow 1 and shrink 1 so independent content still contributes with a zero minimum.
+Prospective intrinsic supply excludes the selected object's replaced Fixed dimension while retaining independently owned descendants, siblings, text and active bounds.
+Parent Fit conversion includes necessary sole-height-Fill basis changes in the same command, stops at independent Fixed/equal-bound descendants, and checks locks only for actual dependent writes.
+Intrinsic wrapped Row Height Fill follows each native row's extent, including a zero-height empty row when another row supplies content.
+Shared intrinsic Column sizing uses the explicitly opted-in native projection described below.
 fill-sharing.ts owns multiple-child equal outer sharing through child-local numeric CSS inputs and exact native variable expressions.
 Its command preparation freezes the applied ownership, derives final membership and decoration from the proposed styles/reorder/delete edits, and appends only necessary dependent style changes.
 Equivalent numeric input declarations are retained verbatim so a no-op does not create an unnecessary dependent write to a locked peer.
@@ -35,4 +49,17 @@ Wrapped Rows use the same source-derived common outer basis for native line form
 A sole wrapped Fill child uses that shared projection too; toggling wrapping prepares any needed child changes in the same atomic command.
 Parent edits also inspect the parent's own child cohort when determining dependent style changes.
 Unchanged parent layout declarations use the captured native display, direction and wrapping, preserving source variables while explicit proposed layout changes take precedence.
-Wrapped cross-axis Fill, arbitrary source, logical ownership, and uncertain dependencies remain unfinished boundaries.
+Broader intrinsic bounds, arbitrary source, logical ownership, and uncertain dependencies remain unfinished boundaries.
+
+## Intrinsic Column projection
+
+`layout-box.ts` distinguishes the canonical outer object from its exact generated inner Flex flow.
+Canonical parent coordinates, paint, clipping, padding, borders, and dimensions use the outer box.
+Flow membership, gaps, order, and distribution use the generated inner box.
+`fill-sharing.ts` activates the own `--orc-intrinsic-column:1` declaration atomically when a supported content-sized Column gains multiple Fill children.
+The shared source projector emits a versioned outer Grid and inner Flex box, while the canonical frame remains a Column with its existing IDs and children.
+Percentage-bearing bases preserve intrinsic contribution and reuse native equal outer sharing with decoration compensation.
+The wrapper remains mounted through later Fit/Fixed changes and membership reductions.
+An explicit conversion away from Column removes the marker in the same command.
+The first structural insertion belongs to Edit mode; later Preview sessions mount the applied structure.
+There is no saved geometry or runtime sizing solver.

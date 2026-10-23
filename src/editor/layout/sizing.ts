@@ -1,11 +1,16 @@
 import {
   isLocked,
+  containsNode,
   type DesignDocument,
   type DesignNode,
   type Styles,
 } from "../../../shared/document/model";
+import { flowBox, objectParent } from "./layout-box";
+import { columnProjectionEligible } from "../../../shared/source/intrinsic-column";
 import { hasCoordinateTransform } from "./coordinates";
 import type { Mutation } from "../../../shared/commands/commands";
+import { captureFillDependencies } from "./fill-dependencies";
+import { previewDocument } from "../properties/property-preview";
 import {
   fillInputProperties,
   fillDecoration,
@@ -89,6 +94,7 @@ function sizingContext(
 }
 
 type SizingContext = ReturnType<typeof sizingContext>;
+type SupplyChange = { id: string; kind: "sizing" | "placement" };
 
 function sizingReadout(source: SizingContext, axis: SizingAxis): SizingReadout {
   const owner = competingDimension(source.style, axis) ? null : source.owners[axis];
@@ -128,12 +134,29 @@ function sizingMessage(
   owner: SizingReadout["mode"],
   limitation: string | null,
 ) {
-  if (owner)
-    return `${axis === "width" ? "Width" : "Height"} controlled by ${owner}.${overflowsParent(source, axis) ? " This object extends beyond its parent." : ""}`;
+  if (owner === "Fill" && limitation && !suppliedFillParent(source, axis)) return limitation;
+  if (owner) return controlledSizingMessage(source, axis, owner);
   if (!convertible) return "Size controlled by source. Edit in Code.";
   if (overflowsParent(source, axis)) return "This object extends beyond its parent.";
   if (limitation) return limitation;
   return contentSizing(source) ? null : "Fit is unavailable for this content.";
+}
+
+function controlledSizingMessage(
+  source: SizingContext,
+  axis: SizingAxis,
+  owner: NonNullable<SizingReadout["mode"]>,
+) {
+  return `${axis === "width" ? "Width" : "Height"} controlled by ${owner}.${owner === "Fill" ? wrappedCrossMessage(source, axis) : ""}${overflowsParent(source, axis) ? " This object extends beyond its parent." : ""}`;
+}
+
+function wrappedCrossMessage(source: SizingContext, axis: SizingAxis) {
+  return axis === "height" &&
+    source.flow.direction === "row" &&
+    source.element.parentElement &&
+    getComputedStyle(source.element.parentElement).flexWrap === "wrap"
+    ? " Height fills its current row."
+    : "";
 }
 
 function crossAxis(source: SizingContext, axis: SizingAxis) {
@@ -144,17 +167,18 @@ function fillLimitation(source: SizingContext, axis: SizingAxis) {
   const parent = source.element.parentElement;
   if (!source.main || !parent) return "Fill is unavailable for this layout.";
   if (source.main === axis) return mainFillLimitation(source, axis);
-  if (getComputedStyle(parent).flexWrap !== "nowrap") return "Fill is unavailable for this layout.";
+  if (!supportedFlowWrapping(parent, source.flow.direction ?? ""))
+    return "Fill is unavailable for this layout.";
   if (
     source.computed.aspectRatio !== "auto" ||
     !ownedStretch(source) ||
     automaticCrossMargin(source.element, axis)
   )
     return "Use Code to change this sizing.";
-  return boundedParent(source, axis) ? null : `Set the parent's ${axis} first.`;
+  return availableFillParent(source, axis) ? null : `Set the parent's ${axis} first.`;
 }
 
-function supportedMainWrapping(parent: HTMLElement, direction: string) {
+function supportedFlowWrapping(parent: Element, direction: string) {
   const wrapping = getComputedStyle(parent).flexWrap;
   return wrapping === "nowrap" || (direction === "row" && wrapping === "wrap");
 }
@@ -174,7 +198,14 @@ function mainFillLimitation(source: SizingContext, axis: SizingAxis) {
   if (layout) return layout;
   if (source.computed.aspectRatio !== "auto" || automaticCrossMargin(source.element, axis))
     return "Use Code to change this sizing.";
-  if (!boundedParent(source, axis)) return `Set the parent's ${axis} first.`;
+  if (!availableFillParent(source, axis)) return `Set the parent's ${axis} first.`;
+  if (
+    axis === "height" &&
+    !boundedParent(source, axis) &&
+    otherGrowers(source).length &&
+    !projectableColumn(parentSizingContext(source))
+  )
+    return "Use Code to change this source-controlled Column.";
   const parent = source.element.parentElement;
   if (!parent) return "Fill is unavailable for this layout.";
   return mainFillSiblingLimitation(source, axis, parent);
@@ -195,7 +226,7 @@ function mainFillSiblingLimitation(source: SizingContext, axis: SizingAxis, pare
 
 function mainFillLayoutLimitation(source: SizingContext, axis: SizingAxis) {
   const parent = source.element.parentElement;
-  if (!parent || !supportedMainWrapping(parent, source.flow.direction ?? ""))
+  if (!parent || !supportedFlowWrapping(parent, source.flow.direction ?? ""))
     return "Fill is unavailable for this layout.";
   return getComputedStyle(parent).flexWrap === "wrap" &&
     fillDecoration(source.element, axis) === null
@@ -227,6 +258,7 @@ export function prepareFlowSizing(
     width: sizingParticipant(context, "width"),
     height: sizingParticipant(context, "height"),
   };
+  const source = flowSupply(context);
   return (parent: HTMLElement, direction: string, values: Styles) => {
     const axis = direction === "row" ? "width" : "height";
     const incoming = projectedParticipant(frozen[axis], axis, values);
@@ -237,15 +269,71 @@ export function prepareFlowSizing(
     });
     if (!incoming.exact && !records.some((record) => record?.exact)) return false;
     const parentNode = document.nodes[parent.dataset.orcId ?? ""];
-    if (!parentNode || !supportedMainWrapping(parent, direction))
+    if (!parentNode || !supportedFlowWrapping(flowBox(parent), direction))
       throw new Error("Fill is unavailable for this layout.");
-    if (!boundedSizing(sizingContext(document, parentNode, parent), axis))
-      throw new Error(`Set the parent's ${axis} first.`);
     const cohort = [incoming, ...records];
+    prepareFlowExtent({
+      source,
+      target: sizingContext(document, parentNode, parent),
+      axis,
+      values,
+      cohort,
+    });
     if (cohort.some((record) => !record || !supportedParticipant(record)))
       throw new Error("Use Code to change this sizing.");
     return true;
   };
+}
+
+type FlowSizingCandidate = {
+  source: ReturnType<typeof flowSupply>;
+  target: SizingContext;
+  axis: SizingAxis;
+  values: Styles;
+  cohort: (ReturnType<typeof sizingParticipant> | null)[];
+};
+
+function flowSupply(source: SizingContext) {
+  const style = window.document.createElement("div").style;
+  style.cssText = source.style.cssText;
+  const supplied = (axis: SizingAxis) =>
+    independentFixed(source, axis) ||
+    intrinsicContribution(source, axis, { id: source.node.id, kind: "placement" });
+  return { id: source.node.id, style, width: supplied("width"), height: supplied("height") };
+}
+
+function prepareFlowExtent({ source, target, axis, values, cohort }: FlowSizingCandidate) {
+  if (boundedSizing(target, axis)) return;
+  if (target.node.kind !== "frame" || !ownedSizing(target, axis))
+    throw new Error("Use Code to change this sizing.");
+  if (!intrinsicFlowSupply(source, target, axis, cohort))
+    throw new Error(`Set the parent's ${axis} first.`);
+  const incoming = cohort[0];
+  if (axis !== "height" || !incoming?.exact) return;
+  values["flex-shrink"] = sizingPriority(source.style, "flex-shrink", "1");
+  values["flex-basis"] = sizingPriority(source.style, "flex-basis", "auto");
+  incoming.shrink = "1";
+  incoming.basis = "auto";
+}
+
+function intrinsicFlowSupply(
+  source: FlowSizingCandidate["source"],
+  target: SizingContext,
+  axis: SizingAxis,
+  cohort: FlowSizingCandidate["cohort"],
+) {
+  const change: SupplyChange = {
+    id: cohort[0]?.exact ? source.id : target.node.id,
+    kind: "placement",
+  };
+  if (target.computed.flexWrap !== "nowrap") return false;
+  if (
+    axis === "height" &&
+    cohort.filter((record) => record?.exact).length > 1 &&
+    !projectableColumn(target)
+  )
+    return false;
+  return intrinsicSizing(target, axis, change) || source[axis];
 }
 
 function sizingParticipant(source: SizingContext, axis: SizingAxis) {
@@ -296,7 +384,7 @@ function supportedParticipant(source: ReturnType<typeof sizingParticipant>) {
 }
 
 function flowParticipants(parent: Element) {
-  return Array.from(parent.children).filter((child): child is HTMLElement | SVGElement => {
+  return Array.from(flowBox(parent).children).filter((child): child is HTMLElement | SVGElement => {
     const style = getComputedStyle(child);
     return (
       (child instanceof HTMLElement || child instanceof SVGElement) &&
@@ -327,17 +415,200 @@ function ownedStretch(source: SizingContext) {
 }
 
 function boundedParent(source: SizingContext, axis: SizingAxis) {
+  const parent = parentSizingContext(source);
+  return parent !== null && boundedSizing(parent, axis);
+}
+
+function availableFillParent(source: SizingContext, axis: SizingAxis) {
+  if (boundedParent(source, axis)) return true;
+  return intrinsicSizing(parentSizingContext(source), axis, { id: source.node.id, kind: "sizing" });
+}
+
+function intrinsicSizing(parent: SizingContext | null, axis: SizingAxis, change: SupplyChange) {
+  while (parent) {
+    if (
+      parent.node.kind !== "frame" ||
+      !ownedSizing(parent, axis) ||
+      !intrinsicWrapping(parent, axis)
+    )
+      return false;
+    if (!intrinsicProjectionOwner(parent, axis)) return false;
+    if (intrinsicContribution(parent, axis, change)) return true;
+    if (!ownedFillRelationship(parent, axis)) return false;
+    parent = parentSizingContext(parent);
+  }
+  return false;
+}
+
+function intrinsicWrapping(source: SizingContext, axis: SizingAxis) {
+  return (
+    source.computed.flexWrap === "nowrap" ||
+    (axis === "height" &&
+      source.computed.flexDirection === "row" &&
+      source.computed.flexWrap === "wrap")
+  );
+}
+
+function projectableColumn(source: SizingContext | null) {
+  return Boolean(
+    source &&
+    source.node.kind === "frame" &&
+    columnProjectionEligible(source.node.style) &&
+    ["flex", "grid"].includes(source.style.display) &&
+    source.computed.flexDirection === "column" &&
+    source.computed.flexWrap === "nowrap",
+  );
+}
+
+function otherGrowers(source: SizingContext) {
   const parent = source.element.parentElement;
-  if (source.parent?.kind !== "frame" || !parent) return false;
-  const context = sizingContext(source.document, source.parent, parent);
-  return boundedSizing(context, axis);
+  return parent
+    ? flowParticipants(parent).filter(
+        (element) => element !== source.element && getComputedStyle(element).flexGrow !== "0",
+      )
+    : [];
 }
 
 function boundedSizing(context: SizingContext, axis: SizingAxis) {
-  if (context.node.kind !== "frame") return false;
-  if (!ownedSizing(context, axis)) return false;
-  if (sizingMode(context, axis) === "Fixed" && activePixel(context, axis)) return true;
-  return activeEqualLimits(context, axis);
+  let source: SizingContext | null = context;
+  while (source) {
+    if (source.node.kind !== "frame" || !ownedSizing(source, axis)) return false;
+    if (sizingMode(source, axis) === "Fixed" && activePixel(source, axis)) return true;
+    if (activeEqualLimits(source, axis)) return true;
+    if (!ownedFillRelationship(source, axis)) return false;
+    source = parentSizingContext(source);
+  }
+  return false;
+}
+
+function parentSizingContext(source: SizingContext) {
+  const element = objectParent(source.element);
+  return source.parent?.kind === "frame" && element
+    ? sizingContext(source.document, source.parent, element)
+    : null;
+}
+
+function ownedFillRelationship(source: SizingContext, axis: SizingAxis) {
+  if (
+    source.owners[axis] !== "Fill" ||
+    source.computed.aspectRatio !== "auto" ||
+    automaticCrossMargin(source.element, axis)
+  )
+    return false;
+  if (source.main === axis)
+    return ownedMainFill(source, axis) && mainFillLayoutLimitation(source, axis) === null;
+  const parent = source.element.parentElement;
+  return Boolean(
+    parent &&
+    crossAxis(source, axis) &&
+    ownedStretch(source) &&
+    supportedFlowWrapping(parent, source.flow.direction ?? ""),
+  );
+}
+
+function suppliedFillParent(source: SizingContext, axis: SizingAxis) {
+  const parent = parentSizingContext(source);
+  return parent !== null && (boundedSizing(parent, axis) || intrinsicContribution(parent, axis));
+}
+
+function intrinsicContribution(
+  source: SizingContext,
+  axis: SizingAxis,
+  change: SupplyChange | null = null,
+): boolean {
+  if (!ownedSizing(source, axis)) return false;
+  if (source.node.id !== change?.id && independentFixed(source, axis)) return true;
+  if (activeEqualLimits(source, axis)) return true;
+  return intrinsicContent(source, axis, change);
+}
+
+function intrinsicContent(source: SizingContext, axis: SizingAxis, change: SupplyChange | null) {
+  if (change && !intrinsicProjectionOwner(source, axis, change)) return false;
+  if (positiveMinimum(source, axis)) return true;
+  if (change && !intrinsicProjection(source, axis, change)) return false;
+  if (!contentSizing(source)) return false;
+  if (source.node.kind === "text") return source.node.runs.some((run) => run.text.length > 0);
+  return intrinsicChildren(source, axis, change);
+}
+
+function intrinsicChildren(source: SizingContext, axis: SizingAxis, change: SupplyChange | null) {
+  return flowParticipants(source.element).some((element) => {
+    const node = source.document.nodes[element.dataset.orcId ?? ""];
+    return (
+      node?.parentId === source.node.id &&
+      source.node.children.includes(node.id) &&
+      intrinsicContribution(sizingContext(source.document, node, element), axis, change)
+    );
+  });
+}
+
+function independentFixed(source: SizingContext, axis: SizingAxis) {
+  return sizingMode(source, axis) === "Fixed" && activePixel(source, axis);
+}
+
+function positiveMinimum(source: SizingContext, axis: SizingAxis) {
+  const property = `min-${axis}`;
+  const value = pixelValue(source.style.getPropertyValue(property));
+  return value !== null && value > 0 && activePixel(source, property);
+}
+
+function intrinsicProjectionOwner(
+  source: SizingContext,
+  axis: SizingAxis,
+  change: SupplyChange | null = null,
+) {
+  if (source.owners[axis] !== "Fill") return true;
+  if (!ownedFillRelationship(source, axis)) return false;
+  if (change?.kind === "placement" && change.id === source.node.id) return true;
+  return (
+    axis !== "height" ||
+    source.main !== axis ||
+    otherGrowers(source).length === 0 ||
+    projectableColumn(parentSizingContext(source))
+  );
+}
+
+function intrinsicProjection(source: SizingContext, axis: SizingAxis, change: SupplyChange) {
+  if (source.owners[axis] !== "Fill" || axis !== "height" || source.main !== axis) return true;
+  if (
+    source.node.id === change.id ||
+    (change.kind === "sizing" && containsNode(source.document, change.id, source.node.id))
+  )
+    return true;
+  return (
+    source.style.flexBasis === "auto" ||
+    source.computed.minHeight === "auto" ||
+    (ownedSharedFill(source.element, axis) && projectableColumn(parentSizingContext(source)))
+  );
+}
+
+function inspectFillDependency(document: DesignDocument, id: string, axis: SizingAxis) {
+  const node = document.nodes[id];
+  const element = sizingElement(id);
+  if (!node || !element) return null;
+  const source = sizingContext(document, node, element);
+  const mode = sizingMode(source, axis);
+  return {
+    fill: ownedSizing(source, axis) && ownedFillRelationship(source, axis),
+    supplied: suppliedFillParent(source, axis),
+    exit: mode === "Fixed" || mode === "Fit",
+  };
+}
+
+export function prepareFillDependencies(document: DesignDocument) {
+  return captureFillDependencies(document, inspectFillDependency);
+}
+
+export function withFillDependencies(
+  document: DesignDocument,
+  candidate: DesignDocument,
+  validate: () => void,
+) {
+  const check = prepareFillDependencies(document);
+  return () => {
+    validate();
+    check(candidate);
+  };
 }
 
 function activeEqualLimits(source: SizingContext, axis: SizingAxis) {
@@ -359,7 +630,7 @@ function activePixel(source: SizingContext, property: string) {
 }
 
 function overflowsParent(source: SizingContext, axis: SizingAxis) {
-  const parent = source.element.parentElement;
+  const parent = objectParent(source.element);
   if (source.parent?.kind !== "frame" || !parent) return false;
   const world = source.element.closest(".canvas-world");
   if (!world) return false;
@@ -413,13 +684,20 @@ function ownedSizing(source: SizingContext, axis: SizingAxis) {
 function ownedSizingRelationship(source: SizingContext) {
   const { element, computed, parent, flow } = source;
   if (!element.getClientRects().length || hasCoordinateTransform(computed)) return false;
-  if (parent && element.parentElement?.dataset.orcId !== parent.id) return false;
+  if (parent && objectParent(element)?.dataset.orcId !== parent.id) return false;
   if (flow.direction && !["row", "column"].includes(flow.direction)) return false;
   return (
     computed.writingMode === "horizontal-tb" &&
     computed.direction === "ltr" &&
     ["static", "relative", "absolute"].includes(computed.position) &&
-    ["block", "flex", "inline-flex", "flow-root", "inline-block"].includes(computed.display)
+    ownedDisplay(element, computed)
+  );
+}
+
+function ownedDisplay(element: Element, computed: CSSStyleDeclaration) {
+  return (
+    ["block", "flex", "inline-flex", "flow-root", "inline-block"].includes(computed.display) ||
+    flowBox(element) !== element
   );
 }
 
@@ -483,7 +761,8 @@ function contentSizing(source: SizingContext) {
   if (source.node.kind === "text") return !["textarea", "option"].includes(source.node.tag);
   return (
     source.node.kind === "frame" &&
-    ["flex", "inline-flex"].includes(source.style.display) &&
+    (["flex", "inline-flex"].includes(source.style.display) ||
+      flowBox(source.element) !== source.element) &&
     ["row", "column"].includes(source.computed.flexDirection)
   );
 }
@@ -514,7 +793,11 @@ export function prepareSizing(
   const mutation = preparedSizingBatch(source, axis, mode, values);
   return {
     mutation,
-    validate: sizingValidation(source, axis, mode, value === undefined),
+    validate: withFillDependencies(
+      document,
+      previewDocument(document, mutation),
+      sizingValidation(source, axis, mode, value === undefined),
+    ),
   };
 }
 
@@ -527,6 +810,12 @@ function preparedSizingBatch(
   const mutation = sizingBatch(source.node.id, values);
   if (mode !== "Fill" && ownedSharedFill(source.element, axis))
     mutation.mutations[0].unset?.push(...fillInputProperties);
+  if (
+    axis === "height" &&
+    !activeEqualLimits(source, axis) &&
+    (mode === "Fit" || (mode === "Fill" && !boundedParent(source, axis)))
+  )
+    mutation.mutations.push(...intrinsicHeightChanges(source));
   mutation.mutations.push(...prepareFillSharing(source.document)(mutation.mutations));
   return mutation;
 }
@@ -578,8 +867,8 @@ function fillValues(source: SizingContext, axis: SizingAxis) {
     source.main === axis
       ? [
           ["flex-grow", "1"],
-          ["flex-shrink", "0"],
-          ["flex-basis", "0px"],
+          ["flex-shrink", axis === "height" && !boundedParent(source, axis) ? "1" : "0"],
+          ["flex-basis", axis === "height" && !boundedParent(source, axis) ? "auto" : "0px"],
         ]
       : [["align-self", "stretch"]];
   for (const [key, value] of factors) values[key] = sizingPriority(source.style, key, value);
@@ -591,11 +880,67 @@ function checkFitDependency(source: SizingContext, axis: SizingAxis) {
   const direction = source.computed.flexDirection;
   if (axis !== (direction === "row" ? "width" : "height")) return;
   if (ownedSizing(source, axis) && activeEqualLimits(source, axis)) return;
-  const participants = flowParticipants(source.element);
-  const growing = participants.filter((child) => getComputedStyle(child).flexGrow !== "0");
+  const growing = checkedGrowingChildren(source, axis);
   if (!growing.length) return;
-  if (growing.length === participants.length) throw new Error(`Set the parent's ${axis} first.`);
-  throw new Error("Use Code to change this content-dependent sizing.");
+  if (!supportedIntrinsicCohort(source, axis, growing.length))
+    throw new Error(`Set the parent's ${axis} first.`);
+}
+
+function supportedIntrinsicCohort(source: SizingContext, axis: SizingAxis, count: number) {
+  if (axis === "height" && count > 1 && !projectableColumn(source)) return false;
+  return intrinsicContribution(source, axis, { id: source.node.id, kind: "sizing" });
+}
+
+function checkedGrowingChildren(source: SizingContext, axis: SizingAxis) {
+  const growing = flowParticipants(source.element).filter(
+    (child) => getComputedStyle(child).flexGrow !== "0",
+  );
+  if (
+    growing.some((element) => {
+      const node = source.document.nodes[element.dataset.orcId ?? ""];
+      return !node || !ownedMainFill(sizingContext(source.document, node, element), axis);
+    })
+  )
+    throw new Error("Use Code to change this content-dependent sizing.");
+  return growing;
+}
+
+function intrinsicHeightChanges(
+  source: SizingContext,
+): ReturnType<typeof sizingBatch>["mutations"] {
+  return flowParticipants(source.element).flatMap((element) => {
+    const node = source.document.nodes[element.dataset.orcId ?? ""];
+    if (!node || node.parentId !== source.node.id || !source.node.children.includes(node.id))
+      return [];
+    const child = sizingContext(source.document, node, element);
+    if (independentFixed(child, "height") || activeEqualLimits(child, "height")) return [];
+    return [...intrinsicHeightChange(child), ...intrinsicHeightChanges(child)];
+  });
+}
+
+function intrinsicHeightChange(source: SizingContext) {
+  if (source.main !== "height" || source.owners.height !== "Fill") return [];
+  if (!ownedMainFill(source, "height"))
+    throw new Error("Use Code to change this content-dependent sizing.");
+  if (retainedColumnProjection(source)) return [];
+  if (source.style.flexBasis === "auto" && source.style.flexShrink === "1") return [];
+  if (isLocked(source.document, source.node.id))
+    throw new Error("Unlock the affected Fill objects before changing this layout.");
+  const batch = sizingBatch(source.node.id, {
+    "flex-shrink": sizingPriority(source.style, "flex-shrink", "1"),
+    "flex-basis": sizingPriority(source.style, "flex-basis", "auto"),
+  });
+  if (ownedSharedFill(source.element, "height"))
+    batch.mutations[0].unset?.push(...fillInputProperties);
+  return batch.mutations;
+}
+
+function retainedColumnProjection(source: SizingContext) {
+  const parent = objectParent(source.element);
+  if (!otherGrowers(source).length) return parent && flowBox(parent) !== parent;
+  if (!projectableColumn(parentSizingContext(source)))
+    throw new Error("Use Code to change this source-controlled Column.");
+  return true;
 }
 
 function sizingBatch(id: string, values: Styles) {
@@ -621,7 +966,10 @@ function sizingValidation(
           .filter(
             (element) => element !== source.element && getComputedStyle(element).flexGrow === "0",
           )
-          .map((element) => ({ element, size: getComputedStyle(element).getPropertyValue(axis) }))
+          .map((element) => ({
+            id: element.dataset.orcId!,
+            size: getComputedStyle(element).getPropertyValue(axis),
+          }))
       : [];
   return () => {
     const element = checkedSizingElement(source.document, source.node.id);
@@ -632,12 +980,7 @@ function sizingValidation(
     for (const dimension of ["width", "height"])
       if (pixelValue(native.getPropertyValue(dimension)) === null)
         throw new Error("The proposed size is unavailable.");
-    if (
-      siblings.some(
-        ({ element, size }) => getComputedStyle(element).getPropertyValue(axis) !== size,
-      )
-    )
-      throw new Error("The size change cannot preserve sibling sizes. Edit in Code.");
+    validateSiblingSizes(siblings, axis);
     if (
       capture &&
       mode === "Fixed" &&
@@ -645,6 +988,16 @@ function sizingValidation(
     )
       throw new Error("The size change cannot preserve the current box. Edit in Code.");
   };
+}
+
+function validateSiblingSizes(siblings: { id: string; size: string }[], axis: SizingAxis) {
+  if (
+    siblings.some(({ id, size }) => {
+      const sibling = sizingElement(id);
+      return !sibling || getComputedStyle(sibling).getPropertyValue(axis) !== size;
+    })
+  )
+    throw new Error("The size change cannot preserve sibling sizes. Edit in Code.");
 }
 
 function sizingPriority(style: CSSStyleDeclaration, property: string, value: string) {

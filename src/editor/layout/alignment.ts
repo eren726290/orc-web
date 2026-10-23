@@ -1,6 +1,8 @@
 import type { Mutation } from "../../../shared/commands/commands";
 import { isLocked, type DesignDocument, type DesignNode } from "../../../shared/document/model";
 import { readFrameLayout } from "./frame-layout";
+import { withFillDependencies } from "./sizing";
+import { previewDocument } from "../properties/property-preview";
 
 type Edge = "start" | "center" | "end";
 export type AlignmentChoice =
@@ -130,12 +132,12 @@ export function prepareFrameAlignment(
   } satisfies Extract<Mutation, { kind: "batch" }>;
   return {
     mutation,
-    validate: () => {
+    validate: withFillDependencies(document, previewDocument(document, mutation), () => {
       const native = getComputedStyle(current.element);
       for (const [property, value] of Object.entries(values))
         if (native.getPropertyValue(property) !== value.replace(" !important", ""))
           throw new Error("Alignment controlled by source. Edit in Code.");
-    },
+    }),
   };
 }
 

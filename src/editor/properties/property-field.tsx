@@ -51,6 +51,7 @@ export function PropertyField(props: Props) {
 
 function useField(props: Props) {
   const [error, setError] = useState<string | null>(null);
+  const cancelled = useRef(false);
   const errorId = useId();
   const attributes = {
     defaultValue: props.value,
@@ -59,14 +60,19 @@ function useField(props: Props) {
     "aria-invalid": error !== null,
     "aria-label": props.label,
     "aria-describedby": error ? errorId : undefined,
+    onFocus: () => {
+      cancelled.current = false;
+    },
     onChange: (event: React.ChangeEvent<Field>) => {
       beginChange(event.currentTarget, props, setError);
     },
     onBlur: (event: React.FocusEvent<Field>) => {
-      void finishChange(event.currentTarget, props).then(setError);
+      if (cancelled.current) cancelled.current = false;
+      else void finishChange(event.currentTarget, props).then(setError);
     },
     onKeyDown: (event: React.KeyboardEvent<Field>) => {
       if (event.key === "Escape") {
+        cancelled.current = true;
         event.currentTarget.value = props.value;
         props.cancel();
         event.currentTarget.blur();

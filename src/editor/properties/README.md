@@ -29,3 +29,6 @@ Its styles live in sizing-controls.css.
 
 Padding prepares and previews any coupled Fill coefficient changes in the same atomic batch as the authored padding edit.
 Preparation errors restore the applied preview and appear beside the field.
+Workspace validates Content previews and commits against existing Fill dependencies.
+Clearing the sole intrinsic text supplier restores the applied preview and explains the missing parent bound through the existing application error message.
+Nonempty edits and independently supplied parents retain the normal text preview and command behavior.

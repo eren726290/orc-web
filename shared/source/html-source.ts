@@ -1,5 +1,13 @@
 import type { DesignDocument, DesignNode, Styles } from "../document/model";
 import { svgContent } from "./svg-source";
+import {
+  columnFlowAttribute,
+  columnFlowStyle,
+  columnLayout,
+  columnLayoutAttribute,
+  hasColumnProjection,
+  projectColumnStyle,
+} from "./intrinsic-column";
 
 function escape(value: string): string {
   return value.replace(
@@ -34,13 +42,21 @@ export function nodeSource(document: DesignDocument, id: string): string {
           )
           .join("")
       : node.children.map((child) => nodeSource(document, child)).join("");
-  return `<${tag}${attributes}>${content}</${tag}>`;
+  const projected = hasColumnProjection(node.style)
+    ? `<div ${columnFlowAttribute}="${columnLayout}" style="${escape(styleSource(columnFlowStyle))}">${content}</div>`
+    : content;
+  return `<${tag}${attributes}>${projected}</${tag}>`;
 }
 
 function sourceAttributes(node: DesignNode): string {
-  const style = { ...node.style };
+  const style = { ...projectColumnStyle(node.style) };
   if (node.kind === "frame") style.overflow = node.clipContent ? "hidden" : "visible";
-  const values = { ...node.attributes, "layer-name": node.name, style: styleSource(style) };
+  const values = {
+    ...node.attributes,
+    ...(hasColumnProjection(node.style) ? { [columnLayoutAttribute]: columnLayout } : {}),
+    "layer-name": node.name,
+    style: styleSource(style),
+  };
   return Object.entries(values)
     .map(([key, value]) => ` ${key}="${escape(value)}"`)
     .join("");

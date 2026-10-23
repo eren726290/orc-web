@@ -1,6 +1,7 @@
+import { flowStyle } from "./layout-box";
 import type { AtomicMutation } from "../../../shared/commands/commands";
 import type { DesignDocument, DesignNode, Styles } from "../../../shared/document/model";
-import { prepareFlowSizing, readFlexSizing } from "./sizing";
+import { prepareFlowSizing, readFlexSizing, readSizing } from "./sizing";
 import { insetProperties } from "./participation";
 
 type Axis = "width" | "height";
@@ -11,25 +12,40 @@ export function prepareFlowPlacement(
   node: DesignNode,
   element: HTMLElement | SVGElement,
 ) {
-  const source = snapshotFlow(node, element);
+  const source = snapshotFlow(document, node, element);
   const checkSizing = prepareFlowSizing(document, node, element);
   return (
     parent: HTMLElement,
-    direction = getComputedStyle(parent).flexDirection,
+    direction = flowStyle(parent).flexDirection,
   ): Extract<AtomicMutation, { kind: "style" }> => {
+    const converted = mainToCross(source, direction);
     const values: Styles = {
       position: priority(source.style, "position", "relative"),
       ...flowDimensions(source),
       ...flowSizing(source),
+      ...converted,
     };
     const ownedFill = checkSizing(parent, direction, values);
-    checkFlowDestination(source, parent, direction, ownedFill);
+    if (!converted) checkFlowDestination(source, parent, direction, ownedFill);
     if (source.crossFill) values["align-self"] = priority(source.style, "align-self", "stretch");
     const unset = [...insetProperties, "--orc-absolute-position"].filter((property) =>
       Object.hasOwn(node.style, property),
     );
     return { kind: "style", id: node.id, values, unset };
   };
+}
+
+function mainToCross(source: ReturnType<typeof snapshotFlow>, direction: string): Styles | null {
+  if (!source.direction || source.direction === direction || !source.ownedMain || source.crossFill)
+    return null;
+  return Object.fromEntries(
+    [
+      ["flex-grow", "0"],
+      ["flex-shrink", "0"],
+      ["flex-basis", "auto"],
+      ["align-self", "stretch"],
+    ].map(([property, value]) => [property, priority(source.style, property, value)]),
+  );
 }
 
 function checkFlowDestination(
@@ -67,7 +83,11 @@ function flowSizing(source: ReturnType<typeof snapshotFlow>) {
   return values;
 }
 
-function snapshotFlow(node: DesignNode, element: HTMLElement | SVGElement) {
+function snapshotFlow(
+  document: DesignDocument,
+  node: DesignNode,
+  element: HTMLElement | SVGElement,
+) {
   const style = window.document.createElement("div").style;
   style.cssText = element.style.cssText;
   const computed = getComputedStyle(element);
@@ -75,12 +95,17 @@ function snapshotFlow(node: DesignNode, element: HTMLElement | SVGElement) {
     node.parentId !== null && element.parentElement
       ? getComputedStyle(element.parentElement)
       : null;
+  const flow = readFlexSizing(element, computed, parent);
+  const sizing = flow.direction
+    ? readSizing(document, node, flow.direction === "row" ? "width" : "height")
+    : null;
   return {
     style,
+    ownedMain: sizing?.mode === "Fill" && sizing.convertible,
     position: computed.position,
     width: computed.width,
     height: computed.height,
-    ...readFlexSizing(element, computed, parent),
+    ...flow,
   };
 }
 

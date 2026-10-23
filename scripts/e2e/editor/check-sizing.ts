@@ -20,7 +20,9 @@ assert.ok(channel === "chromium" || channel === "chrome");
 const phase = process.env.ORC_SIZING_EVIDENCE ?? "verification";
 const modes = process.env.ORC_SIZING_MODES ?? "development+built";
 const scenario = process.env.ORC_SIZING_SCENARIO ?? "all";
-assert.ok(scenario === "all" || scenario === "sharing" || scenario === "wrapped");
+assert.ok(
+  ["all", "sharing", "wrapped", "wrapped-cross", "nested", "nested-dependency"].includes(scenario),
+);
 await mkdir("artifacts/editor", { recursive: true });
 const temporary = await mkdtemp(join("artifacts/editor", "sizing-fixtures-"));
 const browser = await chromium.launch({
@@ -34,6 +36,7 @@ const requirements = [
   "Explicit Fixed preserves the chosen dimension under overflow; Fit follows supported normal-flow content.",
   "Fixed/Fit changes only the selected axis and understood main-axis Flex factors; cross-axis Fill changes only the selected axis and alignment in one command and Undo step.",
   "Bounded nowrap cross-axis Fill follows native parent resizing, decoration, margins and limits while numeric gestures remain read-only and explicit Fixed/Fit exits stay available.",
+  "Bounded wrapped Row Height Fill follows native line heights, content, box models, alignment and later reflow without storing row sizes or overriding parent alignment.",
   "Single main-axis Fill uses auto/1/0/0px with real nonshrinking Fixed/Fit siblings, preserves native minima and rejects unresolved bounds and later unsupported conversions.",
   "Wrapped Row Fill uses a verified source-derived outer basis and shares available space per native line, preserving unequal decoration, limits, Fixed/Fit siblings and responsive saving.",
   "Text wrapping, wrapped frame lines, source ownership, Fill/Constraints readouts and placement conversions remain native.",
@@ -56,9 +59,13 @@ try {
   await rm(temporary, { recursive: true, force: true });
 }
 process.stdout.write(
-  scenario === "wrapped"
-    ? "Wrapped Fill editor workflow passed\n"
-    : "fixed and fit sizing workflow passed\n",
+  scenario === "nested"
+    ? "Nested Fill editor workflow passed\n"
+    : scenario === "wrapped-cross"
+      ? "Wrapped cross Fill editor workflow passed\n"
+      : scenario === "wrapped"
+        ? "Wrapped Fill editor workflow passed\n"
+        : "fixed and fit sizing workflow passed\n",
 );
 
 async function verifyMode(mode: "development" | "built") {
@@ -76,7 +83,10 @@ async function verifyMode(mode: "development" | "built") {
   await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
   try {
     await newProject(page, app.url);
-    if (scenario === "wrapped") await wrappedCheckpoint(page, mode);
+    if (scenario === "nested-dependency") await nestedDependencyCheckpoint(page);
+    else if (scenario === "nested") await nestedCheckpoint(page, mode);
+    else if (scenario === "wrapped") await wrappedCheckpoint(page, mode);
+    else if (scenario === "wrapped-cross") await wrappedCrossCheckpoint(page, mode);
     else if (scenario === "sharing") await sharingCheckpoint(page, mode);
     else await workflow(page, mode);
     assert.deepEqual(errors, []);
@@ -329,10 +339,15 @@ function identityFixture(): DesignNode[] {
 }
 
 async function workflow(page: Page, mode: string) {
+  await nestedWorkflow(page, mode);
+  await accepted(page, { kind: "delete", ids: ["nested-middle"] });
+  await reset(page);
   await wrappedWorkflow(page);
   await accepted(page, { kind: "delete", ids: ["wrapped-fill"] });
   await mainFillWorkflow(page);
   await crossFillWorkflow(page);
+  await wrappedCrossWorkflow(page);
+  await accepted(page, { kind: "delete", ids: ["cross-fixed", "cross-fill", "cross-last"] });
   await inspection(page);
   await fixedOverflow(page);
   await decoratedCapture(page);
@@ -352,6 +367,514 @@ async function workflow(page: Page, mode: string) {
   await conversions(page);
   await minimumPanel(page, mode);
   await saveReopen(page, mode);
+}
+
+async function nestedCheckpoint(page: Page, mode: string) {
+  await nestedWorkflow(page, mode);
+  await nestedFixture(page, "width", ["column", "row", "column"]);
+  await choose(page, "nested-leaf", "width", "Fill");
+  await sourceRoundTrip(page, "nested-leaf");
+  await nestedSource(page);
+  await nestedSaving(page, mode);
+}
+
+async function nestedWorkflow(page: Page, mode: string) {
+  await nestedDirections(page, mode);
+  for (const axis of ["width", "height"] as const) {
+    await nestedLimits(page, axis);
+    await nestedOwnership(page, axis);
+  }
+  await nestedPacked(page);
+  await nestedDependencyCheckpoint(page);
+  await nestedSafeguards(page);
+}
+
+async function nestedDirections(page: Page, mode: string) {
+  for (const axis of ["width", "height"] as const)
+    for (const root of ["row", "column"] as const)
+      for (const middle of ["row", "column"] as const)
+        for (const inner of ["row", "column"] as const) {
+          await nestedFixture(page, axis, [root, middle, inner]);
+          await fillAvailability(page, axis, true);
+          await choose(page, "nested-leaf", axis, "Fill");
+          close((await native(page, "nested-leaf"))[axis], axis === "width" ? 582 : 302);
+          await select(page, "row");
+          await edit(page, "row", axis, "800");
+          close((await native(page, "nested-leaf"))[axis], 742);
+          await select(page, "nested-leaf");
+          assert.equal(await field(page, axis).getAttribute("readonly"), "");
+          inputs.push({
+            trigger: "Nested Fill owned ancestor chain",
+            mode,
+            axis,
+            root,
+            middle,
+            inner,
+          });
+        }
+  checks.push(
+    `${mode}: nested Fill follows an owned ancestor bound across both axes and all Row/Column chains`,
+  );
+}
+
+async function nestedLimits(page: Page, axis: Axis) {
+  const main = axis === "width" ? "row" : "column";
+  await nestedFixture(page, axis, [main, main, main]);
+  await patch(page, "row", {
+    [axis]: "max-content",
+    [`min-${axis}`]: "640px",
+    [`max-${axis}`]: "640px",
+  });
+  await choose(page, "nested-leaf", axis, "Fill");
+  close((await native(page, "nested-leaf"))[axis], 582);
+  await patch(page, "row", { [`min-${axis}`]: "800px", [`max-${axis}`]: "800px" });
+  close((await native(page, "nested-leaf"))[axis], 742);
+  await patch(page, "item", { [`max-${axis}`]: "220px" });
+  close((await native(page, "nested-leaf"))[axis], 192);
+  await patch(page, "item", { [`min-${axis}`]: "500px" });
+  close((await native(page, "nested-leaf"))[axis], 472);
+  await nestedFixture(page, axis, [main, main, main]);
+  for (const id of ["row", "item", "nested-middle"])
+    await patch(page, id, { "box-sizing": "content-box" });
+  await choose(page, "nested-leaf", axis, "Fill");
+  close((await native(page, "nested-leaf"))[axis], axis === "width" ? 612 : 332);
+  for (const id of ["row", "item", "nested-middle"])
+    await patch(page, id, { padding: "0px", border: "0px" });
+  await select(page, "row");
+  await edit(page, "row", axis, "0");
+  close((await native(page, "nested-leaf"))[axis], 0);
+  checks.push(
+    `${axis}: nested Fill preserves equal bounds, native limits, box models and Fixed zero`,
+  );
+}
+
+async function nestedOwnership(page: Page, axis: Axis) {
+  const main = axis === "width" ? "row" : "column";
+  const cross = axis === "width" ? "column" : "row";
+  const cases: DesignNode["style"][] = [
+    { "flex-grow": "2" },
+    { [axis]: "var(--unowned-dimension, 200px)" },
+    { transform: "translate(1px)" },
+  ];
+  for (const values of cases) {
+    await nestedFixture(page, axis, [main, main, main]);
+    await patch(page, "item", values);
+    await noEdit(page, () => fillAvailability(page, axis, false));
+  }
+  await nestedFixture(page, axis, [cross, main, main]);
+  await patch(page, "item", { [axis === "width" ? "margin-left" : "margin-top"]: "auto" });
+  await noEdit(page, () => fillAvailability(page, axis, false));
+  await nestedFixture(page, axis, ["column", main, main]);
+  await patch(page, "row", { "flex-wrap": "wrap" });
+  await noEdit(page, () => fillAvailability(page, axis, false));
+  checks.push(
+    `${axis}: nested Fill rejects unowned factors, dimensions, transforms, margins and Column wrapping`,
+  );
+}
+
+async function nestedPacked(page: Page) {
+  await nestedFixture(page, "height", ["row", "column", "column"]);
+  for (const id of ["row", "item", "nested-middle"])
+    await patch(page, id, { padding: "0px", border: "0px" });
+  await patch(page, "row", { "flex-wrap": "wrap", "align-content": "flex-start" });
+  await choose(page, "nested-leaf", "height", "Fill");
+  close((await native(page, "nested-leaf")).height, 0);
+  await patch(page, "row", { "align-content": "stretch" });
+  close((await native(page, "nested-leaf")).height, 360);
+  await select(page, "row");
+  await edit(page, "row", "height", "500");
+  close((await native(page, "nested-leaf")).height, 500);
+  checks.push("Nested Height Fill preserves an empty packed row and follows native stretched rows");
+}
+
+async function nestedSafeguards(page: Page) {
+  await nestedFixture(page, "width", ["column", "row", "column"]);
+  await locks(page, true, "nested-leaf");
+  await drafts(page, "Fill", "width", "nested-leaf");
+  await choose(page, "nested-leaf", "width", "Fixed");
+  await staleDraft(page, "Fill", true);
+  await patch(page, "row", { width: "640px" });
+  await rejection(page, "Fill", "width", "nested-leaf");
+  await pendingHistory(page, "Fill");
+}
+
+async function nestedSource(page: Page) {
+  await patch(page, "hidden", { display: "none" });
+  const document = (await session(page)).projects[0].document;
+  const output = await page.context().newPage();
+  try {
+    await output.setContent(nodeSource(document, "row"));
+    for (const width of [640, 800, 500]) {
+      await output.locator('[layer-name="row"]').evaluate((element, width) => {
+        if (element instanceof HTMLElement) element.style.width = `${width}px`;
+      }, width);
+      close(
+        await output
+          .locator('[layer-name="nested-leaf"]')
+          .evaluate((element) => element.getBoundingClientRect().width),
+        width - 58,
+      );
+    }
+  } finally {
+    await output.close();
+  }
+  checks.push("Serialized nested Fill follows later root widths without measured-size storage");
+}
+
+async function nestedSaving(page: Page, mode: string) {
+  await page.getByRole("button", { name: "Not saved", exact: true }).click();
+  await page.getByRole("textbox", { name: "Project name", exact: true }).fill(`Nested ${mode}`);
+  await page
+    .getByRole("textbox", { name: "Save in folder", exact: true })
+    .fill(join(process.cwd(), temporary));
+  await page.getByRole("button", { name: "Save project", exact: true }).click();
+  await page.getByRole("dialog").waitFor({ state: "hidden" });
+  const saved = (await session(page)).projects[0];
+  assert.ok(saved.path);
+  assert.deepEqual(
+    JSON.parse(await readFile(join(saved.path, "document.json"), "utf8")),
+    saved.document,
+  );
+  await page.getByRole("button", { name: `Close ${saved.document.name}`, exact: true }).click();
+  await page.getByRole("button", { name: "Open project", exact: true }).click();
+  await page.getByRole("textbox", { name: "Project folder", exact: true }).fill(saved.path);
+  await page.getByRole("dialog").getByRole("button", { name: "Open project", exact: true }).click();
+  await page.getByRole("dialog").waitFor({ state: "hidden" });
+  await select(page, "nested-leaf");
+  const reopened = (await session(page)).projects[0];
+  assert.deepEqual(reopened.document, saved.document);
+  assert.equal(reopened.canUndo || reopened.canRedo, false);
+  assert.equal(await modeLabel(page, "width"), "Fill");
+  close((await native(page, "nested-leaf")).width, 582);
+  await select(page, "row");
+  await edit(page, "row", "width", "800");
+  close((await native(page, "nested-leaf")).width, 742);
+  inputs.push({
+    trigger: "Nested Fill persistence",
+    mode,
+    saved: saved.document,
+    reopened: reopened.document,
+  });
+}
+
+async function nestedDependencyCheckpoint(page: Page) {
+  for (const axis of ["width", "height"] as const) {
+    const main = axis === "width" ? "row" : "column";
+    const cross = axis === "width" ? "column" : "row";
+    await nestedFixture(page, axis, [cross, main, main]);
+    for (const id of ["row", "item", "nested-middle"])
+      await patch(page, id, { padding: "0px", border: "0px" });
+    await choose(page, "nested-leaf", axis, "Fill");
+    await select(page, "row");
+    await noEdit(page, async () => {
+      await control(page, axis).selectOption({ label: "Fit" });
+      await page.waitForFunction(
+        (axis) =>
+          !document.querySelector<HTMLSelectElement>(
+            `select[aria-label="${axis === "width" ? "Width" : "Height"} sizing"]`,
+          )?.disabled,
+        axis,
+      );
+    });
+    await page.getByText(`Set the parent's ${axis} first.`, { exact: true }).waitFor();
+  }
+  checks.push(
+    "Unresolved nested cross-axis Fit conversion preserves the applied document and history",
+  );
+}
+
+async function nestedFixture(
+  page: Page,
+  axis: Axis,
+  directions: ["row" | "column", "row" | "column", "row" | "column"],
+) {
+  if ((await session(page)).projects[0].document.nodes["nested-middle"])
+    await accepted(page, { kind: "delete", ids: ["nested-middle"] });
+  await reset(page);
+  await patch(page, "row", { width: "640px", height: "360px", "flex-direction": directions[0] });
+  await patch(page, "sibling", { display: "none" });
+  await patch(page, "label", { display: "none" });
+  await patch(page, "item", {
+    width: "200px",
+    height: "200px",
+    padding: "7px",
+    border: "2px solid black",
+    "flex-direction": directions[1],
+    ...nestedFillStyle(axis, directions[0]),
+  });
+  await accepted(page, { kind: "insert", nodes: nestedFixtureNodes(axis, directions) });
+  await select(page, "nested-leaf");
+}
+
+function nestedFixtureNodes(
+  axis: Axis,
+  directions: ["row" | "column", "row" | "column", "row" | "column"],
+) {
+  return [
+    frame("nested-middle", "item", ["nested-leaf"], {
+      display: "flex",
+      width: "160px",
+      height: "160px",
+      padding: "3px",
+      border: "2px solid black",
+      "box-sizing": "border-box",
+      flex: "0 0 auto",
+      "flex-direction": directions[2],
+      ...nestedFillStyle(axis, directions[1]),
+    }),
+    frame("nested-leaf", "nested-middle", [], {
+      display: "flex",
+      width: "80px",
+      height: "80px",
+      flex: "0 0 auto",
+      "align-self": "flex-start",
+      "box-sizing": "border-box",
+    }),
+  ];
+}
+
+function nestedFillStyle(axis: Axis, direction: "row" | "column"): DesignNode["style"] {
+  return axis === (direction === "row" ? "width" : "height")
+    ? { [axis]: "auto", "flex-grow": "1", "flex-shrink": "0", "flex-basis": "0px" }
+    : { [axis]: "auto", "align-self": "stretch" };
+}
+
+async function wrappedCrossCheckpoint(page: Page, mode: string) {
+  await wrappedCrossWorkflow(page);
+  await sourceRoundTrip(page);
+  await wrappedCrossSource(page);
+  await wrappedCrossSaving(page, mode);
+}
+
+async function wrappedCrossFixture(page: Page) {
+  await crossFillFixture(page, "row");
+  await patch(page, "row", {
+    width: "254px",
+    height: "330px",
+    "flex-wrap": "wrap",
+    "align-content": "flex-start",
+  });
+  await patch(page, "item", {
+    width: "100px !important",
+    padding: "5px 0 13px",
+    "border-top": "2px solid black",
+    "border-bottom": "4px solid black",
+  });
+  await patch(page, "label", { height: "20px" });
+  await patch(page, "sibling", { display: "block", width: "100px", height: "80px" });
+  await patch(page, "hidden", { display: "none" });
+  if (!(await session(page)).projects[0].document.nodes["cross-fixed"])
+    await accepted(page, {
+      kind: "insert",
+      nodes: [
+        frame("cross-fixed", "row", [], { width: "100px", height: "90px", flex: "0 0 auto" }),
+        frame("cross-fill", "row", [], { width: "100px", height: "40px", flex: "0 0 auto" }),
+        frame("cross-last", "row", [], { width: "100px", height: "50px", flex: "0 0 auto" }),
+      ],
+    });
+  await select(page, "item");
+}
+
+async function wrappedCrossWorkflow(page: Page) {
+  await crossFillBoundaries(page, "row", true);
+  await crossFillParentSources(page, "row", true);
+  await wrappedCrossFixture(page);
+  await fillAvailability(page, "height", true);
+  await choose(page, "item", "height", "Fill");
+  close((await native(page, "item")).height, 66);
+  await crossFillInspection(page, "height");
+  await page.getByText(/Height fills its current row\./u).waitFor();
+  await select(page, "cross-fill");
+  await choose(page, "cross-fill", "height", "Fill");
+  close((await native(page, "cross-fill")).height, 90);
+  await select(page, "item");
+  for (const alignment of ["flex-start", "center", "flex-end", "stretch"])
+    await wrappedCrossAlignment(page, alignment);
+  await patch(page, "row", { "align-content": "flex-start" });
+  await wrappedCrossReflow(page);
+  await wrappedCrossParticipation(page);
+  await wrappedCrossBounds(page);
+  await wrappedCrossSafeguards(page);
+  await select(page, "item");
+  checks.push(
+    "Wrapped Height Fill uses each native line, preserves parent alignment and follows reflow without saved row sizes",
+  );
+}
+
+async function wrappedCrossAlignment(page: Page, alignment: string) {
+  await patch(page, "row", { "align-content": alignment });
+  const parent = await native(page, "row");
+  const first = await native(page, "item");
+  const second = await native(page, "cross-fill");
+  const offset = alignment === "center" ? 30 : alignment === "flex-end" ? 60 : 0;
+  close(first.height, alignment === "stretch" ? 86 : 66);
+  close(second.height, alignment === "stretch" ? 110 : 90);
+  close(first.y - parent.y, 22 + offset);
+  close(second.y - parent.y, (alignment === "stretch" ? 125 : 105) + offset);
+  inputs.push({ trigger: "Wrapped cross Fill row alignment", alignment, parent, first, second });
+}
+
+async function wrappedCrossReflow(page: Page) {
+  await select(page, "row");
+  for (const [width, height] of [
+    [600, 76],
+    [140, 44],
+    [254, 66],
+  ]) {
+    await edit(page, "row", "width", String(width));
+    close((await native(page, "item")).height, height);
+  }
+  await wrappedToggle(page, false, "row");
+  close((await native(page, "item")).height, 286);
+  await wrappedToggle(page, true, "row");
+  close((await native(page, "item")).height, 66);
+  await patch(page, "label", { height: "95px" });
+  close((await native(page, "item")).height, 119);
+  await patch(page, "label", { height: "20px" });
+  await patch(page, "sibling", { height: "130px" });
+  close((await native(page, "item")).height, 116);
+  await patch(page, "sibling", { height: "80px" });
+  await patch(page, "item", { "box-sizing": "content-box" });
+  close((await native(page, "item")).height, 66);
+  await patch(page, "item", { "box-sizing": "border-box" });
+  await patch(page, "row", { padding: "21px" });
+  close((await native(page, "item")).height, 44);
+  await patch(page, "row", { padding: "12px" });
+  await select(page, "item");
+  close((await native(page, "item")).height, 66);
+}
+
+async function wrappedCrossParticipation(page: Page) {
+  const before = (await session(page)).projects[0].document;
+  await participation(page, true);
+  close((await native(page, "item")).height, 66);
+  await exactHistory(page, before, (await session(page)).projects[0].document);
+  await history(page, "undo");
+  assert.equal(await modeLabel(page, "height"), "Fill");
+  close((await native(page, "item")).height, 66);
+}
+
+async function wrappedCrossBounds(page: Page) {
+  await patch(page, "item", { "max-height": "45px" });
+  close((await native(page, "item")).height, 45);
+  await patch(page, "item", { "min-height": "400px" });
+  close((await native(page, "item")).height, 400);
+  await page.getByText(/This object extends beyond its parent\./u).waitFor();
+  await wrappedCrossClip(page, true);
+  await wrappedCrossClip(page, false);
+  await accepted(page, {
+    kind: "style",
+    id: "item",
+    values: {},
+    unset: ["min-height", "max-height"],
+  });
+  await patch(page, "row", { height: "max-content" });
+  await noEdit(page, () => fillAvailability(page, "height", true));
+  await choose(page, "item", "height", "Fixed");
+  await patch(page, "row", { "min-height": "330px", "max-height": "330px" });
+  await fillAvailability(page, "height", true);
+  await choose(page, "item", "height", "Fill");
+  await patch(page, "row", { height: "330px" });
+  await accepted(page, {
+    kind: "style",
+    id: "row",
+    values: {},
+    unset: ["min-height", "max-height"],
+  });
+  const captured = (await native(page, "item")).height;
+  await choose(page, "item", "height", "Fixed");
+  close((await native(page, "item")).height, captured);
+  await choose(page, "item", "height", "Fit");
+  close((await native(page, "item")).height, 44);
+  await choose(page, "item", "height", "Fill");
+  assert.equal((await native(page, "item")).heightPriority, "important");
+}
+
+async function wrappedCrossClip(page: Page, clipped: boolean) {
+  await accepted(page, { kind: "clip", id: "row", clipContent: clipped });
+  close((await native(page, "item")).height, 400);
+  const visible = await page.locator('.canvas-world [data-orc-id="item"]').evaluate((item) => {
+    const parent = item.parentElement;
+    if (!parent) throw new Error("Missing wrapped parent");
+    const bounds = item.getBoundingClientRect();
+    return document
+      .elementsFromPoint(bounds.left + 5, parent.getBoundingClientRect().bottom + 5)
+      .some((element) => item === element || item.contains(element));
+  });
+  assert.equal(visible, !clipped);
+  inputs.push({ trigger: "Wrapped cross Fill visible clipping", clipped, visible });
+}
+
+async function wrappedCrossSafeguards(page: Page) {
+  await locks(page, true);
+  await choose(page, "item", "height", "Fixed");
+  await drafts(page, "Fill", "height");
+  await choose(page, "item", "height", "Fixed");
+  await staleDraft(page, "Fill", true, "height");
+  await patch(page, "row", { height: "330px" });
+  await rejection(page, "Fill", "height");
+  await pendingHistory(page, "Fill", "height");
+  await choose(page, "item", "height", "Fill");
+  await sourceRoundTrip(page);
+}
+
+async function wrappedCrossSource(page: Page) {
+  const output = await page.context().newPage();
+  try {
+    await output.setContent(nodeSource((await session(page)).projects[0].document, "row"));
+    for (const [width, height] of [
+      [254, 66],
+      [600, 76],
+      [140, 44],
+    ]) {
+      await output.locator('[layer-name="row"]').evaluate((element, width) => {
+        if (element instanceof HTMLElement) element.style.width = `${width}px`;
+      }, width);
+      close(
+        await output
+          .locator('[layer-name="item"]')
+          .evaluate((element) => element.getBoundingClientRect().height),
+        height,
+      );
+    }
+  } finally {
+    await output.close();
+  }
+  checks.push("Serialized wrapped Height Fill retains native line reflow at new parent widths");
+}
+
+async function wrappedCrossSaving(page: Page, mode: string) {
+  await page.getByRole("button", { name: "Not saved", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Project name", exact: true })
+    .fill(`Wrapped cross ${mode}`);
+  await page
+    .getByRole("textbox", { name: "Save in folder", exact: true })
+    .fill(join(process.cwd(), temporary));
+  await page.getByRole("button", { name: "Save project", exact: true }).click();
+  await page.getByRole("dialog").waitFor({ state: "hidden" });
+  const saved = (await session(page)).projects[0];
+  assert.ok(saved.path);
+  assert.deepEqual(
+    JSON.parse(await readFile(join(saved.path, "document.json"), "utf8")),
+    saved.document,
+  );
+  await page.getByRole("button", { name: `Close ${saved.document.name}`, exact: true }).click();
+  await page.getByRole("button", { name: "Open project", exact: true }).click();
+  await page.getByRole("textbox", { name: "Project folder", exact: true }).fill(saved.path);
+  await page.getByRole("dialog").getByRole("button", { name: "Open project", exact: true }).click();
+  await page.getByRole("dialog").waitFor({ state: "hidden" });
+  await select(page, "item");
+  assert.deepEqual((await session(page)).projects[0].document, saved.document);
+  assert.equal(await modeLabel(page, "height"), "Fill");
+  close((await native(page, "item")).height, 66);
+  await patch(page, "row", { width: "600px" });
+  close((await native(page, "item")).height, 76);
+  inputs.push({
+    trigger: "Wrapped cross Fill UI save/reopen and native reflow",
+    saved: saved.document,
+    reopened: (await session(page)).projects[0].document,
+  });
 }
 
 async function wrappedCheckpoint(page: Page, mode: string) {
@@ -1326,14 +1849,15 @@ async function mainFillBoundaries(page: Page, direction: "row" | "column") {
   for (const [id, values] of cases) {
     await mainFillFixture(page, direction);
     await patch(page, id, values);
-    const result = await noEdit(page, () => fillAvailability(page, axis, false));
+    const available = id === "row" && values[axis] === "max-content";
+    const result = await noEdit(page, () => fillAvailability(page, axis, available));
     inputs.push({
       trigger: "Main Fill ownership boundary",
       direction,
       axis,
       id,
       values,
-      available: false,
+      available,
       ...result,
     });
   }
@@ -1502,9 +2026,53 @@ async function mainFillLaterChanges(page: Page, direction: "row" | "column") {
 }
 
 async function mainFillParentGuards(page: Page, direction: "row" | "column") {
+  for (const id of ["label", "sibling", "absolute"]) await patch(page, id, { display: "none" });
   await select(page, "row");
   await rejectedMainFillAction(page, direction, "parent-fit");
-  await rejectedMainFillAction(page, direction, "direction");
+  await mainFillFixture(page, direction);
+  await choose(page, "item", direction === "row" ? "width" : "height", "Fill");
+  const hidden = (await session(page)).projects[0].document.nodes.hidden;
+  await accepted(page, { kind: "delete", ids: [hidden.id] });
+  try {
+    await select(page, "row");
+    await acceptedMainFillDirection(page, direction);
+    await patch(page, "item", { "flex-grow": "2 !important" });
+    await select(page, "row");
+    await rejectedMainFillAction(page, direction, "direction");
+    await patch(page, "item", { "flex-grow": "1 !important" });
+  } finally {
+    await accepted(page, { kind: "insert", nodes: [hidden] });
+  }
+}
+
+async function acceptedMainFillDirection(page: Page, direction: "row" | "column") {
+  const axis = direction === "row" ? "width" : "height";
+  const target = direction === "row" ? "Column" : "Row";
+  const before = (await session(page)).projects[0].document;
+  const pending = page.waitForResponse(isCommand);
+  await page.getByRole("button", { name: target, exact: true }).click();
+  const response = await pending;
+  assert.equal(response.status(), 200, await response.text());
+  await settled(page);
+  const after = (await session(page)).projects[0].document;
+  assert.equal(after.revision, before.revision + 1);
+  assert.deepEqual(after.nodes.row.children, before.nodes.row.children);
+  assert.equal(after.nodes.item.style[axis], before.nodes.item.style[axis]);
+  assert.equal(after.nodes.item.style["align-self"], "stretch");
+  await select(page, "item");
+  assert.equal(await modeLabel(page, axis), "Fill");
+  close((await native(page, "item"))[axis], 392);
+  inputs.push({
+    trigger: "Owned main Fill becomes cross Fill during direction conversion",
+    direction,
+    target,
+    before,
+    after,
+    request: parseCommand(response.request().postDataJSON()),
+  });
+  await exactHistory(page, before, after);
+  await history(page, "undo");
+  assertContent((await session(page)).projects[0].document, before);
 }
 
 async function rejectedMainFillAction(
@@ -1514,7 +2082,7 @@ async function rejectedMainFillAction(
 ) {
   const axis = direction === "row" ? "width" : "height";
   const text = {
-    "parent-fit": "Use Code to change this content-dependent sizing.",
+    "parent-fit": `Set the parent's ${axis} first.`,
     direction: "Use Code to convert this source-controlled sizing between Flex axes.",
   }[action];
   const result = await noEdit(page, async () => {
@@ -1657,7 +2225,7 @@ async function crossFillDecoration(page: Page, direction: "row" | "column") {
   }
 }
 
-async function crossFillParentSources(page: Page, direction: "row" | "column") {
+async function crossFillParentSources(page: Page, direction: "row" | "column", wrapped = false) {
   const axis = direction === "row" ? "height" : "width";
   for (const style of [
     { [axis]: "50%" },
@@ -1665,7 +2233,7 @@ async function crossFillParentSources(page: Page, direction: "row" | "column") {
     { [axis === "height" ? "block-size" : "inline-size"]: "200px" },
     { [`min-${axis}`]: "var(--bound)", [`max-${axis}`]: "200px", "--bound": "200px" },
   ]) {
-    await crossFillFixture(page, direction);
+    await crossFillFixture(page, direction, wrapped);
     await patch(page, "row", style);
     await noEdit(page, () => fillAvailability(page, axis, false));
     inputs.push({ trigger: "Cross Fill independently owned parent boundary", direction, style });
@@ -1680,9 +2248,14 @@ async function crossFillSafeguards(page: Page) {
   await pendingHistory(page, "Fill");
 }
 
-async function crossFillFixture(page: Page, direction: "row" | "column") {
+async function crossFillFixture(page: Page, direction: "row" | "column", wrapped = false) {
   await reset(page);
-  await patch(page, "row", { width: "300px", height: "180px", "flex-direction": direction });
+  await patch(page, "row", {
+    width: "300px",
+    height: "180px",
+    "flex-direction": direction,
+    "flex-wrap": wrapped ? "wrap" : "nowrap",
+  });
   const edges =
     direction === "row" ? ["margin-top", "margin-bottom"] : ["margin-left", "margin-right"];
   await patch(page, "item", {
@@ -1724,7 +2297,7 @@ async function crossFillInspection(page: Page, axis: Axis) {
   });
 }
 
-async function crossFillBoundaries(page: Page, direction: "row" | "column") {
+async function crossFillBoundaries(page: Page, direction: "row" | "column", wrapped = false) {
   const axis = direction === "row" ? "height" : "width";
   const edge = direction === "row" ? "margin-top" : "margin-left";
   const cases: DesignNode["style"][] = [
@@ -1738,13 +2311,15 @@ async function crossFillBoundaries(page: Page, direction: "row" | "column") {
     { transform: "scale(1.1)" },
   ];
   for (const style of cases) {
-    await crossFillFixture(page, direction);
+    await crossFillFixture(page, direction, wrapped);
     await patch(page, "item", style);
     await noEdit(page, () => fillAvailability(page, axis, false));
     inputs.push({ trigger: "Cross-axis Fill source boundary", direction, style });
   }
   await crossFillFixture(page, direction);
   await patch(page, "row", { "flex-wrap": "wrap" });
+  await noEdit(page, () => fillAvailability(page, axis, direction === "row"));
+  await patch(page, "row", { "flex-wrap": "wrap-reverse" });
   await noEdit(page, () => fillAvailability(page, axis, false));
 }
 
@@ -1752,6 +2327,8 @@ async function crossFillBounds(page: Page, direction: "row" | "column") {
   const axis = direction === "row" ? "height" : "width";
   await crossFillFixture(page, direction);
   await patch(page, "row", { [axis]: "max-content" });
+  await noEdit(page, () => fillAvailability(page, axis, true));
+  await patch(page, "label", { display: "none" });
   await noEdit(page, async () => {
     await fillAvailability(page, axis, false);
     await page.getByText(`Set the parent's ${axis} first.`, { exact: true }).waitFor();
@@ -2144,7 +2721,7 @@ async function sizingDependencies(page: Page) {
     assert.equal(await modeLabel(page, "width"), "Fill");
     assert.equal(await control(page, "width").isEnabled(), true);
     assert.equal(await field(page, "width").getAttribute("readonly"), "");
-    await fillAvailability(page, "width", false);
+    await fillAvailability(page, "width", true);
   });
   await select(page, "item");
   const children = (await session(page)).projects[0].document.nodes.label;
@@ -2234,6 +2811,7 @@ async function marginFixture(page: Page, direction: "row" | "column", margin: st
 async function dependencyRejection(page: Page) {
   await reset(page, "item", { width: "auto", flex: "1 0 0px" });
   await patch(page, "sibling", { display: "none" });
+  await patch(page, "label", { display: "none" });
   await select(page, "row");
   await noEdit(page, async () => {
     const fit = control(page, "width").getByRole("option", { name: "Fit", exact: true });
@@ -2305,15 +2883,18 @@ async function numericModeCapture(page: Page) {
   assert.equal(await modeLabel(page, "width"), "Fixed");
 }
 
-async function locks(page: Page, prepared = false) {
+async function locks(page: Page, prepared = false, selected = "item") {
   if (!prepared) await reset(page);
-  for (const id of ["item", "row"]) {
+  const nodes = (await session(page)).projects[0].document.nodes;
+  const ids = [selected];
+  for (let id = nodes[selected].parentId; id; id = nodes[id].parentId) ids.push(id);
+  for (const id of ids) {
     await accepted(page, { kind: "lock", id, locked: true });
-    await select(page, "item");
+    await select(page, selected);
     assert.equal(await control(page, "width").isDisabled(), true);
     assert.equal(await control(page, "height").isDisabled(), true);
     const before = await session(page);
-    const response = await command(page, { kind: "style", id: "item", values: { width: "1px" } });
+    const response = await command(page, { kind: "style", id: selected, values: { width: "1px" } });
     assert.equal(response.status(), 400);
     assert.deepEqual(await session(page), before);
     await accepted(page, { kind: "lock", id, locked: false });
@@ -2333,10 +2914,15 @@ async function makeDraft(page: Page) {
   return value;
 }
 
-async function drafts(page: Page, choice: "Fit" | "Fill" = "Fit") {
+async function drafts(
+  page: Page,
+  choice: "Fit" | "Fill" = "Fit",
+  axis: Axis = "width",
+  id = "item",
+) {
   const draft = await makeDraft(page);
   const before = await session(page);
-  await control(page, "width").selectOption({ label: choice });
+  await control(page, axis).selectOption({ label: choice });
   const dialog = page.getByRole("dialog", { name: "Discard unapplied changes?", exact: true });
   await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
   assert.deepEqual(await session(page), before);
@@ -2344,7 +2930,7 @@ async function drafts(page: Page, choice: "Fit" | "Fill" = "Fit") {
     await page.getByRole("textbox", { name: "Object source", exact: true }).innerText(),
     draft,
   );
-  await control(page, "width").selectOption({ label: choice });
+  await control(page, axis).selectOption({ label: choice });
   const pending = page.waitForResponse(isCommand);
   await dialog.getByRole("button", { name: "Discard", exact: true }).click();
   assert.equal((await pending).status(), 200);
@@ -2352,27 +2938,32 @@ async function drafts(page: Page, choice: "Fit" | "Fill" = "Fit") {
   assertAxisOnly(
     before.projects[0].document,
     (await session(page)).projects[0].document,
-    "item",
-    "width",
+    id,
+    axis,
     choice,
   );
-  assert.equal(await modeLabel(page, "width"), choice);
+  assert.equal(await modeLabel(page, axis), choice);
   await page.getByRole("button", { name: "Code", exact: true }).click();
   checks.push(
     "Draft Cancel retains draft/applied state; Discard permits one selected-axis sizing command",
   );
 }
 
-async function staleDraft(page: Page, choice: "Fit" | "Fill" = "Fit", prepared = false) {
+async function staleDraft(
+  page: Page,
+  choice: "Fit" | "Fill" = "Fit",
+  prepared = false,
+  axis: Axis = "width",
+) {
   if (!prepared) {
     if (choice === "Fill") await crossFillFixture(page, "column");
     else await reset(page);
   }
   await makeDraft(page);
-  await control(page, "width").selectOption({ label: choice });
+  await control(page, axis).selectOption({ label: choice });
   const dialog = page.getByRole("dialog", { name: "Discard unapplied changes?", exact: true });
   await dialog.waitFor();
-  await accepted(page, { kind: "style", id: "row", values: { width: "350px" } });
+  await accepted(page, { kind: "style", id: "row", values: { [axis]: "350px" } });
   await noEdit(page, async () => {
     await dialog.getByRole("button", { name: "Discard", exact: true }).click();
     await page.getByRole("alert").filter({ hasText: "The layout changed. Try again." }).waitFor();
@@ -2383,31 +2974,36 @@ async function staleDraft(page: Page, choice: "Fit" | "Fill" = "Fit", prepared =
   );
 }
 
-async function rejection(page: Page, choice: "Fit" | "Fill" = "Fit") {
+async function rejection(
+  page: Page,
+  choice: "Fit" | "Fill" = "Fit",
+  axis: Axis = "width",
+  id = "item",
+) {
   const before = await session(page);
-  const box = await native(page, "item");
+  const box = await native(page, id);
   await page.route("**/api/commands", (route) =>
     route.fulfill({ status: 409, json: { error: "Sizing rejection control" } }),
   );
   try {
-    await control(page, "width").selectOption({ label: choice });
+    await control(page, axis).selectOption({ label: choice });
     await page.getByRole("alert").filter({ hasText: "Sizing rejection control" }).waitFor();
     await settled(page);
     assert.deepEqual(await session(page), before);
-    close((await native(page, "item")).width, box.width);
-    assert.equal(await modeLabel(page, "width"), "Fixed");
-    assert.equal(await control(page, "width").isEnabled(), true);
+    close((await native(page, id))[axis], box[axis]);
+    assert.equal(await modeLabel(page, axis), "Fixed");
+    assert.equal(await control(page, axis).isEnabled(), true);
   } finally {
     await page.unrouteAll({ behavior: "wait" });
   }
-  await choose(page, "item", "width", choice);
-  await choose(page, "item", "width", "Fixed");
+  await choose(page, id, axis, choice);
+  await choose(page, id, axis, "Fixed");
   checks.push(
     "Rejected sizing restores native box, canonical readout and editability; the same control can retry immediately",
   );
 }
 
-async function pendingHistory(page: Page, choice: "Fit" | "Fill" = "Fit") {
+async function pendingHistory(page: Page, choice: "Fit" | "Fill" = "Fit", axis: Axis = "width") {
   let release = () => {};
   let ready = () => {};
   const held = new Promise<void>((resolve) => {
@@ -2426,7 +3022,7 @@ async function pendingHistory(page: Page, choice: "Fit" | "Fill" = "Fit") {
     await route.fulfill({ response });
   });
   try {
-    await control(page, "width").selectOption({ label: choice });
+    await control(page, axis).selectOption({ label: choice });
     await received;
     await page.getByRole("application", { name: "Canvas" }).press("Control+z");
     release();

@@ -1,3 +1,4 @@
+import { flowStyle } from "./layout-box";
 import type { FrameLayout } from "./frame-layout";
 
 export function frameLayoutValidation(element: HTMLElement, target: FrameLayout, scale: number) {
@@ -22,7 +23,7 @@ function validateFrame(
     element.closest(".canvas")?.getAttribute("data-orc-revision") !== revision
   )
     throw new Error("The layout changed. Try the switch again.");
-  const style = getComputedStyle(element);
+  const style = flowStyle(element);
   const layout = ["flex", "inline-flex"].includes(style.display)
     ? style.flexDirection
     : style.display;
@@ -31,10 +32,15 @@ function validateFrame(
 }
 
 function validateBox(box: { node: Element; bounds: DOMRect }, preserve: boolean, scale: number) {
-  const rendered = box.node.getBoundingClientRect();
+  const id = box.node.getAttribute("data-orc-id");
+  const node = id
+    ? document.querySelector(`.canvas-world [data-orc-id="${CSS.escape(id)}"]`)
+    : box.node;
+  if (!node) throw new Error("The object's rendered box is unavailable.");
+  const rendered = node.getBoundingClientRect();
   for (const property of ["x", "y", "width", "height"] as const)
     if (
-      !box.node.isConnected ||
+      !node.isConnected ||
       !Number.isFinite(rendered[property]) ||
       (preserve && Math.abs(rendered[property] - box.bounds[property]) / scale > 0.1)
     )

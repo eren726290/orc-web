@@ -1,3 +1,4 @@
+import { flowStyle } from "../layout/layout-box";
 import { containsNode, isLocked, type DesignDocument } from "../../../shared/document/model";
 import { flowChildren, preparePointerMovement } from "./keyboard-movement";
 import {
@@ -86,7 +87,7 @@ function prepareDestination(
   flow: ReturnType<typeof prepareFlowPlacement>,
 ): (delta: Point) => PointerPreview {
   const parent = destinationFrame(document, id, parentId, surface);
-  if (parent && ["flex", "inline-flex"].includes(getComputedStyle(parent).display)) {
+  if (parent && ["flex", "inline-flex"].includes(flowStyle(parent).display)) {
     const drop = destinationFlow(document, id, parentId, parent, surface);
     const placement = flow(parent);
     return (delta) => ({
@@ -97,7 +98,7 @@ function prepareDestination(
       ],
     });
   }
-  if (parent && !["block", "flow-root"].includes(getComputedStyle(parent).display))
+  if (parent && !["block", "flow-root"].includes(flowStyle(parent).display))
     throw new Error("Use Code to edit this frame's source-controlled layout.");
   const reference = parent ? frameReference(parent, surface, scale) : null;
   const siblings =

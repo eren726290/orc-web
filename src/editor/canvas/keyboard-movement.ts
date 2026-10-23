@@ -1,3 +1,4 @@
+import { flowStyle } from "../layout/layout-box";
 import { prepareFlexDrop } from "./pointer-layout";
 import { hasCoordinateTransform } from "../layout/coordinates";
 import type { AtomicMutation, Mutation } from "../../../shared/commands/commands";
@@ -77,6 +78,7 @@ function flowDirection(
   if (object.node.parentId === null || ["absolute", "fixed"].includes(object.computed.position))
     return null;
   const parent = renderedObject(document, object.node.parentId, surface);
+  parent.computed = flowStyle(parent.element);
   if (["grid", "inline-grid", "contents"].includes(parent.computed.display))
     throw new Error("Use Code to edit this object's source-controlled layout parent.");
   if (!["flex", "inline-flex"].includes(parent.computed.display)) return null;

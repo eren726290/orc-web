@@ -1,3 +1,4 @@
+import { objectParent, flowStyle } from "./layout-box";
 import type { AtomicMutation, Mutation } from "../../../shared/commands/commands";
 import { isLocked, type DesignDocument, type DesignNode } from "../../../shared/document/model";
 import { prepareFlowPlacement } from "./flow-placement";
@@ -6,6 +7,8 @@ import { readFrameLayout } from "./frame-layout";
 import { frameLayoutValidation } from "./frame-layout-validation";
 import { absolutePosition, insetProperties, isExplicitAbsolute } from "./participation";
 import { prepareFillSharing } from "./fill-sharing";
+import { withFillDependencies } from "./sizing";
+import { previewDocument } from "../properties/property-preview";
 
 export function readAbsolutePosition(document: DesignDocument, node: DesignNode) {
   const child = renderedFlexChild(document, node);
@@ -28,13 +31,13 @@ function renderedFlexChild(document: DesignDocument, node: DesignNode) {
   const element = window.document.querySelector(
     `.canvas-world [data-orc-id="${CSS.escape(node.id)}"]`,
   );
-  const frame = element?.parentElement;
+  const frame = element ? objectParent(element) : null;
   if (
     !(element instanceof HTMLElement || element instanceof SVGElement) ||
     frame?.dataset.orcId !== parent.id
   )
     return null;
-  if (!["flex", "inline-flex"].includes(getComputedStyle(frame).display)) return null;
+  if (!["flex", "inline-flex"].includes(flowStyle(frame).display)) return null;
   return { parent, element };
 }
 
@@ -55,12 +58,16 @@ export function prepareAbsolutePosition(document: DesignDocument, id: string, ab
   mutation.mutations.push(...prepareFillSharing(document)(mutation.mutations));
   return {
     mutation,
-    validate: placementValidation(element, context, absolute),
+    validate: withFillDependencies(
+      document,
+      previewDocument(document, mutation),
+      placementValidation(element, context, absolute),
+    ),
   };
 }
 
 function placementContext(element: HTMLElement | SVGElement) {
-  const parent = element.parentElement;
+  const parent = objectParent(element);
   const surface = element.closest(".canvas");
   const world = element.closest(".canvas-world");
   if (
@@ -72,7 +79,7 @@ function placementContext(element: HTMLElement | SVGElement) {
   const scale = new DOMMatrix(getComputedStyle(world).transform).a;
   if (!Number.isFinite(scale) || scale <= 0) throw new Error("The canvas scale is unavailable.");
   const reference = frameReference(parent, surface, scale);
-  const direction = getComputedStyle(parent).flexDirection;
+  const direction = flowStyle(parent).flexDirection;
   if (!["row", "column"].includes(direction) || getComputedStyle(element).order !== "0")
     throw new Error("Use Code to change this source-controlled Flex order.");
   return { parent, surface, world, scale, reference, direction };

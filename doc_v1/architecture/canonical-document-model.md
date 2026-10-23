@@ -155,3 +155,13 @@ Canvas constraint indicators are derived editor view state and are not stored as
 Token search, category expansion, editor inspection, and unfinished previews are also outside canonical design data.
 Unapplied Code window text is editing-session state outside the canonical design until Apply succeeds.
 Local server configuration and MCP connection state are also outside the portable document.
+
+<!-- codex-pc 2026-10-19: Approved native projection clarification.
+"Grid is not part of the initial V1 model" above still describes the public layout model.
+The intrinsic-column-v1 implementation projection uses native Grid internally without adding a canonical Grid layout or another saved hierarchy.
+The own --orc-intrinsic-column:1 parent style declaration is the single opt-in authority; generated data-orc-layout/data-orc-flow markup and its inner Flex box derive from it.
+No generated flow box has a canonical ID or Layers row.
+Canonical children and parentId remain authoritative for identity and order, while explicit native helpers distinguish outer coordinates from inner flow.
+The shared projector and its exact inverse preserve source round trips; unknown marked structures must refuse instead of being guessed into the model.
+See ../../backlog/intrinsic-column-wrapper-proposal.md for the approved mapping and its source opt-out boundary.
+-->
