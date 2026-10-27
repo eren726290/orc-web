@@ -39,6 +39,7 @@ The [V1 package list](../packge_list.md) records package responsibilities, obser
 | Text | [Text editing](interface/text-editing.md) | Creation, inline editing, typography, rich formatting, sizing, and clipboard behavior. |
 | Fonts | [Font management](interface/font-management.md) | Project fonts, installed fonts, missing-font replacement, and portable output. |
 | SVG | [SVG editing](interface/svg-editing.md) | Vector selection, supported styling, replacement, source editing, and V1 limits. |
+| Pen | [Pen tool](interface/pen-tool.md) | Approved own-path drawing, directed arcs, anchor editing, saved records and bounded SVG prerequisites. |
 | React components | [Editable React components](interface/react-components.md) | Source-backed layers, visual edit ownership, shared instances, hidden content, and collections. |
 | Motion | [Motion](interface/motion.md) | Live source-authored animation, optional Still view in Edit, accessible motion, and still capture. |
 | Code | [Code window](interface/code-window.md) | Source scopes, two-way design/code updates, protected drafts, Apply/Discard, copying, and recovery. |

@@ -3,6 +3,7 @@ import { flushSync } from "react-dom";
 import { prepareSizing, readSizing, type SizingAxis, type SizingMode } from "../layout/sizing";
 import { FrameLayoutControls, useLayoutFocus } from "./frame-layout-controls";
 import { PropertyField } from "./property-field";
+import { penSizingReadout } from "../pen/sizing-readout";
 import "./sizing-controls.css";
 
 type PairProps = Parameters<typeof FrameLayoutControls>[0];
@@ -115,7 +116,10 @@ function useSizingReadout(props: Props, busy: boolean) {
     const measure = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() =>
-        setCurrent(readSizing(props.document, props.node, props.axis)),
+        setCurrent(
+          penSizingReadout(props.node, props.axis) ??
+            readSizing(props.document, props.node, props.axis),
+        ),
       );
     };
     measure();

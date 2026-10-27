@@ -1,13 +1,47 @@
 # ORC-web implementation status
 
 Last updated: 2026-10-27.
-Current stage: ordinary parent-edge Constraints controls and indicators are verified on Fedora in both pinned browser versions and application modes.
-The [current checkpoint](#ordinary-parent-edge-constraints-checkpoint) records evidence and remaining integration limits.
+Current stage: the bounded CAD Pen extension is integrated with the ordinary editor controls and verified on the combined source on Fedora.
+The [Pen integration checkpoint](#pen-integration-into-master-checkpoint) records the current source, checks and limitations.
+The ordinary [Constraints checkpoint](#ordinary-parent-edge-constraints-checkpoint) remains verified, including the combined-source regressions.
 The independent [frame-label checkpoint](#top-level-frame-label-and-still-view-checkpoint) is verified; frame-specific Still view remains blocked on production component stable-state integration.
 The ordinary [corner-radius checkpoint](#ordinary-corner-radius-controls-checkpoint) verifies combined and individual fields and the selected-name header during Properties scrolling.
 Ordinary Absolute Position participation, per-axis Fixed/Fit, bounded cross-axis Fill and the earlier single-grow main-axis Fill remain verified checkpoints.
 General Fill, complete sizing and Constraints, and the remaining V1 application are still unfinished.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
+
+## Pen integration into master checkpoint
+
+The approved bounded Pen implementation is integrated with main's frame labels, corner-radius controls and native parent-edge Constraints.
+The [main integration report](plans/pen-main-integration.md) records the two preserved local checkpoints, conflict composition, exact checks, browser identities and evidence.
+All 37 top-level verification invocations passed, including 23 main regression commands, eight Pen workflow suites, data/solver checks, static checks and separately measured performance.
+The final evidence audit matches 34 result files to the same 289 source/check/configuration hashes and eight built files.
+Full sizing, intrinsic sizing, nested placement, deletion, pending history, panels and bundle preservation are included.
+Required TS6 and the isolated TS7 checkpoint both pass their existing configurations; no compiler migration occurred.
+
+Integration reproduced and corrected Pen stroke reboxing under main's native Center constraints: an unsupported edit shifted the original path by 2.5 pixels per axis.
+The shared guard now refuses incompatible reboxing before geometry, source or history changes and asks the user to choose Left/Top explicitly.
+Combined End, Both and Center anchor/stroke regressions pass without changing the accepted ordinary constraint behavior.
+A fresh-checkout guide-fixture directory failure is also corrected without changing application behavior.
+The [integration backlog](backlog/pen-integration.md) retains the bounded placement limitation, dense-label fallback, large-path latency and historical tooling-summary gap.
+The built 402-anchor observation records 331.2 ms median solve-to-preview latency; moving the solver to a Worker does not remove that latency.
+
+The existing Pen checkout remains on `pen-tool` at `0e168a8`; both pre-integration checkpoints remain preserved locally.
+Windows, installed stable Chrome, complete product exports, clipboard duplication, MCP and production React integration remain separate unfinished work.
+The next ordinary task is Fixed-axis canvas resize handles, respecting ordinary sizing and Pen's proportional transform ownership.
+No next feature was started and no push is included.
+
+## Historical Pen branch checkpoint
+
+The approved [Pen extension](doc_v1/interface/pen-tool.md) has portable version-1 records, a pinned guarded WASM adapter, human drawing/editing/history/save, compatible source/paint edits and bounded proportional transforms.
+Focused development and built Chrome checks cover native flow, transformed/nested mapping, lifecycle, refused candidates and standalone SVG.
+The [measured synchronous solver blocker](backlog/pen-integration.md#measured-solver-blocker) led to a dedicated Worker using the unchanged verified WASM.
+Input remains responsive while a large-path numerical preview can still take hundreds of milliseconds.
+The current-source integration ledger remains the completion authority.
+The [final branch report](plans/pen-final-report.md) records the passed checks, matched source identities, measured latency and remaining product/integration boundaries.
+The [progress record](plans/pen-progress.md) and runnable ledgers retain staged evidence and reproduced failure controls.
+General SVG tooling, product exporters, clipboard duplication, Windows and future MCP Pen operations remain separate unfinished work.
+The ordinary layout checkpoints below describe their historical source identities; the combined-source verification is recorded in the current Pen integration checkpoint above.
 
 ## Current state
 

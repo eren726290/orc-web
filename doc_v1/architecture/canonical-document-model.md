@@ -79,6 +79,16 @@ A root node has `parentId: null` and appears exactly once in `workspaceRootIds`.
 A non-root node appears exactly once in its parent’s `children` list.
 The model rejects cycles, duplicate child IDs, missing nodes, and orphaned nodes.
 
+## Own Pen SVG data
+
+The approved [Pen extension](../interface/pen-tool.md) permits an optional independently versioned `pen` record on an SVG node.
+Its stable local identities, connected topology, complete directed arcs and rules describe editable intent alongside ordinary SVG source and public outer attributes.
+The parser validates their semantic agreement; the geometry fingerprint alone is insufficient.
+Unknown versions and malformed or inconsistent records refuse without silently removing data.
+Handles, guides, selected anchors and continuation targets remain browser state.
+The current unreleased schema retains `schemaVersion: 1` with pen record version 1, following the owner's approved compatibility decision.
+Older builds that reject the new field cannot open these projects; settle the public format before release.
+
 ## Frames and layout
 
 A frame is a container with visible geometry and an optional clipping boundary.

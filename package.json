@@ -8,6 +8,10 @@
     "start": "bun server/start.ts",
     "build": "bun run check:types && vite build",
     "check:types": "tsc --noEmit && tsc --noEmit -p tsconfig.server.json",
+    "build:pen-solver": "bun scripts/solver/build.ts",
+    "check:pen-solver": "bun scripts/solver/check-solver.ts && bun scripts/solver/check-browser.ts",
+    "check:pen-data": "bun scripts/e2e/editor/pen/check-record.ts && bun scripts/e2e/editor/pen/check-commands.ts",
+    "check:pen": "bun scripts/e2e/editor/pen/check-editor.ts chrome && bun scripts/e2e/editor/pen/check-layout.ts chrome && bun scripts/e2e/editor/pen/check-source.ts chrome && bun scripts/e2e/editor/pen/check-transforms.ts chrome && bun scripts/e2e/editor/pen/check-lifecycle.ts chrome && bun scripts/e2e/editor/pen/check-interactions.ts && bun scripts/e2e/editor/pen/check-refusals.ts chrome && bun scripts/e2e/editor/pen/check-drawing.ts chrome",
     "check:ts7": "bun scripts/tooling/check-ts7.ts",
     "check:tooling": "bun scripts/tooling/check-tooling.ts",
     "check:browser": "bun scripts/runtime/check-browser.ts",
@@ -41,7 +45,9 @@
     "check:health": "fallow health --format json --quiet --explain",
     "check:format": "oxfmt --check src shared server scripts tools/anti-slop/index.ts index.html vite.config.ts oxlint.config.ts tsconfig.json tsconfig.server.json package.json .oxfmtrc.json .fallowrc.json",
     "lint": "oxlint",
-    "format": "oxfmt --write src shared server scripts tools/anti-slop/index.ts index.html vite.config.ts oxlint.config.ts tsconfig.json tsconfig.server.json package.json .oxfmtrc.json .fallowrc.json"
+    "format": "oxfmt --write src shared server scripts tools/anti-slop/index.ts index.html vite.config.ts oxlint.config.ts tsconfig.json tsconfig.server.json package.json .oxfmtrc.json .fallowrc.json",
+    "check:pen-performance": "bun scripts/e2e/editor/pen/check-performance.ts chrome",
+    "check:pen-provenance": "bun scripts/solver/check-provenance.ts"
   },
   "dependencies": {
     "@babel/parser": "7.29.9",

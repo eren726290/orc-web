@@ -10,6 +10,8 @@ It covers Layers keyboard rename and Undo/Redo, top-level/nested/hidden eligibil
 Use `ORC_FRAME_LABEL_EVIDENCE` for named retained screenshots, traces and source-bound results, and pass `chrome` with `ORC_CHROME_EXECUTABLE` for a specific executable.
 It does not certify the blocked Still view runtime or unfinished product image/PDF exporters.
 
+Portable pen data, atomic geometry commands and the subsequent human pen workflows belong to [pen/](pen/README.md).
+
 Editor, Properties, Code, history, panels, Layers, deletion, Preview, atomic commands, movement, clipping, layout switching, frame Padding, and Gap checks belong here.
 check-alignment.ts verifies physical packed alignment and named distribution through native layout, history, source ownership, safeguards, and saving.
 check-participation.ts verifies the ordinary Absolute Position control, parent-relative boxes, native reflow, history and saving.

@@ -23,6 +23,9 @@ import { keyboardMovement } from "./canvas/keyboard-movement";
 import { prepareFillSharing } from "./layout/fill-sharing";
 import { prepareFillDependencies } from "./layout/sizing";
 import { deletionCandidate } from "./layout/fill-dependencies";
+import { isPenMutation, penWrites, preparePenPreview } from "./pen/preview";
+import { flushSync } from "react-dom";
+import { applyPenSource } from "./pen/apply-source";
 
 type Props = {
   project: ProjectSnapshot;
@@ -66,6 +69,7 @@ function WorkspaceProperties({ controller: c }: { controller: Controller }) {
     <>
       <PanelResize panel="properties" view={c.view} change={c.setView} />
       <Properties
+        penOptions={<PenOptions controller={c} />}
         document={c.project.document}
         selected={c.view.selected}
         mutate={c.mutate}
@@ -75,6 +79,24 @@ function WorkspaceProperties({ controller: c }: { controller: Controller }) {
         select={(id) => c.select(id, false)}
       />
     </>
+  );
+}
+
+function PenOptions({ controller: c }: { controller: Controller }) {
+  const node = c.view.selected.length === 1 ? c.project.document.nodes[c.view.selected[0]] : null;
+  if (c.view.tool !== "pen" && !(node?.kind === "svg" && node.pen)) return null;
+  return (
+    <section className="property-section">
+      <h2>Pen</h2>
+      <label className="checkbox-field">
+        <input
+          type="checkbox"
+          checked={c.view.penGuides}
+          onChange={(event) => c.setView({ penGuides: event.currentTarget.checked })}
+        />
+        Guides &amp; labels
+      </label>
+    </section>
   );
 }
 
@@ -95,8 +117,9 @@ function useWorkspace(props: Props) {
     setView(selectionChange(props.project.document, view, id, extend));
     return true;
   };
-  const mutate = (mutation: Mutation) => applyWorkspaceMutation(props, guard, setView, mutation);
-  const controls = codeControls(props, setView, guard);
+  const mutate = (mutation: Mutation) =>
+    applyWorkspaceMutation(props, guard, setView, mutation, setPreview);
+  const controls = codeControls(props, setView, guard, setPreview, setNotice);
   const prepareProperties = () =>
     projectView(props.project.document.id).draft ? guard.request(props.project.document.id) : true;
   return {
@@ -151,6 +174,8 @@ function previewProperties(
 }
 
 function prepareWorkspaceMutation(document: DesignDocument, mutation: Mutation): Mutation {
+  if (isPenMutation(mutation))
+    throw new Error("Pen edits require complete native candidate preparation.");
   if (mutation.kind === "text")
     prepareFillDependencies(document)(previewDocument(document, mutation));
   if (mutation.kind !== "delete") return mutation;
@@ -164,24 +189,45 @@ async function applyWorkspaceMutation(
   guard: ReturnType<typeof useDraftGuard>,
   setView: (patch: Partial<ViewState>) => void,
   mutation: Mutation,
+  preview?: (value: PropertyPreview) => void,
 ) {
-  const projectId = props.project.document.id;
   try {
-    mutation = prepareWorkspaceMutation(props.project.document, mutation);
+    if (!isPenMutation(mutation))
+      mutation = prepareWorkspaceMutation(props.project.document, mutation);
+    if (!(await approveWorkspaceDraft(props.project.document, mutation, guard))) return false;
+    if (isPenMutation(mutation)) {
+      if (!preview) throw new Error("The pen preview is unavailable.");
+      flushSync(() => preview(null));
+      mutation = preparePenPreview(props.project.document, preview)(penWrites(mutation));
+    }
+    return await publishWorkspaceMutation(props, setView, mutation);
   } catch (cause) {
     sessionClient.setError(cause instanceof Error ? cause.message : "The change failed.");
     return false;
+  } finally {
+    if (isPenMutation(mutation)) preview?.(null);
   }
-  const draft = projectView(projectId).draft;
-  if (
-    draft &&
-    overlapsDraft(props.project.document, mutation, draft.nodeId) &&
-    !(await guard.request(projectId))
-  )
-    return false;
+}
+
+async function approveWorkspaceDraft(
+  document: DesignDocument,
+  mutation: Mutation,
+  guard: ReturnType<typeof useDraftGuard>,
+): Promise<boolean> {
+  const draft = projectView(document.id).draft;
+  return (
+    !draft || !overlapsDraft(document, mutation, draft.nodeId) || (await guard.request(document.id))
+  );
+}
+
+async function publishWorkspaceMutation(
+  props: Props,
+  setView: (patch: Partial<ViewState>) => void,
+  mutation: Mutation,
+) {
   const result = await props.act(
     "/api/commands",
-    mutationInput(projectId, props.project.document.revision, mutation),
+    mutationInput(props.project.document.id, props.project.document.revision, mutation),
   );
   if (result && mutation.kind === "insert")
     setView({
@@ -206,6 +252,8 @@ function codeControls(
   props: Props,
   setView: (patch: Partial<ViewState>) => void,
   guard: ReturnType<typeof useDraftGuard>,
+  preview: (value: PropertyPreview) => void,
+  notice: (value: string | null) => void,
 ) {
   const id = props.project.document.id;
   const toggleCode = async () => {
@@ -213,7 +261,17 @@ function codeControls(
     if (current.codeOpen && !(await guard.request(id))) return;
     setView({ codeOpen: !current.codeOpen });
   };
-  const applySource = async () => {
+  return { toggleCode, applySource: () => applyCodeSource(props, setView, preview, notice) };
+}
+
+async function applyCodeSource(
+  props: Props,
+  setView: (patch: Partial<ViewState>) => void,
+  preview: (value: PropertyPreview) => void,
+  notice: (value: string | null) => void,
+) {
+  try {
+    const id = props.project.document.id;
     const draft = projectView(id).draft;
     if (!draft) return;
     const document = props.project.document;
@@ -223,19 +281,42 @@ function codeControls(
       );
       return;
     }
-    if (
-      await props.act(
+    const applied =
+      (await applyPenSource(document, draft.nodeId, draft.source, props.act, preview)) ??
+      (await props.act(
         "/api/commands",
         mutationInput(id, document.revision, {
           kind: "source",
           id: draft.nodeId,
           source: draft.source,
         }),
-      )
-    )
+      ));
+    if (applied) {
       setView({ draft: null });
-  };
-  return { toggleCode, applySource };
+      explainDetachedPen(document, draft.nodeId, notice);
+    }
+  } catch (error) {
+    sessionClient.setError(error instanceof Error ? error.message : "Source Apply failed.");
+  }
+}
+
+function explainDetachedPen(document: DesignDocument, id: string, notice: (value: string) => void) {
+  const current = sessionClient
+    .snapshot()
+    .session.projects.find((project) => project.document.id === document.id)?.document;
+  const lost = Object.values(document.nodes).some((node) => {
+    const after = current?.nodes[node.id];
+    return (
+      node.kind === "svg" &&
+      node.pen &&
+      containsNode(document, id, node.id) &&
+      (after?.kind !== "svg" || !after.pen)
+    );
+  });
+  if (lost)
+    notice(
+      "Source changed the path structure or mapping. Pen editing data was detached; the SVG artwork remains. Applying ancestor source also replaces descendant identities.",
+    );
 }
 
 function selectionChange(
@@ -487,7 +568,9 @@ function objectKey(event: React.KeyboardEvent, c: Controller) {
     event.preventDefault();
     const node = c.view.selected.length === 1 ? c.project.document.nodes[c.view.selected[0]] : null;
     void c.select(node?.parentId ?? null, false);
-  } else if (event.key.toLowerCase() === "t") c.setView({ tool: "text" });
-  else if (event.key.toLowerCase() === "v") c.setView({ tool: "select" });
-  else if (event.key.toLowerCase() === "h") c.setView({ tool: "pan" });
+  } else {
+    const tools: Record<string, ViewState["tool"]> = { t: "text", p: "pen", v: "select", h: "pan" };
+    const tool = tools[event.key.toLowerCase()];
+    if (tool) c.setView({ tool });
+  }
 }

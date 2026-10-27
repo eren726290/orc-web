@@ -17,6 +17,8 @@ import { ConstraintControls } from "./constraint-controls";
 import { AbsolutePositionControl } from "./absolute-position-control";
 import { SizingControls } from "./sizing-control";
 import { CornerRadiusControls } from "./corner-radius-controls";
+import type { ReactNode } from "react";
+import { PenArtworkControls } from "../pen/PenArtworkControls";
 
 type Props = {
   document: DesignDocument;
@@ -26,6 +28,7 @@ type Props = {
   prepare: () => boolean | Promise<boolean>;
   preview: (value: PropertyPreview) => void;
   select: (id: string) => Promise<boolean>;
+  penOptions?: ReactNode;
 };
 type EditProps = Pick<Props, "document" | "mutate" | "prepare" | "preview"> & {
   node: DesignNode;
@@ -35,7 +38,7 @@ type EditProps = Pick<Props, "document" | "mutate" | "prepare" | "preview"> & {
 export function Properties(props: Props) {
   const node = props.selected.length === 1 ? props.document.nodes[props.selected[0]] : null;
   const ownership = useLayoutOwnership(props.document, node?.id, !props.disabled);
-  if (!node) return <EmptyProperties count={props.selected.length} />;
+  if (!node) return <EmptyProperties count={props.selected.length} penOptions={props.penOptions} />;
   const editing = {
     document: props.document,
     node,
@@ -51,6 +54,7 @@ export function Properties(props: Props) {
         <span>{node.kind}</span>
       </div>
       <div className="property-content">
+        {props.penOptions}
         <PropertySections
           key={node.id}
           {...editing}
@@ -137,10 +141,11 @@ function FrameClipping(props: EditProps) {
   );
 }
 
-function EmptyProperties({ count }: { count: number }) {
+function EmptyProperties({ count, penOptions }: { count: number; penOptions?: ReactNode }) {
   return (
     <aside className="properties-panel">
       <div className="panel-heading">Properties</div>
+      {penOptions}
       <p className="panel-empty">
         {count > 1
           ? `${count} objects selected. Select one object to edit its properties.`
@@ -199,7 +204,11 @@ function TextContent(props: EditProps) {
 function NodeAppearance(props: EditProps) {
   return (
     <>
-      <BackgroundField {...props} />
+      {props.node.kind === "svg" && props.node.pen ? (
+        <PenArtworkControls {...props} />
+      ) : (
+        <BackgroundField {...props} />
+      )}
       <CornerRadiusControls {...props} />
       <StyleField
         {...props}

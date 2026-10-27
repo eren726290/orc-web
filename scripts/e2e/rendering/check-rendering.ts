@@ -20,6 +20,7 @@ const browser = await chromium.launch({
 });
 const checks: string[] = [];
 const inputs: string[] = [];
+const appOutput: string[] = [];
 let failure: string | null = null;
 try {
   await verifyMode("development");
@@ -57,7 +58,9 @@ async function verifyMode(mode: "development" | "built") {
   } finally {
     await context.tracing.stop({ path: artifact(`${mode}-trace.zip`) });
     await context.close();
-    assert.equal(await app.stop(), 0, app.output.join("\n"));
+    const exit = await app.stop();
+    appOutput.push(...app.output);
+    assert.equal(exit, 0, app.output.join("\n"));
   }
 }
 
@@ -71,6 +74,7 @@ async function insertExamples(page: Page) {
     style: {},
   };
   const nodes: DesignNode[] = [
+    boxControl(base),
     {
       ...base,
       id: "svg",
@@ -89,6 +93,32 @@ async function insertExamples(page: Page) {
     { ...base, id: "container", name: "Container example", kind: "element", tag: "div" },
   ];
   assert.equal((await command(page, { kind: "insert", nodes })).status(), 200);
+  const box = await page.locator('.canvas-world [data-orc-id="box-control"]').boundingBox();
+  assert.ok(box);
+  assert.equal(box.width, 190, "SVG paint isolation must preserve ordinary Fixed outer widths.");
+  assert.equal(box.height, 62, "SVG paint isolation must preserve ordinary Fixed outer heights.");
+}
+
+function boxControl(
+  base: Pick<DesignNode, "parentId" | "children" | "visible" | "locked" | "attributes">,
+): DesignNode {
+  return {
+    ...base,
+    id: "box-control",
+    name: "Box control",
+    kind: "frame",
+    mode: "inherit",
+    clipContent: false,
+    style: {
+      position: "absolute",
+      left: "40px",
+      top: "300px",
+      width: "190px",
+      height: "62px",
+      padding: "12px",
+      border: "3px solid black",
+    },
+  };
 }
 
 async function svgWorkflow(page: Page) {
@@ -333,6 +363,6 @@ function artifact(suffix: string) {
 async function writeEvidence() {
   await writeFile(
     artifact("result.json"),
-    `${JSON.stringify({ ...sourceEvidence(), channel, browserVersion: browser.version(), command: `bun scripts/e2e/rendering/check-rendering.ts ${channel}`, phase, checks, inputs, failure }, null, 2)}\n`,
+    `${JSON.stringify({ ...sourceEvidence(), channel, browserVersion: browser.version(), command: `bun scripts/e2e/rendering/check-rendering.ts ${channel}`, phase, checks, inputs, appOutput, failure }, null, 2)}\n`,
   );
 }

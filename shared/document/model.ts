@@ -1,3 +1,5 @@
+import type { PenRecord } from "../pen/model";
+
 export type Styles = Record<string, string>;
 
 export type TextRun = { text: string; style: Styles };
@@ -19,7 +21,7 @@ export type DesignNode = NodeBase &
     | { kind: "element"; tag: string }
     | { kind: "text"; tag: string; runs: TextRun[] }
     | { kind: "image" }
-    | { kind: "svg"; source: string }
+    | { kind: "svg"; source: string; pen?: PenRecord }
   );
 
 export type DesignDocument = {

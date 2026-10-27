@@ -15,6 +15,8 @@ Backlog entries are not product requirements until they are accepted and recorde
 - Complete the accepted [top-level frame controls](frame-controls.md) after production React/Motion stable-state integration is available.
   The independent frame-name overlay does not establish Still view support; loose animated objects retain an explicit unresolved scope question.
 
+- Resolve the [measured Pen solver blocker and integration boundaries](pen-integration.md) before claiming the approved Pen extension complete.
+
 - Complete the accepted V1 [canvas pointer gestures](canvas-pointer-gestures.md), including general sizing ownership, several-object reparenting, and sizing-owned handles.
 
 - Review the [SVG source parser's initial bundle cost](source-parser-bundle-size.md) before release while preserving the verified source and rendering behavior.

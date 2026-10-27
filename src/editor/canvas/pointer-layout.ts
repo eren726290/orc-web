@@ -3,7 +3,9 @@ import type { DesignDocument } from "../../../shared/document/model";
 import { previewDocument, type PropertyPreview } from "../properties/property-preview";
 
 type Reorder = Extract<Mutation, { kind: "reorder" }>;
-type PointerEdit = Exclude<NonNullable<PropertyPreview>, { kind: "batch" }> | Reorder;
+type PointerEdit =
+  | Exclude<NonNullable<PropertyPreview>, { kind: "batch" | "pen-preview" }>
+  | Reorder;
 export type PointerPreview = PointerEdit | { kind: "batch"; mutations: PointerEdit[] } | null;
 type Box = { id: string; bounds: DOMRect };
 type Flow = {

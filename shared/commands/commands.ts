@@ -1,7 +1,10 @@
 import type { DesignNode, Styles, TextRun } from "../document/model";
 import { parseNode } from "../document/document";
+import { parsePenRecord } from "../pen/record";
+import type { PenRecord } from "../pen/model";
 import {
   boolean,
+  knownFields,
   nonnegativeInteger,
   nullableString,
   object,
@@ -15,6 +18,14 @@ export type AtomicMutation =
   | { kind: "rename"; id: string; name: string }
   | { kind: "style"; id: string; values: Styles; unset?: string[] }
   | { kind: "text"; id: string; runs: TextRun[] }
+  | {
+      kind: "pen";
+      id: string;
+      source: string;
+      pen: PenRecord;
+      attributes: Record<string, string>;
+      style: Styles;
+    }
   | { kind: "lock"; id: string; locked: boolean }
   | { kind: "clip"; id: string; clipContent: boolean }
   | { kind: "reorder"; id: string; parentId: string | null; index: number }
@@ -56,10 +67,8 @@ function parseMutation(value: unknown): Mutation {
 function parseAtomicMutation(value: unknown): AtomicMutation {
   const input = object(value);
   switch (input.kind) {
-    case "insert": {
-      if (!Array.isArray(input.nodes)) throw new Error("Expected objects to insert.");
-      return { kind: "insert", nodes: input.nodes.map(parseNode) };
-    }
+    case "insert":
+      return parseInsertMutation(input);
     case "rename":
       return { kind: "rename", id: string(input.id), name: string(input.name) };
     case "style":
@@ -79,6 +88,8 @@ function parseAtomicMutation(value: unknown): AtomicMutation {
       return { kind: "delete", ids: strings(input.ids) };
     case "text":
       return parseTextMutation(input);
+    case "pen":
+      return parsePenMutation(input);
     default:
       throw new Error("Unsupported edit.");
   }
@@ -99,4 +110,21 @@ function parseTextMutation(input: Record<string, unknown>): AtomicMutation {
     return { text: string(run.text), style: stringMap(run.style) };
   });
   return { kind: "text", id: string(input.id), runs };
+}
+
+function parsePenMutation(input: Record<string, unknown>): AtomicMutation {
+  knownFields(input, ["kind", "id", "source", "pen", "attributes", "style"], "pen edit");
+  return {
+    kind: "pen",
+    id: string(input.id),
+    source: string(input.source),
+    pen: parsePenRecord(input.pen),
+    attributes: stringMap(input.attributes),
+    style: stringMap(input.style),
+  };
+}
+
+function parseInsertMutation(input: Record<string, unknown>): AtomicMutation {
+  if (!Array.isArray(input.nodes)) throw new Error("Expected objects to insert.");
+  return { kind: "insert", nodes: input.nodes.map(parseNode) };
 }

@@ -393,8 +393,15 @@ body {
   block-size: 100%;
   transform-origin: 0 0;
 }
-.canvas-world [data-orc-id] {
+/* The SVG filter must not raise the reset above the following box-sizing rule. */
+.canvas-world [data-orc-id]:where(:not(svg)) {
   all: revert;
+}
+.canvas-world svg[data-orc-id] {
+  display: revert;
+  vertical-align: revert;
+}
+.canvas-world [data-orc-id] {
   box-sizing: border-box;
 }
 .canvas-empty {

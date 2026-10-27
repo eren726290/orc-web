@@ -2,14 +2,15 @@
 
 Run checks from the repository root with the scripts in `package.json`.
 
-| Folder                                    | Owns                                              |
-| ----------------------------------------- | ------------------------------------------------- |
-| [e2e/editor/](e2e/editor/README.md)       | Editor feature and history workflows.             |
-| [e2e/projects/](e2e/projects/README.md)   | Saving, bundle preservation, locks, and recovery. |
-| [e2e/rendering/](e2e/rendering/README.md) | Native source/rendering regressions.              |
-| [runtime/](runtime/README.md)             | Browser mounting and startup/shutdown checks.     |
-| [support/](support/README.md)             | Owned application processes and source evidence.  |
-| [tooling/](tooling/README.md)             | Dependency pins and lint enforcement.             |
+| Folder                                    | Owns                                                           |
+| ----------------------------------------- | -------------------------------------------------------------- |
+| [e2e/editor/](e2e/editor/README.md)       | Editor feature and history workflows.                          |
+| [e2e/projects/](e2e/projects/README.md)   | Saving, bundle preservation, locks, and recovery.              |
+| [e2e/rendering/](e2e/rendering/README.md) | Native source/rendering regressions.                           |
+| [runtime/](runtime/README.md)             | Browser mounting and startup/shutdown checks.                  |
+| [support/](support/README.md)             | Owned application processes and source evidence.               |
+| [tooling/](tooling/README.md)             | Dependency pins and lint enforcement.                          |
+| [solver/](solver/README.md)               | Pinned pen solver build and isolated numerical/browser checks. |
 
 `dev.ts` remains the development entry point.
 Package command names remain the stable way to run checks.

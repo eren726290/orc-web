@@ -64,7 +64,8 @@ People replace existing SVGs through Properties.
 Manual new-file insertion through + Add is deferred to V1.x.
 
 V1 supports selecting, moving, proportionally resizing, rotating, replacing, and changing supported fill, stroke, and stroke-width values.
-It does not include drawing new paths, selecting or moving individual path points, editing Bézier handles, combining shapes, or automatic editing of arbitrary SVG source.
+The approved [Pen extension](pen-tool.md) adds drawing and anchor editing for its own connected line/circular-arc paths.
+Arbitrary imported-path adoption, Bézier handles, combining shapes and automatic editing of arbitrary SVG source remain outside that extension.
 
 ## Related contracts
 

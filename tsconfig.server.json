@@ -11,5 +11,5 @@
     "allowImportingTsExtensions": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["server", "shared"]
+  "include": ["server", "shared", "scripts/e2e/editor/pen/check-commands.ts"]
 }

@@ -3,7 +3,8 @@ import { useCallback, useSyncExternalStore } from "react";
 export type ViewState = {
   selected: string[];
   expanded: string[];
-  tool: "select" | "pan" | "text";
+  tool: "select" | "pan" | "text" | "pen";
+  penGuides: boolean;
   leftTab: "layers" | "tokens";
   codeOpen: boolean;
   panels: { layers: number; properties: number; code: number };
@@ -38,6 +39,7 @@ export function projectView(projectId: string): ViewState {
       selected: [],
       expanded: [],
       tool: "select",
+      penGuides: true,
       leftTab: "layers",
       codeOpen: false,
       panels: { layers: 256, properties: 280, code: 220 },

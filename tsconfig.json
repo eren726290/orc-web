@@ -18,5 +18,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "scripts", "tools/anti-slop", "vite.config.ts", "oxlint.config.ts"]
+  "include": ["src", "scripts", "tools/anti-slop", "vite.config.ts", "oxlint.config.ts"],
+  "exclude": ["scripts/e2e/editor/pen/check-commands.ts"]
 }
