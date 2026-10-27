@@ -7,6 +7,7 @@ import {
 } from "../../../shared/document/model";
 import { flowBox, objectParent } from "./layout-box";
 import { columnProjectionEligible } from "../../../shared/source/intrinsic-column";
+import { constraintMode } from "./constraint-css";
 import { hasCoordinateTransform } from "./coordinates";
 import type { Mutation } from "../../../shared/commands/commands";
 import { captureFillDependencies } from "./fill-dependencies";
@@ -475,10 +476,19 @@ function boundedSizing(context: SizingContext, axis: SizingAxis) {
     if (source.node.kind !== "frame" || !ownedSizing(source, axis)) return false;
     if (sizingMode(source, axis) === "Fixed" && activePixel(source, axis)) return true;
     if (activeEqualLimits(source, axis)) return true;
-    if (!ownedFillRelationship(source, axis)) return false;
+    if (!ownedFillRelationship(source, axis) && !ownedConstraintRelationship(source, axis))
+      return false;
     source = parentSizingContext(source);
   }
   return false;
+}
+
+function ownedConstraintRelationship(source: SizingContext, axis: SizingAxis) {
+  return (
+    source.owners[axis] === "Constraints" &&
+    source.computed.position === "absolute" &&
+    constraintMode(source.style, axis) === "both"
+  );
 }
 
 function parentSizingContext(source: SizingContext) {
@@ -1067,7 +1077,8 @@ function axisOwner(
   const { style, flow } = source;
   const main = flow.direction?.startsWith("row") ? "width" : "height";
   if (flow.direction && (axis === main ? flow.grow !== "0" : flow.crossFill)) return "Fill";
-  if (!source.constrained || !["", "auto"].includes(style.getPropertyValue(axis))) return null;
+  if (!source.constrained || !["", "auto", "stretch"].includes(style.getPropertyValue(axis)))
+    return null;
   const edges = axis === "width" ? ["left", "right"] : ["top", "bottom"];
   return edges.every((edge) => !["", "auto"].includes(style.getPropertyValue(edge)))
     ? "Constraints"

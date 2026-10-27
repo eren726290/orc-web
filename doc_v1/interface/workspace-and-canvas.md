@@ -108,6 +108,33 @@ Top-level frames have separate layout, clipping, preview interaction, and overla
 Nested frames belong to their immediate parent and remain part of that parent design area.
 Shared tokens and components can intentionally connect values across frames, as described in [Tokens and modes](tokens-and-modes.md) and [Editable React components](react-components.md).
 
+<!-- codex-pc 2026-10-24: Accepted V1 clarification and frame-name addition. -->
+
+## Top-level frame label and Still view control
+
+In Edit, each top-level frame shows its saved readable name above its top-left edge.
+The name is the same value shown in Layers, follows existing rename operations and Undo/Redo, and is separate from the stable internal ORC node ID.
+The label stays aligned during pan, zoom, movement, resizing, and supported layout changes.
+Its text remains readable at different canvas zoom levels.
+Long names truncate within the available name area without covering the Still view button; the full saved name remains available in Layers.
+For a very narrow frame, preserve the button's accessible target and truncate the name first rather than shrinking the text or overlapping the controls.
+Nested frames do not receive another strip.
+
+One small snowflake icon button sits above each top-level frame's top-right edge.
+Use the existing icon library, a tooltip and accessible name identifying Still view and the target frame, keyboard activation, an exposed pressed state, and a clearly visible active appearance.
+The button has no large permanent text label.
+The complete frame-specific behavior, stable-state limits, and storage contract belong to [Motion](motion.md#frame-specific-still-view).
+
+The label and button are editor overlays outside the design tree and frame clipping.
+They introduce no design node, layout space, generated source, image/PDF content, additional rename action, or strip-specific drag gesture.
+Hide both in Preview, which plays normal animations, and restore each frame's Still view setting when returning to Edit.
+Project-tab switching preserves these per-project settings without transferring them to another project or frame.
+Loose animated objects outside frames have no assigned Still view control until the [open scope question](../../backlog/frame-controls.md#loose-animated-objects) is resolved.
+
+Implementation acceptance checks cover name/history synchronization, two-frame independence, narrow names, keyboard access, native geometry during view/design changes, Preview restoration, and unchanged source/history/save state for a toggle.
+Nested stabilization and normal Preview playback must pass with supported live content before Still view is called implemented.
+The [implementation handoff](../../backlog/frame-controls.md) separates independently deliverable labels from missing runtime dependencies and full exporter verification.
+
 ## Layout modes
 
 | Human label | Saved layout | Behavior |

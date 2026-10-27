@@ -1,5 +1,15 @@
 # Editor workflow checks
 
+`bun run check:corner-radius` verifies combined and individual ordinary corner radii in development and built modes.
+The focused [corner-radius checks](corner-radius/README.md) cover Mixed values, keyboard disclosure, numeric preview/cancellation/adjustment, source ownership and priority, locks/drafts, rejection, pending Undo, generated source and save/reopen.
+Use `ORC_RADIUS_EVIDENCE` to name retained source-bound results, screenshots and traces; `ORC_RADIUS_MODES=development|built` selects one app mode.
+Pass `chrome` with `ORC_CHROME_EXECUTABLE` to check a specific executable.
+
+`bun run check:frame-labels` verifies top-level saved-name overlays in development and built modes.
+It covers Layers keyboard rename and Undo/Redo, top-level/nested/hidden eligibility, narrow names, pan/zoom, pointer movement, Properties sizing, layout changes, tab/Preview restoration and standalone source isolation.
+Use `ORC_FRAME_LABEL_EVIDENCE` for named retained screenshots, traces and source-bound results, and pass `chrome` with `ORC_CHROME_EXECUTABLE` for a specific executable.
+It does not certify the blocked Still view runtime or unfinished product image/PDF exporters.
+
 Editor, Properties, Code, history, panels, Layers, deletion, Preview, atomic commands, movement, clipping, layout switching, frame Padding, and Gap checks belong here.
 check-alignment.ts verifies physical packed alignment and named distribution through native layout, history, source ownership, safeguards, and saving.
 check-participation.ts verifies the ordinary Absolute Position control, parent-relative boxes, native reflow, history and saving.
@@ -44,3 +54,12 @@ It also checks history, source preservation, save/reopen, and measurement cleanu
 Run `bun run check:boundaries` for development and built Chromium, or pass `chrome` with `ORC_CHROME_EXECUTABLE` for a specific Chrome installation.
 `ORC_BOUNDARY_SCENARIO=input|svg|geometry` selects a focused workflow and `ORC_BOUNDARY_MODES=development` limits it to the development app.
 `ORC_BOUNDARY_EVIDENCE` names the retained screenshots, traces and source-bound result under `artifacts/editor/`.
+
+Run `bun run check:constraints` for ordinary parent-edge Constraints in development and built application modes.
+The fixtures and requirement-derived assertions live in [constraints/](constraints/README.md).
+`ORC_CONSTRAINT_MODES=development|built` selects one app mode and `ORC_CONSTRAINT_EVIDENCE` names retained evidence.
+Pass `chrome` and `ORC_CHROME_EXECUTABLE` for an explicit executable.
+The checks cover both axes, the diagram, Align center, native resize, limits, images/SVGs, ownership, locks, drafts, rollback, pending Undo, native motion, scrollbar gutters, pan/zoom, pointer reparenting, history, source isolation and save/reopen.
+
+The boundary geometry check lets pending overlay updates settle before counting idle measurements across twelve frames.
+It retains a zero-read assertion for settled deselection and Preview; a visible frame label's one-time update is distinguished from continued polling.

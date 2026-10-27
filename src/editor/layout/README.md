@@ -63,3 +63,23 @@ The wrapper remains mounted through later Fit/Fixed changes and membership reduc
 An explicit conversion away from Column removes the marker in the same command.
 The first structural insertion belongs to Edit mode; later Preview sessions mount the applied structure.
 There is no saved geometry or runtime sizing solver.
+
+## Parent-edge Constraints
+
+`constraints.ts` derives ordinary immediate-parent eligibility and prepares position-preserving per-axis mode changes or explicit Align center through existing CSS batches and native candidate validation.
+`constraint-css.ts` recognizes the physical native projection shared by ownership, sizing and movement.
+Start/End use one fixed inset, Fixed sizing and normal self-alignment.
+Both uses opposing insets with normal self-alignment, auto dimensions for frames and native stretch dimensions for other ordinary boxes.
+Normal alignment retains the start edge when a small parent and a size limit overconstrain the insets.
+Source-authored stretch self-alignment and intrinsic replaced sizing without an explicit stretch dimension remain in Code.
+Center uses unsafe native self-centering, zero-sum opposing pixel insets and Fixed sizing, with margin-box compensation.
+Later size edits retain the border-box center relationship without adding a transform or changing fixed descendants' containing blocks.
+Existing coordinate guards remain intact for arbitrary transforms, aspect-ratio coupling, logical/source-owned values and uncertain margins.
+Ownership checks distinguish saved place-self declarations from browser serialization of the reviewed physical longhands.
+Free reparenting remeasures the current relationship; joining Flex or workspace root clears editor centering in the same command.
+`frameReference` excludes native scrollbar gutters and accounts for a reserved starting gutter before applying scroll and canvas scale.
+Both-edge limits retain authored offsets, preserve the start edge and expose temporary end-margin conflicts without writing measured boxes back into the document.
+Sizing bound traversal also follows recognized physical Both-edge relationships to an independently owned Fixed or equal-limit ancestor.
+A nested constrained Row/Column can retain its main/cross Fill children without treating a measured box as an authored bound.
+The same rule supports the existing opted-in Column projection and continues to reject loss of the sole parent supply.
+`position.ts` derives read-only measured X/Y for supported End/Center axes without exposing CSS auto or a sizing label as a position.

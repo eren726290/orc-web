@@ -2,6 +2,7 @@ import type { AtomicMutation } from "../../../shared/commands/commands";
 import type { DesignNode } from "../../../shared/document/model";
 import { checkMovementCoordinates } from "../canvas/keyboard-movement";
 import { hasCoordinateTransform } from "./coordinates";
+import { constraintMode as nativeConstraintMode, constraintAlignments } from "./constraint-css";
 import { absolutePosition, insetProperties, isExplicitAbsolute } from "./participation";
 
 type StyleEdit = Extract<AtomicMutation, { kind: "style" }>;
@@ -18,11 +19,22 @@ export function frameReference(element: HTMLElement, surface: HTMLElement, scale
   const bounds = element.getBoundingClientRect();
   const left = Number.parseFloat(style.borderLeftWidth);
   const top = Number.parseFloat(style.borderTopWidth);
+  const right = Number.parseFloat(style.borderRightWidth);
+  const bottom = Number.parseFloat(style.borderBottomWidth);
+  const inlineGutter = Math.max(
+    0,
+    Math.round(element.offsetWidth - element.clientWidth - left - right),
+  );
+  const blockGutter = Math.max(
+    0,
+    Math.round(element.offsetHeight - element.clientHeight - top - bottom),
+  );
+  const startGutter = style.scrollbarGutter.includes("both-edges") ? inlineGutter / 2 : 0;
   return {
-    x: bounds.x + (left - element.scrollLeft) * scale,
+    x: bounds.x + (left + startGutter - element.scrollLeft) * scale,
     y: bounds.y + (top - element.scrollTop) * scale,
-    width: bounds.width / scale - left - Number.parseFloat(style.borderRightWidth),
-    height: bounds.height / scale - top - Number.parseFloat(style.borderBottomWidth),
+    width: bounds.width / scale - left - right - inlineGutter,
+    height: bounds.height / scale - top - bottom - blockGutter,
   };
 }
 
@@ -49,6 +61,14 @@ export function prepareFreePlacement(
     const parent = reference ?? { x: source.world.x, y: source.world.y, width: 0, height: 0 };
     const shift = translation(source);
     const values = {
+      ...(source.computed.position === "absolute" && (!constrained || reference === null)
+        ? Object.fromEntries(
+            constraintAlignments(source.style).map((key) => [
+              key,
+              priority(source.style, key, "auto"),
+            ]),
+          )
+        : {}),
       position: priority(
         source.style,
         "position",
@@ -108,15 +128,9 @@ function freeAxis(
   const margin = placementMargin(source, marginStart, mode);
   const p = (bounds[axis] + delta * scale - parent[axis]) / scale - shift - margin;
   const r = available - p - margin - size - Number.parseFloat(computed.getPropertyValue(marginEnd));
-  return {
-    [start]: priority(
-      style,
-      start,
-      mode === "end" ? "auto" : mode === "center" ? `calc(50% + ${p - available / 2}px)` : `${p}px`,
-    ),
-    [end]: priority(style, end, mode === "end" || mode === "both" ? `${r}px` : "auto"),
-    [length]: priority(style, length, mode === "both" ? "auto" : computed.getPropertyValue(length)),
-  };
+  const center =
+    p + (size + margin + parseFloat(computed.getPropertyValue(marginEnd))) / 2 - available / 2;
+  return freeAxisValues(style, computed, [start, end, length], { mode, p, r, center, available });
 }
 
 function placementMargin(
@@ -130,6 +144,8 @@ function placementMargin(
 }
 
 function constraintMode(style: CSSStyleDeclaration, start: string, end: string, length: string) {
+  if (nativeConstraintMode(style, length === "width" ? "width" : "height") === "center")
+    return "native-center";
   const first = style.getPropertyValue(start);
   const last = style.getPropertyValue(end);
   if (
@@ -177,4 +193,37 @@ function removedInsets(node: DesignNode, values: Record<string, string>) {
 
 function priority(style: CSSStyleDeclaration, property: string, value: string) {
   return value + (style.getPropertyPriority(property) ? " !important" : "");
+}
+
+function freeAxisValues(
+  style: CSSStyleDeclaration,
+  computed: CSSStyleDeclaration,
+  edges: [string, string, string],
+  offsets: { mode: string; p: number; r: number; center: number; available: number },
+) {
+  const [start, end, length] = edges;
+  const { mode, p, r, center, available } = offsets;
+  if (mode === "native-center")
+    return {
+      [start]: priority(style, start, `${center}px`),
+      [end]: priority(style, end, `${-center}px`),
+      [length]: priority(style, length, computed.getPropertyValue(length)),
+    };
+  return {
+    [start]: priority(
+      style,
+      start,
+      mode === "end" ? "auto" : mode === "center" ? `calc(50% + ${p - available / 2}px)` : `${p}px`,
+    ),
+    [end]: priority(style, end, mode === "end" || mode === "both" ? `${r}px` : "auto"),
+    [length]: priority(
+      style,
+      length,
+      mode === "both"
+        ? style.getPropertyValue(length) === "stretch"
+          ? "stretch"
+          : "auto"
+        : computed.getPropertyValue(length),
+    ),
+  };
 }

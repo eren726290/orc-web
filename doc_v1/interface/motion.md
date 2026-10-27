@@ -44,6 +44,32 @@ An animation may restart when entering Preview or after applying a source change
 The [selected-frame workflow and session reset](workspace-and-canvas.md#selected-frame-workflow) apply to animated components as well.
 Preview animation progress is temporary and does not become a saved design value on exit.
 
+<!-- codex-pc 2026-10-24: Accepted frame-specific Still view clarification. -->
+
+## Frame-specific Still view
+
+Still view starts off for every top-level frame.
+Each top-level frame owns one snowflake icon button in its [frame strip](workspace-and-canvas.md#top-level-frame-label-and-still-view-control).
+Enabling it applies the defined stable editable appearance to supported animated content throughout that frame, including nested components and nested frames.
+Other top-level frames retain their own independent settings.
+Selection changes do not transfer or reset a frame's setting.
+
+Still view resolves the supported stable editing state rather than pausing at whichever animation instant was visible.
+Entrance animations leave their content visible, and moving content uses its supported stable editing appearance.
+The content remains live and editable through its supported owners.
+Arbitrary React execution, unsupported animation loops, or unavailable stable states must produce an honest limitation rather than a claim that stabilization succeeded.
+Do not infer a stable state by copying measured animated geometry into saved source.
+
+Keep these settings in the existing project's editor view state, keyed by stable frame identity, outside canonical design data.
+Toggling changes no component source, document revision, Undo history, or autosave status.
+Project-tab switches and returning from Preview preserve the settings.
+Preview always plays normal animations; exports independently resolve their explicit capture state.
+No workspace-wide toggle or toolbar is introduced for loose animated objects; their scope remains [open](../../backlog/frame-controls.md#loose-animated-objects).
+
+The production runtime must support frame-scoped stable-state resolution and report unsupported descendants before this control can claim success.
+An icon or stored setting alone does not implement Still view.
+See the [handoff](../../backlog/frame-controls.md#still-view-production-dependency) for the current dependency and required verification.
+
 ## Editing while motion is visible
 
 Canvas edits change supported saved design values through their source bindings, instance properties, or local data.

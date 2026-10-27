@@ -66,6 +66,15 @@ See [Motion](../interface/motion.md) for the animation contract.
 MCP [get_screenshot](../mcp/tools/get_screenshot.md) reuses this stable-state capture service to return an inspection image at an identified applied revision.
 That read can inspect applied state before autosave and leaves project/view/history state unchanged; file export retains its separate save and destination-publish rules below.
 
+<!-- codex-pc 2026-10-24: Accepted frame-control export boundary. -->
+
+## Frame overlays and capture state
+
+Top-level frame labels and Still view buttons are editor UI and never enter generated design source or exported images/PDFs.
+Existing saved name metadata is unaffected; excluding the visible strip does not remove the node's saved name.
+Each frame's Edit Still view setting is independent of the explicit named state supplied to capture and cannot override that state.
+Verify clean output through the supported product exporters when they are available; a standalone HTML check or editor screenshot alone does not certify image/PDF export.
+
 ## Design modes and tokens
 
 Image and PDF exports use the selected Light or Dark design mode.

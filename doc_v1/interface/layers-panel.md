@@ -85,6 +85,12 @@ Landing page is a frame, Hero can be a React component, and Loose note is outsid
 
 ## Selection and connected panels
 
+<!-- codex-pc 2026-10-24: Accepted frame-label synchronization. -->
+
+The [top-level canvas frame label](workspace-and-canvas.md#top-level-frame-label-and-still-view-control) reads the same saved display name as its Layers row.
+Existing rename commands and Undo/Redo update both presentations without changing the stable node identity.
+The canvas strip adds no separate editable name, rename gesture, or Layer row.
+
 Clicking a row's name selects that object.
 The canvas and Layers identify the same selected object, and Properties shows its applicable controls.
 Selecting an eligible object on the canvas highlights its Layers row, opens its ancestor branches, and scrolls that row into view.

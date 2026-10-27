@@ -32,12 +32,14 @@ export function PropertyField(props: Props) {
         <AdjustableInput props={props} attributes={attributes} error={setError} />
       ) : (
         <input
-          key={props.value}
+          key={props.readOnly ? undefined : props.value}
           type={props.type ?? "text"}
           min={props.min}
           max={props.max}
           step={props.step}
           {...attributes}
+          value={props.readOnly ? props.value : undefined}
+          defaultValue={props.readOnly ? undefined : props.value}
         />
       )}
       {error && (

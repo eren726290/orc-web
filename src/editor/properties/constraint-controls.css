@@ -1,0 +1,127 @@
+.constraint-controls {
+  margin-block: 12px;
+  font-size: 11px;
+}
+.constraint-controls h3 {
+  margin-block: 0 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.properties-panel .constraint-controls > fieldset {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+.constraint-choices {
+  flex: 1;
+  min-inline-size: 0;
+  display: grid;
+  gap: 4px;
+}
+.constraint-axis {
+  display: flex;
+  align-items: end;
+  gap: 2px;
+}
+.constraint-axis .field {
+  flex: 1;
+  min-inline-size: 0;
+}
+.constraint-axis select {
+  inline-size: 100%;
+}
+.constraint-controls button {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  color: var(--color-editor-muted);
+  border-radius: 3px;
+}
+.constraint-controls button:active {
+  background: var(--color-editor-border);
+}
+.constraint-controls button:focus-visible {
+  outline: 2px solid var(--color-editor-selection);
+  outline-offset: -2px;
+}
+.constraint-axis svg {
+  inline-size: 16px;
+  block-size: 16px;
+}
+.constraint-diagram {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(3, 44px);
+  flex: none;
+  align-self: center;
+  inline-size: fit-content;
+  background: var(--color-editor-inset);
+  border: 1px solid var(--color-editor-border);
+  border-radius: 6px;
+}
+.constraint-diagram button {
+  min-inline-size: 0;
+  min-block-size: 0;
+  display: grid;
+  place-items: center;
+}
+.constraint-diagram button[aria-pressed="true"] {
+  color: var(--color-editor-selection);
+  background: var(--color-editor-surface);
+}
+.constraint-diagram span {
+  display: block;
+  border-block-start: 2px solid currentColor;
+  inline-size: 14px;
+}
+.constraint-diagram .constraint-height-start span,
+.constraint-diagram .constraint-height-end span {
+  inline-size: 0;
+  block-size: 14px;
+  border-inline-start: 2px solid currentColor;
+}
+.constraint-width-start {
+  grid-area: 2 / 1;
+}
+.constraint-width-end {
+  grid-area: 2 / 3;
+}
+.constraint-width-center {
+  grid-area: 1 / 1;
+}
+.constraint-height-start {
+  grid-area: 1 / 2;
+}
+.constraint-height-end {
+  grid-area: 3 / 2;
+}
+.constraint-height-center {
+  grid-area: 3 / 3;
+}
+.constraint-diagram .constraint-object {
+  grid-area: 2 / 2;
+  inline-size: 18px;
+  block-size: 18px;
+  place-self: center;
+  border: 1px solid var(--color-editor-muted);
+  border-radius: 2px;
+}
+.constraint-controls p {
+  color: var(--color-editor-muted);
+  margin-block: 6px 0;
+  overflow-wrap: anywhere;
+}
+@media (hover: hover) and (pointer: fine) {
+  .constraint-controls button:enabled:hover {
+    background: var(--color-editor-surface);
+  }
+}
+
+.properties-panel .constraint-controls .constraint-diagram {
+  display: grid;
+  padding: 0;
+}
+.constraint-diagram svg {
+  inline-size: 16px;
+  block-size: 16px;
+}

@@ -108,6 +108,12 @@ The proposed reference box starts at the parent's inner border edge and includes
 Offsets are measured in unzoomed document units.
 The browser mapping of that reference box must be verified before implementation is considered complete.
 
+<!-- codex-pc 2026-10-26: Native confirmation refines this proposed reference for reserved scrollbar gutters.
+The absolute containing block excludes reserved scrollbar space, and a stable both-edges gutter also moves its starting edge inward.
+Using the entire area inside the border caused a real Right-constraint conversion to fail its box-preservation check.
+The native mapping subtracts gutter space, accounts for a reserved starting gutter, and applies scroll before converting canvas scale.
+Padding remains part of the available reference, and no zoomed screen rectangle is saved as layout data. -->
+
 The worked examples use frames with no border, padding, transforms, or min/max limits so their numbers are unambiguous.
 Canvas zoom never changes stored offsets or sizes.
 
@@ -171,6 +177,13 @@ For Both edges, the minimum size takes priority when both margins and that size 
 Left & Right preserves the left margin and allows the actual right margin to decrease.
 Top & Bottom preserves the top margin and allows the actual bottom margin to decrease.
 The exact maximum-size conflict policy remains open.
+
+<!-- codex-pc 2026-10-26: The user approved native start-edge priority for Both-edge maximum-size conflicts.
+Left & Right preserves the left margin when a maximum width prevents both margins from being satisfied, and Top & Bottom preserves the top margin for the equivalent height conflict.
+The actual end margin may increase while the maximum applies.
+Retain the saved end offset and restore the intended relationship when the parent size permits it.
+This clarifies the previously open policy without changing minimum-size priority or clipping ownership. -->
+
 Keep the saved constraint distances throughout resizing; the temporary actual margin does not replace the intended margin.
 Enlarging the parent restores the intended margins once the size limits permit them.
 Show that a limit prevents the ideal relationship, and honor the parent's explicit clipping setting.
@@ -210,6 +223,14 @@ Save constraint mode and the numeric relationships required to reproduce it.
 The model must preserve the selected edge or Center relationship without relying on a display label.
 The final schema must choose one authoritative representation and derive any CSS or panel projection from it.
 It must not maintain independently editable CSS values and constraint metadata that can disagree.
+
+<!-- codex-pc 2026-10-26: The ordinary implementation uses the existing canonical CSS style map as this single authority, without new saved constraint metadata or a runtime layout solver.
+Start/End retain a physical fixed inset and Fixed size.
+Both uses opposing physical insets with normal self-alignment, auto sizing for frames and native stretch sizing for other supported ordinary boxes.
+Center uses native unsafe self-centering with zero-sum opposing pixel insets, Fixed sizing and margin-box compensation.
+It adds no transform, preserving fixed-descendant containment and the existing arbitrary-transform safeguards.
+The controls derive their supported modes from these declarations; source-owned expressions, transforms, aspect-ratio coupling, logical values and uncertain spacing keep their Code path.
+Production React/MCP bindings and complete exporters remain separate integration work; the ordinary source projection does not establish those public APIs. -->
 
 Changing a mode, aligning and updating a constraint, or reparenting with conversion each creates one atomic command and one Undo entry.
 Measurements must match the expected document revision.

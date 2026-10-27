@@ -1,8 +1,10 @@
 # ORC-web implementation status
 
-Last updated: 2026-10-20.
-Current stage: ordinary intrinsic Fit/Fill, including shared intrinsic Columns through the approved native wrapper, is verified on Fedora in both pinned browser versions and application modes.
-The [current checkpoint](#ordinary-intrinsic-column-wrapper-checkpoint) records evidence and remaining integration limits.
+Last updated: 2026-10-27.
+Current stage: ordinary parent-edge Constraints controls and indicators are verified on Fedora in both pinned browser versions and application modes.
+The [current checkpoint](#ordinary-parent-edge-constraints-checkpoint) records evidence and remaining integration limits.
+The independent [frame-label checkpoint](#top-level-frame-label-and-still-view-checkpoint) is verified; frame-specific Still view remains blocked on production component stable-state integration.
+The ordinary [corner-radius checkpoint](#ordinary-corner-radius-controls-checkpoint) verifies combined and individual fields and the selected-name header during Properties scrolling.
 Ordinary Absolute Position participation, per-axis Fixed/Fit, bounded cross-axis Fill and the earlier single-grow main-axis Fill remain verified checkpoints.
 General Fill, complete sizing and Constraints, and the remaining V1 application are still unfinished.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
@@ -14,11 +16,12 @@ This overview describes this checkout and links to reviewed evidence from the PC
 | Application foundation and startup | Implemented combined Bun/Vite development launch and built-app serving; Linux startup failure cleanup, normal shutdown, and failed-save shutdown recovery pass focused process checks. | [Launcher](scripts/dev.ts), [backend](server/start.ts), [lifecycle check](scripts/runtime/check-lifecycle.ts). |
 | Development tooling | Selected anti-slop rules and Fallow CLI configured; required TypeScript 6, lint controls, formatting and build pass on Fedora; reusable isolated TS7 comparison passes both configured application scopes. | [Scaffold verification](SCAFFOLD_VERIFICATION.md), [TS7 checkpoint](SCAFFOLD_VERIFICATION.md#reusable-ts7-checkpoint-2026-10-15), [remaining editor tooling](backlog/development-tooling.md). |
 | Editor workspace, Layers, Properties, and Code | In progress; Dashboard/tabs, selection, basic Properties previews, text editing, Code Apply/Discard, draft safeguards, panel resizing, in-place Layer naming, and atomic subtree deletion pass focused development/built checks. | [Editor workflow](scripts/e2e/editor/check-editor.ts), [panel check](scripts/e2e/editor/check-panels.ts), [naming check](scripts/e2e/editor/check-layers.ts), [deletion check](scripts/e2e/editor/check-deletion.ts). |
-| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, Free/Row/Column switches, Row wrapping, frame Padding, Gap gestures, alignment/distribution, Absolute Position participation, Fixed/Fit sizing, bounded cross-axis Fill, and bounded nowrap multiple-child main-axis Fill sharing, ordinary per-row wrapped Fill and intrinsic Fill including shared Columns pass focused development/built checks; general Fill and constraint controls, group reparenting, resize/rotation handles, and Tokens remain pending. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [wrapping checkpoint](#ordinary-row-wrapping-checkpoint), [Padding checkpoint](#ordinary-frame-padding-checkpoint), [Gap checkpoint](#ordinary-frame-gap-checkpoint), [alignment checkpoint](#ordinary-frame-alignment-and-distribution-checkpoint), [participation checkpoint](#ordinary-absolute-position-checkpoint), [sizing checkpoint](#ordinary-fixedfit-sizing-checkpoint), [cross-axis Fill checkpoint](#bounded-cross-axis-fill), [single-grow main-axis Fill checkpoint](#bounded-single-grow-main-axis-fill), [shared Fill checkpoint](#ordinary-nowrap-fill-sharing-checkpoint--2026-10-14), [wrapped Fill checkpoint](#ordinary-wrapped-row-fill-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
+| Tokens, layout, constraints, and canvas transforms | In progress; ordinary movement, single Flex reordering/reparenting, read-only parent-controlled positions, Free/Row/Column switches, Row wrapping, frame Padding, Gap gestures, alignment/distribution, Absolute Position participation, Fixed/Fit sizing, bounded cross-axis Fill, and bounded nowrap multiple-child main-axis Fill sharing, ordinary per-row wrapped Fill and intrinsic Fill including shared Columns pass focused development/built checks; general Fill, group reparenting, resize/rotation handles and Tokens remain pending; ordinary parent-edge Constraints controls and indicators now pass the focused browser matrix, full sizing regressions and source/build audit. | [Movement check](scripts/e2e/editor/check-movement.ts), [position checkpoint](#parent-controlled-position-checkpoint), [layout checkpoint](#ordinary-frame-layout-checkpoint), [wrapping checkpoint](#ordinary-row-wrapping-checkpoint), [Padding checkpoint](#ordinary-frame-padding-checkpoint), [Gap checkpoint](#ordinary-frame-gap-checkpoint), [alignment checkpoint](#ordinary-frame-alignment-and-distribution-checkpoint), [participation checkpoint](#ordinary-absolute-position-checkpoint), [sizing checkpoint](#ordinary-fixedfit-sizing-checkpoint), [cross-axis Fill checkpoint](#bounded-cross-axis-fill), [single-grow main-axis Fill checkpoint](#bounded-single-grow-main-axis-fill), [shared Fill checkpoint](#ordinary-nowrap-fill-sharing-checkpoint--2026-10-14), [wrapped Fill checkpoint](#ordinary-wrapped-row-fill-checkpoint), [atomic check](scripts/e2e/editor/check-atomic.ts), [layout projection limits](backlog/native-layout-projection.md), [accepted workspace](doc_v1/interface/workspace-and-canvas.md). |
 | Selected-frame Preview | In progress; ordinary frames retain their native sizing and saved defaults, isolate temporary form inputs and scrolling, restore Edit selection/pan/zoom, and preserve Code drafts and document/history in focused development/built Chromium checks. React components, portals, Motion, and supported-platform verification remain pending. | [Preview](src/editor/preview/Preview.tsx), [native workflow check](scripts/e2e/editor/check-preview.ts), [accepted Preview](doc_v1/interface/workspace-and-canvas.md#selected-frame-workflow). |
 | Shared commands, application Undo/Redo, and project saving | In progress; authoritative sessions, revision checks, command history, save/reopen, independent projects, existing-save recovery, failed first Save/Save as recovery, and exclusive locks pass focused checks on Linux. | [Services](server/projects/projects.ts), [pending-response history check](scripts/e2e/editor/check-history.ts), [saving regression check](scripts/e2e/projects/check-saving.ts), [saving contract](doc_v1/architecture/orc-workspace-bundle.md). |
 | Ordinary HTML/CSS/SVG authoring | In progress; reproduced SVG geometry/source disagreement, lost explicit line breaks and inline separators, and invalid SVG render acceptance are corrected and pass focused development/built checks; complete V1 source support remains pending. | [Source service](server/source/html.ts), [importer](src/editor/code/html-import.ts), [rendering regression check](scripts/e2e/rendering/check-rendering.ts), [Code workflow check](scripts/e2e/editor/editor-source.ts). |
 | React source editing and component preparation | Production integration not started; bounded experiments passed in Fedora Chrome. | [Reviewed source-editing evidence](doc_v1/architecture/react-source-editing-validation.md#evidence-by-pr). |
+| Top-level frame controls | Frame-name overlay verified in development and built Chromium and Chrome for Testing; frame-specific Still view remains blocked on production component stable-state integration, with no placeholder toggle or unused setting. | [Frame checkpoint](#top-level-frame-label-and-still-view-checkpoint), [frame contract](doc_v1/interface/workspace-and-canvas.md#top-level-frame-label-and-still-view-control), [handoff](backlog/frame-controls.md). |
 | MCP server and tools | Not started; 28 tool responsibilities and core JSON contracts are documented. | [MCP status](doc_v1/mcp/mcp-server.md#status), [tool index](doc_v1/mcp/tools/README.md). |
 | Background Chrome validation, screenshots, and exports | Initial reusable browser service prepares ordinary HTML; complete render-input validation and product exports remain pending. | [Rendering service](server/rendering/rendering.ts), [export contract](doc_v1/import-export/export.md). |
 | Complete application on Fedora and Windows | No complete application verification result yet. | [Browser support and verification](doc_v1/architecture/browser-support.md). |
@@ -1169,6 +1172,119 @@ No commit or push was requested or performed.
 
 ## Next checkpoint
 
+### Top-level frame label and Still view checkpoint
+
+The user approved independently deliverable frame controls on 2026-10-24.
+The top-level frame label reads the existing saved name used by Layers and follows existing rename commands and Undo/Redo.
+It renders outside the design tree and clipping, uses the shared overlay geometry observer, and preserves readable text size across canvas zoom.
+Long names truncate within the frame width; full names remain available in Layers.
+Nested frames do not receive another strip or new gesture.
+The separate Preview and generated-source paths do not render this editor overlay.
+
+Still view is accepted V1 behavior but is not implemented by this delivery.
+Independent inspection confirms that the current canonical node union and production renderer have no source-backed component execution or frame-scoped stable-state resolver.
+There is no snowflake placeholder, nonfunctional toggle, or unused per-frame setting.
+The [handoff](backlog/frame-controls.md) specifies its runtime dependency, icon/accessibility/view-state requirements, nested stabilization and Preview/capture boundaries, verification, and unresolved loose-object scope.
+React source editing, portals, arbitrary animation loops, complete product image/PDF exports and their clean-output checks remain unfinished.
+
+Verified against `53b2951229627d6be9d0b950237226de186a3d82` plus the uncommitted frame-label implementation, tests and contract updates on Fedora Linux.
+`bun run check:frame-labels` passed development and built modes in Playwright Chromium, identified as Chrome for Testing 153.0.8010.12, and the explicitly selected Chrome for Testing 154.0.8037.57 executable.
+The workflow covers keyboard Layer rename, exact one-step Undo/Redo, independent readable names, nested/hidden/loose exclusion, long-name truncation, fixed text size during zoom, pan, real pointer preview/commit, Properties movement/resizing, Row conversion, responsive sizing, project switching, Preview restoration, deletion/reparenting and standalone source isolation.
+View navigation and source inspection preserve the document, revision, history and save status.
+The independent label has no focusable action; keyboard activation, pressed-state, two-frame Still view settings and animation-state checks remain blocked with the missing runtime.
+The [Chromium record](artifacts/editor/frame-labels-verification-chromium-result.json) and [Chrome record](artifacts/editor/frame-labels-chrome-final-chrome-result.json) retain the fixture, commands, browser identities, source hashes, results, screenshots and traces.
+The [verification report](artifacts/editor/frame-labels-REPORT.md) records exact coverage and limitations.
+
+Existing `check:layers`, `check:preview`, and the geometry scenario of `check:boundaries` passed development and built Chromium.
+Types, lint, formatting, tooling controls and the normal TS6 build passed; isolated TS6/TS7 comparison passed both project configurations without suppressions.
+Fallow dead-code and health checks exited zero, with no unused source, unresolved imports, cycles or cyclomatic/function-size violations.
+The seven retained dependency advisories and estimated-coverage CRAP warnings remain advisory; no suppression or threshold change was added.
+The initial label test wrote an HTML evidence file that triggered Vite's development reload; retaining that source as `.txt` corrected the test without an application navigation change.
+All original lines in the five updated `doc_v1` contracts remain intact, with dated `codex-pc` additions.
+Standalone HTML source checks do not certify unfinished product image/PDF exporters.
+Windows, installed stable Chrome, production React/Motion stabilization and the full application suite were not verified by this focused task.
+Nothing has been committed or pushed for this delivery.
+
+### Ordinary corner radius controls checkpoint
+
+The accepted ordinary Appearance workflow is implemented and verified on 2026-10-26.
+Corner radius starts as one combined field and shows Mixed when its four supported corner values differ.
+A native, keyboard-accessible Individual corners disclosure exposes Top left, Top right, Bottom right and Bottom left without changing source, revision, history or save status.
+Individual edits retain the other corners; a combined edit deliberately assigns all four through one ordinary style batch and one Undo entry.
+Typing, decimal/exponent values, arrows and scrubbing preview locally; Escape restores the applied appearance and invalid input retains the last valid preview.
+The existing numeric field, draft safeguard, mutation, history, save and source paths are reused without a new document field or dependency.
+
+Native CSS declaration ownership and per-corner priority are retained.
+Variable, percentage, calculated, elliptical, logical and CSS-wide values remain available in Code rather than being flattened to measured pixels.
+An independently owned corner remains editable beside unsupported corners, including an explicit corner overriding a variable shorthand.
+Removing and reappending edited longhands preserves CSS precedence when an older important shorthand appears later in the saved declaration order.
+Large authored radii retain their values while the browser performs its normal paint clamping; radius edits leave native placement, dimensions, hierarchy and other nodes unchanged.
+
+Minimum-width visual review reproduced the selected name/type header scrolling out of view.
+The regression failed before the correction, and Properties now keeps its header outside the native scrolling form.
+The panel and form have explicit minimum-height handling so scrolling a field does not expand or scroll the workspace.
+Long selected names truncate within the header and remain available through their native title and the existing Name field.
+The final check measures visibility in the actual viewport as well as the panel, rather than accepting an oversized offscreen panel.
+
+| Verification | Completed result |
+| --- | --- |
+| Focused workflow | `bun run check:corner-radius` passed development and built modes in Chrome for Testing 153.0.8010.12 and the explicitly selected 154.0.8037.57 executable; each browser records 14 check summaries and 36 UI command inputs. |
+| Safeguards | Own/ancestor locks, Code draft Cancel/Discard, failed-command recovery, pending Undo, no-op Redo, selection isolation, source priority, generated source and real save/reopen passed. |
+| Existing affected checks | Editor, pending property history, panels, Padding and frame labels passed in their normal application modes. |
+| Static checks | Required TS6 types, lint, formatting, tooling controls, Fallow dead code and health, and the normal build passed without threshold or configuration changes. |
+| Final audit | The two browser records match the same 186 current source hashes and four build hashes; changes outside this task's declared files were not introduced. |
+
+The [verification report](artifacts/editor/corner-radius-REPORT.md) records exact commands, results, before-fix evidence and limitations.
+The [aggregate audit](artifacts/editor/corner-radius-audit.json), [Chromium result](artifacts/editor/corner-radius-final-chromium-result.json) and [Chrome result](artifacts/editor/corner-radius-final-chrome-result.json) retain the actual commit, working-source hashes, inputs, browser versions and evidence references.
+The [focused check documentation](scripts/e2e/editor/corner-radius/README.md) and package alias provide the rerun entry point.
+Fallow retains seven dependency advisories and 309 static-estimated CRAP warnings; there are no unused source files, unused exports, unresolved imports or enforced complexity/function-size violations.
+Those estimated-coverage warnings do not measure the browser workflows above.
+The verified source is `53b2951229627d6be9d0b950237226de186a3d82` plus the preserved uncommitted frame-label work and this ordinary Properties slice.
+Application schema, server commands, dependencies, accepted doc_v1 content and the independent pen worktree were not edited by this task.
+Windows, installed stable Chrome, source-backed React ownership, tokens, complete product image/PDF exporters and the full V1 suite were not verified here.
+No commit or push was performed.
+
+The ordinary parent-edge Constraints checkpoint below is verified.
+Next: ordinary Fixed-axis canvas resize handles under the accepted manual-resizing contract, respecting Fit/Fill/Constraints ownership.
+The separate pen agent retains its SVG prerequisite and pen workflow scope.
+The pen agent owns its separate SVG prerequisite and pen implementation work; do not duplicate that work in this continuation.
+
+### Ordinary parent-edge Constraints checkpoint
+
+The ordinary controls and indicators are Verified on 2026-10-26.
+The final source/build and scope audit was reconfirmed on 2026-10-27 without changing application or test source.
+Focused development and built workflows pass in Chrome for Testing 153.0.8010.12 and the explicitly selected 154.0.8037.57 executable.
+The full sizing workflows, affected regressions and final source/build scope audit pass at this checkpoint.
+
+The Layout section exposes independent horizontal/vertical choices, a synchronized keyboard-accessible edge/center diagram and explicit Align center actions.
+Eligible objects are immediate Free-frame children or explicit Absolute Position children of supported Flex frames.
+Mode changes preserve the current native box; explicit alignment deliberately changes the selected center offset.
+Both-edge sizes retain Constraints ownership, preserve the approved start-edge priority under size limits, and retain saved end offsets for restoration.
+Native Center self-alignment adds no transform or new saved metadata.
+Existing draft safeguards, locks, command validation, one-step history and saving are reused.
+
+Dotted indicators follow native geometry through scrolling, movement, pan/zoom and Preview restoration without entering source or document history.
+End/Center position fields show measured numeric X/Y and retain their focus while native geometry updates.
+The gutter reference, unavailable-box guard, constrained Fill bound traversal, browser shorthand ownership and replaced-element limit corrections have retained failing reproductions and focused regression coverage.
+Existing arbitrary-transform guards and the independent pen checkout remain unchanged.
+The additive codex-pc comments in [Constraints](doc_v1/interface/constraints.md) record the gutter correction, approved maximum policy and ordinary CSS authority while preserving original content.
+
+The [verification report](artifacts/editor/constraints-REPORT.md), [Chromium record](artifacts/editor/constraints-final-chromium-result.json), [Chrome record](artifacts/editor/constraints-final-chrome-result.json) and [scope audit](artifacts/editor/constraints-audit.json) bind the current work to the same 202 source files and four build files.
+Each browser records 24 check summaries and 140 UI command inputs; these counts describe the focused workflow, not full V1 coverage.
+Full sizing passes in development and built Chromium with 61 check summaries per mode and matching current source hashes.
+Movement, layout, participation, renderer boundaries, editor, pending history, radius and frame-label workflows pass in their normal development/built modes.
+Required TS6 types, lint, formatting, tooling, Fallow health/dead code and the normal build pass without configuration or threshold changes.
+The final audit protects the 372-file pre-task baseline and checks 389 current files, 202 source hashes and four build hashes.
+Fallow retains seven dependency advisories and 334 static-estimated CRAP advisories, with zero enforced findings or unused source files/exports.
+One development run was invalidated by the main agent editing watched documentation; a controlled reproduction and no-write control isolate the Vite reload trigger, and the final full development run passes with all scanned files frozen.
+The boundary test now measures settled idle work and samples motion after current frame callbacks finish, retaining its original zero-read and pixel-tolerance assertions.
+These verification corrections changed test timing, not product code or accepted behavior.
+The source is 53b2951229627d6be9d0b950237226de186a3d82 plus the recorded uncommitted frame-label, radius and Constraints changes on Fedora.
+The [remaining ownership and integration work](backlog/constraints-boundaries.md) includes the unresolved preliminary development reload observation and its reproduction evidence.
+No compiler migration, dependencies, schema changes, commit or push are included.
+
+### V1 continuation
+
 The focused [TS7 compatibility checkpoint](SCAFFOLD_VERIFICATION.md#reusable-ts7-checkpoint-2026-10-15) is implemented and verified against the expanded application on Fedora.
 Required checking and the normal build remain on TS6; migration and Windows certification remain separate unfinished work.
 The wrapped Row cross-axis Height Fill checkpoint is verified and closed at the requested pause.
@@ -1176,7 +1292,9 @@ The ordinary nested Fill checkpoint, including the [destination and dependency r
 The approved native intrinsic Column wrapper is implemented and verified at the [current checkpoint](#ordinary-intrinsic-column-wrapper-checkpoint).
 The original content-responsive shared Height Fill blocker is resolved for the accepted ordinary workflow, including mixed Fixed/Fit siblings and individual limits.
 The internal generated box adds no canonical object or Layer and introduces no measured-size runtime.
-Complete this task at this checkpoint; select the next ordinary geometry/layout/Constraints/Tokens requirement from doc_v1 before starting another implementation.
+The ordinary Constraints checkpoint is complete.
+The next ordinary task is [Fixed-axis canvas resizing](doc_v1/interface/workspace-and-canvas.md#manual-resizing), with source-owned and parent-controlled axes kept protected.
+That next feature has not been started.
 Imported React source rewriting, component events/portals, full exporters and supported-platform certification remain separate work.
 
 1. Complete the ordinary editor's geometry, layout, constraints, and Tokens workflows.

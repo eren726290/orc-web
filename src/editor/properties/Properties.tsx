@@ -13,8 +13,10 @@ import { FrameLayoutControls } from "./frame-layout-controls";
 import { FramePaddingControls } from "./frame-padding-controls";
 import { FrameGapControls } from "./frame-gap-controls";
 import { FrameAlignmentControls } from "./frame-alignment-controls";
+import { ConstraintControls } from "./constraint-controls";
 import { AbsolutePositionControl } from "./absolute-position-control";
 import { SizingControls } from "./sizing-control";
+import { CornerRadiusControls } from "./corner-radius-controls";
 
 type Props = {
   document: DesignDocument;
@@ -32,7 +34,7 @@ type EditProps = Pick<Props, "document" | "mutate" | "prepare" | "preview"> & {
 
 export function Properties(props: Props) {
   const node = props.selected.length === 1 ? props.document.nodes[props.selected[0]] : null;
-  const ownership = useLayoutOwnership(props.document, node?.id);
+  const ownership = useLayoutOwnership(props.document, node?.id, !props.disabled);
   if (!node) return <EmptyProperties count={props.selected.length} />;
   const editing = {
     document: props.document,
@@ -45,18 +47,20 @@ export function Properties(props: Props) {
   return (
     <aside className="properties-panel">
       <div className="property-title">
-        <strong>{node.name}</strong>
+        <strong title={node.name}>{node.name}</strong>
         <span>{node.kind}</span>
       </div>
-      <PropertySections
-        key={node.id}
-        {...editing}
-        disabled={props.disabled || isLocked(props.document, node.id)}
-        select={props.select}
-      />
-      {isLocked(props.document, node.id) && (
-        <p className="panel-empty">Unlock this object or its parent to edit.</p>
-      )}
+      <div className="property-content">
+        <PropertySections
+          key={node.id}
+          {...editing}
+          disabled={props.disabled || isLocked(props.document, node.id)}
+          select={props.select}
+        />
+        {isLocked(props.document, node.id) && (
+          <p className="panel-empty">Unlock this object or its parent to edit.</p>
+        )}
+      </div>
     </aside>
   );
 }
@@ -72,6 +76,7 @@ function PropertySections(props: EditProps & Pick<Props, "disabled" | "select">)
           <FrameAlignmentControls {...props} />
           <AbsolutePositionControl {...props} />
           <NodeLayout {...props} />
+          <ConstraintControls {...props} />
           <FramePaddingControls {...props} />
           <FrameClipping {...props} />
         </fieldset>
@@ -195,14 +200,7 @@ function NodeAppearance(props: EditProps) {
   return (
     <>
       <BackgroundField {...props} />
-      <StyleField
-        {...props}
-        property="border-radius"
-        label="Corner radius"
-        fallback="0px"
-        numeric="px"
-        min={0}
-      />
+      <CornerRadiusControls {...props} />
       <StyleField
         {...props}
         property="opacity"
@@ -292,19 +290,21 @@ function StyleField(props: StyleProps) {
 }
 
 function styleFieldValue(props: StyleProps) {
-  if ((props.property === "left" || props.property === "top") && props.ownership.position)
-    return { value: props.ownership.position[props.property], readOnly: true };
+  const position = positionFieldValue(props);
+  if (position) return position;
   const authored = props.node.style[props.property] ?? props.fallback;
   const fixed = /^-?\d+(?:\.\d+)?px$/u.test(authored);
   const readOnly = props.numeric === "px" && !fixed;
-  const value = styleFieldDisplay(authored, props.numeric, readOnly);
+  const value = props.numeric === "px" && !readOnly ? String(parseFloat(authored)) : authored;
   return { value, readOnly };
 }
 
-function styleFieldDisplay(authored: string, numeric: StyleProps["numeric"], readOnly: boolean) {
-  if (numeric === "px" && !readOnly) return String(parseFloat(authored));
-  const fit = ["auto", "max-content", "fit-content"].includes(authored);
-  return readOnly && fit ? "Fit" : authored;
+function positionFieldValue(props: StyleProps) {
+  if (props.property !== "left" && props.property !== "top") return null;
+  const owner = props.ownership.position;
+  if (owner) return { value: owner[props.property], readOnly: true };
+  const value = props.ownership.constraintPosition?.[props.property];
+  return value === undefined || value === null ? null : { value, readOnly: true };
 }
 
 function decodeStyle(value: string, props: StyleProps): string | null {

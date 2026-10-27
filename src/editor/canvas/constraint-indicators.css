@@ -1,0 +1,19 @@
+.constraint-indicators {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+  overflow: visible;
+  color: var(--color-editor-selection);
+}
+.constraint-indicators line {
+  stroke: currentColor;
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+.constraint-indicators path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}

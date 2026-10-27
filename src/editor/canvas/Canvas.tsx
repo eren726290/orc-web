@@ -10,6 +10,8 @@ import type { PropertyPreview } from "../properties/property-preview";
 import { pointerDocument, type PointerPreview } from "./pointer-layout";
 import type { ViewState } from "../view-state";
 import { observeOverlayGeometry } from "./overlay-geometry";
+import { ConstraintIndicators } from "./ConstraintIndicators";
+import { FrameLabels } from "./FrameLabels";
 
 type Props = {
   document: DesignDocument;
@@ -382,6 +384,7 @@ function CanvasOverlays({
 }) {
   return (
     <>
+      <FrameLabels canvas={canvas} document={props.document} pan={props.view.pan} />
       <DropIndicator
         canvas={canvas}
         document={props.document}
@@ -392,6 +395,12 @@ function CanvasOverlays({
         canvas={canvas}
         selected={props.view.selected}
         document={props.document}
+        pan={props.view.pan}
+      />
+      <ConstraintIndicators
+        canvas={canvas}
+        document={props.document}
+        selected={props.view.selected}
         pan={props.view.pan}
       />
       <GapHandles {...props} canvas={canvas} />

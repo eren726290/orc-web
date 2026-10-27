@@ -1,0 +1,31 @@
+.corner-radius-controls {
+  margin-block: 4px 12px;
+}
+.corner-radius-controls summary {
+  min-block-size: 44px;
+  align-content: center;
+  font-size: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  padding-inline: 4px;
+}
+.corner-radius-controls details[open] summary {
+  margin-block-end: 8px;
+}
+.corner-radius-controls summary:focus-visible {
+  outline: 2px solid var(--color-editor-selection);
+  outline-offset: 2px;
+}
+.corner-radius-controls summary:active {
+  background: var(--color-editor-border);
+}
+.corner-radius-controls p {
+  color: var(--color-editor-muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+@media (hover: hover) and (pointer: fine) {
+  .corner-radius-controls summary:hover {
+    background: var(--color-editor-inset);
+  }
+}

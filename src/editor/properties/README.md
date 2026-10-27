@@ -1,6 +1,7 @@
 # Properties
 
 Properties controls, editable fields, and temporary property previews belong here.
+The selected name/type header stays outside the scrolling property-content area so it remains visible during long forms and numeric edits.
 Sizing-owner labels and parent-controlled positions are derived from the applied native canvas after document, selection, or native box size changes.
 Controlled positions are read-only, and Select parent uses the workspace's existing Code draft safeguard.
 Frame layout controls submit one measured Free/Row/Column conversion through the shared atomic command path.
@@ -32,3 +33,20 @@ Preparation errors restore the applied preview and appear beside the field.
 Workspace validates Content previews and commits against existing Fill dependencies.
 Clearing the sole intrinsic text supplier restores the applied preview and explains the missing parent bound through the existing application error message.
 Nonempty edits and independently supplied parents retain the normal text preview and command behavior.
+
+corner-radius-controls.tsx provides the combined Corner radius field and a keyboard-accessible disclosure for individual corners.
+corner-radius.ts reads native shorthand/longhand ownership and prepares ordinary style batches that preserve per-corner priority and declaration order.
+Mixed values remain unchanged until an explicit combined edit; independent supported corners stay editable beside source-owned corners.
+The controls reuse PropertyField for live preview, cancellation, numeric adjustments, one-command completion, draft safeguards and history.
+Their styles remain beside the feature in corner-radius-controls.css.
+
+`constraint-controls.tsx` provides ordinary parent-edge dropdowns, the synchronized keyboard-accessible diagram and separate Align center actions.
+Choices preserve the current box, while alignment deliberately sets that axis's center offset to zero.
+They reuse the existing draft safeguard, temporary preview, native validation, pending focus, atomic mutation and history path.
+Sizing-owned Both axes remain read-only in the existing sizing controls.
+Native overlay invalidation refreshes limit feedback without a document mutation.
+The feature's editor styles live in constraint-controls.css.
+End/Center position readouts use measured document units and share native geometry invalidation with the canvas overlays.
+Their read-only input remains mounted as values change, preserving keyboard focus during native movement.
+The ownership subscription runs only for the active editor and resolves the current rendered object after structural changes or returning from Preview.
+Unavailable rendered boxes disable measured constraint conversion instead of publishing offsets from an empty rectangle.

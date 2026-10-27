@@ -2,6 +2,7 @@ import { flowStyle } from "./layout-box";
 import type { AtomicMutation } from "../../../shared/commands/commands";
 import type { DesignDocument, DesignNode, Styles } from "../../../shared/document/model";
 import { prepareFlowSizing, readFlexSizing, readSizing } from "./sizing";
+import { constraintAlignments } from "./constraint-css";
 import { insetProperties } from "./participation";
 
 type Axis = "width" | "height";
@@ -21,6 +22,9 @@ export function prepareFlowPlacement(
     const converted = mainToCross(source, direction);
     const values: Styles = {
       position: priority(source.style, "position", "relative"),
+      ...Object.fromEntries(
+        source.constraintAlignments.map((key) => [key, priority(source.style, key, "auto")]),
+      ),
       ...flowDimensions(source),
       ...flowSizing(source),
       ...converted,
@@ -102,6 +106,7 @@ function snapshotFlow(
   return {
     style,
     ownedMain: sizing?.mode === "Fill" && sizing.convertible,
+    constraintAlignments: computed.position === "absolute" ? constraintAlignments(style) : [],
     position: computed.position,
     width: computed.width,
     height: computed.height,

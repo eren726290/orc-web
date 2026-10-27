@@ -149,6 +149,14 @@ Human creation, editing, reference counts, and deletion belong to [Tokens panel]
 
 ## What does not belong in the document
 
+<!-- codex-pc 2026-10-24: Accepted frame-control data ownership. -->
+
+The top-level frame label derives from the existing saved node `name`; its stable `id` remains the target identity and is not its displayed label.
+The frame strip adds no canonical object or saved layout space.
+Per-frame Still view settings belong to the existing project's editor view state keyed by stable frame ID, with off as the initial value.
+They remain independent of selection and do not alter source, revisions, Undo history, or autosave status.
+See [frame-specific Still view](../interface/motion.md#frame-specific-still-view) for tab/Preview restoration and stable-state requirements.
+
 The document does not store selection, hover, expanded Layer rows, panel visibility, canvas zoom, Preview scroll positions, window size, browser history, or an Undo stack.
 The selected Preview frame and its temporary input, open-state, and animation progress are also editor-session state, following the [Preview reset contract](../interface/workspace-and-canvas.md#temporary-state-and-returning-to-edit).
 Canvas constraint indicators are derived editor view state and are not stored as design objects or styles.

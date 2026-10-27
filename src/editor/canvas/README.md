@@ -20,3 +20,14 @@ Gap handle visuals and their 44px input targets live in gap-handles.css.
 It observes active layout relationships, design mutations, native scroll/load events and CSS animation/transition events.
 Frame refresh continues only while native animations are running or pending; inactive overlays disconnect their observers and scheduled work.
 It measures temporary display geometry without writing canonical CSS or changing transformed-layout eligibility.
+
+`FrameLabels.tsx` uses the same observer for visible top-level frame names, outside `.canvas-world` and frame clipping.
+It reads the canonical saved name used by Layers, follows previewed geometry without changing design data, and keeps text at a fixed editor size during zoom.
+Its noninteractive label introduces no rename or drag gesture and is absent from the separate Preview renderer and generated source.
+Frame-specific Still view is accepted but blocked on production component stable-state integration, as recorded in the [handoff](../../../backlog/frame-controls.md).
+
+`ConstraintIndicators.tsx` draws dotted active-edge connectors and Center markers for one eligible selected ordinary object against its immediate parent.
+It shares native geometry invalidation with the existing overlays, keeps editor-size strokes during canvas zoom and renders outside design clipping.
+Selection snapshots prevent lines from the previous owner appearing under a new selection.
+The indicators are noninteractive and absent from Preview, canonical styles and generated source.
+Their styles live in constraint-indicators.css.

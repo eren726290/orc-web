@@ -90,7 +90,8 @@ async function movingAlignment(page: Page, id: string) {
     if (!target || !outline) throw new Error("Missing geometry fixture");
     const result = [];
     for (let index = 0; index < 50; index++) {
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      // Sample after all frame callbacks, including the overlay update, have finished.
+      await new Promise<void>((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
       const box = target.getBoundingClientRect();
       const selection = outline.getBoundingClientRect();
       result.push({
@@ -161,6 +162,9 @@ async function panAlignment(page: Page) {
 
 async function noIdleMeasurements(page: Page) {
   const count = await page.evaluate(async () => {
+    // Let the visible frame labels finish the selection/layout update before measuring idle work.
+    for (let index = 0; index < 2; index++)
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     const original = Element.prototype.getBoundingClientRect;
     let count = 0;
     Element.prototype.getBoundingClientRect = function () {
