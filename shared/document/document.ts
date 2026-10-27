@@ -1,4 +1,6 @@
 import type { DesignDocument, DesignNode } from "./model";
+import { parsePenRecord } from "../pen/record";
+import { validatePenArtwork } from "../pen/artwork";
 import {
   boolean,
   knownFields,
@@ -50,7 +52,7 @@ export function parseNode(value: unknown): DesignNode {
     case "image":
       return { ...base, kind: "image" };
     case "svg":
-      return { ...base, kind: "svg", source: string(input.source) };
+      return parseSVG(base, input);
     default:
       throw new Error("Unsupported object kind.");
   }
@@ -67,10 +69,18 @@ function specificNodeFields(kind: unknown): string[] {
     case "image":
       return [];
     case "svg":
-      return ["source"];
+      return ["source", "pen"];
     default:
       throw new Error("Unsupported object kind.");
   }
+}
+
+function parseSVG(base: Omit<DesignNode, "kind">, input: Record<string, unknown>): DesignNode {
+  const node = { ...base, kind: "svg" as const, source: string(input.source) };
+  if (input.pen === undefined) return node;
+  const result = { ...node, pen: parsePenRecord(input.pen) };
+  validatePenArtwork(result);
+  return result;
 }
 
 function parseMode(value: unknown): "inherit" | "light" | "dark" {
@@ -117,6 +127,10 @@ export function validateDocument(document: DesignDocument): void {
       throw new Error("Invalid design hierarchy.");
     }
     visited.add(id);
+    if (node.kind === "svg" && node.pen) {
+      parsePenRecord(node.pen);
+      validatePenArtwork({ ...node, pen: node.pen });
+    }
     for (const child of node.children) visit(child, id);
   };
   for (const root of document.workspaceRootIds) visit(root, null);

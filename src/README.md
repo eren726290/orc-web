@@ -12,6 +12,7 @@ Editor styles use semantic CSS tokens; imported design styles remain separate.
 | [session/](session/README.md)                     | HTTP requests, session client, and its React subscription.                    |
 | [editor/](editor/README.md)                       | Workspace, toolbar, resizing, and browser view state.                         |
 | [editor/canvas/](editor/canvas/README.md)         | Canvas interaction and keyboard movement.                                     |
+| [editor/pen/](editor/pen/README.md)               | Human Pen drafting, anchor editing and native candidate validation.           |
 | [editor/rendering/](editor/rendering/README.md)   | Native design renderer and rich-text run helpers.                             |
 | [editor/layers/](editor/layers/README.md)         | Layers and inline renaming.                                                   |
 | [editor/properties/](editor/properties/README.md) | Properties fields and temporary previews.                                     |

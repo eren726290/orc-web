@@ -1,6 +1,8 @@
 # Properties
 
 Properties controls, editable fields, and temporary property previews belong here.
+The selected-name header stays outside the scrolling property-content area, including the longer Pen artwork form.
+Supported own-Pen Fixed dimensions use the feature-owned readout and proportional Scale rather than independent axis edits.
 Sizing-owner labels and parent-controlled positions are derived from the applied native canvas after document, selection, or native box size changes.
 Controlled positions are read-only, and Select parent uses the workspace's existing Code draft safeguard.
 Frame layout controls submit one measured Free/Row/Column conversion through the shared atomic command path.

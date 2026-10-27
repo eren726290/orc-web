@@ -1,4 +1,4 @@
-import { Code2, Hand, MousePointer2, Play, Type } from "lucide-react";
+import { Code2, Hand, MousePointer2, PenTool, Play, Type } from "lucide-react";
 import type { ViewState } from "./view-state";
 
 type Props = {
@@ -26,36 +26,28 @@ export function Toolbar(props: Props) {
   );
 }
 
+const canvasTools = [
+  ["select", "Select", "V", MousePointer2],
+  ["pan", "Pan", "H", Hand],
+  ["text", "Text", "T", Type],
+  ["pen", "Pen", "P", PenTool],
+] as const;
+
 function CanvasTools(props: Pick<Props, "view" | "tool" | "previewing">) {
   return (
     <>
-      <button
-        aria-pressed={props.view.tool === "select"}
-        disabled={props.previewing}
-        onClick={() => props.tool("select")}
-        title="Select (V)"
-      >
-        <MousePointer2 size={20} />
-        <span>Select</span>
-      </button>
-      <button
-        aria-pressed={props.view.tool === "pan"}
-        disabled={props.previewing}
-        onClick={() => props.tool("pan")}
-        title="Pan (H)"
-      >
-        <Hand size={20} />
-        <span>Pan</span>
-      </button>
-      <button
-        aria-pressed={props.view.tool === "text"}
-        disabled={props.previewing}
-        onClick={() => props.tool("text")}
-        title="Text (T)"
-      >
-        <Type size={20} />
-        <span>Text</span>
-      </button>
+      {canvasTools.map(([value, label, key, Icon]) => (
+        <button
+          key={value}
+          aria-pressed={props.view.tool === value}
+          disabled={props.previewing}
+          onClick={() => props.tool(value)}
+          title={`${label} (${key})`}
+        >
+          <Icon size={20} />
+          <span>{label}</span>
+        </button>
+      ))}
     </>
   );
 }

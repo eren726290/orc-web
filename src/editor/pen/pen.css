@@ -1,0 +1,144 @@
+.pen-overlays {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pen-guides {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pen-guides :is(circle, line) {
+  fill: none;
+  stroke: var(--color-editor-selection);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.5;
+}
+
+.pen-guides text {
+  fill: var(--color-editor-ink);
+  stroke: var(--color-editor-surface);
+  stroke-width: 3px;
+  paint-order: stroke;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pen-guides .pen-center {
+  font-size: 16px;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.pen-anchor {
+  position: absolute;
+  translate: -50% -50%;
+  inline-size: 10px;
+  block-size: 10px;
+  padding: 0;
+  border: 1.5px solid var(--color-editor-selection);
+  border-radius: 1px;
+  background: var(--color-editor-surface);
+  pointer-events: auto;
+  cursor: move;
+  touch-action: none;
+}
+
+.pen-anchor::after {
+  content: "";
+  position: absolute;
+  inset: -17px;
+}
+
+.pen-anchor[aria-pressed="true"],
+.pen-anchor:active {
+  background: var(--color-editor-selection);
+}
+
+.pen-anchor:focus-visible {
+  outline: 2px solid var(--color-editor-ink);
+  outline-offset: 3px;
+}
+
+.pen-anchor:disabled {
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pen-anchor:hover {
+    background: color-mix(in oklch, var(--color-editor-selection) 25%, var(--color-editor-surface));
+  }
+}
+
+.pen-hint {
+  position: absolute;
+  inset-inline-start: 16px;
+  inset-block-end: 16px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-editor-border);
+  border-radius: 4px;
+  background: var(--color-editor-surface);
+  color: var(--color-editor-muted);
+  font-size: 12px;
+}
+
+.tool-pen {
+  cursor: crosshair;
+}
+
+.pen-transform-box {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: var(--color-editor-selection);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.pen-transform-handle {
+  position: absolute;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  inline-size: 20px;
+  block-size: 20px;
+  padding: 0;
+  border: 1px solid var(--color-editor-selection);
+  border-radius: 4px;
+  background: var(--color-editor-surface);
+  color: var(--color-editor-ink);
+  touch-action: none;
+  pointer-events: auto;
+  cursor: nwse-resize;
+}
+
+.pen-transform-handle::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+}
+
+.pen-transform-handle[data-pen-transform="rotation"] {
+  cursor: grab;
+}
+
+.pen-transform-handle:focus-visible {
+  outline: 2px solid var(--color-editor-ink);
+  outline-offset: 3px;
+}
+
+.pen-guides .pen-label-leader {
+  fill: none;
+  stroke: var(--color-editor-selection);
+  stroke-width: 1;
+}

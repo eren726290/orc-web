@@ -2,6 +2,7 @@ import { htmlLanguage } from "@codemirror/lang-html";
 import { cssLanguage } from "@codemirror/lang-css";
 import type { DesignNode, NodeBase, Styles, TextRun } from "../../../shared/document/model";
 import { validateSVGStyles } from "../rendering/svg-styles";
+export { preparePenSource } from "../pen/source";
 import {
   columnFlowAttribute,
   columnFlowStyle,

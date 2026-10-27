@@ -1,5 +1,6 @@
 import { containsNode, isLocked, type DesignDocument } from "../../shared/document/model";
 import type { AtomicMutation, Mutation } from "../../shared/commands/commands";
+import { validatePenDimensions } from "../../shared/pen/artwork";
 
 export function applyMutation(
   document: DesignDocument,
@@ -39,6 +40,9 @@ function updateNode(
       node.runs = structuredClone(mutation.runs);
       break;
     }
+    case "pen":
+      updatePen(node, mutation);
+      break;
     case "lock":
       node.locked = mutation.locked;
       break;
@@ -47,6 +51,23 @@ function updateNode(
       node.clipContent = mutation.clipContent;
       break;
   }
+}
+
+function updatePen(
+  node: DesignDocument["nodes"][string],
+  mutation: Extract<AtomicMutation, { kind: "pen" }>,
+): void {
+  if (node.kind !== "svg" || !node.pen) throw new Error("This SVG has no editable pen record.");
+  validatePenDimensions(mutation.style);
+  Object.assign(
+    node,
+    structuredClone({
+      source: mutation.source,
+      pen: mutation.pen,
+      attributes: mutation.attributes,
+      style: mutation.style,
+    }),
+  );
 }
 
 function updateStyle(

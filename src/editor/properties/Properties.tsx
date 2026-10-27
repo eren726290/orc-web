@@ -15,6 +15,8 @@ import { FrameGapControls } from "./frame-gap-controls";
 import { FrameAlignmentControls } from "./frame-alignment-controls";
 import { AbsolutePositionControl } from "./absolute-position-control";
 import { SizingControls } from "./sizing-control";
+import type { ReactNode } from "react";
+import { PenArtworkControls } from "../pen/PenArtworkControls";
 
 type Props = {
   document: DesignDocument;
@@ -24,6 +26,7 @@ type Props = {
   prepare: () => boolean | Promise<boolean>;
   preview: (value: PropertyPreview) => void;
   select: (id: string) => Promise<boolean>;
+  penOptions?: ReactNode;
 };
 type EditProps = Pick<Props, "document" | "mutate" | "prepare" | "preview"> & {
   node: DesignNode;
@@ -33,30 +36,26 @@ type EditProps = Pick<Props, "document" | "mutate" | "prepare" | "preview"> & {
 export function Properties(props: Props) {
   const node = props.selected.length === 1 ? props.document.nodes[props.selected[0]] : null;
   const ownership = useLayoutOwnership(props.document, node?.id);
-  if (!node) return <EmptyProperties count={props.selected.length} />;
-  const editing = {
-    document: props.document,
-    node,
-    ownership,
-    mutate: props.mutate,
-    prepare: props.prepare,
-    preview: props.preview,
-  };
+  if (!node) return <EmptyProperties count={props.selected.length} penOptions={props.penOptions} />;
   return (
     <aside className="properties-panel">
       <div className="property-title">
-        <strong>{node.name}</strong>
+        <strong title={node.name}>{node.name}</strong>
         <span>{node.kind}</span>
       </div>
-      <PropertySections
-        key={node.id}
-        {...editing}
-        disabled={props.disabled || isLocked(props.document, node.id)}
-        select={props.select}
-      />
-      {isLocked(props.document, node.id) && (
-        <p className="panel-empty">Unlock this object or its parent to edit.</p>
-      )}
+      <div className="property-content">
+        {props.penOptions}
+        <PropertySections
+          key={node.id}
+          {...props}
+          node={node}
+          ownership={ownership}
+          disabled={props.disabled || isLocked(props.document, node.id)}
+        />
+        {isLocked(props.document, node.id) && (
+          <p className="panel-empty">Unlock this object or its parent to edit.</p>
+        )}
+      </div>
     </aside>
   );
 }
@@ -132,10 +131,11 @@ function FrameClipping(props: EditProps) {
   );
 }
 
-function EmptyProperties({ count }: { count: number }) {
+function EmptyProperties({ count, penOptions }: { count: number; penOptions?: ReactNode }) {
   return (
     <aside className="properties-panel">
       <div className="panel-heading">Properties</div>
+      {penOptions}
       <p className="panel-empty">
         {count > 1
           ? `${count} objects selected. Select one object to edit its properties.`
@@ -194,7 +194,11 @@ function TextContent(props: EditProps) {
 function NodeAppearance(props: EditProps) {
   return (
     <>
-      <BackgroundField {...props} />
+      {props.node.kind === "svg" && props.node.pen ? (
+        <PenArtworkControls {...props} />
+      ) : (
+        <BackgroundField {...props} />
+      )}
       <StyleField
         {...props}
         property="border-radius"

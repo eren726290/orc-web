@@ -14,6 +14,7 @@ See [implementation status](IMPLEMENTATION_STATUS.md) and the [V1 specification]
 | [server/](server/README.md) | HTTP routes, projects and storage, commands, source preparation, background rendering, and backend types. |
 | [shared/](shared/README.md) | Canonical document, commands, sessions, source serialization, and common validation. |
 | [scripts/](scripts/README.md) | Workflow checks grouped by domain, runtime checks, tooling checks, and shared verification helpers. |
+| [solver/](solver/README.md) | Pinned editing-time pen solver adapter and rebuild inputs. |
 
 Keep new files with the feature or domain that owns them.
 Keep styles and feature-specific helpers beside that feature.
@@ -27,6 +28,15 @@ Install the locked dependencies with `bun install --frozen-lockfile`.
 Run `bun run dev` and open the printed localhost URL.
 The command starts the Bun backend and Vite together and prints the editor URL.
 Use `bun run build` followed by `bun run start` to serve the compiled editor from Bun.
+
+## Pen branch checkpoint
+
+The approved [Pen tool](doc_v1/interface/pen-tool.md) is implemented in this branch with focused development/built Chrome checks.
+A disposable browser Worker keeps input responsive during the unchanged numerical solve.
+The [performance record](backlog/pen-integration.md#measured-solver-blocker) retains the large-path preview latency and release policy.
+Run `bun run check:pen`, `bun run check:pen-data` and `bun run check:pen-solver` for the corresponding scopes.
+Run `bun run check:pen-performance` separately to retain timing observations; its token does not certify acceptable latency.
+See [implementation records](plans/README.md) for the staged evidence, current-source verification and integration boundaries.
 
 ## Checks
 

@@ -278,30 +278,45 @@ function nativeRecord(found: ElementBox) {
 type Record = ReturnType<typeof snapshot>[number];
 
 function candidate(document: DesignDocument, records: Record[], edits: AtomicMutation[]) {
-  return records.map((record) => {
-    let next = { ...record };
-    for (const edit of edits) {
-      if (edit.kind === "delete" && edit.ids.some((id) => containsNode(document, id, record.id)))
-        next.removed = true;
-      if (edit.kind === "reorder" && edit.id === record.id) next.parentId = edit.parentId;
-      if (edit.kind === "style" && edit.id === record.id) {
-        next.styles = { ...next.styles, ...edit.values };
-        for (const property of edit.unset ?? []) delete next.styles[property];
-      }
-    }
+  const inserted = edits.flatMap((edit) => (edit.kind === "insert" ? edit.nodes : []));
+  const additions = inserted
+    .filter((node) => !records.some((record) => record.id === node.id))
+    .map(snapshotRecord);
+  return [...records, ...additions].map((record) => {
+    const next = { ...record };
+    for (const edit of edits) applyRecordEdit(document, next, edit);
     return next;
   });
 }
 
+function applyRecordEdit(document: DesignDocument, record: Record, edit: AtomicMutation): void {
+  const next = record;
+  if (edit.kind === "delete") {
+    if (edit.ids.some((id) => containsNode(document, id, record.id))) next.removed = true;
+    return;
+  }
+  if (edit.kind === "insert" || edit.id !== record.id) return;
+  if (edit.kind === "reorder") next.parentId = edit.parentId;
+  if (edit.kind === "pen") next.styles = edit.style;
+  if (edit.kind === "style") {
+    next.styles = { ...next.styles, ...edit.values };
+    for (const property of edit.unset ?? []) delete next.styles[property];
+  }
+}
+
 function affectedParents(records: Record[], next: Record[], edits: AtomicMutation[]) {
   const changed = new Set(
-    edits.flatMap((edit) => (edit.kind === "delete" ? edit.ids : "id" in edit ? [edit.id] : [])),
+    edits.flatMap((edit) =>
+      edit.kind === "delete"
+        ? edit.ids
+        : edit.kind === "insert"
+          ? edit.nodes.map((node) => node.id)
+          : [edit.id],
+    ),
   );
   return new Set(
-    records.flatMap((record, index) =>
-      changed.has(record.id) || next[index].removed
-        ? [record.parentId, next[index].parentId, record.id]
-        : [],
+    [...records, ...next].flatMap((record) =>
+      changed.has(record.id) || record.removed ? [record.parentId, record.id] : [],
     ),
   );
 }

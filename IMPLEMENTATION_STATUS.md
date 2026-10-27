@@ -1,11 +1,23 @@
 # ORC-web implementation status
 
-Last updated: 2026-10-20.
+Last updated in the Pen branch: 2026-10-26.
 Current stage: ordinary intrinsic Fit/Fill, including shared intrinsic Columns through the approved native wrapper, is verified on Fedora in both pinned browser versions and application modes.
 The [current checkpoint](#ordinary-intrinsic-column-wrapper-checkpoint) records evidence and remaining integration limits.
 Ordinary Absolute Position participation, per-axis Fixed/Fit, bounded cross-axis Fill and the earlier single-grow main-axis Fill remain verified checkpoints.
 General Fill, complete sizing and Constraints, and the remaining V1 application are still unfinished.
 This overview describes this checkout and links to reviewed evidence from the PC experiments.
+
+## Pen branch checkpoint
+
+The approved [Pen extension](doc_v1/interface/pen-tool.md) has portable version-1 records, a pinned guarded WASM adapter, human drawing/editing/history/save, compatible source/paint edits and bounded proportional transforms.
+Focused development and built Chrome checks cover native flow, transformed/nested mapping, lifecycle, refused candidates and standalone SVG.
+The [measured synchronous solver blocker](backlog/pen-integration.md#measured-solver-blocker) led to a dedicated Worker using the unchanged verified WASM.
+Input remains responsive while a large-path numerical preview can still take hundreds of milliseconds.
+The current-source integration ledger remains the completion authority.
+The [final branch report](plans/pen-final-report.md) records the passed checks, matched source identities, measured latency and remaining product/integration boundaries.
+The [progress record](plans/pen-progress.md) and runnable ledgers retain staged evidence and reproduced failure controls.
+General SVG tooling, product exporters, clipboard duplication, Windows and future MCP Pen operations remain separate unfinished work.
+The ordinary layout checkpoints below describe the base; they do not certify the new Pen extension or the main checkout's concurrent constraints/frame-controls changes.
 
 ## Current state
 

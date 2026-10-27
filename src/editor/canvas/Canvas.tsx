@@ -10,6 +10,9 @@ import type { PropertyPreview } from "../properties/property-preview";
 import { pointerDocument, type PointerPreview } from "./pointer-layout";
 import type { ViewState } from "../view-state";
 import { observeOverlayGeometry } from "./overlay-geometry";
+import { usePen } from "../pen/usePen";
+import { PenOverlay } from "../pen/PenOverlay";
+import { usePenTransform } from "../pen/usePenTransform";
 
 type Props = {
   document: DesignDocument;
@@ -37,6 +40,9 @@ export function Canvas(props: Props) {
     scale: props.view.pan.scale,
   });
   const { canvas, handlers } = useCanvasEvents(props, editor.setEditing, movement);
+  const penProps = { ...props, canvas };
+  const pen = usePen(penProps);
+  const transform = usePenTransform(penProps);
   const rendered = { ...props, document: pointerDocument(props.document, movement.preview) };
   useCanvasWheel(canvas, props.view.pan, props.setView, movement.cancel);
   /* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex -- This application canvas implements custom keyboard commands and requires focus. */
@@ -48,20 +54,72 @@ export function Canvas(props: Props) {
       role="application"
       aria-label="Canvas"
       tabIndex={0}
-      onKeyDown={(event) => canvasKey(event, props, movement)}
-      onClickCapture={(event) => {
-        if (event.target instanceof Element && event.target.closest("[data-orc-id]")) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-      }}
-      {...handlers}
+      {...penCanvasHandlers(props, pen, transform, handlers, movement)}
+      onClickCapture={preventDesignClick}
     >
       <CanvasContent props={rendered} editing={editor.editing} finish={editor.finish} />
       <CanvasOverlays canvas={canvas} props={rendered} preview={movement.preview} />
+      <PenOverlay props={penProps} state={pen.state} />
     </div>
   );
   /* eslint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */
+}
+
+function preventDesignClick(event: React.MouseEvent) {
+  if (event.target instanceof Element && event.target.closest("[data-orc-id]")) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+}
+
+function penCanvasHandlers(
+  props: Props,
+  pen: ReturnType<typeof usePen>,
+  transform: ReturnType<typeof usePenTransform>,
+  handlers: ReturnType<typeof useCanvasEvents>["handlers"],
+  movement: ReturnType<typeof usePointerMovement>,
+) {
+  return {
+    ...handlers,
+    onBlur: (event: React.FocusEvent<HTMLDivElement>) =>
+      canvasBlur(event, pen.lost, transform.lost),
+    onKeyDown: (event: React.KeyboardEvent) => {
+      if (!transform.key(event) && !pen.key(event)) canvasKey(event, props, movement);
+    },
+    onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!transform.down(event) && !pen.down(event)) handlers.onPointerDown(event);
+    },
+    onPointerMove: (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!transform.move(event) && !pen.move(event)) handlers.onPointerMove(event);
+    },
+    onPointerUp: (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!transform.up(event) && !pen.up(event)) handlers.onPointerUp(event);
+    },
+    onPointerCancel: () => {
+      pen.cancel();
+      transform.cancel();
+      handlers.onPointerCancel();
+    },
+    onLostPointerCapture: () => {
+      pen.lost();
+      transform.lost();
+      handlers.onLostPointerCapture();
+    },
+  };
+}
+
+function canvasBlur(
+  event: React.FocusEvent<HTMLDivElement>,
+  penLost: () => void,
+  transformLost: () => void,
+) {
+  if (
+    !(event.relatedTarget instanceof Node) ||
+    !event.currentTarget.contains(event.relatedTarget)
+  ) {
+    penLost();
+    transformLost();
+  }
 }
 
 function useCanvasEditor(props: Props) {
@@ -390,7 +448,10 @@ function CanvasOverlays({
       />
       <SelectionOutline
         canvas={canvas}
-        selected={props.view.selected}
+        selected={props.view.selected.filter((id) => {
+          const node = props.document.nodes[id];
+          return !(node?.kind === "svg" && node.pen && props.view.tool === "select");
+        })}
         document={props.document}
         pan={props.view.pan}
       />

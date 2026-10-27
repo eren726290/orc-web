@@ -36,6 +36,15 @@ The suffix gives ORC products one recognizable project name.
 It does not guarantee that Electron ORC and ORC-web projects can open in each other.
 Desktop conversion is a separate future feature.
 
+## Pen format compatibility
+
+The approved [Pen extension](../interface/pen-tool.md) stores optional pen record version 1 inside the current unreleased document schema version 1.
+Existing ordinary SVG projects remain readable.
+Older builds without the pen field safely reject projects containing it; this is not forward compatibility with those builds.
+Unknown record versions and invalid geometry/source pairs must leave the current session and original bundle bytes unchanged.
+A public release must settle the final portable format and migration policy before promising cross-version compatibility.
+The solver is an application editing dependency and is absent from standalone SVG output.
+
 ## Starting and opening projects
 
 The local server can retain several open project sessions, with one active project at a time.

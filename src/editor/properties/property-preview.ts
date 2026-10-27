@@ -2,13 +2,21 @@ import type { Mutation } from "../../../shared/commands/commands";
 import type { DesignDocument } from "../../../shared/document/model";
 
 type NodePreview = Extract<Mutation, { kind: "style" | "text" | "rename" }>;
-export type PropertyPreview = NodePreview | { kind: "batch"; mutations: NodePreview[] } | null;
+export type PropertyPreview =
+  | NodePreview
+  | { kind: "batch"; mutations: NodePreview[] }
+  | { kind: "pen-preview"; candidate: DesignDocument }
+  | null;
 
 export function previewDocument(
   document: DesignDocument,
   preview: PropertyPreview,
 ): DesignDocument {
   if (!preview) return document;
+  if (preview.kind === "pen-preview")
+    return preview.candidate.id === document.id && preview.candidate.revision === document.revision
+      ? preview.candidate
+      : document;
   const nodes = { ...document.nodes };
   for (const change of preview.kind === "batch" ? preview.mutations : [preview]) {
     const node = nodes[change.id];

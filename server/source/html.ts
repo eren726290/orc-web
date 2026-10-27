@@ -16,7 +16,7 @@ async function importerModule(): Promise<string> {
   return result.outputs[0].text();
 }
 
-async function prepareHTML(source: string) {
+async function prepareHTML(source: string, previous: DesignNode | null = null) {
   importer ??= importerModule();
   const module = await importer;
   const value: unknown = await withRenderPage(async (page) => {
@@ -26,16 +26,19 @@ async function prepareHTML(source: string) {
         failures.push(message.text());
     });
     const nodes: unknown = await page.evaluate(
-      async ({ source, module }) => {
+      async ({ source, module, previous }) => {
         const url = URL.createObjectURL(new Blob([module], { type: "text/javascript" }));
         try {
           const parser = await import(url);
-          return parser.importHTML(source);
+          const nodes = await parser.importHTML(source);
+          if (previous && nodes[0])
+            nodes[0] = parser.preparePenSource(previous, nodes[0]) ?? nodes[0];
+          return nodes;
         } finally {
           URL.revokeObjectURL(url);
         }
       },
-      { source, module },
+      { source, module, previous },
     );
     if (failures.length) throw new Error(failures[0]);
     return nodes;
@@ -57,10 +60,25 @@ export async function applySource(
   const affected = descendants(document, id);
   assertUnlocked(document, affected);
   const nodes = await prepareHTML(source);
-  const incoming = nodes[0];
+  let incoming = nodes[0];
   if (await equivalentSource(document, id, nodes)) return;
+  if (previous.kind === "svg" && previous.pen) {
+    incoming = (await prepareHTML(source, previous))[0];
+    nodes[0] = incoming;
+  }
   if (!incoming || !compatible(previous, incoming))
     throw new Error("Keep the selected root's element type when editing its source.");
+  replaceSource(document, id, previous, incoming, nodes, affected);
+}
+
+function replaceSource(
+  document: DesignDocument,
+  id: string,
+  previous: DesignNode,
+  incoming: DesignNode,
+  nodes: DesignNode[],
+  affected: string[],
+) {
   const root = previous.kind === "frame" ? frameRoot(previous, incoming) : incoming;
   nodes[0] = root;
   const generatedId = root.id;

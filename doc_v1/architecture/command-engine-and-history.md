@@ -40,6 +40,14 @@ If that check fails, the command leaves the current committed document untouched
 An interaction path that only runs later can still fail at runtime, so a later component error does not silently roll back the committed revision.
 The editor records that runtime diagnostic against the affected component for the current local session.
 
+## Pen transactions
+
+The approved [Pen extension](../interface/pen-tool.md) uses this same command engine.
+A completed Pen edit publishes its full geometry record, SVG source, public attributes, dimensions, placement and required dependent CSS as one validated transaction.
+Local drafts, native previews and intermediate numerical continuation steps create no document history.
+The server independently validates the complete candidate; browser solver success is insufficient.
+Cancellation and refused candidates retain the prior applied state.
+
 ## Revisions
 
 Each completed mutation increases `document.revision` by one.
